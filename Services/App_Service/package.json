@@ -1,13 +1,12 @@
 {
-  "name": "meleapp",
+  "name": "mele_app",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Web Application for Mele:RIMBA, using node.Js, Express.JS, MongoDB and EJS Templating",
+  "main": "App.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
+  "author": "AI01",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^16.4.7",
