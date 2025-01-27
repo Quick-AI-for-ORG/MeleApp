@@ -50,9 +50,8 @@
   backdrop-filter: saturate(200%) blur(25px);
   min-height: 600px;
   width: 100%;
-  box-shadow: 
-    0 5px 20px rgba(252, 163, 17, 0.1),
-    0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 30px 60px rgba(252, 163, 17, 0.3),
+    0 15px 40px rgba(0, 0, 0, 0.3);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 0;
 }
