@@ -10,7 +10,7 @@ const rootRoute = require("./Routes/root")
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("../../UI/Public"));
-app/use("/", rootRoute);
+app.use("/", rootRoute);
 
 app.set('views', "../../UI/Views");
 app.set('view engine', 'ejs');
