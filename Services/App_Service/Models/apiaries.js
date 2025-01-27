@@ -11,15 +11,16 @@ const apiarySchema = new mongoose.Schema({
         required: true,
     },
     temperature: {
-        type: [temperatureSchema],
+        type: Number,
     },
     humidity: {
-        type: [humiditySchema],    
+        type: Number,   
     },
-    date: {
-        type: Date,
-        default: Date.now,
-    }
-});
+    numberOfHives: {
+        type: Number,
+        required: true,
+    },
+
+},{timestamps: true});
 
 module.exports = mongoose.model('Apiary', apiarySchema);
