@@ -4,20 +4,19 @@ const dotenv = require("dotenv");
 
 dotenv.config({ path: "../../.env" });
 
-const mongoURI = process.env.MONGODB_URI;
 const app = express();
-
-dotenv.config();
+const rootRoute = require("./Routes/root")
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("../../UI/Public"));
-app.set("views", "../../UI/Views");
+app/use("/", rootRoute);
 
-app.set("view engine", "ejs");
+app.set('views', "../../UI/Views");
+app.set('view engine', 'ejs');
 
 mongoose
-  .connect(mongoURI)
+  .connect(process.env.MONGODB_URI)
   .then(() => {
     console.log("Connected to MongoDB successfully");
   })
@@ -25,10 +24,6 @@ mongoose
     console.error("MongoDB connection error:", error);
     process.exit(1);
   });
-
-app.get("/", (req, res) => {
-  res.render("signup");
-});
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
