@@ -1,6 +1,7 @@
 /* Background Styles */
 body {
-    background-color: #fca311;
+  min-height: 100vh;
+  /* background-color: #fca311;
     background-image: radial-gradient(
         650px circle at 0% 0%,
         #fbf5dd 15%,
@@ -16,112 +17,164 @@ body {
         rgba(252, 163, 17, 0.8) 75%,
         rgba(252, 163, 17, 0.7) 80%,
         transparent 100%
-    );
+    ); */
+}
+
+section {
+  min-height: 120vh;
+}
+
+.container {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+  min-height: 120vh;
+  max-width: 1400px;
+  width: 95%;
 }
 
 .cascading-right {
-    margin-right: -50px;
+  margin-right: -50px;
 }
 
 /* Card Styles */
 .card {
-    background: rgba(251, 245, 221, 0.9) !important;
-    backdrop-filter: saturate(200%) blur(25px);
+  background: rgba(251, 245, 221, 0.9) !important;
+  backdrop-filter: saturate(200%) blur(25px);
+  min-height: 600px;
+  width: 100%;
+}
+
+/* Card position adjustment */
+.card.cascading-right {
+  margin-right: -150px;
+  z-index: 2;
+  position: relative;
 }
 
 /* Button Styles */
 .signUp {
-    width: 100%;
-    background-color: #16404d;
-    color: #fbf5dd;
-    border: none;
-    border-radius: 5px;
-    padding: 10px;
-    font-size: 18px;
-    transition: background-color 0.5s;
+  width: 100%;
+  background-color: #16404d;
+  color: #fbf5dd;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 18px;
+  transition: background-color 0.5s;
 }
 
 .signUp:hover {
-    background-color: #df951d;
+  background-color: #df951d;
 }
 
 .cancel {
-    color: #16404d;
-    position: absolute;
-    right: 5px;
-    top: 5px;
-    border: transparent;
-    font-size: 25px;
-    background-color: transparent;
-    transition: color 0.5s;
+  color: #16404d;
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  border: transparent;
+  font-size: 25px;
+  background-color: transparent;
+  transition: color 0.5s;
 }
 
 .cancel:hover {
-    color: #df951d;
+  color: #df951d;
 }
 
 /* Form Elements */
 .form-check-input:checked {
-    background-color: #16404d !important;
-    border-color: #16404d !important;
+  background-color: #16404d !important;
+  border-color: #16404d !important;
 }
 
 /* Social Media Icons */
 .btn-link {
-    color: #16404d;
-    transition: color 0.5s;
+  color: #16404d;
+  transition: color 0.5s;
 }
 
 .btn-link:hover {
-    color: #df951d;
+  color: #df951d;
 }
 
 /* Link Styles */
 .member {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 .login {
-    color: #16404d;
-    transition: color 0.5s;
-    text-decoration: none;
+  color: #16404d;
+  transition: color 0.5s;
+  text-decoration: none;
 }
 
 .login:hover {
-    color: #df951d;
+  color: #df951d;
 }
 
 /* Animations */
 @keyframes fadeIn {
-    0% {
-        opacity: 0;
-        transform: translateX(-500px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateX(0px);
-    }
+  0% {
+    opacity: 0;
+    transform: translateX(-500px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0px);
+  }
 }
 
 @keyframes fade {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 body:not(.cMail, .pswe) {
-    animation: fadeIn 1s ease-in-out;
+  animation: fadeIn 1s ease-in-out;
 }
 
 img {
-    animation: fade 1s ease-in-out;
+  animation: fade 1s ease-in-out;
+}
+
+.col-lg-6 img {
+  width: 100%;
+  height: 100%;
+  min-height: 800px;
+  max-height: 900px;
+  object-fit: cover;
+  border-radius: 15px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  margin-left: -50px;
+  position: relative;
+  z-index: 1;
+}
+
+.col-lg-6.mb-5.mb-lg-5 {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 2rem;
+  z-index: 1;
 }
 
 ::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 
 @media (max-width: 991.98px) {
-    .cascading-right {
-        margin-right: 0;
-    }
+  .cascading-right {
+    margin-right: 0;
+  }
+  .card.cascading-right {
+    margin-right: 0;
+  }
+  .col-lg-6 img {
+    margin-left: 0;
+  }
 }
