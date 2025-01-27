@@ -2,24 +2,35 @@ const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 
-dotenv.config();
 
+dotenv.config({ path: "../../.env" });
+
+const mongoURI = process.env.MONGODB_URI;
 const app = express();
+
+dotenv.config();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static("../../UI/Public"));
+app.set('views', "../../UI/Views");
+
+app.set('view engine', 'ejs');
+
+
 
 mongoose
-  .connect(process.env.MONGODB_URI)
+  .connect(mongoURI)
   .then(() => {
     console.log("Connected to MongoDB successfully");
   })
   .catch((error) => {
     console.error("MongoDB connection error:", error);
+    process.exit(1);
   });
 
 app.get("/", (req, res) => {
-  res.send("Welcome to MeleApp API");
+  res.render('index');
 });
 
 app.use((err, req, res, next) => {
