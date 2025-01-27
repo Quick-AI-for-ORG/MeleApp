@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,14 +9,15 @@
     <link rel="stylesheet" href="/CSS/login.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
+
 <body>
     <section class="background-radial-gradient overflow-hidden">
         <div class="container px-4 py-5 px-md-5 text-center text-lg-start my-5">
             <div class="row gx-lg-5 align-items-center mb-5">
                 <div class="col-lg-6 mb-5 mb-lg-0" style="z-index: 10">
-                    <h1 class="my-5 display-5 fw-bold ls-tight" style="color: hsl(218, 81%, 95%)">
+                    <h1 class="my-5 display-5 fw-bold ls-tight welcome-text">
                         Welcome Back
-                        <span style="color: hsl(218, 81%, 75%)">to Basma!</span>
+                        <span class="mele-text">to Mele!</span>
                     </h1>
                 </div>
 
@@ -27,20 +29,19 @@
                         <button type="button" class="cancel" onclick="location.replace('/')">
                             <i title="Exit" class="fa-solid fa-circle-xmark"></i>
                         </button>
-                        
+
                         <div class="card-body px-4 py-5 px-md-5">
                             <form method="post" action="/guest/login" onsubmit="submitable(event)">
                                 <div class="form-outline mb-5">
-                                    <input type="email" id="mail" class="form-control" name="email" 
-                                           placeholder="e.g, example@gmail.com" />
+                                    <input type="email" id="mail" class="form-control" name="email"
+                                        placeholder="e.g, example@gmail.com" />
                                     <label class="form-label">Email address</label>
                                 </div>
 
                                 <!-- Password Input -->
                                 <div class="form-outline mb-3">
-                                    <input type="password" id="password" class="form-control" 
-                                           placeholder="e.g, ●●●●●●●●●●" name="password" 
-                                           oninput="checkLogin(event)" />
+                                    <input type="password" id="password" class="form-control"
+                                        placeholder="e.g, ●●●●●●●●●●" name="password" oninput="checkLogin(event)" />
                                     <label class="form-label">Password</label>
                                 </div>
                                 <div id="loginError" style="display: none;"></div>
@@ -74,7 +75,7 @@
                                     </div>
 
                                     <div class="member mt-3">
-                                        <span>Don't have an account? 
+                                        <span>Don't have an account?
                                             <a class="signup" href="/guest/signup">Sign up</a>
                                         </span>
                                     </div>
@@ -89,4 +90,5 @@
 
     <!-- <script src="/JS/loginVerification.js"></script> -->
 </body>
+
 </html>
