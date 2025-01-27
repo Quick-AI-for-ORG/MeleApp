@@ -28,6 +28,8 @@
   left: -130px;
   background: radial-gradient(#fbf5dd, #fca311);
   overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2),
+    0 5px 15px rgba(252, 163, 17, 0.15);
 }
 
 #radius-shape-2 {
@@ -38,6 +40,8 @@
   height: 400px;
   background: radial-gradient(#fbf5dd, #fca311);
   overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2),
+    0 5px 15px rgba(252, 163, 17, 0.15);
 }
 
 /* Card Styles */
@@ -46,6 +50,9 @@
   backdrop-filter: saturate(200%) blur(25px);
   min-height: 600px;
   width: 100%;
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.2), 0 5px 20px rgba(252, 163, 17, 0.1),
+    0 2px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 /* Container adjustment */
