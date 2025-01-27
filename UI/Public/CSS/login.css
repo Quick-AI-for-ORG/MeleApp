@@ -1,0 +1,163 @@
+/* Background Styles */
+.background-radial-gradient {
+  background-color: #fca311;
+  background-image: radial-gradient(
+      650px circle at 0% 0%,
+      #fbf5dd 15%,
+      #fca311 35%,
+      rgba(252, 163, 17, 0.8) 75%,
+      rgba(252, 163, 17, 0.7) 80%,
+      transparent 100%
+    ),
+    radial-gradient(
+      1250px circle at 100% 100%,
+      #fbf5dd 15%,
+      #fca311 35%,
+      rgba(252, 163, 17, 0.8) 75%,
+      rgba(252, 163, 17, 0.7) 80%,
+      transparent 100%
+    );
+  min-height: 120vh;
+}
+
+/* Shape Decorations */
+#radius-shape-1 {
+  height: 280px;
+  width: 280px;
+  top: -60px;
+  left: -130px;
+  background: radial-gradient(#fbf5dd, #fca311);
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2),
+    0 5px 15px rgba(252, 163, 17, 0.15);
+}
+
+#radius-shape-2 {
+  border-radius: 38% 62% 63% 37% / 70% 33% 67% 30%;
+  bottom: -60px;
+  right: -110px;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(#fbf5dd, #fca311);
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2),
+    0 5px 15px rgba(252, 163, 17, 0.15);
+}
+
+/* Card Styles */
+.bg-glass {
+  background-color: rgba(251, 245, 221, 0.9) !important;
+  backdrop-filter: saturate(200%) blur(25px);
+  min-height: 600px;
+  width: 100%;
+  box-shadow: 0 30px 60px rgba(252, 163, 17, 0.3),
+    0 15px 40px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0;
+}
+
+/* Container adjustment */
+.container {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+  min-height: 120vh;
+  max-width: 1400px;
+  width: 95%;
+}
+
+/* Button Styles */
+.signUp {
+  width: 100%;
+  background-color: #16404d;
+  color: #fbf5dd;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 18px;
+  transition: background-color 0.5s;
+}
+
+.signUp:hover {
+  background-color: #df951d;
+}
+
+.cancel {
+  color: #16404d;
+  vertical-align: bottom;
+  cursor: pointer;
+  border: 0 none;
+  background-color: transparent;
+  font-size: 1.5em;
+  margin: 3% 0 0 85%;
+}
+
+.cancel:hover {
+  color: #dda853;
+}
+
+/* Link Styles */
+a {
+  text-decoration: none;
+}
+
+.member {
+  margin-top: 10px;
+}
+
+.signup {
+  color: #16404d;
+  transition: color 0.5s;
+}
+
+.signup:hover {
+  color: #dda853;
+}
+
+/* Utilities */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-500px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+body *:not(.background-radial-gradient, #loginError) {
+  animation: fadeIn 0.7s ease-in-out;
+}
+
+/* Welcome Text Styles */
+.welcome-text {
+  color: #4e2606;
+}
+
+.mele-text {
+  color: #260701;
+  font-weight: 900;
+  position: relative;
+  z-index: 1;
+}
+
+/* Form Elements */
+.form-check-input:checked {
+  background-color: #16404d !important;
+  border-color: #16404d !important;
+}
+
+/* Social Media Icons */
+.social-buttons .btn-link {
+  color: #16404d;
+  transition: color 0.5s;
+}
+
+.social-buttons .btn-link:hover {
+  color: #df951d;
+}
