@@ -2,20 +2,24 @@ const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 
-dotenv.config();
+dotenv.config({ path: "../../.env" });
 
+const mongoURI = process.env.MONGODB_URI;
 const app = express();
+
+dotenv.config();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 mongoose
-  .connect(process.env.MONGODB_URI)
+  .connect(mongoURI)
   .then(() => {
     console.log("Connected to MongoDB successfully");
   })
   .catch((error) => {
     console.error("MongoDB connection error:", error);
+    process.exit(1);
   });
 
 app.get("/", (req, res) => {
