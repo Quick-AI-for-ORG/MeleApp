@@ -125,3 +125,19 @@ body *:not(.background-radial-gradient, #loginError) {
   position: relative;
   z-index: 1;
 }
+
+/* Form Elements */
+.form-check-input:checked {
+  background-color: #16404d !important;
+  border-color: #16404d !important;
+}
+
+/* Social Media Icons */
+.social-buttons .btn-link {
+  color: #16404d;
+  transition: color 0.5s;
+}
+
+.social-buttons .btn-link:hover {
+  color: #df951d;
+}
