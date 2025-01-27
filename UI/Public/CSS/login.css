@@ -1,20 +1,20 @@
 /* Background Styles */
 .background-radial-gradient {
-  background-color: #dda853;
+  background-color: #fca311;
   background-image: radial-gradient(
       650px circle at 0% 0%,
       #fbf5dd 15%,
-      #dda853 35%,
-      rgba(221, 168, 83, 0.8) 75%,
-      rgba(221, 168, 83, 0.7) 80%,
+      #fca311 35%,
+      rgba(252, 163, 17, 0.8) 75%,
+      rgba(252, 163, 17, 0.7) 80%,
       transparent 100%
     ),
     radial-gradient(
       1250px circle at 100% 100%,
       #fbf5dd 15%,
-      #dda853 35%,
-      rgba(221, 168, 83, 0.8) 75%,
-      rgba(221, 168, 83, 0.7) 80%,
+      #fca311 35%,
+      rgba(252, 163, 17, 0.8) 75%,
+      rgba(252, 163, 17, 0.7) 80%,
       transparent 100%
     );
 }
@@ -25,7 +25,7 @@
   width: 220px;
   top: -60px;
   left: -130px;
-  background: radial-gradient(#fbf5dd, #dda853);
+  background: radial-gradient(#fbf5dd, #fca311);
   overflow: hidden;
 }
 
@@ -35,7 +35,7 @@
   right: -110px;
   width: 300px;
   height: 300px;
-  background: radial-gradient(#fbf5dd, #dda853);
+  background: radial-gradient(#fbf5dd, #fca311);
   overflow: hidden;
 }
 
@@ -58,7 +58,7 @@
 }
 
 .signUp:hover {
-  background-color: #dda853;
+  background-color: #df951d;
 }
 
 .cancel {
@@ -116,7 +116,7 @@ body *:not(.background-radial-gradient, #loginError) {
 
 /* Welcome Text Styles */
 .welcome-text {
-  color: #26070182;
+  color: #4e2606;
 }
 
 .mele-text {
