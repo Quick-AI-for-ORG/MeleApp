@@ -27,7 +27,7 @@ mongoose
   });
 
 app.get("/", (req, res) => {
-  res.render("login");
+  res.render("signup");
 });
 
 app.use((err, req, res, next) => {
