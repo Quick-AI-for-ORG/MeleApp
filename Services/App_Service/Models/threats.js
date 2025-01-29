@@ -5,14 +5,13 @@ const threatsSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    timeStamp : {
-        type: Date,
-        default: Date.now,
-    },
     hiveRef: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Hive',
     },
-});
+    action: {
+        type: String,
+    },
+}, { timestamps: true });
 
 model.exports = mongoose.model('Threats', threatsSchema);

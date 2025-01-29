@@ -6,29 +6,31 @@ const dimensionSchema = new mongoose.Schema({
     height: { type: Number, required: true },
 });
 
-const frameSchema = new mongoose.Schema({
-    weight: { type: Number, required: true },
-    honeyYeild: { type: Number, required: true },
-    vibration: { type: [Number], required: true },
-});
+// const frameSchema = new mongoose.Schema({
+//     weight: [{ type: Number, required: true }],
+//     honeyYeild: [{ type: Number, required: true }],
+//     vibration: [{ type: [Number], required: true }],
+//     picture: [{ type: String}],
+// }, timestamps = true);
 
 const hiveSchema = new mongoose.Schema({
     dimentions: {
         type: dimensionSchema,
         required: true,
     },
-    frames: {
-        type: [frameSchema],
+    numberOfFrames: {
+        type: Number,
+        required: true,
     },
     streamUrl: {
         type: String,
 
     },
-    threats: {
-        type: [{type: mongoose.Schema.Types.ObjectId, 
-            ref: 'Threats'}],
+    apiaryRef: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Apiary',
     },
 
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model('Hive', hiveSchema);
