@@ -44,21 +44,21 @@
                     </li>
                     <% if (user) { %>
                         <li class="nav-item ms-3">
-                            <a id="on" class="btn toggled rounded-pill" href="/guest">
+                            <a id="on" class="btn toggled rounded-pill" href="/keeper">
                                 <i class="fas fa-user-circle fa-lg pe-2"></i>Profile
                             </a>
                         </li>
                         <li class="nav-item ms-3">
-                            <a id="off" class="btn rounded-pill" href="/guest/logout">
+                            <a id="off" class="btn rounded-pill" href="/keeper/logout">
                                 <i class="fas fa-sign-out-alt fa-lg pe-2"></i>Logout
                             </a>
                         </li>
                         <% } else { %>
                             <li class="nav-item ms-3">
-                                <a id="on" class="btn toggled rounded-pill" href="/guest/login">Sign in</a>
+                                <a id="on" class="btn toggled rounded-pill" href="/keeper/login">Sign in</a>
                             </li>
                             <li class="nav-item ms-3">
-                                <a id="off" class="btn rounded-pill" href="/guest/signup">Sign up</a>
+                                <a id="off" class="btn rounded-pill" href="/keeper/signup">Sign up</a>
                             </li>
                             <% } %>
                 </ul>
