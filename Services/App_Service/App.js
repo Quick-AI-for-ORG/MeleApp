@@ -8,7 +8,8 @@ const expressLayouts = require("express-ejs-layouts");
 dotenv.config({ path: "../../.env" });
 
 const app = express();
-const rootRoute = require("./Routes/root")
+const rootRouter = require("./Routes/root")
+const keeperRouter = require("./Routes/keeper")
 
 
 app.use(express.json());
@@ -19,9 +20,12 @@ app.use(
 );
 app.use(express.static("../../UI/Public"));
 app.use(expressLayouts);
-app.set("layout", "Layouts/layout");
-app.use("/", rootRoute);
 
+app.use("/", rootRouter);
+app.use("/keeper", keeperRouter);
+
+
+app.set("layout", "Layouts/layout");
 app.set('views', "../../UI/Views");
 app.set('view engine', 'ejs');
 
