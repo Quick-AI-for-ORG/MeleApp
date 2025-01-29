@@ -14,7 +14,7 @@ const dimensionSchema = new mongoose.Schema({
 // }, timestamps = true);
 
 const hiveSchema = new mongoose.Schema({
-    dimentions: {
+    dimensions: {
         type: dimensionSchema,
         required: true,
     },

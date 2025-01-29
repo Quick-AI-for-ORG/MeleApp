@@ -163,11 +163,6 @@ footer *,
   margin-bottom: 0.5rem; /* Reduced from 3rem */
 }
 
-.navbar-brand span {
-  color: #16404d;
-  font-weight: 600;
-}
-
 .nav-link {
   color: #16404d !important;
   transition: color 0.3s ease;
@@ -187,47 +182,37 @@ footer *,
 
 .nav-link:hover i {
   color: #df951d;
-  transform: scale(1.1);
 }
 
-#in i {
-  color: #fbf5dd;
-}
-
-#up i {
-  color: #16404d;
-}
-
-#up:hover i {
-  color: white;
-}
 
 /* Make icons slightly larger */
 .fa-lg {
   font-size: 1.2em;
 }
 
-#in {
-  background-color: #16404d;
-  border-color: #16404d;
+#off {
+  border: 1px solid #16404d;
+  color: #16404d;
+  transition: all 0.3s ease;
+  vertical-align: middle;
   transition: all 0.3s ease;
 }
 
-#in:hover {
-  background-color: #fca311;
-  border-color: #fca311;
-}
-
-#up {
-  color: #16404d;
+#on, #off:hover{
+  color:white;
+  background-color: #16404d;
+  vertical-align: middle;
   border: 1px solid #16404d;
+  transition: all 0.3s ease;
 }
 
-#up:hover {
+ #on:hover {
   background-color: #fca311;
   border-color: #fca311;
   color: white;
+  transition: all 0.3s ease;
 }
+
 
 hr {
   border-color: #fca311;
