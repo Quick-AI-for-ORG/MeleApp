@@ -1,0 +1,21 @@
+    <head>
+        <link rel="stylesheet" href="/CSS/message.css">
+    </head>
+        <% if (message != null) { %>
+        <div class="error-message ">
+            <img src="/Images/bee.gif" class="bee" alt="Flying Bee" loop>
+            <div class="dashed-line">
+                <div class="dash" style="animation-delay: 0s;"></div>
+                <div class="dash" style="animation-delay: 0.1s;"></div>
+                <div class="dash" style="animation-delay: 0.2s;"></div>
+                <div class="dash" style="animation-delay: 0.3s;"></div>
+                <div class="dash" style="animation-delay: 0.4s;"></div>
+                <div class="dash" style="animation-delay: 0.5s;"></div>
+                <div class="dash" style="animation-delay: 0.6s;"></div>
+            </div>
+            <div class="handle">
+                <img src="/Images/handle.png" alt="handle">
+            </div>
+        <div class="message-box"><%=message%></div>        
+    </div>
+        <% } %>
