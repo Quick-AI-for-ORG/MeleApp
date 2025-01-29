@@ -163,11 +163,6 @@ footer *,
   margin-bottom: 0.5rem; /* Reduced from 3rem */
 }
 
-.navbar-brand span {
-  color: #16404d;
-  font-weight: 600;
-}
-
 .nav-link {
   color: #16404d !important;
   transition: color 0.3s ease;
