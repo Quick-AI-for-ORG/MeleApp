@@ -64,6 +64,23 @@
   background-color: #fff;
 }
 
+/* First Carousel Image Styles */
+.carousel-item .row .col-md-4 img {
+  width: 100%;
+  height: 300px; /* Fixed height for all images */
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.carousel-item .row {
+  margin: 0 -5px; /* Reduce gap between images */
+}
+
+.carousel-item .col-md-4 {
+  padding: 0 5px; /* Reduce padding between columns */
+}
+
 /* main text */
 .centered-text {
   text-align: center;
@@ -148,8 +165,8 @@
 
 .secondslide {
   margin-top: 20px;
-  width: 60%;
-  height: 90%; /* Adjust the height as needed */
+  width: 80%; /* Increased width for better visibility */
+  height: 600px; /* Match the height of inner divs */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -163,11 +180,13 @@
 
 .secondslide > div {
   width: 100%;
-  height: 100%;
+  height: 600px; /* Fixed height for consistency */
   background-size: cover;
+  background-position: center;
   position: absolute;
   animation: slide 25s infinite;
   opacity: 0;
+  object-fit: cover;
 }
 
 .secondslide > div:nth-child(2) {
