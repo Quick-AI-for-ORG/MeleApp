@@ -244,21 +244,21 @@
 .slideTitle::before {
   content: "";
   position: absolute;
-  top: 28%;
+  top: 30%;
   height: 2px;
   background-color: #fca311;
   width: 50px;
-  left: 28%;
+  left: 34%;
   transform: translate(0, -50%);
 }
 .slideTitle::after {
   content: "";
   position: absolute;
-  top: 28%;
+  top: 31%;
   height: 2px;
   background-color: #fca311;
   width: 50px;
-  right: 28%;
+  right: 34%;
   transform: translate(0, -50%);
 }
 
