@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const sensorEntriesSchema = new mongoose.Schema({
+const readingEntry = new mongoose.Schema({
     sensorRef: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Sensor',
@@ -15,9 +15,11 @@ const sensorEntriesSchema = new mongoose.Schema({
         ref: 'Hive',
         required: true,
     },
-    frameRef: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Frame',
+    frameNum: {
+        type: Number,
+    
     },
 
 }, { timestamps: true });
+
+module.exports = mongoose.model('Reading', readingEntry);

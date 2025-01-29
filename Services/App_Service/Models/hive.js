@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const threatsSchema = require('./threats');
+const threatsSchema = require('./threat');
 const dimensionSchema = new mongoose.Schema({
     length: { type: Number, required: true },
     width: { type: Number, required: true },
