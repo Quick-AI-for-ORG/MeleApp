@@ -438,6 +438,6 @@
     transform: translateY(0px);
   }
 }
-body *:not(nav, nav *, footer, footer *) {
+body *:not(nav, nav *, footer, footer *, .slideContainer, .slideContainer *) {
   animation: fadeIn 1.5s ease-in-out; /* Adjust duration as needed */
 }
