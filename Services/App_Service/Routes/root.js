@@ -6,16 +6,9 @@ router.get("/", (req, res) => {
     user: req.session.user === undefined ? "" : req.session.user,
   });
 });
-
-router.get("/signup", (req, res) => {
-  res.render("signup", { layout: false });
-});
-
-router.get("/login", (req, res) => {
-  res.render("login", { layout: false });
-});
-router.get("/about", (req, res) => {
+router.get("/aboutus", (req, res) => {
   res.render("aboutUs", { layout: false });
 });
+
 
 module.exports = router;
