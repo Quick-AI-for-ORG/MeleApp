@@ -14,8 +14,11 @@ router.get("/signup", (req, res) => {
 router.get("/login", (req, res) => {
   res.render("login", { layout: false });
 });
+
 router.get("/about", (req, res) => {
-  res.render("aboutUs", { layout: false });
+  res.render("aboutUs", {
+    user: req.session.user === undefined ? "" : req.session.user,
+  });
 });
 
 module.exports = router;

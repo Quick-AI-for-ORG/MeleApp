@@ -7,12 +7,13 @@ body {
 
 /* Hero Section */
 .hero-section {
-  height: 60vh;
+  height: 80vh;
   background-image: url("/Images/honey-hero.jpg");
   background-size: cover;
   background-position: center;
   position: relative;
   margin-bottom: 4rem;
+  background-attachment: fixed;
 }
 
 .overlay {
@@ -21,7 +22,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(22, 64, 77, 0.4);
+  background: rgba(22, 64, 77, 0.6);
 }
 
 .hero-content {
@@ -76,18 +77,54 @@ section {
 }
 
 /* Reviews Section */
-.reviews-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  margin-bottom: 3rem;
+.reviews-section,
+.reviews-grid,
+.review-card {
+  display: none;
 }
 
-.review-card {
-  background: white;
+/* Fun Facts Section */
+.facts-section {
+  background-color: #fff;
+  padding: 5rem 0;
+}
+
+.facts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.fact-card {
+  background: #fbf5dd;
   padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 10px 20px rgba(252, 163, 17, 0.1);
+  border-radius: 15px;
+  box-shadow: 0 15px 30px rgba(252, 163, 17, 0.1);
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.fact-card:hover {
+  transform: translateY(-10px);
+}
+
+.fact-card i {
+  font-size: 2.5rem;
+  color: #fca311;
+  margin-bottom: 1rem;
+}
+
+.fact-card h3 {
+  color: #16404d;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.fact-card p {
+  color: #666;
+  font-size: 1rem;
+  line-height: 1.6;
 }
 
 /* Animations */
