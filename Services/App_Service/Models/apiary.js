@@ -1,6 +1,4 @@
 const mongoose = require('mongoose');
-const humiditySchema = require('./humidity');
-const temperatureSchema = require('./temperature');
 const apiarySchema = new mongoose.Schema({
     name: {
         type: String,
@@ -18,6 +16,11 @@ const apiarySchema = new mongoose.Schema({
     },
     numberOfHives: {
         type: Number,
+        required: true,
+    },
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
         required: true,
     },
 

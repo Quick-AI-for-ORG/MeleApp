@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const hiveSchema = require('../hive');
 const threatsSchema = new mongoose.Schema({
     threatType : {
         type: String,
@@ -14,4 +13,4 @@ const threatsSchema = new mongoose.Schema({
     },
 }, { timestamps: true });
 
-model.exports = mongoose.model('Threats', threatsSchema);
+module.exports = mongoose.model('Threat', threatsSchema);
