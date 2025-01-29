@@ -1,15 +1,25 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
+const session = require("express-session");
+const bodyParser = require("body-parser");
+const expressLayouts = require("express-ejs-layouts");
 
 dotenv.config({ path: "../../.env" });
 
 const app = express();
 const rootRoute = require("./Routes/root")
 
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(
+  session({ secret: "Your_Secret_Key", saveUninitialized: true, resave: false })
+);
 app.use(express.static("../../UI/Public"));
+app.use(expressLayouts);
+app.set("layout", "Layouts/layout");
 app.use("/", rootRoute);
 
 app.set('views', "../../UI/Views");
