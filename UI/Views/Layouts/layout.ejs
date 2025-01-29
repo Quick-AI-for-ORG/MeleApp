@@ -18,47 +18,52 @@
     <nav class="navbar navbar-expand-lg fixed-top bg-light navbar-light">
         <div class="container">
             <a class="navbar-brand" href="/">
-                <span class="mb-3">Mele Egyptian Honey</span>
+                <span class="mb-3">Mele Rimba</span>
                 <img id="MDB-logo" src="/IMAGES/honey-logo.png" alt="Mele Logo" draggable="false" height="50" />
             </a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-                    <div class="collapse navbar-collapse" id="navbarNav">
-                        <ul class="navbar-nav ms-auto align-items-center">
-                            <li class="nav-item">
-                                <a class="nav-link mx-2" href="/products"><i
-                                        class="fas fa-honey-pot pe-2"></i>Products</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link mx-2" href="/products">
+                            <img src="/Images/honey.png" alt="honey" class="nav-icon honey-icon">Products
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link mx-2" href="/beekeeping">
+                            <img src="/Images/bee.png" alt="bee" class="nav-icon bee-icon">Process
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link mx-2" href="/aboutus">
+                            <img src="/Images/apiary.png" alt="info" class="nav-icon info-icon">About Us
+                        </a>
+                    </li>
+                    <% if (user) { %>
+                        <li class="nav-item ms-3">
+                            <a id="on" class="btn toggled rounded-pill" href="/guest">
+                                <i class="fas fa-user-circle fa-lg pe-2"></i>Profile
+                            </a>
+                        </li>
+                        <li class="nav-item ms-3">
+                            <a id="off" class="btn rounded-pill" href="/guest/logout">
+                                <i class="fas fa-sign-out-alt fa-lg pe-2"></i>Logout
+                            </a>
+                        </li>
+                        <% } else { %>
+                            <li class="nav-item ms-3">
+                                <a id="on" class="btn toggled rounded-pill" href="/guest/login">Sign in</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link mx-2" href="/beekeeping"><i class="fas fa-bee pe-2"></i>Our
-                                    Process</a>
+                            <li class="nav-item ms-3">
+                                <a id="off" class="btn rounded-pill" href="/guest/signup">Sign up</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link mx-2" href="/aboutus"><i class="fas fa-circle-info pe-2"></i>About
-                                    Us</a>
-                            </li>
-                            <% if (user) { %>
-                                <li class="nav-item ms-3">
-                                    <a id="in" class="btn btn-dark rounded-pill" href="/guest"><i
-                                            class="fas fa-user pe-2"></i>My Profile</a>
-                                </li>
-                                <li class="nav-item ms-3">
-                                    <a id="up" class="btn rounded-pill"" href=" /guest/logout"><i
-                                            class="fas fa-sign-out-alt pe-2"></i>Logout</a>
-                                </li>
-                                <% } else { %>
-                                    <li class="nav-item ms-3">
-                                        <a id="in" class="btn btn-dark rounded-pill" href="/guest/login">Sign in</a>
-                                    </li>
-                                    <li class="nav-item ms-3">
-                                        <a id="up" class="btn rounded-pill" href="/guest/signup">Sign up</a>
-                                    </li>
-                                    <% } %>
-                        </ul>
-                    </div>
+                            <% } %>
+                </ul>
+            </div>
         </div>
     </nav>
 
@@ -66,41 +71,43 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/JS/toggle.js"></script>
     <!-- Navbar -->
-    <%-body%>
-        <!-- Footer -->
-        <footer>
-            <div class="footer-content">
-                <div class="contact-form">
-                    <h3>Have a Question?</h3>
-                    <hr>
-                    <p>Our honey experts are here to help</p>
-                    <form method="post" action="/askQuestion">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" required>
-                        <label for="message">Message</label>
-                        <textarea id="message" name="message" required></textarea>
-                        <button type="submit">Contact Basma</button>
-                    </form>
-                </div>
-                <div class="contact-details">
-                    <h3>Our Commitment</h3>
-                    <hr>
-                    <p style="font-weight: 600;">The Art of Egyptian Beekeeping</p>
-                    <p>We blend ancient Egyptian beekeeping traditions with modern sustainable practices to bring you
-                        the purest, most flavorful honey from the Nile Valley.</p>
-                    <p>El-Nozha, Cairo, Egypt</p>
-                    <hr>
-                    <p>+20(2)-2461-9865</p>
-                    <a href="#">contact@mele-honey.com</a>
-                </div>
-                <div class="accept">
-                    <p>We Proudly Accept</p>
-                    <img src="/IMAGES/payment (1).png" alt="Master card & visa">
-                    <img src="/IMAGES/logo-01-1-1-removebg-preview.png" alt="miza">
-                </div>
+    <main>
+        <%-body%>
+    </main>
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="contact-form">
+                <h3>Have a Question?</h3>
+                <hr>
+                <p>Our honey experts are here to help</p>
+                <form method="post" action="/askQuestion">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" required></textarea>
+                    <button type="submit">Contact Mele</button>
+                </form>
             </div>
-            <p style="color: white;">Mele Egyptian Honey © 2023 All Rights Reserved</p>
-        </footer>
+            <div class="contact-details">
+                <h3>Our Commitment</h3>
+                <hr>
+                <p style="font-weight: 600;">The Art of Egyptian Beekeeping</p>
+                <p>We blend ancient Egyptian beekeeping traditions with modern sustainable practices to bring you
+                    the purest, most flavorful honey from the Nile Valley.</p>
+                <p>El-Nozha, Cairo, Egypt</p>
+                <hr>
+                <p>+20(2)-2461-9865</p>
+                <a href="#">contact@mele-honey.com</a>
+            </div>
+            <div class="accept">
+                <p>We Proudly Accept</p>
+                <img src="/IMAGES/payment (1).png" alt="Master card & visa">
+                <img src="/IMAGES/logo-01-1-1-removebg-preview.png" alt="miza">
+            </div>
+        </div>
+        <p style="color: white;">Mele Rimba © 2025 All Rights Reserved</p>
+    </footer>
 
 
 </body>
