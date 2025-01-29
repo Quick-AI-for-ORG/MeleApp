@@ -253,10 +253,11 @@ main {
   vertical-align: middle;
 } /* Keep honey and bee icons original */
 .honey-icon,
-.bee-icon {
-  filter: none;
-} /* Info icon with reversed colors */
+.bee-icon,
 .info-icon {
+  filter: none;
+}
+/* .info-icon {
   filter: brightness(0) saturate(100%) invert(72%) sepia(32%) saturate(1496%)
     hue-rotate(346deg) brightness(97%) contrast(95%);
 }
@@ -264,7 +265,7 @@ main {
 .nav-link:hover .info-icon {
   filter: brightness(0) saturate(100%) invert(24%) sepia(16%) saturate(1966%)
     hue-rotate(153deg) brightness(94%) contrast(87%);
-}
+} */
 
 .nav-link:hover .nav-icon {
   transform: scale(1.1);
