@@ -3,6 +3,7 @@
   position: relative;
   max-width: 600px;
   margin: 20px auto 0 auto;
+  margin-top: 1rem; /* Reduced from 2rem */
 }
 
 .mySlides {
@@ -53,7 +54,7 @@
 }
 
 .carousel-item {
-  padding: 20px;
+  padding: 10px; /* Reduced from 20px */
 }
 
 .carousel-indicators li {
@@ -78,7 +79,13 @@
 }
 
 .carousel-item .col-md-4 {
-  padding: 0 5px; /* Reduce padding between columns */
+  padding: 0 5px; 
+}
+
+/* First Carousel Image Styles */
+#multi-item-carousel {
+  margin-top: 2rem; 
+  padding-top: 0.5rem;
 }
 
 /* main text */

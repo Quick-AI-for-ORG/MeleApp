@@ -15,6 +15,10 @@ footer {
   color: #fff;
   padding: 20px 0;
   text-align: center;
+  margin-top: auto;
+  position: relative;
+  bottom: 0;
+  width: 100%;
 }
 
 /* Style for footer content */
@@ -91,7 +95,6 @@ footer {
 }
 
 /* Style for the "We Proudly Accept" section */
-/* Style for the "We Proudly Accept" section */
 .accept {
   max-width: 150px; /* Adjust the max-width as per your design */
   text-align: center;
@@ -157,6 +160,7 @@ footer *,
 
 .navbar {
   border-bottom: 2px solid #fca311;
+  margin-bottom: 0.5rem; /* Reduced from 3rem */
 }
 
 .navbar-brand span {
@@ -198,4 +202,16 @@ footer *,
 hr {
   border-color: #fca311;
   opacity: 0.5;
+}
+
+/* Layout Spacing */
+body {
+  padding-top: 80px; /* Reduced from 90px */
+  margin-bottom: 30px; /* Reduced from 60px */
+}
+
+/* Content Wrapper */
+main {
+  min-height: calc(100vh - 80px - 30px); /* Updated to match new spacing */
+  margin-bottom: 2rem; /* Reduced from 5rem */
 }
