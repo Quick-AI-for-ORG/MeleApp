@@ -79,12 +79,12 @@
 }
 
 .carousel-item .col-md-4 {
-  padding: 0 5px; 
+  padding: 0 5px;
 }
 
 /* First Carousel Image Styles */
 #multi-item-carousel {
-  margin-top: 2rem; 
+  margin-top: 2rem;
   padding-top: 0.5rem;
 }
 
@@ -114,6 +114,7 @@
   color: #333;
   text-align: center;
   position: relative;
+  margin: 40px 0 0 0; /* Vertical margin only (top) */
 }
 
 .centered-text p:last-of-type {
@@ -128,8 +129,9 @@
   height: 2px;
   background-color: #fca311;
   width: 50px;
-  left: 30%;
+  left: 29%;
   transform: translate(0, -50%);
+  margin: 30px 0 0 0;
 }
 .centered-text::after {
   content: "";
@@ -138,8 +140,9 @@
   height: 2px;
   background-color: #fca311;
   width: 50px;
-  right: 30%;
+  right: 29%;
   transform: translate(0, -50%);
+  margin: 30px 0 0 0;
 }
 
 /* Start Second SlideShow */
@@ -328,8 +331,9 @@
   height: 2px;
   background-color: #fca311;
   width: 50px;
-  left: 38%;
+  left: 32%;
   transform: translate(0, -50%);
+  margin: 0 0 0 20px;
 }
 .main-safe::after {
   content: "";
@@ -338,8 +342,9 @@
   height: 2px;
   background-color: #fca311;
   width: 50px;
-  right: 38%;
+  right: 32%;
   transform: translate(0, -50%);
+  margin: 0 20px 0 0;
 }
 
 .safe p {
