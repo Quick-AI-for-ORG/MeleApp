@@ -97,32 +97,36 @@ section {
 }
 
 .fact-card {
-  background: #fbf5dd;
+  background: #16404d;
   padding: 2rem;
   border-radius: 15px;
-  box-shadow: 0 15px 30px rgba(252, 163, 17, 0.1);
+  box-shadow: 0 15px 30px rgba(22, 64, 77, 0.2);
   text-align: center;
   transition: transform 0.3s ease;
 }
 
 .fact-card:hover {
   transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(22, 64, 77, 0.3);
 }
 
 .fact-card i {
   font-size: 2.5rem;
-  color: #fca311;
+  color: #16404d;
   margin-bottom: 1rem;
+  background: #fbf5dd;
+  padding: 1rem;
+  border-radius: 50%;
 }
 
 .fact-card h3 {
-  color: #16404d;
+  color: #fbf5dd;
   margin-bottom: 1rem;
   font-size: 1.5rem;
 }
 
 .fact-card p {
-  color: #666;
+  color: #fbf5dd;
   font-size: 1rem;
   line-height: 1.6;
 }
