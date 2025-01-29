@@ -7,7 +7,9 @@ router.get("/", (req, res) => {
   });
 });
 router.get("/aboutus", (req, res) => {
-  res.render("aboutUs", { layout: false });
+  res.render("aboutUs", {
+      user: req.session.user === undefined ? "" : req.session.user,
+    });
 });
 
 
