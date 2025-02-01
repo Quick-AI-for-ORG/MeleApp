@@ -582,6 +582,28 @@ canvas {
   font-size: 0.75rem;
 }
 
+.weather-card.total-beekeepers .weather-icon {
+  background: rgba(79, 70, 229, 0.1);
+  color: #4f46e5;
+}
+
+.weather-card.total-hives .weather-icon {
+  background: rgba(252, 163, 17, 0.1);
+  color: #fca311;
+}
+
+.weather-card.total-threats .weather-icon {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+/* Adjust grid columns for 5 cards */
+@media (min-width: 1200px) {
+  .weather-stats {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .beekeepers-grid {
@@ -722,8 +744,8 @@ canvas {
   color: white;
 }
 
-.nested-trigger, 
+.nested-trigger,
 .dropdown-trigger {
-    cursor: pointer;
-    user-select: none;
+  cursor: pointer;
+  user-select: none;
 }
