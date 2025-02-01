@@ -3,16 +3,30 @@ const router = express.Router()
 
 
 router.get("/", (req, res) => {
-    res.redirect("/login")
+    req.session.message = "Please login to access this page";
+    res.redirect("/keeper/login");
     })
 router.get("/signup", (req, res) => {
-    res.render("signup", { layout: false });
-  });
-  
-  router.get("/login", (req, res) => {
-    res.render("login", { layout: false,
-        message: req.body.message === undefined ? null : req.body.message
+    let message = req.session.message === undefined ? null : req.session.message
+    req.session.message = undefined ;
+    res.render("signup", { layout: false,
+      message: message
      });
   });
   
+  router.get("/login", (req, res) => {
+    let message = req.session.message === undefined ? null : req.session.message
+    req.session.message = undefined ;
+    res.render("login", { layout: false,
+        message: message
+     });
+  });
+  
+
+  router.get("/dashboard", (req, res) => {
+    res.render("beekeeper", {
+      layout: false,
+      message: req.body.message === undefined ? null : req.body.message,
+    });
+  });
   module.exports = router;

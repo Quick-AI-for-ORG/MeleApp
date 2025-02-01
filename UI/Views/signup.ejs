@@ -13,6 +13,7 @@
 </head>
 
 <body>
+    <%- include('./Layouts/message.ejs') %>
 
     <!-- Section: Design Block -->
     <section class="text-center text-lg-start">
@@ -32,7 +33,7 @@
                             </button>
                             <h2 class="fw-bold mb-5" style="color: #4e2606;">Sign up to <span
                                     style="color: #260701; font-weight: 900;">Mele!</span></h2>
-                            <form method="post" action="/guest/register" onsubmit="return submitable()">
+                            <form method="post" action="/keeper/register" onsubmit="return submitable()">
                                 <!-- 2 column grid layout with text inputs for the first and last names -->
                                 <div class="row">
                                     <div class="col-md-6 mb-4">
@@ -117,7 +118,7 @@
                                         <i class="fab fa-instagram" style=" font-size: larger;"></i>
                                     </button>
                                     <div class="member">
-                                        <span>Already a member? <a class="login" href="/guest/login">Log In</a></span>
+                                        <span>Already a member? <a class="login" href="/keeper/login">Log In</a></span>
                                     </div>
                                 </div>
                             </form>
@@ -126,7 +127,7 @@
                 </div>
 
                 <div class="col-lg-6 mb-5 mb-lg-5">
-                    <img src="/Images/aaron-burden-2xhOYKK-jAM-unsplash.jpg" class="w-100 rounded-4 shadow-4" alt="" />
+                    <img src="/Images/signup.jpg" class="w-100 rounded-4 shadow-4" alt="" />
                 </div>
             </div>
         </div>

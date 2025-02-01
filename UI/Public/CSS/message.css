@@ -5,7 +5,7 @@
     padding: 20px;
     animation: moveLeft 25s ease-out forwards;
     position: absolute; 
-    right: 0; 
+    right: 0%; 
     z-index: 100;
     top:0
 }
@@ -64,9 +64,6 @@
 }
 
 @keyframes moveLeft {
-    0% {
-        transform: translateX(100%); 
-    }
     100% {
         transform: translateX(-100%); 
     }
