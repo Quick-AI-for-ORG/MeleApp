@@ -1,0 +1,325 @@
+/* start allrooms */
+/* Room Cards */
+body {
+  background-image: url("/IMAGES/abdullah-omar-wU6S5-pMlns-unsplash.jpg");
+  background-size: cover;
+  background-position: center;
+  width: 100vw;
+  height: 60vh;
+  margin: 0;
+  background-repeat: no-repeat;
+  background-color: #fbf5dd;
+  color: #16404d;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+header h1 {
+  margin-top: 7%;
+  font-size: 36px;
+  background-image: linear-gradient(to right, #133cc2, #8213c2);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  position: relative;
+  z-index: 1;
+}
+
+header h1::after {
+  content: "";
+  display: block;
+  width: 400px;
+  height: 4px;
+  background-color: #600396aa;
+  margin: 15px auto;
+}
+.room-card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch; /* Make all items stretch to the same height */
+}
+
+.room-row {
+  display: flex;
+  margin: 20px 30px;
+  width: 100%;
+  justify-content: center;
+  align-items: flex-start; /* Align items to the start of the container */
+}
+
+.room-card {
+  width: 100%;
+  max-width: 400px;
+  margin: 10px;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background-color: #fff;
+  cursor: pointer;
+  transition: transform 0.2s;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.room-card:hover {
+  transform: scale(1.05);
+}
+
+.room-card img {
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto 10px;
+  display: block;
+}
+
+.room-card h2 {
+  font-size: 24px;
+  margin: 10px 0;
+}
+
+.room-card p {
+  font-size: 16px;
+  margin-bottom: 10px;
+  flex-grow: 1;
+}
+
+.room-card-container {
+  border-bottom: 1px solid #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+}
+/* End all rooms */
+/* Pagination styling */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.pagination button {
+  background-color: #3c0266;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  margin: 10px 10px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.pagination button:hover {
+  background-color: #8213c2;
+  transition: background-color 0.5s;
+}
+
+.pagination span {
+  font-size: 18px;
+  margin: 0 10px;
+}
+
+a {
+  color: #8213c2;
+  text-decoration: none;
+}
+
+#currentPage {
+  font-size: 20px;
+  background-color: #8213c2;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+/* end pagination   */
+/* make all cards the same size */
+::-webkit-scrollbar {
+  display: none;
+}
+.centered-text {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 7%;
+  position: relative;
+}
+
+.centered-text h2 {
+  font-size: 36px;
+  background-image: linear-gradient(to right, #133cc2, #8213c2);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  position: relative;
+  z-index: 1;
+  color: #333333ac;
+}
+
+centered-text h2::after {
+  content: "";
+  display: block;
+  width: 400px;
+  height: 4px;
+  background-color: #600396aa;
+  margin: 15px auto;
+}
+
+.room-card-container .equal-height {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.room-card-container .equal-height .room-card {
+  display: flex;
+  flex-direction: column;
+}
+::-webkit-scrollbar {
+  display: none;
+}
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-500px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+body *:not(nav, nav *, footer, footer *) {
+  animation: fadeIn 1.5s ease-in-out; /* Adjust duration as needed */
+}
+
+/* Hero Section */
+.products-hero {
+  background: linear-gradient(rgba(22, 64, 77, 0.7), rgba(22, 64, 77, 0.7)),
+    url("/Images/honey-hero.jpg");
+  background-size: cover;
+  background-position: center;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  color: #fbf5dd;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+/* Filter Buttons */
+.filters {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+.filter-btn {
+  background: transparent;
+  border: 2px solid #16404d;
+  color: #16404d;
+  padding: 0.5rem 1.5rem;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+  background: #fca311;
+  border-color: #fca311;
+  color: #fff;
+}
+
+/* Products Grid */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  padding: 2rem 0;
+}
+
+.product-card {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 15px 30px rgba(252, 163, 17, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-10px);
+}
+
+.product-image {
+  position: relative;
+  height: 250px;
+  overflow: hidden;
+}
+
+.product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.product-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(22, 64, 77, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.product-card:hover .product-overlay {
+  opacity: 1;
+}
+
+.product-info {
+  padding: 1.5rem;
+}
+
+.product-info h3 {
+  color: #16404d;
+  margin-bottom: 0.5rem;
+}
+
+.product-meta {
+  display: flex;
+  justify-content: space-between;
+  margin: 1rem 0;
+}
+
+.add-to-cart {
+  width: 100%;
+  background: #16404d;
+  color: #fbf5dd;
+  border: none;
+  padding: 0.8rem;
+  border-radius: 5px;
+  transition: background 0.3s ease;
+}
+
+.add-to-cart:hover {
+  background: #fca311;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .filters {
+    flex-wrap: wrap;
+  }
+
+  .product-card {
+    margin: 0 1rem;
+  }
+}
