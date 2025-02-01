@@ -14,7 +14,6 @@ router.get("/aboutus", (req, res) => {
 });
 router.get("/products", async (req, res) => {
   try {
-    // Mock data for now - replace with actual database query later
     const products = [
       {
         title: "Citrus Blossom Honey",
@@ -22,7 +21,7 @@ router.get("/products", async (req, res) => {
         price: 12.99,
         size: "500g",
         category: "citrus",
-        image: "/Images/honey-citrus.jpg",
+        image: "/Images/bianca-ackermann-ZHOmQ_0X6QQ-unsplash.jpg",
       },
       {
         title: "Wild Flower Honey",
@@ -30,9 +29,8 @@ router.get("/products", async (req, res) => {
         price: 14.99,
         size: "500g",
         category: "wildflower",
-        image: "/Images/honey-wildflower.jpg",
+        image: "/Images/bianca-ackermann-nsPPKwXxG8s-unsplash.jpg",
       },
-      // Add more mock products...
     ];
 
     res.render("products", {

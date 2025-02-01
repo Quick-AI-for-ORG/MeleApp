@@ -278,6 +278,7 @@ body *:not(nav, nav *, footer, footer *) {
   justify-content: center;
   opacity: 0;
   transition: opacity 0.3s ease;
+  backdrop-filter: blur(3px);
 }
 
 .product-card:hover .product-overlay {
@@ -311,6 +312,34 @@ body *:not(nav, nav *, footer, footer *) {
 
 .add-to-cart:hover {
   background: #fca311;
+}
+
+.view-btn {
+  background: #fca311;
+  color: #fff;
+  border: none;
+  padding: 0.8rem 2rem;
+  border-radius: 25px;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(252, 163, 17, 0.3);
+}
+
+.view-btn:hover {
+  background: #16404d;
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(22, 64, 77, 0.4);
+}
+
+.product-card:hover .view-btn {
+  animation: buttonPop 0.3s ease;
+}
+
+@keyframes buttonPop {
+  0% { transform: scale(0.8); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
 }
 
 /* Responsive Design */
