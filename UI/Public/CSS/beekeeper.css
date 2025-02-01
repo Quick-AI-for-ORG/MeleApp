@@ -830,3 +830,72 @@ canvas {
     opacity: 1;
   }
 }
+
+/* Sensor Data Tables */
+.tables-section {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.table-card {
+  background: white;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.table-title {
+  color: #16404d;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.table-title i {
+  color: #fca311;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.sensor-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px;
+}
+
+.sensor-table th,
+.sensor-table td {
+  padding: 0.75rem;
+  text-align: center;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.sensor-table th {
+  background: #f8f9fa;
+  font-weight: 600;
+  color: #16404d;
+}
+
+.sensor-table tr:hover {
+  background: #fbf5dd;
+}
+
+.sensor-table td:first-child {
+  font-weight: 500;
+  color: #16404d;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .table-container {
+    margin: 0 -1rem;
+    padding: 0 1rem;
+  }
+}
