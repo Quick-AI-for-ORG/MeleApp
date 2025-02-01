@@ -1,15 +1,22 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Response
+import cv2
 import numpy as np
 import tensorflow as tf
+import os
+import sys
+sys.path.append(os.path.join(os.path.dirname('Utils')))
+from Utils.Insect_Classifier import insectClassifier
 
-model = tf.keras.models.load_model("model.keras")  
+beePath = "../AI_Service/Models/Quantized_Bee.tflite"
+waspPath = "../AI_Service/Models/Quantized_Wasp.tflite"
+yoloPath = "../AI_Service/Models/Insect.pt"
 
-class_labels = ["Class A", "Class B", "Class C"]  
+classifier = insectClassifier(beePath,waspPath,yoloPath)
 
 app = Flask(__name__)
 
-@app.route('/predict', methods=['POST'])
-def predict():
+@app.route('/Classify', methods=['POST'])
+def classify():
     try:
         data = request.json
         if not data or 'input' not in data:
@@ -17,16 +24,11 @@ def predict():
         
         input_data = np.array(data['input'])  
         input_data = np.expand_dims(input_data, axis=0) 
-
-        predictions = model.predict(input_data)
         
-        predicted_index = np.argmax(predictions[0]) 
-        predicted_class = class_labels[predicted_index]
-        confidence = float(predictions[0][predicted_index]) 
+        frame = classifier.processFrame(input_data)
 
         return jsonify({
-            "predicted_class": predicted_class,
-            "confidence": confidence
+            frame: frame
         })
 
     except Exception as e:
