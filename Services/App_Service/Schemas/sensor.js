@@ -5,5 +5,9 @@ const sensorSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
+    status: {
+        type: String,
+        required: true,
+    },
 }, { timestamps: true });
 module.exports = mongoose.model('Sensor', sensorSchema);
