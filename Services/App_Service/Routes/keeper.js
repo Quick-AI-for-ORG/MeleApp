@@ -10,7 +10,9 @@ router.get("/signup", (req, res) => {
   });
   
   router.get("/login", (req, res) => {
-    res.render("login", { layout: false });
+    res.render("login", { layout: false,
+        message: req.body.message === undefined ? null : req.body.message
+     });
   });
   
   module.exports = router;
