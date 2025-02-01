@@ -315,8 +315,9 @@ body *:not(nav, nav *, footer, footer *) {
 }
 
 .view-btn {
-  background:#16404d ;
+  background: #16404d;
   color: #fff;
+  text-decoration: none;
   border: none;
   padding: 0.8rem 2rem;
   border-radius: 25px;
@@ -324,12 +325,15 @@ body *:not(nav, nav *, footer, footer *) {
   transition: all 0.3s ease;
   cursor: pointer;
   box-shadow: 0 4px 15px rgba(252, 163, 17, 0.3);
+  display: inline-block;
 }
 
 .view-btn:hover {
   background: #fca311;
   transform: scale(1.05);
   box-shadow: 0 6px 20px rgba(22, 64, 77, 0.4);
+  color: #fff;
+  text-decoration: none;
 }
 
 .product-card:hover .view-btn {

@@ -31,9 +31,9 @@
                     <div class="product-image">
                         <img src="<%= product.image %>" alt="<%= product.title %>">
                         <div class="product-overlay">
-                            <button class="view-btn">
+                            <a href="/products/<%= product._id %>" class="view-btn">
                                 <i class="fas fa-eye me-2"></i>View Details
-                            </button>
+                            </a>
                         </div>
                     </div>
                     <div class="product-info">
