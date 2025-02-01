@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const readingEntry = new mongoose.Schema({
     sensorRef: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Sensor',
+        ref: 'Sensors',
         required: true,
     },
     sensorValue: {
@@ -12,7 +12,7 @@ const readingEntry = new mongoose.Schema({
     },
     hiveRef: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Hive',
+        ref: 'Hives',
         required: true,
     },
     frameNum: {
@@ -22,4 +22,4 @@ const readingEntry = new mongoose.Schema({
 
 }, { timestamps: true });
 
-module.exports = mongoose.model('Reading', readingEntry);
+module.exports = mongoose.model('Readings', readingEntry);

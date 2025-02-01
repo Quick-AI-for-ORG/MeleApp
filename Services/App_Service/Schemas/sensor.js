@@ -10,4 +10,4 @@ const sensorSchema = new mongoose.Schema({
         required: true,
     },
 }, { timestamps: true });
-module.exports = mongoose.model('Sensor', sensorSchema);
+module.exports = mongoose.model('Sensors', sensorSchema);

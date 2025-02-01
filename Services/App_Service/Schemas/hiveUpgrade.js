@@ -1,15 +1,15 @@
 const mongoose = require('mongoose');
 const upgradeSchema = new mongoose.Schema({
-    userRef: {
+    hiveRef: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Users',
+        ref: 'Hives',
         required: true,
     },
-    productRef: [{
+    upgradeRef: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Products',
+        ref: 'Upgrades',
         required: true,
     }],
 }, { timestamps: true });
 
-module.exports = mongoose.model('Upgrades', upgradeSchema);
+module.exports = mongoose.model('HiveUpgrades', upgradeSchema);

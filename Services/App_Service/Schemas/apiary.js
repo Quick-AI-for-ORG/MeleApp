@@ -20,10 +20,10 @@ const apiarySchema = new mongoose.Schema({
     },
     owner: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'Users',
         required: true,
     },
 
 },{timestamps: true});
 
-module.exports = mongoose.model('Apiary', apiarySchema);
+module.exports = mongoose.model('Apiaries', apiarySchema);
