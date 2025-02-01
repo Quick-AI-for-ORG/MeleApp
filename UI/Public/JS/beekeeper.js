@@ -77,6 +77,7 @@ document.addEventListener("DOMContentLoaded", function () {
               : "rotate(0deg)";
           }
         }
+        toggleDashboards(false);
       });
     });
 
@@ -107,6 +108,7 @@ document.addEventListener("DOMContentLoaded", function () {
               : "rotate(0deg)";
           }
         }
+        toggleDashboards(true);
       });
     });
 
@@ -276,4 +278,90 @@ function initializeProjectsChart() {
       },
     },
   });
+}
+
+function toggleDashboards(showHive = false) {
+  const apiaryDashboard = document.querySelector('.apiary-dashboard');
+  const hiveDashboard = document.querySelector('.hive-dashboard');
+  
+  if (showHive) {
+      apiaryDashboard.style.display = 'none';
+      hiveDashboard.style.display = 'block';
+      initializeHiveCharts();
+  } else {
+      apiaryDashboard.style.display = 'block';
+      hiveDashboard.style.display = 'none';
+      initializeCharts();
+  }
+}
+
+function initializeHiveCharts() {
+  // Weight Chart
+  const weightCtx = document.getElementById("hiveWeightChart");
+  if (weightCtx) {
+      new Chart(weightCtx.getContext("2d"), {
+          type: "bar",
+          data: {
+              labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+              datasets: [{
+                  label: "Weight (kg)",
+                  data: [32.5, 33.1, 34.2, 33.8, 35.2, 34.9, 35.2],
+                  backgroundColor: "#fca311",
+                  borderRadius: 5,
+              }]
+          },
+          options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                  legend: { display: false }
+              },
+              scales: {
+                  y: {
+                      beginAtZero: false,
+                      min: 30,
+                      max: 38,
+                      grid: { display: false }
+                  },
+                  x: {
+                      grid: { display: false }
+                  }
+              }
+          }
+      });
+  }
+
+  // Vibration Chart
+  const vibrationCtx = document.getElementById("vibrationChart");
+  if (vibrationCtx) {
+      new Chart(vibrationCtx.getContext("2d"), {
+          type: "line",
+          data: {
+              labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+              datasets: [{
+                  label: "Vibration Level",
+                  data: [2.1, 1.8, 2.3, 1.9, 2.4, 2.0, 1.7],
+                  borderColor: "#4F46E5",
+                  tension: 0.4,
+                  fill: false
+              }]
+          },
+          options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                  legend: { display: false }
+              },
+              scales: {
+                  y: {
+                      beginAtZero: true,
+                      grid: { display: false }
+                  },
+                  x: {
+                      grid: { display: false }
+                  }
+              }
+          }
+      });
+  }
 }

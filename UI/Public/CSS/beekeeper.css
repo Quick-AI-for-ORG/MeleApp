@@ -802,3 +802,31 @@ canvas {
   color: #16404d;
   margin-right: 0.25rem;
 }
+
+.weather-card.frames .weather-icon {
+  background: rgba(79, 70, 229, 0.1);
+  color: #4f46e5;
+}
+
+.weather-card.sensors .weather-icon {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+.weather-card.hive-threats .weather-icon {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.hive-dashboard {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
