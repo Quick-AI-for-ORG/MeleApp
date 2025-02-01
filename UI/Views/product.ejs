@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= room.Title %>
+    </title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-TDk5lZuPf3dIjwWS6vjo5er1e3I9Xn2V/9j8h1N7DgDOWzIuXW+56WZdQDd21h9N" crossorigin="anonymous">
+    <link rel="stylesheet" href="/CSS/room.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css"
+        integrity="...">
+
+</head>
+
+<body class="background-radial-gradient">
+
+    <div class="images">
+        <h1 class="title">
+            <%=room.Title%>
+        </h1>
+        <% const more=room.imageURL.substring(0, room.imageURL.length- 5);%>
+
+            <div class="mySlides">
+                <img src="<%= room.imageURL %>" alt="<%= room.Title %>">
+            </div>
+            <div class="mySlides">
+                <img src="<%= more + '1.jpeg' %>" alt="<%= room.Title %>">
+            </div>
+            <div class="mySlides">
+                <img src="<%= more + '2.jpeg' %>" alt="<%= room.Title %>">
+            </div>
+
+            <div class="image-container">
+                <div class="image-item">
+                    <img class="demo img-fluid" src="<%= room.imageURL %>" alt="<%= room.Title %>"
+                        onclick="currentSlide(1)">
+                </div>
+                <div class="image-item">
+                    <img class="demo img-fluid" src="<%= more + '1.jpeg' %>" alt="<%= room.Title %>"
+                        onclick="currentSlide(2)">
+                </div>
+                <div class="image-item">
+                    <img class="demo img-fluid" src="<%= more + '2.jpeg' %>" alt="<%= room.Title %>"
+                        onclick="currentSlide(3)">
+                </div>
+            </div>
+
+    </div>
+    </div>
+    <div class="data">
+        <div class="col-md-6">
+            <label>Description</label>
+            <p>
+                <%= room.description%>
+            </p>
+            <p>
+                <% if (characteristics) { characteristics.forEach(characteristic=> { %>
+                    <i class="<%=characteristic.icon%>" title="<%= characteristic.characteristic %>" alt=""
+                        <%=characteristic.characteristic %>""></i>
+                    <% })}; let num=room.capacity; if (num==3) { %>
+                        <i class="fa-regular fa-3" title="Number of people"></i>
+                        <% } else { %>
+                            <i class="fa-regular fa-4" title="Number of people"></i>
+                            <% } %>
+            </p>
+            <hr>
+            <label>Room Details</label>
+            <p class="type">
+                <%= room.executive ? 'Executive Club Room' : 'Basma Hotel Room' %>
+            </p>
+            <ul>
+                <li>Quantity: <%= room.quantity %>
+                </li>
+                <li>Capacity: <%= room.capacity %> people</li>
+                <li>Starting Price: $<%= room.startingPrice %> per night</li>
+            </ul>
+            <div class="go-back-button">
+                <a href="/room">
+                    <button>
+                        <i class="fa-solid fa-circle-arrow-left"></i> Go Back to All Rooms
+                    </button>
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div id="radius-shape-1" class="radius-shape-1"></div>
+            <div id="radius-shape-2" class="radius-shape-2"></div>
+            <div class="booking-form">
+                <form action="/guest/booking" method="POST">
+                    <input type="hidden" name="roomTitle" value="<%= room.Title %>">
+                    <label for="arrivalDate">Arrival Date:</label>
+                    <input type="date" id="arrivalDate" name="arrivalDate" required>
+                    <br>
+                    <label for="departureDate">Departure Date:</label>
+                    <input type="date" id="departureDate" name="departureDate" required>
+                    <br>
+                    <input type="submit" value="Book Now" class="btn btn-primary">
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="/JS/room.js"></script>
+    <script src="/JS/dates.js"></script>
+
+</body>
+
+</html>

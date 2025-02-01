@@ -1,0 +1,225 @@
+body {
+  font-family: "Arial", sans-serif;
+  background-image: url("/IMAGES/axp-photography-RfyqNPEU2RQ-unsplash_.jpg");
+  /* background-image: url("/IMAGES/Aswan+at+sunset-1920w.webp"); */
+  /* background-image: url("/IMAGES/aswan_0.jpg"); */
+  /* background-image: url("/IMAGES/GettyImages-465683519_full.jpg"); */
+  background-size: contain;
+
+  margin: 0;
+}
+
+.room-description,
+.booking-form {
+  margin-left: 20%;
+  flex: 1;
+  max-width: 80%;
+  box-sizing: border-box;
+  background-color: #ffffff;
+  color: #7f12be;
+  border-radius: 20px;
+  padding: 20px;
+  border: 2px solid #8213c2;
+}
+
+.room-description h2,
+.booking-form h2 {
+  color: #7f12be;
+}
+
+.room-description p {
+  color: #2d3142;
+}
+
+.booking-form form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin-bottom: 10px;
+  background-image: linear-gradient(to left, #133cc2, #8213c2);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.booking-form input[type="date"] {
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 2px solid #bfc0c0;
+  border-radius: 10px;
+  color: #000000;
+  transition: background-color 0.5s;
+}
+
+.booking-form input[type="submit"] {
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 2px solid #8213c2;
+  border-radius: 10px;
+  background-color: #8213c2;
+  color: #fff;
+  transition: background-color 0.5s;
+}
+
+.booking-form input[type="submit"]:hover {
+  background-color: #3c0266;
+  border-color: #3c0266;
+}
+
+.data {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -15px;
+  margin-left: -15px;
+  border-radius: 0.2rem;
+  padding: 1.25rem !important;
+  width: 70%;
+  margin-left: 15%;
+  padding: 25%;
+  border-radius: 20px;
+  margin-bottom: 3%;
+  border-style: solid;
+  border-color: #4d13c2;
+  border-top: 0;
+  border-width: middle;
+  background-color: white;
+}
+
+.images {
+  background-color: white;
+  margin-top: 7%;
+  padding: 2%;
+  width: 70%;
+  margin-left: 15%;
+  border-radius: 20px;
+  border: 2px solid #4106b7;
+  border-bottom: 0;
+  /* background-image: url("/IMAGES/v822-aew-23.jpg"); */
+  position: relative;
+}
+
+.images::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  width: 90%;
+  transform: translateX(-50%);
+  height: 1px;
+  background-color: #4106b7;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+.demo {
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+.active,
+.demo:hover {
+  opacity: 1;
+}
+.image-container {
+  display: flex;
+}
+
+.image-item {
+  flex: 1;
+  margin-top: 10px;
+  margin-right: 10px;
+}
+.image-item img {
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+}
+.image-item:last-child {
+  margin-right: 0;
+}
+.mySlides img {
+  width: 100%;
+  height: 70%;
+  border-radius: 5px;
+}
+.type {
+  font-size: medium;
+  margin: 1%;
+  margin-top: -1%;
+  color: #1103af;
+}
+p i {
+  color: #133cc2;
+}
+
+.title {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  align-items: center;
+  margin-bottom: 2%;
+  background-image: linear-gradient(to right, #133cc2, #8213c2);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.title::before,
+.title::after {
+  content: "";
+  flex: 0 1 10%;
+  height: 2px;
+  background-image: linear-gradient(to right, #133cc2, #8213c2);
+  width: 30%;
+}
+
+.title::before {
+  margin-right: 10px;
+}
+
+.title::after {
+  margin-left: 10px;
+}
+
+/* Go back button */
+.go-back-button a {
+  text-decoration: none;
+}
+
+.go-back-button button {
+  background-color: #8213c2;
+  color: #fff;
+  padding: 10px 20px;
+  margin-left: 0;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.go-back-button button:hover {
+  background-color: #4e027a;
+}
+
+.go-back-button i {
+  margin-right: 5px;
+}
+::-webkit-scrollbar {
+  display: none;
+}
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-500px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+body *:not(nav, nav *, footer, footer *) {
+  animation: fadeIn 1.5s ease-in-out; /* Adjust duration as needed */
+}
