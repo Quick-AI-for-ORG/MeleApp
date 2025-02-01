@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Update title
         const apiaryName = this.querySelector("span").textContent;
-        updateApiaryTitle(apiaryName);
+        updateTitles(apiaryName);
 
         // Toggle nested content
         const content = this.nextElementSibling;
@@ -77,6 +77,7 @@ document.addEventListener("DOMContentLoaded", function () {
               : "rotate(0deg)";
           }
         }
+        toggleDashboards(false);
       });
     });
 
@@ -87,6 +88,12 @@ document.addEventListener("DOMContentLoaded", function () {
       trigger.addEventListener("click", function (e) {
         e.preventDefault();
         e.stopPropagation();
+
+        const hiveName = this.querySelector("span").textContent;
+        const apiaryElement = this.closest('.nested-dropdown').querySelector('.nested-trigger span');
+        const apiaryName = apiaryElement ? apiaryElement.textContent : '';
+        
+        updateTitles(apiaryName, hiveName);
 
         const content = this.nextElementSibling;
         if (content) {
@@ -101,6 +108,7 @@ document.addEventListener("DOMContentLoaded", function () {
               : "rotate(0deg)";
           }
         }
+        toggleDashboards(true);
       });
     });
 
@@ -108,13 +116,22 @@ document.addEventListener("DOMContentLoaded", function () {
   initializeCharts();
 });
 
-function updateApiaryTitle(newTitle) {
-  const navTitle = document.querySelector(".nav-title");
-  if (navTitle) {
-    navTitle.textContent = newTitle;
-    navTitle.style.animation = "none";
-    navTitle.offsetHeight; // Trigger reflow
-    navTitle.style.animation = "titleUpdate 0.3s ease";
+function updateTitles(apiaryName, hiveName = '') {
+  const apiaryTitle = document.getElementById('currentApiaryTitle');
+  const hiveTitle = document.getElementById('currentHiveTitle');
+  
+  if (apiaryTitle) {
+      apiaryTitle.textContent = apiaryName;
+  }
+  
+  if (hiveTitle) {
+      if (hiveName) {
+          hiveTitle.textContent = hiveName;
+          hiveTitle.classList.add('active');
+      } else {
+          hiveTitle.textContent = '';
+          hiveTitle.classList.remove('active');
+      }
   }
 }
 
@@ -261,4 +278,90 @@ function initializeProjectsChart() {
       },
     },
   });
+}
+
+function toggleDashboards(showHive = false) {
+  const apiaryDashboard = document.querySelector('.apiary-dashboard');
+  const hiveDashboard = document.querySelector('.hive-dashboard');
+  
+  if (showHive) {
+      apiaryDashboard.style.display = 'none';
+      hiveDashboard.style.display = 'block';
+      initializeHiveCharts();
+  } else {
+      apiaryDashboard.style.display = 'block';
+      hiveDashboard.style.display = 'none';
+      initializeCharts();
+  }
+}
+
+function initializeHiveCharts() {
+  // Weight Chart
+  const weightCtx = document.getElementById("hiveWeightChart");
+  if (weightCtx) {
+      new Chart(weightCtx.getContext("2d"), {
+          type: "bar",
+          data: {
+              labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+              datasets: [{
+                  label: "Weight (kg)",
+                  data: [32.5, 33.1, 34.2, 33.8, 35.2, 34.9, 35.2],
+                  backgroundColor: "#fca311",
+                  borderRadius: 5,
+              }]
+          },
+          options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                  legend: { display: false }
+              },
+              scales: {
+                  y: {
+                      beginAtZero: false,
+                      min: 30,
+                      max: 38,
+                      grid: { display: false }
+                  },
+                  x: {
+                      grid: { display: false }
+                  }
+              }
+          }
+      });
+  }
+
+  // Vibration Chart
+  const vibrationCtx = document.getElementById("vibrationChart");
+  if (vibrationCtx) {
+      new Chart(vibrationCtx.getContext("2d"), {
+          type: "line",
+          data: {
+              labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+              datasets: [{
+                  label: "Vibration Level",
+                  data: [2.1, 1.8, 2.3, 1.9, 2.4, 2.0, 1.7],
+                  borderColor: "#4F46E5",
+                  tension: 0.4,
+                  fill: false
+              }]
+          },
+          options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                  legend: { display: false }
+              },
+              scales: {
+                  y: {
+                      beginAtZero: true,
+                      grid: { display: false }
+                  },
+                  x: {
+                      grid: { display: false }
+                  }
+              }
+          }
+      });
+  }
 }

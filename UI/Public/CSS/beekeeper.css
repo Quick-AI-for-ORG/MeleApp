@@ -591,6 +591,16 @@ canvas {
   color: #ef4444;
 }
 
+.weather-card.hive-temp .weather-icon {
+  background: rgba(252, 163, 17, 0.1);
+  color: #fca311;
+}
+
+.weather-card.hive-humidity .weather-icon {
+  background: rgba(22, 64, 77, 0.1);
+  color: #16404d;
+}
+
 /* Adjust grid columns for 5 cards */
 @media (min-width: 1200px) {
   .weather-stats {
@@ -746,40 +756,156 @@ canvas {
 
 /* Navbar title styles */
 .nav-divider {
-    width: 2px;
-    height: 30px;
-    background: rgba(22, 64, 77, 0.1);
-    margin: 0 1rem;
+  width: 2px;
+  height: 30px;
+  background: rgba(22, 64, 77, 0.1);
+  margin: 0 1rem;
 }
 
 .nav-title {
-    color: #16404d;
-    font-size: 1.2rem;
-    font-weight: 500;
-    margin-right: 2rem;
-    position: relative;
-    padding-right: 1rem;
+  color: #16404d;
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-right: 2rem;
+  position: relative;
+  padding-right: 1rem;
 }
 
 .nav-title::after {
-    content: '';
-    position: absolute;
-    bottom: -4px;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: #fca311;
-    transform: scaleX(0);
-    transition: transform 0.3s ease;
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #fca311;
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
 }
 
 .nav-title:hover::after {
-    transform: scaleX(1);
+  transform: scaleX(1);
 }
 
 /* Update header-left to accommodate new title */
 .header-left {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Dynamic Hive Title */
+.hive-title {
+  display: inline-block;
+  opacity: 0;
+  margin-left: 0.5rem;
+  color: #fca311;
+  transition: all 0.3s ease;
+}
+
+.hive-title.active {
+  opacity: 1;
+}
+
+.hive-title::before {
+  content: "- ";
+  color: #16404d;
+  margin-right: 0.25rem;
+}
+
+.weather-card.frames .weather-icon {
+  background: rgba(79, 70, 229, 0.1);
+  color: #4f46e5;
+}
+
+.weather-card.sensors .weather-icon {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+.weather-card.hive-threats .weather-icon {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.hive-dashboard {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Sensor Data Tables */
+.tables-section {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.table-card {
+  background: white;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.table-title {
+  color: #16404d;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.table-title i {
+  color: #fca311;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.sensor-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px;
+}
+
+.sensor-table th,
+.sensor-table td {
+  padding: 0.75rem;
+  text-align: center;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.sensor-table th {
+  background: #f8f9fa;
+  font-weight: 600;
+  color: #16404d;
+}
+
+.sensor-table tr:hover {
+  background: #fbf5dd;
+}
+
+.sensor-table td:first-child {
+  font-weight: 500;
+  color: #16404d;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .table-container {
+    margin: 0 -1rem;
+    padding: 0 1rem;
+  }
 }

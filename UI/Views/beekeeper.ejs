@@ -21,7 +21,12 @@
                     <img src="/Images/Logo.png" alt="Mele Logo" height="40">
                 </div>
                 <div class="nav-divider"></div>
-                <h2 class="nav-title" id="currentApiaryTitle">Aswan Apiary</h2>
+                <div class="dynamic-title">
+                    <h2 class="nav-title">
+                        <span id="currentApiaryTitle">Aswan Apiary</span>
+                        <span id="currentHiveTitle" class="hive-title"></span>
+                    </h2>
+                </div>
                 <nav class="nav">
                     <a href="#" class="nav-link active">Dashboard</a>
                     <a href="#" class="nav-link">Home</a>
@@ -100,235 +105,406 @@
 
         <!-- Main Content -->
         <main class="main-content">
-            <!-- Weather Stats -->
-            <div class="weather-stats">
-                <div class="weather-card temp">
-                    <div class="weather-icon">
-                        <i class="fas fa-temperature-high"></i>
-                    </div>
-                    <div class="weather-info">
-                        <h3>Temperature</h3>
-                        <div class="weather-value">
-                            <span class="value">28</span>
-                            <span class="unit">°C</span>
+            <!-- Apiary Dashboard -->
+            <div class="apiary-dashboard">
+                <!-- Weather Stats -->
+                <div class="weather-stats">
+                    <div class="weather-card temp">
+                        <div class="weather-icon">
+                            <i class="fas fa-temperature-high"></i>
                         </div>
-                        <p class="weather-time">Today, 2:30 PM</p>
+                        <div class="weather-info">
+                            <h3>Temperature</h3>
+                            <div class="weather-value">
+                                <span class="value">28</span>
+                                <span class="unit">°C</span>
+                            </div>
+                            <p class="weather-time">Today, 2:30 PM</p>
+                        </div>
+                    </div>
+
+                    <div class="weather-card humidity">
+                        <div class="weather-icon">
+                            <i class="fas fa-tint"></i>
+                        </div>
+                        <div class="weather-info">
+                            <h3>Humidity</h3>
+                            <div class="weather-value">
+                                <span class="value">65</span>
+                                <span class="unit">%</span>
+                            </div>
+                            <p class="weather-time">Today, 2:30 PM</p>
+                        </div>
+                    </div>
+
+                    <div class="weather-card total-beekeepers">
+                        <div class="weather-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="weather-info">
+                            <h3>Total Beekeepers</h3>
+                            <div class="weather-value">
+                                <span class="value">12</span>
+                                <span class="unit">Active</span>
+                            </div>
+                            <p class="weather-time">Last updated today</p>
+                        </div>
+                    </div>
+
+                    <div class="weather-card total-hives">
+                        <div class="weather-icon">
+                            <i class="fas fa-archive"></i>
+                        </div>
+                        <div class="weather-info">
+                            <h3>Total Hives</h3>
+                            <div class="weather-value">
+                                <span class="value">35</span>
+                                <span class="unit">Monitored</span>
+                            </div>
+                            <p class="weather-time">Last updated today</p>
+                        </div>
+                    </div>
+
+                    <div class="weather-card total-threats">
+                        <div class="weather-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="weather-info">
+                            <h3>Active Threats</h3>
+                            <div class="weather-value">
+                                <span class="value">3</span>
+                                <span class="unit">Detected</span>
+                            </div>
+                            <p class="weather-time">Last updated today</p>
+                        </div>
                     </div>
                 </div>
 
-                <div class="weather-card humidity">
-                    <div class="weather-icon">
-                        <i class="fas fa-tint"></i>
-                    </div>
-                    <div class="weather-info">
-                        <h3>Humidity</h3>
-                        <div class="weather-value">
-                            <span class="value">65</span>
-                            <span class="unit">%</span>
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon">+</div>
+                            <button class="more-btn"><i class="fas fa-ellipsis-v"></i></button>
                         </div>
-                        <p class="weather-time">Today, 2:30 PM</p>
+                        <div class="stat-content">
+                            <h3 class="stat-value">45/76</h3>
+                            <p class="stat-title">Invoices Awaiting Payment</p>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: 55%"></div>
+                        </div>
+                        <p class="stat-subtitle">$5,589 (55%)</p>
+                    </div>
+                    <!-- Repeat for other stat cards -->
+                </div>
+
+                <!-- Charts Grid -->
+                <div class="charts-grid">
+                    <!-- Payment chart commented out
+                    <div class="chart-card">
+                        <h3 class="chart-title">Payment Record</h3>
+                        <canvas id="paymentChart"></canvas>
+                        <div class="chart-footer">
+                            <div class="chart-stat">
+                                <span>Awaiting</span>
+                                <strong>$5,486</strong>
+                            </div>
+                            <div class="chart-stat">
+                                <span>Completed</span>
+                                <strong>$9,275</strong>
+                            </div>
+                        </div>
+                    </div>
+                    -->
+
+                    <div class="chart-card">
+                        <h3 class="chart-title">Hive Weight Average</h3>
+                        <canvas id="weightChart"></canvas>
+                    </div>
+
+                    <div class="threats-card">
+                        <h3 class="threats-title">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            Detected Threats
+                        </h3>
+                        <div class="threats-list">
+                            <div class="threat-item high">
+                                <div class="threat-icon">
+                                    <i class="fas fa-bug"></i>
+                                </div>
+                                <div class="threat-info">
+                                    <h4>Varroa Mites Detected</h4>
+                                    <p>Hive A1 - Moderate infestation level</p>
+                                    <span class="timestamp">2 hours ago</span>
+                                </div>
+                                <div class="threat-severity">High</div>
+                            </div>
+
+                            <div class="threat-item medium">
+                                <div class="threat-icon">
+                                    <i class="fas fa-temperature-high"></i>
+                                </div>
+                                <div class="threat-info">
+                                    <h4>Temperature Alert</h4>
+                                    <p>Hive C2 - Above normal range</p>
+                                    <span class="timestamp">4 hours ago</span>
+                                </div>
+                                <div class="threat-severity">Medium</div>
+                            </div>
+
+                            <div class="threat-item low">
+                                <div class="threat-icon">
+                                    <i class="fas fa-tint"></i>
+                                </div>
+                                <div class="threat-info">
+                                    <h4>Humidity Warning</h4>
+                                    <p>Hive B3 - Slightly elevated</p>
+                                    <span class="timestamp">6 hours ago</span>
+                                </div>
+                                <div class="threat-severity">Low</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="weather-card total-beekeepers">
-                    <div class="weather-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <div class="weather-info">
-                        <h3>Total Beekeepers</h3>
-                        <div class="weather-value">
-                            <span class="value">12</span>
-                            <span class="unit">Active</span>
+                <!-- Beekeepers Section -->
+                <div class="beekeepers-section">
+                    <h2 class="section-title"> Beekeepers</h2>
+                    <div class="beekeepers-grid">
+                        <div class="beekeeper-card">
+                            <div class="beekeeper-avatar">
+                                <i class="fas fa-user-circle"></i>
+                                <div class="status-badge active"></div>
+                            </div>
+                            <div class="beekeeper-info">
+                                <h3>Ahmed Hassan</h3>
+                                <p class="role">Senior Beekeeper</p>
+                                <div class="stats">
+                                    <div class="stat-item">
+                                        <i class="fas fa-box-open"></i>
+                                        <span>12 Hives</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <i class="fas fa-clock"></i>
+                                        <span>8 Years</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="contact-btn"><i class="fas fa-envelope"></i></button>
                         </div>
-                        <p class="weather-time">Last updated today</p>
-                    </div>
-                </div>
 
-                <div class="weather-card total-hives">
-                    <div class="weather-icon">
-                        <i class="fas fa-archive"></i>
-                    </div>
-                    <div class="weather-info">
-                        <h3>Total Hives</h3>
-                        <div class="weather-value">
-                            <span class="value">35</span>
-                            <span class="unit">Monitored</span>
+                        <div class="beekeeper-card">
+                            <div class="beekeeper-avatar">
+                                <i class="fas fa-user-circle"></i>
+                                <div class="status-badge"></div>
+                            </div>
+                            <div class="beekeeper-info">
+                                <h3>Sara Mohamed</h3>
+                                <p class="role">Apiary Manager</p>
+                                <div class="stats">
+                                    <div class="stat-item">
+                                        <i class="fas fa-box-open"></i>
+                                        <span>15 Hives</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <i class="fas fa-clock"></i>
+                                        <span>5 Years</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="contact-btn"><i class="fas fa-envelope"></i></button>
                         </div>
-                        <p class="weather-time">Last updated today</p>
-                    </div>
-                </div>
 
-                <div class="weather-card total-threats">
-                    <div class="weather-icon">
-                        <i class="fas fa-exclamation-triangle"></i>
-                    </div>
-                    <div class="weather-info">
-                        <h3>Active Threats</h3>
-                        <div class="weather-value">
-                            <span class="value">3</span>
-                            <span class="unit">Detected</span>
+                        <div class="beekeeper-card">
+                            <div class="beekeeper-avatar">
+                                <i class="fas fa-user-circle"></i>
+                                <div class="status-badge active"></div>
+                            </div>
+                            <div class="beekeeper-info">
+                                <h3>Karim Ali</h3>
+                                <p class="role">Junior Beekeeper</p>
+                                <div class="stats">
+                                    <div class="stat-item">
+                                        <i class="fas fa-box-open"></i>
+                                        <span>8 Hives</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <i class="fas fa-clock"></i>
+                                        <span>2 Years</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="contact-btn"><i class="fas fa-envelope"></i></button>
                         </div>
-                        <p class="weather-time">Last updated today</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Stats Grid -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <div class="stat-icon">+</div>
-                        <button class="more-btn"><i class="fas fa-ellipsis-v"></i></button>
-                    </div>
-                    <div class="stat-content">
-                        <h3 class="stat-value">45/76</h3>
-                        <p class="stat-title">Invoices Awaiting Payment</p>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress" style="width: 55%"></div>
-                    </div>
-                    <p class="stat-subtitle">$5,589 (55%)</p>
-                </div>
-                <!-- Repeat for other stat cards -->
-            </div>
-
-            <!-- Charts Grid -->
-            <div class="charts-grid">
-                <!-- Payment chart commented out
-                <div class="chart-card">
-                    <h3 class="chart-title">Payment Record</h3>
-                    <canvas id="paymentChart"></canvas>
-                    <div class="chart-footer">
-                        <div class="chart-stat">
-                            <span>Awaiting</span>
-                            <strong>$5,486</strong>
+            <!-- Hive Dashboard -->
+            <div class="hive-dashboard" style="display: none;">
+                <!-- Hive Stats -->
+                <div class="weather-stats">
+                    <div class="weather-card frames">
+                        <div class="weather-icon">
+                            <i class="fas fa-layer-group"></i>
                         </div>
-                        <div class="chart-stat">
-                            <span>Completed</span>
-                            <strong>$9,275</strong>
+                        <div class="weather-info">
+                            <h3>Total Frames</h3>
+                            <div class="weather-value">
+                                <span class="value">10</span>
+                                <span class="unit">Active</span>
+                            </div>
+                            <p class="weather-time">Last updated today</p>
                         </div>
                     </div>
-                </div>
-                -->
 
-                <div class="chart-card">
-                    <h3 class="chart-title">Hive Weight Average</h3>
-                    <canvas id="weightChart"></canvas>
-                </div>
-
-                <div class="threats-card">
-                    <h3 class="threats-title">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        Detected Threats
-                    </h3>
-                    <div class="threats-list">
-                        <div class="threat-item high">
-                            <div class="threat-icon">
-                                <i class="fas fa-bug"></i>
-                            </div>
-                            <div class="threat-info">
-                                <h4>Varroa Mites Detected</h4>
-                                <p>Hive A1 - Moderate infestation level</p>
-                                <span class="timestamp">2 hours ago</span>
-                            </div>
-                            <div class="threat-severity">High</div>
+                    <div class="weather-card sensors">
+                        <div class="weather-icon">
+                            <i class="fas fa-microchip"></i>
                         </div>
-
-                        <div class="threat-item medium">
-                            <div class="threat-icon">
-                                <i class="fas fa-temperature-high"></i>
+                        <div class="weather-info">
+                            <h3>Total Sensors</h3>
+                            <div class="weather-value">
+                                <span class="value">4</span>
+                                <span class="unit">Online</span>
                             </div>
-                            <div class="threat-info">
-                                <h4>Temperature Alert</h4>
-                                <p>Hive C2 - Above normal range</p>
-                                <span class="timestamp">4 hours ago</span>
-                            </div>
-                            <div class="threat-severity">Medium</div>
+                            <p class="weather-time">Last updated today</p>
                         </div>
+                    </div>
 
-                        <div class="threat-item low">
-                            <div class="threat-icon">
-                                <i class="fas fa-tint"></i>
+                    <div class="weather-card hive-threats">
+                        <div class="weather-icon">
+                            <i class="fas fa-exclamation-circle"></i>
+                        </div>
+                        <div class="weather-info">
+                            <h3>Active Threats</h3>
+                            <div class="weather-value">
+                                <span class="value">2</span>
+                                <span class="unit">Detected</span>
                             </div>
-                            <div class="threat-info">
-                                <h4>Humidity Warning</h4>
-                                <p>Hive B3 - Slightly elevated</p>
-                                <span class="timestamp">6 hours ago</span>
+                            <p class="weather-time">Last updated today</p>
+                        </div>
+                    </div>
+
+                    <div class="weather-card hive-temp">
+                        <div class="weather-icon">
+                            <i class="fas fa-temperature-high"></i>
+                        </div>
+                        <div class="weather-info">
+                            <h3>Average Temperature</h3>
+                            <div class="weather-value">
+                                <span class="value">32.4</span>
+                                <span class="unit">°C</span>
                             </div>
-                            <div class="threat-severity">Low</div>
+                            <p class="weather-time">Last updated today</p>
+                        </div>
+                    </div>
+
+                    <div class="weather-card hive-humidity">
+                        <div class="weather-icon">
+                            <i class="fas fa-tint"></i>
+                        </div>
+                        <div class="weather-info">
+                            <h3>Average Humidity</h3>
+                            <div class="weather-value">
+                                <span class="value">65.3</span>
+                                <span class="unit">%</span>
+                            </div>
+                            <p class="weather-time">Last updated today</p>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Beekeepers Section -->
-            <div class="beekeepers-section">
-                <h2 class="section-title"> Beekeepers</h2>
-                <div class="beekeepers-grid">
-                    <div class="beekeeper-card">
-                        <div class="beekeeper-avatar">
-                            <i class="fas fa-user-circle"></i>
-                            <div class="status-badge active"></div>
-                        </div>
-                        <div class="beekeeper-info">
-                            <h3>Ahmed Hassan</h3>
-                            <p class="role">Senior Beekeeper</p>
-                            <div class="stats">
-                                <div class="stat-item">
-                                    <i class="fas fa-box-open"></i>
-                                    <span>12 Hives</span>
-                                </div>
-                                <div class="stat-item">
-                                    <i class="fas fa-clock"></i>
-                                    <span>8 Years</span>
-                                </div>
-                            </div>
-                        </div>
-                        <button class="contact-btn"><i class="fas fa-envelope"></i></button>
+                <!-- Hive Charts Grid -->
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <h3 class="chart-title">Weight Over Time</h3>
+                        <canvas id="hiveWeightChart"></canvas>
                     </div>
 
-                    <div class="beekeeper-card">
-                        <div class="beekeeper-avatar">
-                            <i class="fas fa-user-circle"></i>
-                            <div class="status-badge"></div>
+                    <div class="chart-card">
+                        <h3 class="chart-title">Vibration Over Time</h3>
+                        <canvas id="vibrationChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Sensor Data Tables -->
+                <div class="tables-section">
+                    <div class="table-card">
+                        <h3 class="table-title">
+                            <i class="fas fa-temperature-high"></i>
+                            Temperature Data (°C)
+                        </h3>
+                        <div class="table-container">
+                            <table class="sensor-table">
+                                <thead>
+                                    <tr>
+                                        <th>Time</th>
+                                        <th>Average</th>
+                                        <th>S1</th>
+                                        <th>S2</th>
+                                        <th>S3</th>
+                                        <th>S4</th>
+                                        <th>S5</th>
+                                        <th>S6</th>
+                                        <th>S7</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>14:30</td>
+                                        <td>32.5</td>
+                                        <td>32.1</td>
+                                        <td>32.4</td>
+                                        <td>32.7</td>
+                                        <td>32.3</td>
+                                        <td>32.6</td>
+                                        <td>32.8</td>
+                                        <td>32.2</td>
+                                    </tr>
+                                    <!-- Add more rows as needed -->
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="beekeeper-info">
-                            <h3>Sara Mohamed</h3>
-                            <p class="role">Apiary Manager</p>
-                            <div class="stats">
-                                <div class="stat-item">
-                                    <i class="fas fa-box-open"></i>
-                                    <span>15 Hives</span>
-                                </div>
-                                <div class="stat-item">
-                                    <i class="fas fa-clock"></i>
-                                    <span>5 Years</span>
-                                </div>
-                            </div>
-                        </div>
-                        <button class="contact-btn"><i class="fas fa-envelope"></i></button>
                     </div>
 
-                    <div class="beekeeper-card">
-                        <div class="beekeeper-avatar">
-                            <i class="fas fa-user-circle"></i>
-                            <div class="status-badge active"></div>
+                    <div class="table-card">
+                        <h3 class="table-title">
+                            <i class="fas fa-tint"></i>
+                            Humidity Data (%)
+                        </h3>
+                        <div class="table-container">
+                            <table class="sensor-table">
+                                <thead>
+                                    <tr>
+                                        <th>Time</th>
+                                        <th>Average</th>
+                                        <th>S1</th>
+                                        <th>S2</th>
+                                        <th>S3</th>
+                                        <th>S4</th>
+                                        <th>S5</th>
+                                        <th>S6</th>
+                                        <th>S7</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>14:30</td>
+                                        <td>65.3</td>
+                                        <td>65.1</td>
+                                        <td>65.4</td>
+                                        <td>65.7</td>
+                                        <td>65.3</td>
+                                        <td>65.6</td>
+                                        <td>65.8</td>
+                                        <td>65.2</td>
+                                    </tr>
+                                    <!-- Add more rows as needed -->
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="beekeeper-info">
-                            <h3>Karim Ali</h3>
-                            <p class="role">Junior Beekeeper</p>
-                            <div class="stats">
-                                <div class="stat-item">
-                                    <i class="fas fa-box-open"></i>
-                                    <span>8 Hives</span>
-                                </div>
-                                <div class="stat-item">
-                                    <i class="fas fa-clock"></i>
-                                    <span>2 Years</span>
-                                </div>
-                            </div>
-                        </div>
-                        <button class="contact-btn"><i class="fas fa-envelope"></i></button>
                     </div>
                 </div>
             </div>
