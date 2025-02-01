@@ -1,14 +1,15 @@
 const mongoose = require('mongoose');
-const product = require('./product');
 const upgradeSchema = new mongoose.Schema({
     userRef: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'Users',
         required: true,
     },
     productRef: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product',
+        ref: 'Products',
         required: true,
     }],
 }, { timestamps: true });
+
+module.exports = mongoose.model('Upgrades', upgradeSchema);

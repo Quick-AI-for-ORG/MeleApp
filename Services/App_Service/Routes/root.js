@@ -49,7 +49,7 @@ router.get("/products/:id", async (req, res) => {
   try {
     // Mock data - replace with database query later
     const products = {
-      "1": {
+      1: {
         title: "Citrus Blossom Honey",
         description:
           "Sweet honey from Egyptian orange groves, carefully harvested to preserve its natural flavors and therapeutic properties. Our citrus honey offers a delicate balance of sweetness with subtle citrus undertones.",
@@ -64,7 +64,7 @@ router.get("/products/:id", async (req, res) => {
           "Lab Tested Quality",
         ],
       },
-      "2": {
+      2: {
         // ...similar structure for other products
       },
     };
