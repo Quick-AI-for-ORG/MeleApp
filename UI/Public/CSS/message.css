@@ -1,0 +1,73 @@
+.error-message {
+    display: flex;
+    align-items: center;
+    gap: 10px; 
+    padding: 20px;
+    animation: moveLeft 25s ease-out forwards;
+    position: absolute; 
+    right: 0; 
+    z-index: 100;
+    top:0
+}
+
+.error-message .bee{
+    width: 80px; 
+}
+.error-message .handle img{
+    width:50px
+}
+.error-message .dashed-line {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 5px; 
+    position: relative;
+    width: 10%;
+}
+
+.error-message .dash {
+    width: 100px;
+    height: 2px;
+    background: linear-gradient(to right, #F4C64F, #16404d);
+    position: relative;
+    animation: waveMotion 2s infinite ease-in-out;
+}
+
+.error-message .message-box {
+    background:#16404d;
+    color: #fbf5dd;
+    font-weight: bold;
+    padding: 8px 12px;
+    border-radius: 5px;
+    white-space: nowrap;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+    margin-left: -27px;
+}
+@keyframes waveMotion {
+    0% {
+        transform: translateY(20px) 
+    }
+    
+    25% {
+        transform: translateY(-20px)
+    }
+
+    50% {
+        transform: translateY(20px)
+    }
+    75% {
+        transform: translateY(-20px)
+    }
+    100% {
+        transform: translateY(20px)
+    }
+}
+
+@keyframes moveLeft {
+    0% {
+        transform: translateX(100%); 
+    }
+    100% {
+        transform: translateX(-100%); 
+    }
+}

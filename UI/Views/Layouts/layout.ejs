@@ -18,8 +18,7 @@
     <nav class="navbar navbar-expand-lg fixed-top bg-light navbar-light">
         <div class="container">
             <a class="navbar-brand" href="/">
-                <span class="mb-3">Mele Rimba</span>
-                <img id="MDB-logo" src="/IMAGES/honey-logo.png" alt="Mele Logo" draggable="false" height="50" />
+                <img id="logo" src="/IMAGES/Logo.png" alt="Mele Logo" draggable="false" height="50" />                
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,21 +44,21 @@
                     </li>
                     <% if (user) { %>
                         <li class="nav-item ms-3">
-                            <a id="on" class="btn toggled rounded-pill" href="/guest">
+                            <a id="on" class="btn toggled rounded-pill" href="/keeper">
                                 <i class="fas fa-user-circle fa-lg pe-2"></i>Profile
                             </a>
                         </li>
                         <li class="nav-item ms-3">
-                            <a id="off" class="btn rounded-pill" href="/guest/logout">
+                            <a id="off" class="btn rounded-pill" href="/keeper/logout">
                                 <i class="fas fa-sign-out-alt fa-lg pe-2"></i>Logout
                             </a>
                         </li>
                         <% } else { %>
                             <li class="nav-item ms-3">
-                                <a id="on" class="btn toggled rounded-pill" href="/guest/login">Sign in</a>
+                                <a id="on" class="btn toggled rounded-pill" href="/keeper/login">Sign in</a>
                             </li>
                             <li class="nav-item ms-3">
-                                <a id="off" class="btn rounded-pill" href="/guest/signup">Sign up</a>
+                                <a id="off" class="btn rounded-pill" href="/keeper/signup">Sign up</a>
                             </li>
                             <% } %>
                 </ul>
@@ -103,7 +102,7 @@
             <div class="accept">
                 <p>We Proudly Accept</p>
                 <img src="/IMAGES/payment (1).png" alt="Master card & visa">
-                <img src="/IMAGES/logo-01-1-1-removebg-preview.png" alt="miza">
+                <img src="/IMAGES/instapay.png" alt="Instapay">
             </div>
         </div>
         <p style="color: white;">Mele Rimba © 2025 All Rights Reserved</p>
