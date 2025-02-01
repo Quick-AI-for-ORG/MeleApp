@@ -58,7 +58,7 @@ header h1::after {
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  background-color: #fff;
+  background-color: #fbf5dd;
   cursor: pointer;
   transition: transform 0.2s;
   display: flex;
@@ -205,7 +205,7 @@ body *:not(nav, nav *, footer, footer *) {
   height: 300px;
   display: flex;
   align-items: center;
-  color: #fbf5dd;
+  color: #fff;
   text-align: center;
   margin-bottom: 3rem;
 }
@@ -219,9 +219,9 @@ body *:not(nav, nav *, footer, footer *) {
 }
 
 .filter-btn {
-  background: transparent;
+  background: #16404d;
   border: 2px solid #16404d;
-  color: #16404d;
+  color: #fff;
   padding: 0.5rem 1.5rem;
   border-radius: 25px;
   transition: all 0.3s ease;
@@ -315,7 +315,7 @@ body *:not(nav, nav *, footer, footer *) {
 }
 
 .view-btn {
-  background: #fca311;
+  background:#16404d ;
   color: #fff;
   border: none;
   padding: 0.8rem 2rem;
@@ -327,7 +327,7 @@ body *:not(nav, nav *, footer, footer *) {
 }
 
 .view-btn:hover {
-  background: #16404d;
+  background: #fca311;
   transform: scale(1.05);
   box-shadow: 0 6px 20px rgba(22, 64, 77, 0.4);
 }
