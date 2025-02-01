@@ -22,4 +22,11 @@ router.get("/signup", (req, res) => {
      });
   });
   
+
+  router.get("/dashboard", (req, res) => {
+    res.render("beekeeper", {
+      layout: false,
+      message: req.body.message === undefined ? null : req.body.message,
+    });
+  });
   module.exports = router;

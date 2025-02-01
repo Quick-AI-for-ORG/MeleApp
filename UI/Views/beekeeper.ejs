@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duralux Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/CSS/beekeeper.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <div class="logo">
+                    <img src="/Images/Logo.png" alt="Mele Logo" height="40">
+                </div>
+                <nav class="nav">
+                    <a href="#" class="nav-link active">Dashboard</a>
+                    <a href="#" class="nav-link">Home</a>
+                </nav>
+            </div>
+            <div class="header-right">
+                <button class="icon-btn"><i class="fas fa-search"></i></button>
+                <button class="icon-btn"><i class="fas fa-bell"></i></button>
+                <button class="icon-btn"><i class="fas fa-cog"></i></button>
+            </div>
+        </header>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <div class="dropdown-container">
+                    <button class="dropdown-trigger" id="apiaryDropdown">
+                        <div class="trigger-content">
+                            <i class="fas fa-warehouse"></i>
+                            <span>My Apiaries</span>
+                        </div>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="dropdown-content">
+                        <!-- Dummy apiaries -->
+                        <div class="nested-dropdown">
+                            <button class="nested-trigger">
+                                <span>Aswan Apiary</span>
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                            <div class="nested-content">
+                                <div class="hive-item">
+                                    <button class="nested-trigger">
+                                        <span>Hive A1</span>
+                                        <i class="fas fa-chevron-right"></i>
+                                    </button>
+                                    <div class="nested-content">
+                                        <a href="#" class="monitor-link"><i class="fas fa-video"></i> Door Camera</a>
+                                        <a href="#" class="monitor-link"><i class="fas fa-eye"></i> Honey View</a>
+                                        <a href="#" class="monitor-link"><i class="fas fa-temperature-high"></i>
+                                            Internal</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="nested-dropdown">
+                            <button class="nested-trigger">
+                                <span>Cairo Garden Apiary</span>
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                            <div class="nested-content">
+                                <div class="hive-item">
+                                    <button class="nested-trigger">
+                                        <span>Hive C1</span>
+                                        <i class="fas fa-chevron-right"></i>
+                                    </button>
+                                    <div class="nested-content">
+                                        <a href="#" class="monitor-link"><i class="fas fa-video"></i> Door Camera</a>
+                                        <a href="#" class="monitor-link"><i class="fas fa-eye"></i> Honey View</a>
+                                        <a href="#" class="monitor-link"><i class="fas fa-temperature-high"></i>
+                                            Internal</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ...rest of sidebar... -->
+                <a href="#" class="sidebar-link">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Reports</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Weather Stats -->
+            <div class="weather-stats">
+                <div class="weather-card temp">
+                    <div class="weather-icon">
+                        <i class="fas fa-temperature-high"></i>
+                    </div>
+                    <div class="weather-info">
+                        <h3>Temperature</h3>
+                        <div class="weather-value">
+                            <span class="value">28</span>
+                            <span class="unit">°C</span>
+                        </div>
+                        <p class="weather-time">Today, 2:30 PM</p>
+                    </div>
+                </div>
+
+                <div class="weather-card humidity">
+                    <div class="weather-icon">
+                        <i class="fas fa-tint"></i>
+                    </div>
+                    <div class="weather-info">
+                        <h3>Humidity</h3>
+                        <div class="weather-value">
+                            <span class="value">65</span>
+                            <span class="unit">%</span>
+                        </div>
+                        <p class="weather-time">Today, 2:30 PM</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon">+</div>
+                        <button class="more-btn"><i class="fas fa-ellipsis-v"></i></button>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-value">45/76</h3>
+                        <p class="stat-title">Invoices Awaiting Payment</p>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 55%"></div>
+                    </div>
+                    <p class="stat-subtitle">$5,589 (55%)</p>
+                </div>
+                <!-- Repeat for other stat cards -->
+            </div>
+
+            <!-- Charts Grid -->
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h3 class="chart-title">Payment Record</h3>
+                    <canvas id="paymentChart"></canvas>
+                    <div class="chart-footer">
+                        <div class="chart-stat">
+                            <span>Awaiting</span>
+                            <strong>$5,486</strong>
+                        </div>
+                        <div class="chart-stat">
+                            <span>Completed</span>
+                            <strong>$9,275</strong>
+                        </div>
+                    </div>
+                </div>
+                <!-- Repeat for other chart cards -->
+            </div>
+
+            <!-- Beekeepers Section -->
+            <div class="beekeepers-section">
+                <h2 class="section-title"> Beekeepers</h2>
+                <div class="beekeepers-grid">
+                    <div class="beekeeper-card">
+                        <div class="beekeeper-avatar">
+                            <i class="fas fa-user-circle"></i>
+                            <div class="status-badge active"></div>
+                        </div>
+                        <div class="beekeeper-info">
+                            <h3>Ahmed Hassan</h3>
+                            <p class="role">Senior Beekeeper</p>
+                            <div class="stats">
+                                <div class="stat-item">
+                                    <i class="fas fa-box-open"></i>
+                                    <span>12 Hives</span>
+                                </div>
+                                <div class="stat-item">
+                                    <i class="fas fa-clock"></i>
+                                    <span>8 Years</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="contact-btn"><i class="fas fa-envelope"></i></button>
+                    </div>
+
+                    <div class="beekeeper-card">
+                        <div class="beekeeper-avatar">
+                            <i class="fas fa-user-circle"></i>
+                            <div class="status-badge"></div>
+                        </div>
+                        <div class="beekeeper-info">
+                            <h3>Sara Mohamed</h3>
+                            <p class="role">Apiary Manager</p>
+                            <div class="stats">
+                                <div class="stat-item">
+                                    <i class="fas fa-box-open"></i>
+                                    <span>15 Hives</span>
+                                </div>
+                                <div class="stat-item">
+                                    <i class="fas fa-clock"></i>
+                                    <span>5 Years</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="contact-btn"><i class="fas fa-envelope"></i></button>
+                    </div>
+
+                    <div class="beekeeper-card">
+                        <div class="beekeeper-avatar">
+                            <i class="fas fa-user-circle"></i>
+                            <div class="status-badge active"></div>
+                        </div>
+                        <div class="beekeeper-info">
+                            <h3>Karim Ali</h3>
+                            <p class="role">Junior Beekeeper</p>
+                            <div class="stats">
+                                <div class="stat-item">
+                                    <i class="fas fa-box-open"></i>
+                                    <span>8 Hives</span>
+                                </div>
+                                <div class="stat-item">
+                                    <i class="fas fa-clock"></i>
+                                    <span>2 Years</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="contact-btn"><i class="fas fa-envelope"></i></button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="/JS/beekeeper.js"></script>
+</body>
+
+</html>
