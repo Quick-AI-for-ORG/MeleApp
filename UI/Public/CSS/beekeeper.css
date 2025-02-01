@@ -115,163 +115,163 @@ body {
 
 /* Nested Dropdowns */
 .dropdown-container {
-    position: relative;
-    width: 100%;
-    margin-bottom: 1rem;
+  position: relative;
+  width: 100%;
+  margin-bottom: 1rem;
 }
 
 .dropdown-trigger,
 .nested-trigger {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    padding: 0.75rem;
-    background: none;
-    border: none;
-    color: #16404d;
-    cursor: pointer;
-    border-radius: 0.375rem;
-    transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.75rem;
+  background: none;
+  border: none;
+  color: #16404d;
+  cursor: pointer;
+  border-radius: 0.375rem;
+  transition: all 0.3s ease;
 }
 
 .dropdown-trigger {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.75rem 1rem;
-    background: #16404d;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: #16404d;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .dropdown-trigger .trigger-content {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .dropdown-trigger:hover {
-    background: #fca311;
+  background: #fca311;
 }
 
 .nested-trigger {
-    width: 100%;
-    text-align: left;
-    padding: 0.5rem 1rem;
-    background: none;
-    border: none;
-    color: #16404d;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-radius: 4px;
-    transition: all 0.2s ease;
+  width: 100%;
+  text-align: left;
+  padding: 0.5rem 1rem;
+  background: none;
+  border: none;
+  color: #16404d;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 4px;
+  transition: all 0.2s ease;
 }
 
 .nested-trigger:hover {
-    background: #fca31120;
+  background: #fca31120;
 }
 
 .dropdown-content,
 .nested-content {
-    display: none;
-    padding-left: 1rem;
-    margin-top: 0.5rem;
+  display: none;
+  padding-left: 1rem;
+  margin-top: 0.5rem;
 }
 
 .dropdown-content.active,
 .nested-content.active {
-    display: block;
-    animation: slideDown 0.3s ease;
+  display: block;
+  animation: slideDown 0.3s ease;
 }
 
 .dropdown-content {
-    background: white;
-    padding: 1rem;
-    margin-top: 0.5rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  background: white;
+  padding: 1rem;
+  margin-top: 0.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .nested-content {
-    padding-left: 1.5rem;
-    margin-top: 0.5rem;
-    display: none; /* Only nested content hidden by default */
+  padding-left: 1.5rem;
+  margin-top: 0.5rem;
+  display: none; /* Only nested content hidden by default */
 }
 
 .nested-content.show {
-    display: block;
+  display: block;
 }
 
 .monitor-link {
-    display: block;
-    padding: 0.5rem 1rem;
-    color: #16404d;
-    text-decoration: none;
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
+  display: block;
+  padding: 0.5rem 1rem;
+  color: #16404d;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
 }
 
 .monitor-link {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1rem;
-    color: #16404d;
-    text-decoration: none;
-    font-size: 0.9rem;
-    transition: all 0.2s ease;
-    border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  color: #16404d;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  border-radius: 4px;
 }
 
 .monitor-link:hover {
-    color: #fca311;
-    background-color: #fca31110;
-    border-radius: 0.375rem;
+  color: #fca311;
+  background-color: #fca31110;
+  border-radius: 0.375rem;
 }
 
 .monitor-link:hover {
-    background: #fca31120;
-    color: #fca311;
+  background: #fca31120;
+  color: #fca311;
 }
 
 .nested-dropdown {
-    margin: 0.25rem 0;
+  margin: 0.25rem 0;
 }
 
 .fa-chevron-right,
 .fa-chevron-down {
-    transition: transform 0.3s ease;
+  transition: transform 0.3s ease;
 }
 
 .nested-trigger.active .fa-chevron-right {
-    transform: rotate(90deg);
+  transform: rotate(90deg);
 }
 
 .dropdown-trigger.active .fa-chevron-down {
-    transform: rotate(180deg);
+  transform: rotate(180deg);
 }
 
 .fa-chevron-down,
 .fa-chevron-right {
-    transition: transform 0.3s ease;
+  transition: transform 0.3s ease;
 }
 
 @keyframes slideDown {
-    from { 
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to { 
-        opacity: 1;
-        transform: translateY(0);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Main content styles */
@@ -398,199 +398,199 @@ canvas {
 
 /* Beekeepers Section */
 .beekeepers-section {
-    margin-top: 2rem;
-    padding: 2rem;
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-top: 2rem;
+  padding: 2rem;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .section-title {
-    color: #16404d;
-    font-size: 1.5rem;
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid #fca31130;
+  color: #16404d;
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #fca31130;
 }
 
 .beekeepers-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
 }
 
 .beekeeper-card {
-    display: flex;
-    align-items: center;
-    padding: 1.5rem;
-    background: #fbf5dd;
-    border-radius: 12px;
-    transition: transform 0.3s ease;
-    position: relative;
+  display: flex;
+  align-items: center;
+  padding: 1.5rem;
+  background: #fbf5dd;
+  border-radius: 12px;
+  transition: transform 0.3s ease;
+  position: relative;
 }
 
 .beekeeper-card:hover {
-    transform: translateY(-5px);
+  transform: translateY(-5px);
 }
 
 .beekeeper-avatar {
-    position: relative;
-    margin-right: 1rem;
+  position: relative;
+  margin-right: 1rem;
 }
 
 .beekeeper-avatar i {
-    font-size: 3rem;
-    color: #16404d;
+  font-size: 3rem;
+  color: #16404d;
 }
 
 .status-badge {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: #9ca3af;
-    border: 2px solid #fbf5dd;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #9ca3af;
+  border: 2px solid #fbf5dd;
 }
 
 .status-badge.active {
-    background: #22c55e;
+  background: #22c55e;
 }
 
 .beekeeper-info {
-    flex: 1;
+  flex: 1;
 }
 
 .beekeeper-info h3 {
-    color: #16404d;
-    font-size: 1.1rem;
-    margin-bottom: 0.25rem;
+  color: #16404d;
+  font-size: 1.1rem;
+  margin-bottom: 0.25rem;
 }
 
 .role {
-    color: #666;
-    font-size: 0.9rem;
-    margin-bottom: 0.75rem;
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
 }
 
 .stats {
-    display: flex;
-    gap: 1rem;
+  display: flex;
+  gap: 1rem;
 }
 
 .stat-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.9rem;
-    color: #16404d;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: #16404d;
 }
 
 .stat-item i {
-    color: #fca311;
+  color: #fca311;
 }
 
 .contact-btn {
-    background: none;
-    border: none;
-    color: #16404d;
-    cursor: pointer;
-    padding: 0.5rem;
-    border-radius: 50%;
-    transition: all 0.3s ease;
+  background: none;
+  border: none;
+  color: #16404d;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: all 0.3s ease;
 }
 
 .contact-btn:hover {
-    color: #fca311;
-    background: #fca31110;
+  color: #fca311;
+  background: #fca31110;
 }
 
 /* Weather Stats */
 .weather-stats {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-    margin-bottom: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
 }
 
 .weather-card {
-    background: white;
-    border-radius: 12px;
-    padding: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    box-shadow: 0 4px 6px rgba(252, 163, 17, 0.1);
-    transition: transform 0.3s ease;
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  box-shadow: 0 4px 6px rgba(252, 163, 17, 0.1);
+  transition: transform 0.3s ease;
 }
 
 .weather-card:hover {
-    transform: translateY(-5px);
+  transform: translateY(-5px);
 }
 
 .weather-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
 }
 
 .weather-card.temp .weather-icon {
-    background: rgba(252, 163, 17, 0.1);
-    color: #fca311;
+  background: rgba(252, 163, 17, 0.1);
+  color: #fca311;
 }
 
 .weather-card.humidity .weather-icon {
-    background: rgba(22, 64, 77, 0.1);
-    color: #16404d;
+  background: rgba(22, 64, 77, 0.1);
+  color: #16404d;
 }
 
 .weather-info {
-    flex: 1;
+  flex: 1;
 }
 
 .weather-info h3 {
-    color: #6b7280;
-    font-size: 0.875rem;
-    margin-bottom: 0.5rem;
+  color: #6b7280;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
 }
 
 .weather-value {
-    display: flex;
-    align-items: baseline;
-    gap: 0.25rem;
-    margin-bottom: 0.5rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
 }
 
 .weather-value .value {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #16404d;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #16404d;
 }
 
 .weather-value .unit {
-    color: #6b7280;
-    font-size: 1rem;
+  color: #6b7280;
+  font-size: 1rem;
 }
 
 .weather-time {
-    color: #6b7280;
-    font-size: 0.75rem;
+  color: #6b7280;
+  font-size: 0.75rem;
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-    .beekeepers-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .beekeeper-card {
-        padding: 1rem;
-    }
+  .beekeepers-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .beekeeper-card {
+    padding: 1rem;
+  }
 }
 
 /* Responsive Design */
@@ -608,4 +608,122 @@ canvas {
   .sidebar {
     display: none;
   }
+}
+
+/* Threats card styles */
+.threats-card {
+  background: white;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  height: 400px;
+  overflow-y: auto;
+}
+
+.threats-title {
+  color: #16404d;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.threats-title i {
+  color: #fca311;
+}
+
+.threats-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.threat-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 8px;
+  background: #fbf5dd;
+  transition: transform 0.3s ease;
+}
+
+.threat-item:hover {
+  transform: translateX(5px);
+}
+
+.threat-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+.threat-item.high .threat-icon {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.threat-item.medium .threat-icon {
+  background: rgba(252, 163, 17, 0.1);
+  color: #fca311;
+}
+
+.threat-item.low .threat-icon {
+  background: rgba(22, 64, 77, 0.1);
+  color: #16404d;
+}
+
+.threat-info {
+  flex: 1;
+}
+
+.threat-info h4 {
+  color: #16404d;
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.threat-info p {
+  color: #6b7280;
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+}
+
+.timestamp {
+  color: #9ca3af;
+  font-size: 0.75rem;
+}
+
+.threat-severity {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.threat-item.high .threat-severity {
+  background: #ef4444;
+  color: white;
+}
+
+.threat-item.medium .threat-severity {
+  background: #fca311;
+  color: white;
+}
+
+.threat-item.low .threat-severity {
+  background: #16404d;
+  color: white;
+}
+
+.nested-trigger, 
+.dropdown-trigger {
+    cursor: pointer;
+    user-select: none;
 }

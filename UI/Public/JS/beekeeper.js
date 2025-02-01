@@ -27,70 +27,59 @@ const monthlyData = {
 };
 
 document.addEventListener("DOMContentLoaded", function () {
+  // Main dropdown functionality
+  document
+    .getElementById("apiaryDropdown")
+    .addEventListener("click", function (e) {
+      e.preventDefault();
+      const content = document.querySelector(".dropdown-content");
+      content.style.display =
+        content.style.display === "block" ? "none" : "block";
+
+      // Rotate icon
+      const icon = this.querySelector(".fa-chevron-down");
+      icon.style.transform =
+        content.style.display === "block" ? "rotate(180deg)" : "rotate(0deg)";
+    });
+
+  // Nested dropdowns functionality
+  const nestedTriggers = document.querySelectorAll(".nested-trigger");
+  nestedTriggers.forEach((trigger) => {
+    trigger.addEventListener("click", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const content = this.nextElementSibling;
+      content.style.display =
+        content.style.display === "block" ? "none" : "block";
+
+      // Rotate chevron
+      const chevron = this.querySelector(".fa-chevron-right");
+      if (chevron) {
+        chevron.style.transform =
+          content.style.display === "block" ? "rotate(90deg)" : "rotate(0deg)";
+      }
+    });
+  });
+
   // Initialize charts
   initializeCharts();
-
-  // Handle main dropdown
-  const apiaryDropdown = document.getElementById('apiaryDropdown');
-  const dropdownContent = document.querySelector('.dropdown-content');
-  
-  if (apiaryDropdown && dropdownContent) {
-      apiaryDropdown.addEventListener('click', function(e) {
-          e.preventDefault();
-          dropdownContent.classList.toggle('show');
-          const icon = this.querySelector('.fa-chevron-down');
-          if (icon) {
-              icon.style.transform = dropdownContent.classList.contains('show') 
-                  ? 'rotate(180deg)' 
-                  : 'rotate(0)';
-          }
-      });
-  }
-
-  // Handle nested dropdowns
-  document.querySelectorAll('.nested-trigger').forEach(trigger => {
-      trigger.addEventListener('click', function(e) {
-          e.preventDefault();
-          e.stopPropagation();
-          
-          const content = this.nextElementSibling;
-          const icon = this.querySelector('.fa-chevron-right');
-          
-          // Close all other nested dropdowns at the same level
-          const siblings = this.parentElement.parentElement.querySelectorAll('.nested-content');
-          siblings.forEach(sibling => {
-              if (sibling !== content) {
-                  sibling.classList.remove('show');
-                  const siblingIcon = sibling.previousElementSibling.querySelector('.fa-chevron-right');
-                  if (siblingIcon) siblingIcon.style.transform = 'rotate(0)';
-              }
-          });
-          
-          content.classList.toggle('show');
-          if (icon) {
-              icon.style.transform = content.classList.contains('show') 
-                  ? 'rotate(90deg)' 
-                  : 'rotate(0)';
-          }
-      });
-  });
 });
 
 function initializeCharts() {
-  // Payment Chart
-  const paymentCtx = document.getElementById("paymentChart");
-  if (paymentCtx) {
-    new Chart(paymentCtx.getContext("2d"), {
-      type: "line",
+  // Weight Chart
+  const weightCtx = document.getElementById("weightChart");
+  if (weightCtx) {
+    new Chart(weightCtx.getContext("2d"), {
+      type: "bar",
       data: {
-        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+        labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
         datasets: [
           {
-            label: "Revenue",
-            data: [3000, 4500, 3500, 5000, 4800, 5500],
-            borderColor: "#fca311",
-            tension: 0.4,
-            fill: false,
+            label: "Hive Weight (kg)",
+            data: [32.5, 33.1, 34.2, 33.8, 35.2, 34.9, 35.2],
+            backgroundColor: "#fca311",
+            borderRadius: 5,
           },
         ],
       },
@@ -101,10 +90,28 @@ function initializeCharts() {
           legend: {
             display: false,
           },
+          annotation: {
+            annotations: {
+              weightStats: {
+                type: "label",
+                xValue: 3,
+                yValue: 36,
+                backgroundColor: "rgba(255,255,255,0.8)",
+                content: ["Current Weight: 35.2 kg", "Weekly Average: 33.8 kg"],
+                font: {
+                  size: 12,
+                },
+                padding: 8,
+                borderRadius: 6,
+              },
+            },
+          },
         },
         scales: {
           y: {
-            beginAtZero: true,
+            beginAtZero: false,
+            min: 30,
+            max: 38,
             grid: {
               display: false,
             },
