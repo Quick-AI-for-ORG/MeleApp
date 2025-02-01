@@ -591,6 +591,16 @@ canvas {
   color: #ef4444;
 }
 
+.weather-card.hive-temp .weather-icon {
+  background: rgba(252, 163, 17, 0.1);
+  color: #fca311;
+}
+
+.weather-card.hive-humidity .weather-icon {
+  background: rgba(22, 64, 77, 0.1);
+  color: #16404d;
+}
+
 /* Adjust grid columns for 5 cards */
 @media (min-width: 1200px) {
   .weather-stats {
