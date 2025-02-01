@@ -21,46 +21,54 @@
             </a>
         </div>
 
-        <div class="images">
-            <img src="<%= product.image %>" alt="<%= product.title %>">
-        </div>
-
-        <div class="data">
-            <div class="product-info">
-                <h1 class="title"><%= product.title %></h1>
-                <p class="type">
-                    <%= product.category %> Honey
-                </p>
-                <p><i class="fas fa-tag"></i> Price: $<%= product.price %>
-                </p>
-                <p><i class="fas fa-box"></i> Size: <%= product.size %>
-                </p>
-                <p><i class="fas fa-info-circle"></i> <%= product.description %>
-                </p>
-            </div>
-
-            <form class="booking-form" action="/cart/add" method="POST">
-                <input type="hidden" name="productId" value="<%= product._id %>">
-
-                <div class="form-group">
-                    <label>Select Size:</label>
-                    <select class="form-select" name="size">
-                        <option value="250g">250g</option>
-                        <option value="500g" selected>500g</option>
-                        <option value="1kg">1kg</option>
-                    </select>
+        <div class="product-container">
+            <form class="product-form" action="/cart/add" method="POST">
+                <div class="product-image-section">
+                    <img src="<%= product.image %>" alt="<%= product.title %>">
                 </div>
 
-                <div class="form-group">
-                    <label>Quantity:</label>
-                    <div class="quantity-buttons">
-                        <button type="button" class="qty-btn" onclick="updateQuantity(-1)">-</button>
-                        <input type="number" id="quantity" name="quantity" value="1" min="1">
-                        <button type="button" class="qty-btn" onclick="updateQuantity(1)">+</button>
+                <div class="product-details-section">
+                    <h1 class="title">
+                        <%= product.title %>
+                    </h1>
+                    <p class="type">
+                        <%= product.category %> Honey
+                    </p>
+                    <div class="price-tag">
+                        <i class="fas fa-tag"></i>
+                        <span>
+                            <%= parseFloat(product.price).toFixed(2) %>
+                        </span>
                     </div>
-                </div>
 
-                <input type="submit" value="Add to Cart">
+                    <p class="description"><i class="fas fa-info-circle"></i>
+                        <%= product.description %>
+                    </p>
+
+                    <div class="product-options">
+                        <div class="size-selector">
+                            <label>Select Size:</label>
+                            <select class="form-select" name="size">
+                                <option value="250g">250g</option>
+                                <option value="500g" selected>500g</option>
+                                <option value="1kg">1kg</option>
+                            </select>
+                        </div>
+
+                        <div class="quantity-selector">
+                            <label>Quantity:</label>
+                            <div class="quantity-buttons">
+                                <button type="button" class="qty-btn" onclick="updateQuantity(-1)">-</button>
+                                <input type="number" id="quantity" name="quantity" value="1" min="1">
+                                <button type="button" class="qty-btn" onclick="updateQuantity(1)">+</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="add-to-cart-btn">
+                        <i class="fas fa-shopping-cart"></i> Purchase
+                    </button>
+                </div>
             </form>
         </div>
     </div>
