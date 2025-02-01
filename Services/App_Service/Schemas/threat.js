@@ -6,11 +6,11 @@ const threatsSchema = new mongoose.Schema({
     },
     hiveRef: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Hive',
+        ref: 'Hives',
     },
     action: {
         type: String,
     },
 }, { timestamps: true });
 
-module.exports = mongoose.model('Threat', threatsSchema);
+module.exports = mongoose.model('Threats', threatsSchema);

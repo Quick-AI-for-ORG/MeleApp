@@ -1,3 +1,4 @@
+
 /* Background Styles */
 .background-radial-gradient {
   background-color: #fca311;
@@ -130,7 +131,7 @@ a {
   }
 }
 
-body *:not(.background-radial-gradient, #loginError) {
+body *:not(.background-radial-gradient, #loginError, .error-message, .error-message *, .background-radial-gradient *, section) {
   animation: fadeIn 0.7s ease-in-out;
 }
 

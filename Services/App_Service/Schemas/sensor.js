@@ -9,5 +9,18 @@ const sensorSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    description: {
+        type: String,
+        required: true,
+    },
+    imagePath: {
+        type: String,
+        required: true,
+    },
+    modelName: {
+        type: String,
+        required: true,
+    },
 }, { timestamps: true });
-module.exports = mongoose.model('Sensor', sensorSchema);
+module.exports = mongoose.model('Sensors', sensorSchema);
+

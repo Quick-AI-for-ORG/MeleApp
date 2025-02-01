@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const threatsSchema = require('./threat');
 const dimensionSchema = new mongoose.Schema({
     length: { type: Number, required: true },
     width: { type: Number, required: true },
@@ -28,9 +27,9 @@ const hiveSchema = new mongoose.Schema({
     },
     apiaryRef: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Apiary',
+        ref: 'Apiaries',
     },
 
 }, { timestamps: true });
 
-module.exports = mongoose.model('Hive', hiveSchema);
+module.exports = mongoose.model('Hives', hiveSchema);
