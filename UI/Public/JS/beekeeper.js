@@ -28,43 +28,95 @@ const monthlyData = {
 
 document.addEventListener("DOMContentLoaded", function () {
   // Main dropdown functionality
-  document
-    .getElementById("apiaryDropdown")
-    .addEventListener("click", function (e) {
+  const apiaryDropdown = document.getElementById("apiaryDropdown");
+  const dropdownContent = document.querySelector(".dropdown-content");
+
+  if (apiaryDropdown && dropdownContent) {
+    apiaryDropdown.addEventListener("click", function (e) {
       e.preventDefault();
-      const content = document.querySelector(".dropdown-content");
-      content.style.display =
-        content.style.display === "block" ? "none" : "block";
+      dropdownContent.style.display =
+        dropdownContent.style.display === "block" ? "none" : "block";
+
+      // Toggle active class for styling
+      dropdownContent.classList.toggle("active");
 
       // Rotate icon
       const icon = this.querySelector(".fa-chevron-down");
-      icon.style.transform =
-        content.style.display === "block" ? "rotate(180deg)" : "rotate(0deg)";
-    });
-
-  // Nested dropdowns functionality
-  const nestedTriggers = document.querySelectorAll(".nested-trigger");
-  nestedTriggers.forEach((trigger) => {
-    trigger.addEventListener("click", function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-
-      const content = this.nextElementSibling;
-      content.style.display =
-        content.style.display === "block" ? "none" : "block";
-
-      // Rotate chevron
-      const chevron = this.querySelector(".fa-chevron-right");
-      if (chevron) {
-        chevron.style.transform =
-          content.style.display === "block" ? "rotate(90deg)" : "rotate(0deg)";
+      if (icon) {
+        icon.style.transform = dropdownContent.classList.contains("active")
+          ? "rotate(180deg)"
+          : "rotate(0deg)";
       }
     });
-  });
+  }
+
+  // Handle nested dropdowns
+  document
+    .querySelectorAll(".nested-dropdown > .nested-trigger")
+    .forEach((trigger) => {
+      trigger.addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        // Update title
+        const apiaryName = this.querySelector("span").textContent;
+        updateApiaryTitle(apiaryName);
+
+        // Toggle nested content
+        const content = this.nextElementSibling;
+        if (content) {
+          content.style.display =
+            content.style.display === "block" ? "none" : "block";
+          content.classList.toggle("show");
+
+          // Rotate chevron
+          const chevron = this.querySelector(".fa-chevron-right");
+          if (chevron) {
+            chevron.style.transform = content.classList.contains("show")
+              ? "rotate(90deg)"
+              : "rotate(0deg)";
+          }
+        }
+      });
+    });
+
+  // Handle hive triggers
+  document
+    .querySelectorAll(".hive-item > .nested-trigger")
+    .forEach((trigger) => {
+      trigger.addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const content = this.nextElementSibling;
+        if (content) {
+          content.style.display =
+            content.style.display === "block" ? "none" : "block";
+          content.classList.toggle("show");
+
+          const chevron = this.querySelector(".fa-chevron-right");
+          if (chevron) {
+            chevron.style.transform = content.classList.contains("show")
+              ? "rotate(90deg)"
+              : "rotate(0deg)";
+          }
+        }
+      });
+    });
 
   // Initialize charts
   initializeCharts();
 });
+
+function updateApiaryTitle(newTitle) {
+  const navTitle = document.querySelector(".nav-title");
+  if (navTitle) {
+    navTitle.textContent = newTitle;
+    navTitle.style.animation = "none";
+    navTitle.offsetHeight; // Trigger reflow
+    navTitle.style.animation = "titleUpdate 0.3s ease";
+  }
+}
 
 function initializeCharts() {
   // Weight Chart
