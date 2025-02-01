@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Update title
         const apiaryName = this.querySelector("span").textContent;
-        updateApiaryTitle(apiaryName);
+        updateTitles(apiaryName);
 
         // Toggle nested content
         const content = this.nextElementSibling;
@@ -88,6 +88,12 @@ document.addEventListener("DOMContentLoaded", function () {
         e.preventDefault();
         e.stopPropagation();
 
+        const hiveName = this.querySelector("span").textContent;
+        const apiaryElement = this.closest('.nested-dropdown').querySelector('.nested-trigger span');
+        const apiaryName = apiaryElement ? apiaryElement.textContent : '';
+        
+        updateTitles(apiaryName, hiveName);
+
         const content = this.nextElementSibling;
         if (content) {
           content.style.display =
@@ -108,13 +114,22 @@ document.addEventListener("DOMContentLoaded", function () {
   initializeCharts();
 });
 
-function updateApiaryTitle(newTitle) {
-  const navTitle = document.querySelector(".nav-title");
-  if (navTitle) {
-    navTitle.textContent = newTitle;
-    navTitle.style.animation = "none";
-    navTitle.offsetHeight; // Trigger reflow
-    navTitle.style.animation = "titleUpdate 0.3s ease";
+function updateTitles(apiaryName, hiveName = '') {
+  const apiaryTitle = document.getElementById('currentApiaryTitle');
+  const hiveTitle = document.getElementById('currentHiveTitle');
+  
+  if (apiaryTitle) {
+      apiaryTitle.textContent = apiaryName;
+  }
+  
+  if (hiveTitle) {
+      if (hiveName) {
+          hiveTitle.textContent = hiveName;
+          hiveTitle.classList.add('active');
+      } else {
+          hiveTitle.textContent = '';
+          hiveTitle.classList.remove('active');
+      }
   }
 }
 
