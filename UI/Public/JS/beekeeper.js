@@ -90,9 +90,11 @@ document.addEventListener("DOMContentLoaded", function () {
         e.stopPropagation();
 
         const hiveName = this.querySelector("span").textContent;
-        const apiaryElement = this.closest('.nested-dropdown').querySelector('.nested-trigger span');
-        const apiaryName = apiaryElement ? apiaryElement.textContent : '';
-        
+        const apiaryElement = this.closest(".nested-dropdown").querySelector(
+          ".nested-trigger span"
+        );
+        const apiaryName = apiaryElement ? apiaryElement.textContent : "";
+
         updateTitles(apiaryName, hiveName);
 
         const content = this.nextElementSibling;
@@ -116,22 +118,22 @@ document.addEventListener("DOMContentLoaded", function () {
   initializeCharts();
 });
 
-function updateTitles(apiaryName, hiveName = '') {
-  const apiaryTitle = document.getElementById('currentApiaryTitle');
-  const hiveTitle = document.getElementById('currentHiveTitle');
-  
+function updateTitles(apiaryName, hiveName = "") {
+  const apiaryTitle = document.getElementById("currentApiaryTitle");
+  const hiveTitle = document.getElementById("currentHiveTitle");
+
   if (apiaryTitle) {
-      apiaryTitle.textContent = apiaryName;
+    apiaryTitle.textContent = apiaryName;
   }
-  
+
   if (hiveTitle) {
-      if (hiveName) {
-          hiveTitle.textContent = hiveName;
-          hiveTitle.classList.add('active');
-      } else {
-          hiveTitle.textContent = '';
-          hiveTitle.classList.remove('active');
-      }
+    if (hiveName) {
+      hiveTitle.textContent = hiveName;
+      hiveTitle.classList.add("active");
+    } else {
+      hiveTitle.textContent = "";
+      hiveTitle.classList.remove("active");
+    }
   }
 }
 
@@ -281,17 +283,17 @@ function initializeProjectsChart() {
 }
 
 function toggleDashboards(showHive = false) {
-  const apiaryDashboard = document.querySelector('.apiary-dashboard');
-  const hiveDashboard = document.querySelector('.hive-dashboard');
-  
+  const apiaryDashboard = document.querySelector(".apiary-dashboard");
+  const hiveDashboard = document.querySelector(".hive-dashboard");
+
   if (showHive) {
-      apiaryDashboard.style.display = 'none';
-      hiveDashboard.style.display = 'block';
-      initializeHiveCharts();
+    apiaryDashboard.style.display = "none";
+    hiveDashboard.style.display = "block";
+    initializeHiveCharts();
   } else {
-      apiaryDashboard.style.display = 'block';
-      hiveDashboard.style.display = 'none';
-      initializeCharts();
+    apiaryDashboard.style.display = "block";
+    hiveDashboard.style.display = "none";
+    initializeCharts();
   }
 }
 
@@ -299,118 +301,215 @@ function initializeHiveCharts() {
   // Weight Chart
   const weightCtx = document.getElementById("hiveWeightChart");
   if (weightCtx) {
-      new Chart(weightCtx.getContext("2d"), {
-          type: "bar",
-          data: {
-              labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-              datasets: [{
-                  label: "Weight (kg)",
-                  data: [32.5, 33.1, 34.2, 33.8, 35.2, 34.9, 35.2],
-                  backgroundColor: "#fca311",
-                  borderRadius: 5,
-              }]
+    new Chart(weightCtx.getContext("2d"), {
+      type: "bar",
+      data: {
+        labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+        datasets: [
+          {
+            label: "Weight (kg)",
+            data: [32.5, 33.1, 34.2, 33.8, 35.2, 34.9, 35.2],
+            backgroundColor: "#fca311",
+            borderRadius: 5,
           },
-          options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: {
-                  legend: { display: false }
-              },
-              scales: {
-                  y: {
-                      beginAtZero: false,
-                      min: 30,
-                      max: 38,
-                      grid: { display: false }
-                  },
-                  x: {
-                      grid: { display: false }
-                  }
-              }
-          }
-      });
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+        },
+        scales: {
+          y: {
+            beginAtZero: false,
+            min: 30,
+            max: 38,
+            grid: { display: false },
+          },
+          x: {
+            grid: { display: false },
+          },
+        },
+      },
+    });
   }
 
   // Vibration Chart
   const vibrationCtx = document.getElementById("vibrationChart");
   if (vibrationCtx) {
-      new Chart(vibrationCtx.getContext("2d"), {
-          type: "line",
-          data: {
-              labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-              datasets: [{
-                  label: "Vibration Level",
-                  data: [2.1, 1.8, 2.3, 1.9, 2.4, 2.0, 1.7],
-                  borderColor: "#4F46E5",
-                  tension: 0.4,
-                  fill: false
-              }]
+    new Chart(vibrationCtx.getContext("2d"), {
+      type: "line",
+      data: {
+        labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+        datasets: [
+          {
+            label: "Vibration Level",
+            data: [2.1, 1.8, 2.3, 1.9, 2.4, 2.0, 1.7],
+            borderColor: "#4F46E5",
+            tension: 0.4,
+            fill: false,
           },
-          options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: {
-                  legend: { display: false }
-              },
-              scales: {
-                  y: {
-                      beginAtZero: true,
-                      grid: { display: false }
-                  },
-                  x: {
-                      grid: { display: false }
-                  }
-              }
-          }
-      });
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            grid: { display: false },
+          },
+          x: {
+            grid: { display: false },
+          },
+        },
+      },
+    });
   }
 }
 
 // Beekeeper Management Functions
+
+// Mock data for demonstration - replace with actual data from backend
+const beekeepersData = {
+  1: {
+    firstName: "Ahmed",
+    lastName: "Hassan",
+    email: "ahmed.hassan@example.com",
+    phone: "+201234567890",
+  },
+  2: {
+    firstName: "Sara",
+    lastName: "Mohamed",
+    email: "sara.mohamed@example.com",
+    phone: "+201234567891",
+  },
+  3: {
+    firstName: "Karim",
+    lastName: "Ali",
+    email: "karim.ali@example.com",
+    phone: "+201234567892",
+  },
+};
+
 function openModal(mode, beekeeperId = null) {
-    const modal = document.getElementById('beekeeperModal');
-    const modalTitle = document.getElementById('modalTitle');
-    const form = document.getElementById('beekeeperForm');
+  const modal = document.getElementById("beekeeperModal");
+  const modalTitle = document.getElementById("modalTitle");
+  const form = document.getElementById("beekeeperForm");
+  const passwordGroup = document.querySelector(".password-group");
 
-    modalTitle.textContent = mode === 'add' ? 'Add New Beekeeper' : 'Edit Beekeeper';
-    
-    if (mode === 'edit' && beekeeperId) {
-        // TODO: Fetch beekeeper data and populate form
-        // This would be implemented when backend is ready
-    } else {
-        form.reset();
+  modalTitle.textContent =
+    mode === "add" ? "Add New Beekeeper" : "Edit Beekeeper";
+
+  // Show/hide password field based on mode
+  if (passwordGroup) {
+    passwordGroup.style.display = mode === "add" ? "block" : "none";
+  }
+
+  if (mode === "edit" && beekeeperId) {
+    // Get beekeeper data (replace with actual API call)
+    const beekeeper = beekeepersData[beekeeperId];
+    if (beekeeper) {
+      // Populate form with existing data
+      form.firstName.value = beekeeper.firstName;
+      form.lastName.value = beekeeper.lastName;
+      form.email.value = beekeeper.email;
+      form.phone.value = beekeeper.phone;
+
+      // Add hidden input for ID to use when submitting
+      let idInput = form.querySelector('input[name="beekeeperId"]');
+      if (!idInput) {
+        idInput = document.createElement("input");
+        idInput.type = "hidden";
+        idInput.name = "beekeeperId";
+        form.appendChild(idInput);
+      }
+      idInput.value = beekeeperId;
     }
+  } else {
+    form.reset();
+    // Remove ID if exists
+    const idInput = form.querySelector('input[name="beekeeperId"]');
+    if (idInput) {
+      idInput.remove();
+    }
+  }
 
-    modal.style.display = 'block';
+  modal.style.display = "block";
 }
 
 function closeModal() {
-    const modal = document.getElementById('beekeeperModal');
-    modal.style.display = 'none';
+  const modal = document.getElementById("beekeeperModal");
+  modal.style.display = "none";
 }
 
 function handleSubmit(event) {
-    event.preventDefault();
-    const formData = new FormData(event.target);
-    const data = Object.fromEntries(formData);
-    
-    // TODO: Send data to backend
-    console.log('Form data:', data);
-    
-    closeModal();
+  event.preventDefault();
+  const formData = new FormData(event.target);
+  const data = Object.fromEntries(formData);
+
+  // Validate names
+  if (
+    !/^[a-zA-Z\s]{2,}$/.test(data.firstName) ||
+    !/^[a-zA-Z\s]{2,}$/.test(data.lastName)
+  ) {
+    alert("Please enter valid first and last names");
+    return;
+  }
+
+  // Validate phone number
+  const phoneRegex = /^\+?[\d\s-]{10,}$/;
+  if (!phoneRegex.test(data.phone)) {
+    alert("Please enter a valid phone number");
+    return;
+  }
+
+  // Validate email
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(data.email)) {
+    alert("Please enter a valid email address");
+    return;
+  }
+
+  // Check if this is an edit or add operation
+  const isEdit = data.beekeeperId !== undefined;
+
+  // TODO: Send data to backend
+  console.log(`${isEdit ? "Updating" : "Adding"} beekeeper:`, data);
+
+  closeModal();
 }
 
 function confirmDelete(beekeeperId) {
-    if (confirm('Are you sure you want to delete this beekeeper?')) {
-        // TODO: Send delete request to backend
-        console.log('Deleting beekeeper:', beekeeperId);
-    }
+  if (confirm("Are you sure you want to delete this beekeeper?")) {
+    // TODO: Send delete request to backend
+    console.log("Deleting beekeeper:", beekeeperId);
+  }
 }
 
 // Close modal when clicking outside
-window.onclick = function(event) {
-    const modal = document.getElementById('beekeeperModal');
-    if (event.target === modal) {
-        closeModal();
-    }
+window.onclick = function (event) {
+  const modal = document.getElementById("beekeeperModal");
+  if (event.target === modal) {
+    closeModal();
+  }
+};
+
+function togglePassword() {
+  const passwordInput = document.getElementById("password");
+  const toggleButton = document.querySelector(".toggle-password i");
+
+  if (passwordInput.type === "password") {
+    passwordInput.type = "text";
+    toggleButton.classList.remove("fa-eye");
+    toggleButton.classList.add("fa-eye-slash");
+  } else {
+    passwordInput.type = "password";
+    toggleButton.classList.remove("fa-eye-slash");
+    toggleButton.classList.add("fa-eye");
+  }
 }
