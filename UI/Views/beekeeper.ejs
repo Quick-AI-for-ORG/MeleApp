@@ -270,7 +270,12 @@
 
                 <!-- Beekeepers Section -->
                 <div class="beekeepers-section">
-                    <h2 class="section-title"> Beekeepers</h2>
+                    <div class="section-header">
+                        <h2 class="section-title">Beekeepers</h2>
+                        <button class="add-beekeeper-btn" onclick="openModal('add')">
+                            <i class="fas fa-plus"></i> Add Beekeeper
+                        </button>
+                    </div>
                     <div class="beekeepers-grid">
                         <div class="beekeeper-card">
                             <div class="beekeeper-avatar">
@@ -292,6 +297,14 @@
                                 </div>
                             </div>
                             <button class="contact-btn"><i class="fas fa-envelope"></i></button>
+                            <div class="beekeeper-actions">
+                                <button class="action-btn edit" onclick="openModal('edit', '1')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn delete" onclick="confirmDelete('1')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
                         </div>
 
                         <div class="beekeeper-card">
@@ -314,6 +327,14 @@
                                 </div>
                             </div>
                             <button class="contact-btn"><i class="fas fa-envelope"></i></button>
+                            <div class="beekeeper-actions">
+                                <button class="action-btn edit" onclick="openModal('edit', '2')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn delete" onclick="confirmDelete('2')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
                         </div>
 
                         <div class="beekeeper-card">
@@ -336,7 +357,51 @@
                                 </div>
                             </div>
                             <button class="contact-btn"><i class="fas fa-envelope"></i></button>
+                            <div class="beekeeper-actions">
+                                <button class="action-btn edit" onclick="openModal('edit', '3')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn delete" onclick="confirmDelete('3')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Beekeeper Modal -->
+                <div id="beekeeperModal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 id="modalTitle">Add New Beekeeper</h3>
+                            <button class="close-modal" onclick="closeModal()">&times;</button>
+                        </div>
+                        <form id="beekeeperForm" onsubmit="handleSubmit(event)">
+                            <div class="form-group">
+                                <label for="name">Full Name</label>
+                                <input type="text" id="name" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="role">Role</label>
+                                <select id="role" name="role" required>
+                                    <option value="Junior Beekeeper">Junior Beekeeper</option>
+                                    <option value="Senior Beekeeper">Senior Beekeeper</option>
+                                    <option value="Apiary Manager">Apiary Manager</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="hives">Number of Hives</label>
+                                <input type="number" id="hives" name="hives" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="experience">Years of Experience</label>
+                                <input type="number" id="experience" name="experience" min="0" required>
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="cancel-btn" onclick="closeModal()">Cancel</button>
+                                <button type="submit" class="submit-btn">Save</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

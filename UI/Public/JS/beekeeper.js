@@ -365,3 +365,52 @@ function initializeHiveCharts() {
       });
   }
 }
+
+// Beekeeper Management Functions
+function openModal(mode, beekeeperId = null) {
+    const modal = document.getElementById('beekeeperModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const form = document.getElementById('beekeeperForm');
+
+    modalTitle.textContent = mode === 'add' ? 'Add New Beekeeper' : 'Edit Beekeeper';
+    
+    if (mode === 'edit' && beekeeperId) {
+        // TODO: Fetch beekeeper data and populate form
+        // This would be implemented when backend is ready
+    } else {
+        form.reset();
+    }
+
+    modal.style.display = 'block';
+}
+
+function closeModal() {
+    const modal = document.getElementById('beekeeperModal');
+    modal.style.display = 'none';
+}
+
+function handleSubmit(event) {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const data = Object.fromEntries(formData);
+    
+    // TODO: Send data to backend
+    console.log('Form data:', data);
+    
+    closeModal();
+}
+
+function confirmDelete(beekeeperId) {
+    if (confirm('Are you sure you want to delete this beekeeper?')) {
+        // TODO: Send delete request to backend
+        console.log('Deleting beekeeper:', beekeeperId);
+    }
+}
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    const modal = document.getElementById('beekeeperModal');
+    if (event.target === modal) {
+        closeModal();
+    }
+}
