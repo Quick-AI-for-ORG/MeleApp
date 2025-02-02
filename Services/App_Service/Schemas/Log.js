@@ -5,8 +5,8 @@ const logSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    error: {
-        type: Boolean,
+    degree: {
+        type: Number,
         required: true,
     },
 },{timestamps: true});
