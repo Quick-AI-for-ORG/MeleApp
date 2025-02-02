@@ -17,3 +17,6 @@ const getAssignedKeeper = async (req, res) => {}
 const closeDoor = async (req, res) => {}
 const openDoor = async (req, res) => {}
 const getDoorStatus = async (req, res) => {}
+const turnOnCooler = async (req, res) => {}
+const turnOffCooler = async (req, res) => {}
+const getAnaomaly = async (req, res) => {} 
