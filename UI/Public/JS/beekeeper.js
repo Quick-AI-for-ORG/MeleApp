@@ -116,6 +116,34 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Initialize charts
   initializeCharts();
+
+  // Close modal when clicking outside
+  const modal = document.getElementById("beekeeperModal");
+  if (modal) {
+    modal.addEventListener("click", function (event) {
+      if (event.target === modal) {
+        closeModal();
+      }
+    });
+  }
+
+  // Close modal when clicking the X button
+  const closeButton = document.querySelector(".close-modal");
+  if (closeButton) {
+    closeButton.addEventListener("click", function (event) {
+      event.preventDefault();
+      closeModal();
+    });
+  }
+
+  // Close modal when clicking Cancel button
+  const cancelButton = document.querySelector(".cancel-btn");
+  if (cancelButton) {
+    cancelButton.addEventListener("click", function (event) {
+      event.preventDefault();
+      closeModal();
+    });
+  }
 });
 
 function updateTitles(apiaryName, hiveName = "") {
@@ -372,122 +400,199 @@ function initializeHiveCharts() {
   }
 }
 
-// Beekeeper Management Functions
-
-// Mock data for demonstration - replace with actual data from backend
-const beekeepersData = {
-  1: {
+// Beekeeper Management
+const defaultBeekeepers = [
+  {
+    id: "1",
     firstName: "Ahmed",
     lastName: "Hassan",
     email: "ahmed.hassan@example.com",
     phone: "+201234567890",
+    role: "Senior Beekeeper",
+    hives: 12,
+    experience: 8,
+    isActive: true,
   },
-  2: {
+  {
+    id: "2",
     firstName: "Sara",
     lastName: "Mohamed",
     email: "sara.mohamed@example.com",
     phone: "+201234567891",
+    role: "Apiary Manager",
+    hives: 15,
+    experience: 5,
+    isActive: false,
   },
-  3: {
-    firstName: "Karim",
-    lastName: "Ali",
-    email: "karim.ali@example.com",
-    phone: "+201234567892",
-  },
-};
+];
+
+// Initialize data storage
+let beekeepers =
+  JSON.parse(localStorage.getItem("beekeepers")) || defaultBeekeepers;
+
+// Initialize beekeepers display on page load
+document.addEventListener("DOMContentLoaded", () => {
+  refreshBeekeepersList();
+  updateBeekeepersCount();
+});
+
+function refreshBeekeepersList() {
+  const container = document.querySelector(".beekeepers-grid");
+  container.innerHTML = "";
+  beekeepers.forEach((beekeeper) => {
+    container.insertAdjacentHTML("beforeend", createBeekeeperCard(beekeeper));
+  });
+}
+
+function createBeekeeperCard(beekeeper) {
+  return `
+        <div class="beekeeper-card" data-id="${beekeeper.id}">
+            <div class="beekeeper-avatar">
+                <i class="fas fa-user-circle"></i>
+                <div class="status-badge ${
+                  beekeeper.isActive ? "active" : ""
+                }"></div>
+            </div>
+            <div class="beekeeper-info">
+                <h3>${beekeeper.firstName} ${beekeeper.lastName}</h3>
+                <p class="role">${beekeeper.role || "New Beekeeper"}</p>
+                <div class="stats">
+                    <div class="stat-item">
+                        <i class="fas fa-box-open"></i>
+                        <span>${beekeeper.hives || 0} Hives</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-clock"></i>
+                        <span>${beekeeper.experience || 0} Years</span>
+                    </div>
+                </div>
+            </div>
+            <button class="contact-btn" onclick="window.location.href='mailto:${
+              beekeeper.email
+            }'">
+                <i class="fas fa-envelope"></i>
+            </button>
+            <div class="beekeeper-actions">
+                <button class="action-btn edit" onclick="openModal('edit', '${
+                  beekeeper.id
+                }')">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="action-btn delete" onclick="confirmDelete('${
+                  beekeeper.id
+                }')">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>
+    `;
+}
 
 function openModal(mode, beekeeperId = null) {
   const modal = document.getElementById("beekeeperModal");
-  const modalTitle = document.getElementById("modalTitle");
   const form = document.getElementById("beekeeperForm");
+  const modalTitle = document.getElementById("modalTitle");
   const passwordGroup = document.querySelector(".password-group");
 
   modalTitle.textContent =
     mode === "add" ? "Add New Beekeeper" : "Edit Beekeeper";
-
-  // Show/hide password field based on mode
-  if (passwordGroup) {
-    passwordGroup.style.display = mode === "add" ? "block" : "none";
-  }
+  passwordGroup.style.display = mode === "add" ? "block" : "none";
 
   if (mode === "edit" && beekeeperId) {
-    // Get beekeeper data (replace with actual API call)
-    const beekeeper = beekeepersData[beekeeperId];
+    const beekeeper = beekeepers.find((b) => b.id === beekeeperId);
     if (beekeeper) {
-      // Populate form with existing data
       form.firstName.value = beekeeper.firstName;
       form.lastName.value = beekeeper.lastName;
       form.email.value = beekeeper.email;
       form.phone.value = beekeeper.phone;
-
-      // Add hidden input for ID to use when submitting
-      let idInput = form.querySelector('input[name="beekeeperId"]');
-      if (!idInput) {
-        idInput = document.createElement("input");
-        idInput.type = "hidden";
-        idInput.name = "beekeeperId";
-        form.appendChild(idInput);
-      }
-      idInput.value = beekeeperId;
+      form.dataset.mode = "edit";
+      form.dataset.id = beekeeperId;
     }
   } else {
     form.reset();
-    // Remove ID if exists
-    const idInput = form.querySelector('input[name="beekeeperId"]');
-    if (idInput) {
-      idInput.remove();
-    }
+    form.dataset.mode = "add";
+    delete form.dataset.id;
   }
 
   modal.style.display = "block";
 }
 
-function closeModal() {
-  const modal = document.getElementById("beekeeperModal");
-  modal.style.display = "none";
-}
-
 function handleSubmit(event) {
   event.preventDefault();
-  const formData = new FormData(event.target);
+  const form = event.target;
+  const formData = new FormData(form);
   const data = Object.fromEntries(formData);
 
-  // Validate names
+  if (!validateForm(data)) return;
+
+  const isEdit = form.dataset.mode === "edit";
+
+  if (isEdit) {
+    const index = beekeepers.findIndex((b) => b.id === form.dataset.id);
+    if (index !== -1) {
+      beekeepers[index] = {
+        ...beekeepers[index],
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        phone: data.phone,
+      };
+    }
+  } else {
+    const newBeekeeper = {
+      id: Date.now().toString(),
+      ...data,
+      role: "New Beekeeper",
+      hives: 0,
+      experience: 0,
+      isActive: true,
+    };
+    beekeepers.unshift(newBeekeeper);
+  }
+
+  localStorage.setItem("beekeepers", JSON.stringify(beekeepers));
+  refreshBeekeepersList();
+  updateBeekeepersCount();
+  closeModal(); // Make sure modal closes after successful submit
+}
+
+function validateForm(data) {
   if (
     !/^[a-zA-Z\s]{2,}$/.test(data.firstName) ||
     !/^[a-zA-Z\s]{2,}$/.test(data.lastName)
   ) {
     alert("Please enter valid first and last names");
-    return;
+    return false;
   }
 
-  // Validate phone number
-  const phoneRegex = /^\+?[\d\s-]{10,}$/;
-  if (!phoneRegex.test(data.phone)) {
+  if (!/^\+?[\d\s-]{10,}$/.test(data.phone)) {
     alert("Please enter a valid phone number");
-    return;
+    return false;
   }
 
-  // Validate email
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(data.email)) {
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
     alert("Please enter a valid email address");
-    return;
+    return false;
   }
 
-  // Check if this is an edit or add operation
-  const isEdit = data.beekeeperId !== undefined;
-
-  // TODO: Send data to backend
-  console.log(`${isEdit ? "Updating" : "Adding"} beekeeper:`, data);
-
-  closeModal();
+  return true;
 }
 
 function confirmDelete(beekeeperId) {
   if (confirm("Are you sure you want to delete this beekeeper?")) {
-    // TODO: Send delete request to backend
-    console.log("Deleting beekeeper:", beekeeperId);
+    beekeepers = beekeepers.filter((b) => b.id !== beekeeperId);
+    localStorage.setItem("beekeepers", JSON.stringify(beekeepers));
+    refreshBeekeepersList();
+    updateBeekeepersCount();
+  }
+}
+
+function updateBeekeepersCount() {
+  const countElement = document.querySelector(
+    ".weather-card.total-beekeepers .weather-value .value"
+  );
+  if (countElement) {
+    countElement.textContent = beekeepers.length;
   }
 }
 
@@ -498,6 +603,20 @@ window.onclick = function (event) {
     closeModal();
   }
 };
+
+function closeModal() {
+  const modal = document.getElementById("beekeeperModal");
+  if (modal) {
+    modal.style.display = "none";
+    // Reset form
+    const form = document.getElementById("beekeeperForm");
+    if (form) {
+      form.reset();
+      delete form.dataset.mode;
+      delete form.dataset.id;
+    }
+  }
+}
 
 function togglePassword() {
   const passwordInput = document.getElementById("password");
