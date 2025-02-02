@@ -1,0 +1,84 @@
+const models = {
+   userModel: require("../Schemas/User"),
+}
+const Log = require("../Schemas/Log");
+const Result = require("../../Shared/Result")
+
+const CRUDInterface = {
+    create: async function (data, model, compareKey) {
+        try {
+          const compareClause = {[compareKey]: data[compareKey]};
+          const existingRecord = await models[model].findOne( compareClause );
+          if (!existingRecord) {
+            record = await models[model].create(data);
+            await Log.create({log: `Created new record with ${compareKey}: ${data[compareKey]}`, degree: 1});
+            return new Result(1, record, `Created new record with ${compareKey}: ${data[compareKey]}`);
+          } else {
+            await Log.create({log: `Created new record with ${compareKey}: ${data[compareKey]}`, degree: 0});
+            return new Result(0, null, `Record with ${compareKey}: ${data[compareKey]} already exists. Skipping creation.`);
+          }
+          } catch (error) {
+            await Log.create({log: `Error adding data: ${error}`, degree: -1});
+            return new Result(-1, null, `Error adding data: ${error}`);
+        }
+      },
+    modify: async function (primaryKey,newData,model,compareKey) {
+        try {
+          const compareClause = {[compareKey]: primaryKey};
+          let record = await models[model].findOneAndUpdate(compareClause, {$set: newData}, {new:true});
+          if (!record) {
+            await Log.create({log: `Record with ${compareKey}: ${primaryKey} not found. Skipping modification.`, degree: 0});
+            return new Result(0, null, `Record with ${compareKey}: ${primaryKey} not found. Skipping modification.`);
+          } else {
+            await Log.create({log: `Updated record with ${compareKey}: ${newData[compareKey]}`, degree: 1});
+            return new Result(1, record, `Updated record with ${compareKey}: ${newData[compareKey]}`);
+          }
+        } catch (error) {
+          await Log.create({log: `Error modifying data: ${error}`, degree: -1});
+          return new Result(-1, null, `Error modifying data: ${error}`);
+        }
+      } ,
+    remove: async function (primaryKey, model, compareKey) {
+        try {
+          const compareClause = {[compareKey]: primaryKey};
+          const record = await models[model].findOneAndDelete( compareClause );
+          if (!record) {
+            await Log.create({log: `Record with ${compareKey}: ${primaryKey} not found. Skipping deletion.`, degree: 0});
+            return new Result(0, null, `Record with ${compareKey}: ${primaryKey} not found. Skipping deletion.`);
+          } else {
+            await Log.create({log: `Deleted record with ${compareKey}: ${primaryKey}`, degree: 1});
+            return new Result(1, record, `Deleted record with ${compareKey}: ${primaryKey}`);
+          }
+        } catch (error) {
+          await Log.create({log: `Error removing data: ${error}`, degree: -1});
+          return new Result(-1, null, `Error removing data: ${error}`);
+        }
+      },
+    get: async function (primaryKey, model, compareKey) {
+        try {
+          const compareClause = {[compareKey]: primaryKey};
+          const record = await models[model].findOne( compareClause );
+          if (record) {
+            await Log.create({log: `Found record with ${compareKey}: ${primaryKey}`, degree: 1});
+            return new Result(1, record, `Found record with ${compareKey}: ${primaryKey}`);
+          } else {
+            await Log.create({log: `Record with ${compareKey}: ${primaryKey} not found.`, degree: 0});
+            return new Result(0, null, `Record with ${compareKey}: ${primaryKey} not found.`);
+          }
+        } catch (error) {
+          await Log.create({log: `Error getting data: ${error}`, degree: -1});
+          return new Result(-1, null, `Error getting data: ${error}`);
+        }
+    },
+    getAll: async function (model) {
+        try {
+          const records = await models[model].find();
+          await Log.create({log: `Found ${records.length} records.`, degree: 1});
+          return new Result(1, records, `Found ${records.length} records.`);
+        } catch (error) {
+          await Log.create({log: `Error getting all data: ${error}`, degree: -1});
+          return new Result(-1, null, `Error getting all data: ${error}`);
+        }
+      }
+}
+module.exports = CRUDInterface;
