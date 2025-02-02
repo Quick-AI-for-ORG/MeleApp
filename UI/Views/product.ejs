@@ -22,7 +22,7 @@
         </div>
 
         <div class="product-container">
-            <form class="product-form" action="/cart/add" method="POST">
+            <div class="product-form">
                 <div class="product-image-section">
                     <img src="<%= product.image %>" alt="<%= product.title %>">
                 </div>
@@ -65,11 +65,11 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="add-to-cart-btn">
+                    <a href="/keeper/upgrade" class="add-to-cart-btn">
                         <i class="fas fa-shopping-cart"></i> Join Mele Keepers
-                    </button>
+                    </a>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
     <script src="/JS/product.js"></script>

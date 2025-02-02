@@ -1,0 +1,159 @@
+.background-radial-gradient {
+    background-color: #fca311;
+    background-image: radial-gradient(
+        650px circle at 0% 0%,
+        #fbf5dd 15%,
+        #fca311 35%,
+        rgba(252, 163, 17, 0.8) 75%,
+        rgba(252, 163, 17, 0.7) 80%,
+        transparent 100%
+    );
+    min-height: 100vh;
+    padding: 2rem 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.upgrade-container {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.header h1 {
+    color: #16404d;
+    margin-bottom: 0.5rem;
+}
+
+.header p {
+    color: #666;
+}
+
+.upgrade-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    color: #16404d;
+    font-weight: 500;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"] {
+    padding: 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #fca311;
+    box-shadow: 0 0 0 3px rgba(252, 163, 17, 0.1);
+}
+
+.kit-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.kit-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+}
+
+.kit-option:hover {
+    background-color: #f3f4f6;
+}
+
+.dimensions {
+    margin-top: 1rem;
+}
+
+.dimensions-inputs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.dimension {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.dimension label {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+input[type="range"] {
+    width: 100%;
+    margin: 1rem 0;
+}
+
+.agreement {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 1rem 0;
+}
+
+.agreement input[type="checkbox"] {
+    width: 1.2rem;
+    height: 1.2rem;
+    border-color: #16404d;
+}
+
+.purchase-btn {
+    background: #16404d;
+    color: white;
+    border: none;
+    padding: 1rem;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.purchase-btn:hover {
+    background: #fca311;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+    
+    .dimensions-inputs {
+        grid-template-columns: 1fr;
+    }
+}
