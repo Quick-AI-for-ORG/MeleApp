@@ -1,8 +1,51 @@
+const crudInterface = require("../Utils/CRUD");
+const jsonToObject = require("../Utils/Mapper");
+
 class Reading {
-    constructor(readingJSON) {
-        this.sensorRef = readingJSON.sensorRef;
-        this.sensorValue = readingJSON.sensorValue;
-        this.hiveRef = readingJSON.hiveRef;
-        this.frameNum = readingJSON.frameNum || null;
+
+  static crudInterface = crudInterface;
+  static jsonToObject = jsonToObject;
+  static attributes = ['sensorRef', 'sensorValue', 'hiveRef', 'frameNum'];
+
+  constructor(readingJSON) {
+    Reading.jsonToObject(this, readingJSON);
+  }
+
+  static async get(id) {
+    const result = await Reading.crudInterface.get(id, "readingModel", "_id");
+    if (result.success.status) {
+      result.data = new Reading(result.data);
     }
+    return result;
+  }
+
+  static async getAll() {
+    const result = await Reading.crudInterface.getAll("readingModel");
+    if (result.success.status) {
+      result.data = result.data.map(reading => new Reading(reading));
+    }
+    return result;
+  }
+
+  async create() {
+    const result = await Reading.crudInterface.create(this, "readingModel", "_id");
+    if (result.success.status) {
+      result.data = Reading.jsonToObject(this, result.data);
+    }
+    return result;
+  }
+
+  async modify(newReading) {
+    const result = await Reading.crudInterface.modify(this._id, newReading, "readingModel", "_id");
+    if (result.success.status) {
+      result.data = Reading.jsonToObject(this, result.data);
+    }
+    return result;
+  }
+
+  async remove() {
+    return await Reading.crudInterface.remove(this._id, "readingModel", "_id");
+  }
 }
+
+module.exports = Reading;
