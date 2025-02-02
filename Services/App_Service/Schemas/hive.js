@@ -5,13 +5,6 @@ const dimensionSchema = new mongoose.Schema({
     height: { type: Number, required: true },
 });
 
-// const frameSchema = new mongoose.Schema({
-//     weight: [{ type: Number, required: true }],
-//     honeyYeild: [{ type: Number, required: true }],
-//     vibration: [{ type: [Number], required: true }],
-//     picture: [{ type: String}],
-// }, timestamps = true);
-
 const hiveSchema = new mongoose.Schema({
     dimensions: {
         type: dimensionSchema,
