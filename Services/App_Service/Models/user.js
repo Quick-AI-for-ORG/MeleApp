@@ -7,8 +7,10 @@ const bcrypt = require("bcrypt");
 const HASH_SALT = 12;
 
 class User {
+
   static crudInterface = crudInterface;
   static jsonToObject = jsonToObject;
+  static attributes = ['name', 'role', 'email', 'password', 'tel', 'address', 'affiliation'];
 
   constructor(userJSON, role = "Owner") {
     User.jsonToObject(this, userJSON, { role: role });
@@ -26,15 +28,7 @@ class User {
   }
   static async getAll() {
     const result = await User.crudInterface.getAll("userModel");
-    if (result.success.status) {
-      let users = [];
-      if (result.data.length > 0) {
-        for (let i = 0; i < result.data.length; i++) {
-          users.push(new User(result.data[i], result.data[i].role));
-        }
-        result.data = users
-        };
-      } 
+    if (result.success.status) result.data =  result.data.map(user => new User(user, user.role));
     return result
   }
   static async login(email, password) {
@@ -52,15 +46,12 @@ class User {
   async create() {
     this.password = await User.hashPassword(this.password);
     const result = await User.crudInterface.create(this, "userModel", "email");
-    if(result.success.status) result.data = this
+    if(result.success.status) result.data = User.jsonToObject(this, result.data)
     return result
   }
   async modify(newUser) {
     const result = await User.crudInterface.modify(this.email, newUser, "userModel", "email");
-    if(result.success.status){
-      User.jsonToObject(this, result.data);
-      result.data = this
-    }
+    if(result.success.status) result.data = User.jsonToObject(this, result.data);
     return result
   }
   async remove() {

@@ -1,5 +1,14 @@
 const models = {
-   userModel: require("../Schemas/User"),
+    userModel: require("../Schemas/User"),
+    sensorModel: require("../Schemas/Sensor"),
+    hiveModel: require("../Schemas/Hive"),
+    readingModel: require("../Schemas/Reading"),
+    apiaryModel: require("../Schemas/Apiary"),
+    upgradeModel: require("../Schemas/Upgrade"),
+    threatModel: require("../Schemas/Threat"),
+    productModel: require("../Schemas/Product"),
+    keeperAssignmentModel: require("../Schemas/KeeperAssignment"),
+    hiveUpgradeModel: require("../Schemas/HiveUpgrade")
 }
 const Log = require("../Schemas/Log");
 const Result = require("../../Shared/Result")
