@@ -1,39 +1,10 @@
-const mongoose = require("mongoose");
-
-const productSchema = new mongoose.Schema({
-    title: {
-        type: String,
-        required: true
-    },
-    description: {
-        type: String,
-        required: true
-    },
-    price: {
-        type: Number,
-        required: true
-    },
-    size: {
-        type: String,
-        required: true
-    },
-    category: {
-        type: String,
-        required: true,
-        enum: ['citrus', 'wildflower', 'specialty']
-    },
-    image: {
-        type: String,
-        required: true
-    },
-    inStock: {
-        type: Boolean,
-        default: true
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now
+class Product {
+    constructor(productJSON) {
+        this.name = productJSON.name;
+        this.price = productJSON.price;
+        this.description = productJSON.description;
+        this.subscription = productJSON.subscription;
     }
-});
 
-module.exports = mongoose.model("Product", productSchema);
+
+}

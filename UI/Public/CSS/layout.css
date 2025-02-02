@@ -80,7 +80,7 @@ footer {
 }
 
 .contact-form button {
-  background-color: #fca311;
+  background-color: #86979c;
   color: #fff;
   border: none;
   border-radius: 5px;
@@ -91,7 +91,7 @@ footer {
 }
 
 .contact-form button:hover {
-  background-color: #df951d;
+  background-color: #fca311;
 }
 
 /* Style for the "We Proudly Accept" section */
@@ -154,7 +154,7 @@ footer *,
   margin: 0;
 }
 #searchResults a:hover {
-  border: 3px solid #0f3ed7;
+  border: 3px solid #fca311;
   border-radius: 10px;
 }
 
