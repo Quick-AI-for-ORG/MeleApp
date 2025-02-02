@@ -37,10 +37,15 @@
                             <% kits.forEach((kit, index)=> { %>
                                 <div class="kit-option">
                                     <input type="checkbox" id="kit<%= index %>" name="kitSelection"
-                                        value="<%= kit.name %>">
-                                    <label for="kit<%= index %>">
-                                        <%= kit.name %>
-                                    </label>
+                                        value="<%= kit.name %>" <%=kit.name==='The Mele:RIMBA Kit' ? 'checked' : '' %>
+                                    <%= kit.name==='Internal Hive Monitoring Kit' ? 'checked readonly' : '' %>
+                                        >
+                                        <label for="kit<%= index %>">
+                                            <%= kit.name %>
+                                                <% if (kit.name==='Internal Hive Monitoring Kit' ) { %>
+                                                    <span class="required-kit">(Required)</span>
+                                                    <% } %>
+                                        </label>
                                 </div>
                                 <% }); %>
                                     <% } else { %>
@@ -86,6 +91,17 @@
                     Complete Purchase
                 </button>
             </form>
+        </div>
+    </div>
+
+    <!-- Add confirmation modal -->
+    <div id="confirmationModal" class="confirmation-modal">
+        <div class="confirmation-content">
+            <i class="fas fa-check-circle"></i>
+            <h2>Thank You!</h2>
+            <p>A confirmation email has been sent to your registered email address. Please check your inbox and follow
+                the instructions to proceed with payment process.</p>
+            <button onclick="closeConfirmation()" class="close-confirmation">Continue</button>
         </div>
     </div>
 
