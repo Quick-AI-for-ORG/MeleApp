@@ -489,17 +489,30 @@ function createBeekeeperCard(beekeeper) {
 }
 
 function openModal(mode, beekeeperId = null) {
+  console.group("Opening Modal");
+  console.log("Mode:", mode);
+  console.log("Beekeeper ID:", beekeeperId);
+
   const modal = document.getElementById("beekeeperModal");
   const form = document.getElementById("beekeeperForm");
   const modalTitle = document.getElementById("modalTitle");
   const passwordGroup = document.querySelector(".password-group");
+
+  if (!form || !modal) {
+    console.error("Required elements not found!");
+    console.groupEnd();
+    return;
+  }
 
   modalTitle.textContent =
     mode === "add" ? "Add New Beekeeper" : "Edit Beekeeper";
   passwordGroup.style.display = mode === "add" ? "block" : "none";
 
   if (mode === "edit" && beekeeperId) {
+    console.log("Current beekeepers:", beekeepers);
     const beekeeper = beekeepers.find((b) => b.id === beekeeperId);
+    console.log("Found beekeeper for edit:", beekeeper);
+
     if (beekeeper) {
       form.firstName.value = beekeeper.firstName;
       form.lastName.value = beekeeper.lastName;
@@ -507,53 +520,111 @@ function openModal(mode, beekeeperId = null) {
       form.phone.value = beekeeper.phone;
       form.dataset.mode = "edit";
       form.dataset.id = beekeeperId;
+      console.log("Form populated with data:", {
+        firstName: form.firstName.value,
+        lastName: form.lastName.value,
+        email: form.email.value,
+        phone: form.phone.value,
+        mode: form.dataset.mode,
+        id: form.dataset.id,
+      });
+    } else {
+      console.error("Beekeeper not found for editing");
     }
   } else {
     form.reset();
     form.dataset.mode = "add";
     delete form.dataset.id;
+    console.log("Form reset for new beekeeper");
   }
 
   modal.style.display = "block";
+  console.groupEnd();
 }
 
 function handleSubmit(event) {
   event.preventDefault();
+  console.group("Form Submission");
+
   const form = event.target;
   const formData = new FormData(form);
   const data = Object.fromEntries(formData);
+  console.log("Form data:", data);
+  console.log("Form mode:", form.dataset.mode);
+  console.log("Form ID:", form.dataset.id);
 
-  if (!validateForm(data)) return;
-
-  const isEdit = form.dataset.mode === "edit";
-
-  if (isEdit) {
-    const index = beekeepers.findIndex((b) => b.id === form.dataset.id);
-    if (index !== -1) {
-      beekeepers[index] = {
-        ...beekeepers[index],
-        firstName: data.firstName,
-        lastName: data.lastName,
-        email: data.email,
-        phone: data.phone,
-      };
-    }
-  } else {
-    const newBeekeeper = {
-      id: Date.now().toString(),
-      ...data,
-      role: "New Beekeeper",
-      hives: 0,
-      experience: 0,
-      isActive: true,
-    };
-    beekeepers.unshift(newBeekeeper);
+  if (!validateForm(data)) {
+    console.error("Form validation failed");
+    console.groupEnd();
+    return;
   }
 
-  localStorage.setItem("beekeepers", JSON.stringify(beekeepers));
-  refreshBeekeepersList();
-  updateBeekeepersCount();
-  closeModal(); // Make sure modal closes after successful submit
+  const isEdit = form.dataset.mode === "edit";
+  console.log("Is edit mode:", isEdit);
+
+  try {
+    if (isEdit) {
+      const beekeeperId = form.dataset.id;
+      console.log("Updating beekeeper with ID:", beekeeperId);
+      console.log("Before update, beekeepers:", beekeepers);
+
+      // Find the beekeeper index
+      const index = beekeepers.findIndex((b) => b.id === beekeeperId);
+      console.log("Found beekeeper at index:", index);
+
+      if (index !== -1) {
+        // Create updated beekeeper object
+        const updatedBeekeeper = {
+          ...beekeepers[index],
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+          phone: data.phone,
+        };
+        console.log("Updated beekeeper data:", updatedBeekeeper);
+
+        // Update in array
+        beekeepers[index] = updatedBeekeeper;
+        console.log("After update, beekeepers:", beekeepers);
+
+        // Save to localStorage
+        localStorage.setItem("beekeepers", JSON.stringify(beekeepers));
+        console.log("Saved to localStorage");
+
+        // Update the DOM
+        refreshBeekeepersList();
+        console.log("Display refreshed");
+        showToast('Beekeeper updated successfully');
+      } else {
+        throw new Error("Beekeeper index not found");
+      }
+    } else {
+      // Add new beekeeper logic
+      console.log("Adding new beekeeper");
+      const newId = Date.now().toString();
+      const newBeekeeper = {
+        id: newId,
+        ...data,
+        role: "New Beekeeper",
+        hives: 0,
+        experience: 0,
+        isActive: true,
+      };
+      beekeepers.unshift(newBeekeeper);
+      localStorage.setItem("beekeepers", JSON.stringify(beekeepers));
+      refreshBeekeepersList();
+      updateBeekeepersCount();
+      showToast('New beekeeper added successfully');
+    }
+
+    closeModal();
+    console.log("Operation completed successfully");
+  } catch (error) {
+    console.error("Error during operation:", error);
+    showToast(error.message, 'error');
+  }
+
+  console.groupEnd();
 }
 
 function validateForm(data) {
@@ -579,12 +650,7 @@ function validateForm(data) {
 }
 
 function confirmDelete(beekeeperId) {
-  if (confirm("Are you sure you want to delete this beekeeper?")) {
-    beekeepers = beekeepers.filter((b) => b.id !== beekeeperId);
-    localStorage.setItem("beekeepers", JSON.stringify(beekeepers));
-    refreshBeekeepersList();
-    updateBeekeepersCount();
-  }
+  showDeleteModal(beekeeperId);
 }
 
 function updateBeekeepersCount() {
@@ -631,4 +697,87 @@ function togglePassword() {
     toggleButton.classList.remove("fa-eye-slash");
     toggleButton.classList.add("fa-eye");
   }
+}
+
+function showToast(message, type = 'success') {
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.innerHTML = `
+        <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+        <span>${message}</span>
+    `;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.classList.add('show');
+    }, 100);
+
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+function showDeleteModal(beekeeperId) {
+    // Create modal if it doesn't exist
+    let modal = document.getElementById('deleteModal');
+    let backdrop = document.getElementById('modalBackdrop');
+    
+    if (!modal) {
+        backdrop = document.createElement('div');
+        backdrop.id = 'modalBackdrop';
+        backdrop.className = 'modal-backdrop';
+        
+        modal = document.createElement('div');
+        modal.id = 'deleteModal';
+        modal.className = 'delete-modal';
+        modal.innerHTML = `
+            <div class="delete-modal-content">
+                <i class="fas fa-exclamation-circle delete-modal-icon"></i>
+                <h3>Confirm Deletion</h3>
+                <p>Are you sure you want to delete this beekeeper? This action cannot be undone.</p>
+                <div class="delete-modal-actions">
+                    <button class="cancel-delete">Cancel</button>
+                    <button class="confirm-delete">Delete</button>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(backdrop);
+        document.body.appendChild(modal);
+    }
+    
+    // Show modal and backdrop
+    modal.style.display = 'block';
+    backdrop.style.display = 'block';
+    
+    // Handle button clicks
+    const cancelBtn = modal.querySelector('.cancel-delete');
+    const confirmBtn = modal.querySelector('.confirm-delete');
+    
+    cancelBtn.onclick = () => {
+        modal.style.display = 'none';
+        backdrop.style.display = 'none';
+    };
+    
+    confirmBtn.onclick = () => {
+        // Delete the beekeeper
+        beekeepers = beekeepers.filter(b => b.id !== beekeeperId);
+        localStorage.setItem('beekeepers', JSON.stringify(beekeepers));
+        refreshBeekeepersList();
+        updateBeekeepersCount();
+        
+        // Hide modal
+        modal.style.display = 'none';
+        backdrop.style.display = 'none';
+        
+        // Show success toast
+        showToast('Beekeeper deleted successfully');
+    };
+    
+    // Close on backdrop click
+    backdrop.onclick = () => {
+        modal.style.display = 'none';
+        backdrop.style.display = 'none';
+    };
 }

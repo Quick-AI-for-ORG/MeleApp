@@ -1065,44 +1065,149 @@ canvas {
 
 /* Form Styles */
 .password-group {
-    position: relative;
+  position: relative;
 }
 
 .password-input {
-    position: relative;
-    display: flex;
-    align-items: center;
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .password-input input {
-    padding-right: 2.5rem;
+  padding-right: 2.5rem;
 }
 
 .toggle-password {
-    position: absolute;
-    right: 0.75rem;
-    background: none;
-    border: none;
-    color: #6b7280;
-    cursor: pointer;
-    padding: 0.25rem;
+  position: absolute;
+  right: 0.75rem;
+  background: none;
+  border: none;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0.25rem;
 }
 
 .toggle-password:hover {
-    color: #16404d;
+  color: #16404d;
 }
 
 .form-group input {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #e5e7eb;
-    border-radius: 6px;
-    font-size: 1rem;
-    transition: border-color 0.3s ease;
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
 }
 
 .form-group input:focus {
-    outline: none;
-    border-color: #fca311;
-    box-shadow: 0 0 0 3px rgba(252, 163, 17, 0.1);
+  outline: none;
+  border-color: #fca311;
+  box-shadow: 0 0 0 3px rgba(252, 163, 17, 0.1);
+}
+
+/* Toast Notification */
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transform: translateX(150%);
+  transition: transform 0.3s ease;
+  z-index: 2000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.toast.success {
+  background: #16404d;
+}
+
+.toast.error {
+  background: #ef4444;
+}
+
+.toast.show {
+  transform: translateX(0);
+}
+
+/* Delete Confirmation Modal */
+.delete-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  width: 90%;
+  z-index: 2000;
+  display: none;
+}
+
+.delete-modal-content {
+  text-align: center;
+}
+
+.delete-modal-icon {
+  color: #ef4444;
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.delete-modal h3 {
+  color: #16404d;
+  margin-bottom: 0.5rem;
+}
+
+.delete-modal p {
+  color: #6b7280;
+  margin-bottom: 1.5rem;
+}
+
+.delete-modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.delete-modal-actions button {
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cancel-delete {
+  background: white;
+  border: 1px solid #e5e7eb;
+  color: #6b7280;
+}
+
+.confirm-delete {
+  background: #ef4444;
+  border: none;
+  color: white;
+}
+
+.confirm-delete:hover {
+  background: #dc2626;
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1999;
+  display: none;
 }
