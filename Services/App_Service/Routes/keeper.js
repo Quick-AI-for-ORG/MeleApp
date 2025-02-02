@@ -37,6 +37,7 @@ router.get("/upgrade", async (req, res) => {
       user: req.session.user || "",
       layout: false,
       kits: kits,
+      googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY
     });
   } catch (error) {
     console.error("Database Error:", error);

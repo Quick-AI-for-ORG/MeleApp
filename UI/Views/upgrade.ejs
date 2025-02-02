@@ -8,6 +8,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/CSS/upgrade.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://maps.googleapis.com/maps/api/js?key=<%= googleMapsApiKey %>&libraries=places&callback=initMap"
+        defer></script>
 </head>
 
 <body class="background-radial-gradient">
@@ -22,6 +24,17 @@
                 <div class="form-group">
                     <label for="apiaryName">Apiary Name</label>
                     <input type="text" id="apiaryName" name="apiaryName" required placeholder="Enter your apiary name">
+                </div>
+
+                <div class="form-group">
+                    <label>Apiary Location</label>
+                    <div id="mapContainer">
+                        <input type="text" id="searchLocation" placeholder="Search location...">
+                        <div id="map"></div>
+                        <input type="hidden" id="latitude" name="latitude">
+                        <input type="hidden" id="longitude" name="longitude">
+                        <p id="selectedLocation">Click on the map to set location</p>
+                    </div>
                 </div>
 
                 <div class="form-group">
