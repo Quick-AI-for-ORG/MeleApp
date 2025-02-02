@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const mongoose = require("mongoose");
 
 router.get("/", (req, res) => {
   req.session.message = "Please login to access this page";
@@ -24,17 +25,32 @@ router.get("/dashboard", (req, res) => {
   });
 });
 
-router.get("/upgrade", (req, res) => {
-  res.render("upgrade", {
-    user: req.session.user || "",
-    layout: false
-  });
+router.get("/upgrade", async (req, res) => {
+  try {
+    const meleDB = mongoose.connection.useDb("meleDB");
+
+    const collections = await meleDB.db.listCollections().toArray();
+
+    const kits = await meleDB.db.collection("products").find({}).toArray();
+
+    res.render("upgrade", {
+      user: req.session.user || "",
+      layout: false,
+      kits: kits,
+    });
+  } catch (error) {
+    console.error("Database Error:", error);
+    res.render("upgrade", {
+      user: req.session.user || "",
+      layout: false,
+      kits: [],
+    });
+  }
 });
 
 router.post("/upgrade", (req, res) => {
   const upgradeData = req.body;
-  // Handle the upgrade data here
-  res.redirect("/keeper/dashboard"); // Update redirect path
+  res.redirect("/keeper/dashboard");
 });
 
 module.exports = router;
