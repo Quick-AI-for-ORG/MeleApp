@@ -594,7 +594,7 @@ function handleSubmit(event) {
         // Update the DOM
         refreshBeekeepersList();
         console.log("Display refreshed");
-        showToast('Beekeeper updated successfully');
+        showToast("Beekeeper updated successfully");
       } else {
         throw new Error("Beekeeper index not found");
       }
@@ -614,14 +614,14 @@ function handleSubmit(event) {
       localStorage.setItem("beekeepers", JSON.stringify(beekeepers));
       refreshBeekeepersList();
       updateBeekeepersCount();
-      showToast('New beekeeper added successfully');
+      showToast("New beekeeper added successfully");
     }
 
     closeModal();
     console.log("Operation completed successfully");
   } catch (error) {
     console.error("Error during operation:", error);
-    showToast(error.message, 'error');
+    showToast(error.message, "error");
   }
 
   console.groupEnd();
@@ -632,17 +632,17 @@ function validateForm(data) {
     !/^[a-zA-Z\s]{2,}$/.test(data.firstName) ||
     !/^[a-zA-Z\s]{2,}$/.test(data.lastName)
   ) {
-    alert("Please enter valid first and last names");
+    showToast("Please enter valid first and last names", "error");
     return false;
   }
 
   if (!/^\+?[\d\s-]{10,}$/.test(data.phone)) {
-    alert("Please enter a valid phone number");
+    showToast("Please enter a valid phone number", "error");
     return false;
   }
 
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
-    alert("Please enter a valid email address");
+    showToast("Please enter a valid email address", "error");
     return false;
   }
 
@@ -699,39 +699,41 @@ function togglePassword() {
   }
 }
 
-function showToast(message, type = 'success') {
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-    toast.innerHTML = `
-        <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+function showToast(message, type = "success") {
+  const toast = document.createElement("div");
+  toast.className = `toast ${type}`;
+  toast.innerHTML = `
+        <i class="fas fa-${
+          type === "success" ? "check-circle" : "exclamation-circle"
+        }"></i>
         <span>${message}</span>
     `;
-    document.body.appendChild(toast);
-    
-    setTimeout(() => {
-        toast.classList.add('show');
-    }, 100);
+  document.body.appendChild(toast);
 
-    setTimeout(() => {
-        toast.classList.remove('show');
-        setTimeout(() => toast.remove(), 300);
-    }, 3000);
+  setTimeout(() => {
+    toast.classList.add("show");
+  }, 100);
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+    setTimeout(() => toast.remove(), 300);
+  }, 3000);
 }
 
 function showDeleteModal(beekeeperId) {
-    // Create modal if it doesn't exist
-    let modal = document.getElementById('deleteModal');
-    let backdrop = document.getElementById('modalBackdrop');
-    
-    if (!modal) {
-        backdrop = document.createElement('div');
-        backdrop.id = 'modalBackdrop';
-        backdrop.className = 'modal-backdrop';
-        
-        modal = document.createElement('div');
-        modal.id = 'deleteModal';
-        modal.className = 'delete-modal';
-        modal.innerHTML = `
+  // Create modal if it doesn't exist
+  let modal = document.getElementById("deleteModal");
+  let backdrop = document.getElementById("modalBackdrop");
+
+  if (!modal) {
+    backdrop = document.createElement("div");
+    backdrop.id = "modalBackdrop";
+    backdrop.className = "modal-backdrop";
+
+    modal = document.createElement("div");
+    modal.id = "deleteModal";
+    modal.className = "delete-modal";
+    modal.innerHTML = `
             <div class="delete-modal-content">
                 <i class="fas fa-exclamation-circle delete-modal-icon"></i>
                 <h3>Confirm Deletion</h3>
@@ -742,42 +744,42 @@ function showDeleteModal(beekeeperId) {
                 </div>
             </div>
         `;
-        
-        document.body.appendChild(backdrop);
-        document.body.appendChild(modal);
-    }
-    
-    // Show modal and backdrop
-    modal.style.display = 'block';
-    backdrop.style.display = 'block';
-    
-    // Handle button clicks
-    const cancelBtn = modal.querySelector('.cancel-delete');
-    const confirmBtn = modal.querySelector('.confirm-delete');
-    
-    cancelBtn.onclick = () => {
-        modal.style.display = 'none';
-        backdrop.style.display = 'none';
-    };
-    
-    confirmBtn.onclick = () => {
-        // Delete the beekeeper
-        beekeepers = beekeepers.filter(b => b.id !== beekeeperId);
-        localStorage.setItem('beekeepers', JSON.stringify(beekeepers));
-        refreshBeekeepersList();
-        updateBeekeepersCount();
-        
-        // Hide modal
-        modal.style.display = 'none';
-        backdrop.style.display = 'none';
-        
-        // Show success toast
-        showToast('Beekeeper deleted successfully');
-    };
-    
-    // Close on backdrop click
-    backdrop.onclick = () => {
-        modal.style.display = 'none';
-        backdrop.style.display = 'none';
-    };
+
+    document.body.appendChild(backdrop);
+    document.body.appendChild(modal);
+  }
+
+  // Show modal and backdrop
+  modal.style.display = "block";
+  backdrop.style.display = "block";
+
+  // Handle button clicks
+  const cancelBtn = modal.querySelector(".cancel-delete");
+  const confirmBtn = modal.querySelector(".confirm-delete");
+
+  cancelBtn.onclick = () => {
+    modal.style.display = "none";
+    backdrop.style.display = "none";
+  };
+
+  confirmBtn.onclick = () => {
+    // Delete the beekeeper
+    beekeepers = beekeepers.filter((b) => b.id !== beekeeperId);
+    localStorage.setItem("beekeepers", JSON.stringify(beekeepers));
+    refreshBeekeepersList();
+    updateBeekeepersCount();
+
+    // Hide modal
+    modal.style.display = "none";
+    backdrop.style.display = "none";
+
+    // Show success toast
+    showToast("Beekeeper deleted successfully");
+  };
+
+  // Close on backdrop click
+  backdrop.onclick = () => {
+    modal.style.display = "none";
+    backdrop.style.display = "none";
+  };
 }
