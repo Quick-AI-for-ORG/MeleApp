@@ -1,4 +1,4 @@
-const user = require("../Schemas/user")
+const User = require('../Models/User')
 
 const addUser = async(res,req)=>{}
 const removeUser = async(res,req)=>{}
