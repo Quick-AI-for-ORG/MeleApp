@@ -31,47 +31,19 @@ const noLogin = (req, res) => {
   res.redirect("/keeper/login");
 }
 const products = async (req, res) => {
+    req.session.productDetails = undefined;
     await ctrlProduct.getProducts(req, res);
     res.render("products", { user: req.session.user || "", products: req.session.products || [] });
 }
 
 
 const product =  async (req, res) => {
-    try {
-      // Mock data - replace with database query later
-      const products = {
-        1: {
-          title: "Citrus Blossom Honey",
-          description:
-            "Sweet honey from Egyptian orange groves, carefully harvested to preserve its natural flavors and therapeutic properties. Our citrus honey offers a delicate balance of sweetness with subtle citrus undertones.",
-          price: 12.99,
-          size: "500g",
-          category: "citrus",
-          image: "/Images/bianca-ackermann-ZHOmQ_0X6QQ-unsplash.jpg",
-          features: [
-            "100% Pure Egyptian Honey",
-            "Natural Citrus Undertones",
-            "No Artificial Additives",
-            "Lab Tested Quality",
-          ],
-        },
-        2: {
-          // ...similar structure for other products
-        },
-      }
-      const product = products[req.params.id];
-      if (!product) {
-        return res.status(404).send("Product not found");
-      }
-  
+    if(req.body.productName) await ctrlProduct.getProduct(req, res)
+    if(!req.session.productDetails) res.redirect("/products");
       res.render("product", {
         user: req.session.user || "",
-        product: product,
+        product: req.session.productDetails || {},
       });
-    } catch (error) {
-      console.error(error);
-      res.status(500).send("Error loading product");
-    }
   }
 
 const dashboard =  (req, res) => {

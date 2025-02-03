@@ -315,13 +315,16 @@ body *:not(nav, nav *, footer, footer *) {
   color: #fff;
   text-decoration: none;
   border: none;
-  padding: 0.8rem 2rem;
+  padding: 0rem 2rem;
   border-radius: 25px;
   font-size: 1.1rem;
   transition: all 0.3s ease;
   cursor: pointer;
   box-shadow: 0 4px 15px rgba(252, 163, 17, 0.3);
   display: inline-block;
+}
+.view-btn *{
+  margin-top: 15%;
 }
 
 .view-btn:hover {
