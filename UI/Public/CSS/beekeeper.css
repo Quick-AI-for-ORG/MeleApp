@@ -27,7 +27,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 0 2rem;
-  background: white;
+  background: white; /* Changed back to white */
   border-radius: 10px;
 }
 
@@ -55,7 +55,7 @@ body {
 
 .nav-link {
   text-decoration: none;
-  color: #16404d;
+  color: #16404d; /* Changed back to blue */
   padding: 0.5rem 1rem;
   border-radius: 5px;
   transition: all 0.3s ease;
@@ -141,8 +141,8 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 0.75rem 1rem;
-  background: #16404d;
-  color: white;
+  background: #16404d; /* Changed back to blue */
+  color: white; /* Changed text to white */
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -156,16 +156,17 @@ body {
 }
 
 .dropdown-trigger:hover {
-  background: #fca311;
+  background: #fca311; /* Changed hover to honey color */
+  color: white; /* Keep text white on hover */
 }
 
 .nested-trigger {
   width: 100%;
   text-align: left;
   padding: 0.5rem 1rem;
-  background: none;
+  background: #fbf5dd; /* Light honey background */
   border: none;
-  color: #16404d;
+  color: #16404d; /* Blue text */
   cursor: pointer;
   display: flex;
   justify-content: space-between;
@@ -175,7 +176,8 @@ body {
 }
 
 .nested-trigger:hover {
-  background: #fca31120;
+  background: #fca311; /* Honey color on hover */
+  color: white; /* White text on hover */
 }
 
 .dropdown-content {
@@ -204,20 +206,11 @@ body {
 }
 
 .monitor-link {
-  display: block;
-  padding: 0.5rem 1rem;
-  color: #16404d;
-  text-decoration: none;
-  font-size: 0.9rem;
-  transition: all 0.3s ease;
-}
-
-.monitor-link {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
-  color: #16404d;
+  color: #16404d; /* Blue text */
   text-decoration: none;
   font-size: 0.9rem;
   transition: all 0.2s ease;
@@ -225,14 +218,8 @@ body {
 }
 
 .monitor-link:hover {
-  color: #fca311;
-  background-color: #fca31110;
-  border-radius: 0.375rem;
-}
-
-.monitor-link:hover {
-  background: #fca31120;
-  color: #fca311;
+  background: #fca311; /* Honey color on hover */
+  color: white; /* White text on hover */
 }
 
 .nested-dropdown {
@@ -758,12 +745,12 @@ canvas {
 .nav-divider {
   width: 2px;
   height: 30px;
-  background: rgba(22, 64, 77, 0.1);
+  background: rgba(22, 64, 77, 0.1); /* Changed back to semi-transparent blue */
   margin: 0 1rem;
 }
 
 .nav-title {
-  color: #16404d;
+  color: #16404d; /* Changed back to blue */
   font-size: 1.2rem;
   font-weight: 500;
   margin-right: 2rem;
@@ -1065,44 +1052,53 @@ canvas {
 
 /* Form Styles */
 .password-group {
-    position: relative;
+  position: relative;
 }
 
 .password-input {
-    position: relative;
-    display: flex;
-    align-items: center;
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .password-input input {
-    padding-right: 2.5rem;
+  padding-right: 2.5rem;
 }
 
 .toggle-password {
-    position: absolute;
-    right: 0.75rem;
-    background: none;
-    border: none;
-    color: #6b7280;
-    cursor: pointer;
-    padding: 0.25rem;
+  position: absolute;
+  right: 0.75rem;
+  background: none;
+  border: none;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0.25rem;
 }
 
 .toggle-password:hover {
-    color: #16404d;
+  color: #16404d;
 }
 
 .form-group input {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #e5e7eb;
-    border-radius: 6px;
-    font-size: 1rem;
-    transition: border-color 0.3s ease;
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
 }
 
 .form-group input:focus {
-    outline: none;
-    border-color: #fca311;
-    box-shadow: 0 0 0 3px rgba(252, 163, 17, 0.1);
+  outline: none;
+  border-color: #fca311;
+  box-shadow: 0 0 0 3px rgba(252, 163, 17, 0.1);
+}
+
+.sidebar {
+  background: #16404d;
+  color: white;
+}
+.sidebar-nav .dropdown-trigger {
+  background: #f9f9f9;
+  color: #16404d;
 }
