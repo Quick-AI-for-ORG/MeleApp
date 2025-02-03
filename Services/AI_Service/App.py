@@ -5,7 +5,10 @@ import tensorflow as tf
 import os
 import sys
 sys.path.append(os.path.join(os.path.dirname('Utils')))
+sys.path.append(os.path.join(os.path.dirname('../Shared')))
+from Shared.Result import Result
 from Utils.Insect_Classifier import insectClassifier
+
 
 beePath = "../AI_Service/Models/Quantized_Bee.tflite"
 waspPath = "../AI_Service/Models/Quantized_Wasp.tflite"
