@@ -8,3 +8,12 @@ const getUsers = async(res,req)=>{}
 const register = async(res,req)=>{}
 const login = async(res,req)=>{}
 
+module.exports = {
+    addUser,
+    removeUser,
+    updateUser,
+    getUser,
+    getUsers,
+    register,
+    login
+}

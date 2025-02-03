@@ -146,23 +146,7 @@ section {
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
-  .hero-content h1 {
-    font-size: 2.5rem;
-  }
-  section {
-    padding: 3rem 0;
-  }
-  #about-card{
-    max-width: 95%;
-    min-width: 90%;
-    height: auto;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 1%;
-  }
- 
-}
+
 
 /* Buttons & Links */
 .btn-link {
@@ -188,4 +172,116 @@ section {
   margin-bottom: 5%;
 }
 
+.sensors-section{
+}
 
+.sensors-section ul {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  justify-content: center;
+  gap:10px
+}
+
+.sensor-card {
+  display: flex;
+  width: 30%;
+  flex-direction: column;
+  margin: 2%;
+  border-radius: 10px;
+  text-align: center;
+  overflow: hidden;
+  color: #16404d;
+  transition: .3s;
+}
+.sensor-card i{
+  color:#fca311
+}
+
+.informations-container {
+  flex: 1 0 auto;
+  padding:2%;
+  background: #16404d;
+  transition: .3s;
+  border-top-right-radius: 10px;
+  transform: translateY(100px);
+  box-shadow: 20px 10px 20px rgba(22, 64, 77, 0.951);
+
+}
+
+.informations-container .title {
+  position: relative;
+  margin-bottom: 5%;
+  margin-top: 5%;
+  font-weight: bold;
+  font-size: 1.2em;
+  color: #fbf5dd;
+}
+
+.informations-container .title::after {
+  content: '';
+  position: absolute;
+  bottom: -10;
+  left: 0;
+  right: 0;
+  height: 1px;
+  width: 80%;
+  margin: auto;
+  background: #fca311;
+}
+
+.informations-container .sub-title {
+  font-size: 1em;
+  margin-top:2%;
+  color: #e9e9e9f0
+}
+
+.informations-container .more-information {
+  opacity: 0;
+  transition: .3s;
+}
+
+.informations-container .more-information .disclaimer {
+  margin:2%;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 0.8em;
+  color: #d4d4d4;
+  padding-bottom: 5%;
+}
+
+.sensor-card:hover::before {
+  background: rgba(10, 72, 112, 0.6);
+}
+
+.sensor-card:hover .informations-container {
+  transform: translateY(0px);
+}
+
+.sensor-card:hover .informations-container .more-information {
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .hero-content h1 {
+    font-size: 2.5rem;
+  }
+  section {
+    padding: 3rem 0;
+  }
+  #about-card{
+    max-width: 95%;
+    min-width: 90%;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 1%;
+  }
+  .sensor-card{
+    height: fit-content;
+    width: 100%;
+    transform: translateX(-15px);
+  }
+ 
+}

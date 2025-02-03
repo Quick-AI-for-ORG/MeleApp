@@ -1,22 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
+const ctrlPages = require("../Controllers/ctrlPages");
+
 
 router.get("/", (req, res) => {
   req.session.message = "Please login to access this page";
   res.redirect("/keeper/login");
 });
-router.get("/signup", (req, res) => {
-  let message = req.session.message === undefined ? null : req.session.message;
-  req.session.message = undefined;
-  res.render("signup", { layout: false, message: message });
-});
+router.get("/signup", ctrlPages._KEEPER.signup);
 
-router.get("/login", (req, res) => {
-  let message = req.session.message === undefined ? null : req.session.message;
-  req.session.message = undefined;
-  res.render("login", { layout: false, message: message });
-});
+router.get("/login", ctrlPages._KEEPER.login);
 
 router.get("/dashboard", (req, res) => {
   res.render("beekeeper", {

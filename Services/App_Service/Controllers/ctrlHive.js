@@ -20,3 +20,26 @@ const getDoorStatus = async (req, res) => {}
 const turnOnCooler = async (req, res) => {}
 const turnOffCooler = async (req, res) => {}
 const getAnaomaly = async (req, res) => {} 
+
+module.exports = {
+    addHive,
+    removeHive,
+    updateHive,
+    getHive,
+    getHives,
+    getHiveTemperature,
+    getHiveHumidity,
+    getHiveWeight,
+    getFramesWeight,
+    watchLivestream,
+    getHiveUpgrade,
+    upgradeHive,
+    assignKeeper,
+    getAssignedKeeper,
+    closeDoor,
+    openDoor,
+    getDoorStatus,
+    turnOnCooler,
+    turnOffCooler,
+    getAnaomaly
+}

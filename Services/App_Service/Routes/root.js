@@ -1,17 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const Product = require("../Models/Product"); // You'll need to create this model
+const ctrlPages = require("../Controllers/ctrlPages");
 
-router.get("/", (req, res) => {
-  res.render("mele", {
-    user: req.session.user === undefined ? "" : req.session.user,
-  });
-});
-router.get("/aboutus", (req, res) => {
-  res.render("aboutUs", {
-    user: req.session.user === undefined ? "" : req.session.user,
-  });
-});
+router.get("/", ctrlPages._PUBLIC.home);
+router.get("/aboutus", ctrlPages._PUBLIC.about);
+
 router.get("/products", async (req, res) => {
   try {
     const products = [
