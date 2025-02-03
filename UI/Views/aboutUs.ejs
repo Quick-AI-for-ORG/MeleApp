@@ -49,7 +49,7 @@
                     <i class="fa-solid fa-utensils"></i>
                     <h3>SDG-2: Zero Hunger</h3>
                 </div>
-                <h4 class="title">Promoting food security and improved nutrition by supporting bee populations, ensuring access to sufficient, safe, and nutritious food for all to end hunger</h4>
+                <h4 class="title">Promoting food security and improved nutrition by supporting bee populations, ensuring access to sufficient, safe, and nutritious food for all to end world hunger</h4>
                 </div>
                 <div class="quality-card">
                     <div class="quality-top">
@@ -105,7 +105,7 @@
             <h2>Our Hive Monitoring Sensors</h2>
             <ul>
                 <% sensors.forEach(sensor => { %>
-                  <li class="sensor-card" >
+                  <li class="sensor-card" style="background-image: url('/Images/<%= sensor.imagePath %>')">
                     <div class="informations-container">
                       <h2 class="title"><%= sensor.sensorType %></h2>
                       <p class="sub-title">Model: <%= sensor.modelName %></p>
