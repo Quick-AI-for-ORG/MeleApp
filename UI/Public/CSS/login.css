@@ -1,4 +1,3 @@
-
 /* Background Styles */
 .background-radial-gradient {
   background-color: #fca311;
@@ -131,7 +130,15 @@ a {
   }
 }
 
-body *:not(.background-radial-gradient, #loginError, .error-message, .error-message *, .background-radial-gradient *, section) {
+body
+  *:not(
+    .background-radial-gradient,
+    #loginError,
+    .error-message,
+    .error-message *,
+    .background-radial-gradient *,
+    section
+  ) {
   animation: fadeIn 0.7s ease-in-out;
 }
 
@@ -163,4 +170,90 @@ body *:not(.background-radial-gradient, #loginError, .error-message, .error-mess
   color: #df951d;
 }
 
+/* Toast Styles */
+.toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+}
 
+.toast {
+  background: white;
+  color: #ef4444;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  animation: slideIn 0.3s ease, fadeOut 0.3s ease 2.7s;
+  opacity: 0;
+}
+
+.toast i {
+  font-size: 1.2rem;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.toasts-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+}
+
+.toast-notification {
+  background: white;
+  padding: 1rem;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 300px;
+  max-width: 400px;
+  animation: slideIn 0.3s ease forwards;
+}
+
+.toast-notification i {
+  color: #ef4444;
+  font-size: 1.2rem;
+}
+
+.toast-notification .message {
+  color: #16404d;
+  font-size: 0.9rem;
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}

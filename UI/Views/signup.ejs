@@ -9,132 +9,173 @@
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <link rel="stylesheet" href="/CSS/signUp.css">
+    <style>
+        .toasts-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
 
+        .toast-notification {
+            background: white;
+            padding: 1rem;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 300px;
+            animation: slideIn 0.3s ease forwards;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+    </style>
 </head>
 
 <body>
+    <div id="toastsContainer" class="toasts-container"></div>
     <%- include('./Layouts/message.ejs') %>
 
-    <!-- Section: Design Block -->
-    <section class="text-center text-lg-start">
+        <!-- Section: Design Block -->
+        <section class="text-center text-lg-start">
 
 
-        <!-- Jumbotron -->
-        <div class="container py-4">
-            <div class="row g-0 align-items-center">
-                <div class="col-lg-6 mb-5 mb-lg-0">
-                    <div class="card cascading-right" style="
+            <!-- Jumbotron -->
+            <div class="container py-4">
+                <div class="row g-0 align-items-center">
+                    <div class="col-lg-6 mb-5 mb-lg-0">
+                        <div class="card cascading-right" style="
               background: hsla(0, 0%, 100%, 0.55);
               backdrop-filter: blur(30px);
               ">
-                        <div class="card-body p-5 shadow-5 text-center">
-                            <button title="Exit" type="button" class="cancel" onclick="location.replace('/')">
-                                <i class="fa-solid fa-circle-xmark"></i>
-                            </button>
-                            <h2 class="fw-bold mb-5" style="color: #4e2606;">Sign up to <span
-                                    style="color: #260701; font-weight: 900;">Mele!</span></h2>
-                            <form method="post" action="/keeper/register" onsubmit="return submitable()">
-                                <!-- 2 column grid layout with text inputs for the first and last names -->
-                                <div class="row">
-                                    <div class="col-md-6 mb-4">
-                                        <div class="form-outline">
-                                            <input type="text" id="form3Example1" class="form-control" required
-                                                placeholder="Enter your first name" name="fname" />
-                                            <label class="form-label" for="form3Example1">First name</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 mb-4">
-                                        <div class="form-outline">
-                                            <input type="text" id="form3Example2" class="form-control" required
-                                                placeholder="Enter your last name" name="lname" />
-                                            <label class="form-label" for="form3Example2">Last name</label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Email input -->
-                                <div class="form-outline mb-4">
-                                    <input type="email" id="form3Example3" oninput="checkMail(this)"
-                                        class="form-control" placeholder="Enter your email e.g, example@gmail.com"
-                                        name="email" required />
-                                    <label class="form-label" for="form3Example3">Email address</label>
-                                </div>
-                                <label class="cMail" style="display: none; color:red;">E-mail already in use</label>
-
-                                <!-- Password input -->
-                                <div class="form-outline mb-4">
-                                    <input type="password" id="form3Example4" class="form-control pw" required
-                                        placeholder="Enter your password" name="password" />
-                                    <label class="form-label" for="form3Example4">Password</label>
-                                </div>
-                                <div class="form-outline mb-4">
-                                    <input type="password" id="form3Example4" class="form-control cpw" required
-                                        placeholder="Confirm your password" />
-                                    <label class="form-label" for="form3Example4">Confirm password</label>
-                                    <label class="pswe" style="display: none; color:red;">Passwords do not match</label>
-                                </div>
-
-                                <div class="form-outline mb-4">
-                                    <input type="tel" id="form3Example4" class="form-control" required
-                                        placeholder="+20123456789" name="phoneNumber" />
-                                    <label class="form-label" for="form3Example4">Phone number</label>
-                                </div>
-                                <div class="form-outline mb-4">
-                                    <input type="text" id="form3Example4" class="form-control" required
-                                        placeholder="Enter your adress" name="address" />
-                                    <label class="form-label" for="form3Example4">Address</label>
-                                </div>
-                                <!-- Checkbox -->
-                                <div class="form-check d-flex justify-content-center mb-4">
-                                    <input class="form-check-input me-2" type="checkbox" value="" id="form2Example33"
-                                        required />
-                                    <label class="form-check-label" for="form2Example33">
-                                        I'm above 18 years old
-                                    </label>
-                                </div>
-
-
-                                <!-- Submit button -->
-                                <button type="submit" class="signUp btn-block mb-4">
-                                    Sign up
+                            <div class="card-body p-5 shadow-5 text-center">
+                                <button title="Exit" type="button" class="cancel" onclick="location.replace('/')">
+                                    <i class="fa-solid fa-circle-xmark"></i>
                                 </button>
-
-                                <!-- Register buttons -->
-                                <div class="text-center">
-                                    <p>or sign up with:</p>
-                                    <button type="button" class="btn btn-link btn-floating mx-1">
-                                        <i class="fab fa-facebook-f"></i>
-                                    </button>
-
-                                    <button type="button" class="btn btn-link btn-floating mx-1">
-                                        <i class="fab fa-google"></i>
-                                    </button>
-
-                                    <button type="button" class="btn btn-link btn-floating mx-1">
-                                        <i class="fab fa-twitter"></i>
-                                    </button>
-
-                                    <button type="button" class="btn btn-link btn-floating mx-1">
-                                        <i class="fab fa-instagram" style=" font-size: larger;"></i>
-                                    </button>
-                                    <div class="member">
-                                        <span>Already a member? <a class="login" href="/keeper/login">Log In</a></span>
+                                <h2 class="fw-bold mb-5" style="color: #4e2606;">Sign up to <span
+                                        style="color: #260701; font-weight: 900;">Mele!</span></h2>
+                                <form method="post" action="/keeper/register" class="signup-form">
+                                    <!-- 2 column grid layout with text inputs for the first and last names -->
+                                    <div class="row">
+                                        <div class="col-md-6 mb-4">
+                                            <div class="form-outline">
+                                                <input type="text" id="form3Example1" class="form-control" required
+                                                    placeholder="Enter your first name" name="fname" />
+                                                <label class="form-label" for="form3Example1">First name</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mb-4">
+                                            <div class="form-outline">
+                                                <input type="text" id="form3Example2" class="form-control" required
+                                                    placeholder="Enter your last name" name="lname" />
+                                                <label class="form-label" for="form3Example2">Last name</label>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </form>
+
+                                    <!-- Email input -->
+                                    <div class="form-outline mb-4">
+                                        <input type="email" id="form3Example3" oninput="checkMail(this)"
+                                            class="form-control" placeholder="Enter your email e.g, example@gmail.com"
+                                            name="email" required />
+                                        <label class="form-label" for="form3Example3">Email address</label>
+                                    </div>
+                                    <label class="cMail" style="display: none; color:red;">E-mail already in use</label>
+
+                                    <!-- Password input -->
+                                    <div class="form-outline mb-4">
+                                        <input type="password" id="form3Example4" class="form-control pw" required
+                                            placeholder="Enter your password" name="password" />
+                                        <label class="form-label" for="form3Example4">Password</label>
+                                    </div>
+                                    <div class="form-outline mb-4">
+                                        <input type="password" id="form3Example4" class="form-control cpw" required
+                                            placeholder="Confirm your password" />
+                                        <label class="form-label" for="form3Example4">Confirm password</label>
+                                        <label class="pswe" style="display: none; color:red;">Passwords do not
+                                            match</label>
+                                    </div>
+
+                                    <div class="form-outline mb-4">
+                                        <input type="tel" id="form3Example4" class="form-control" required
+                                            placeholder="+20123456789" name="phoneNumber" />
+                                        <label class="form-label" for="form3Example4">Phone number</label>
+                                    </div>
+                                    <div class="form-outline mb-4">
+                                        <input type="text" id="form3Example4" class="form-control" required
+                                            placeholder="Enter your adress" name="address" />
+                                        <label class="form-label" for="form3Example4">Address</label>
+                                    </div>
+                                    <!-- Checkbox -->
+                                    <div class="form-check d-flex justify-content-center mb-4">
+                                        <input class="form-check-input me-2" type="checkbox" value=""
+                                            id="form2Example33" required />
+                                        <label class="form-check-label" for="form2Example33">
+                                            I'm above 18 years old
+                                        </label>
+                                    </div>
+
+
+                                    <!-- Submit button -->
+                                    <button type="submit" class="signUp btn-block mb-4">
+                                        Sign up
+                                    </button>
+
+                                    <!-- Register buttons -->
+                                    <div class="text-center">
+                                        <p>or sign up with:</p>
+                                        <button type="button" class="btn btn-link btn-floating mx-1">
+                                            <i class="fab fa-facebook-f"></i>
+                                        </button>
+
+                                        <button type="button" class="btn btn-link btn-floating mx-1">
+                                            <i class="fab fa-google"></i>
+                                        </button>
+
+                                        <button type="button" class="btn btn-link btn-floating mx-1">
+                                            <i class="fab fa-twitter"></i>
+                                        </button>
+
+                                        <button type="button" class="btn btn-link btn-floating mx-1">
+                                            <i class="fab fa-instagram" style=" font-size: larger;"></i>
+                                        </button>
+                                        <div class="member">
+                                            <span>Already a member? <a class="login" href="/keeper/login">Log
+                                                    In</a></span>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="col-lg-6 mb-5 mb-lg-5">
-                    <img src="/Images/signup.jpg" class="w-100 rounded-4 shadow-4" alt="" />
+                    <div class="col-lg-6 mb-5 mb-lg-5">
+                        <img src="/Images/signup.jpg" class="w-100 rounded-4 shadow-4" alt="" />
+                    </div>
                 </div>
             </div>
-        </div>
-        <!-- Jumbotron -->
-    </section>
-    <!-- Section: Design Block -->
-    <!-- <script type="text/javascript" src="/JS/verification.js"></script> -->
+            <!-- Jumbotron -->
+        </section>
+        <script src="/JS/signupValidation.js"></script>
 </body>
 
 </html>
