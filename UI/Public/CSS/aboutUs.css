@@ -172,8 +172,7 @@ section {
   margin-bottom: 5%;
 }
 
-.sensors-section{
-}
+
 
 .sensors-section ul {
   display: flex;
@@ -189,10 +188,14 @@ section {
   flex-direction: column;
   margin: 2%;
   border-radius: 10px;
+  border-top-left-radius: 0;
   text-align: center;
   overflow: hidden;
   color: #16404d;
   transition: .3s;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 .sensor-card i{
   color:#fca311
