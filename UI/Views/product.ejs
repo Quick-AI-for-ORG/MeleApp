@@ -14,13 +14,6 @@
 
 <body class="background-radial-gradient">
 
-    <div class="container">
-        <div class="go-back-button">
-            <a href="/products">
-                <button><i class="fas fa-arrow-left"></i> Back to Products</button>
-            </a>
-        </div>
-
         <div class="product-container">
             <div class="product-form">
                 <div class="product-image-section">
@@ -44,11 +37,8 @@
 
                 <div class="product-details-section">
                     <h1 class="title">
-                        <%= product.title %>
+                        <%= product.name %>
                     </h1>
-                    <p class="type">
-                        <%= product.category %> Honey
-                    </p>
                     <div class="price-tag">
                         <i class="fas fa-tag"></i>
                         <span><small>EGP</small> <%= parseFloat(product.price).toFixed(2) %></span>
