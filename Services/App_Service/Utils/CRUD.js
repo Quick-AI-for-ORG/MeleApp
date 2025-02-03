@@ -4,7 +4,6 @@ const models = {
   hiveModel: require("../Schemas/Hive"),
   readingModel: require("../Schemas/Reading"),
   apiaryModel: require("../Schemas/Apiary"),
-  upgradeModel: require("../Schemas/Upgrade"),
   threatModel: require("../Schemas/Threat"),
   productModel: require("../Schemas/Product"),
   keeperAssignmentModel: require("../Schemas/KeeperAssignment"),
