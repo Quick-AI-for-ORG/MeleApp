@@ -5,7 +5,7 @@ class HiveUpgrade {
 
   static crudInterface = crudInterface;
   static jsonToObject = jsonToObject;
-  static attributes = ['hiveRef', 'upgradeRef'];
+  static attributes = ['hiveRef', 'upgradeRef', 'userRef'];
 
   constructor(upgradeJSON) {
     HiveUpgrade.jsonToObject(this, upgradeJSON);
