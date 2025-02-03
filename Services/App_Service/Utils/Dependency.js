@@ -29,6 +29,19 @@ const dependencyInterface = {
             await Log.create({ log: `Error during cascade deletion for ${object}: ${error}`, degree: -1 });
             return new Result(-1, null, `Error during cascade deletion for ${object}: ${error}`);
         }
+    },
+    populate: async function (reference, object, compareKey) {
+        try {
+            for (let model of reference) {
+                const result = await CRUDInterface.getAll(object._id, model, compareKey);
+                if (!result.success.status) return result;
+            }
+            await Log.create({ log: `Population for ${object} is valid.`, degree: 1 });
+            return new Result(1, true, `Population for ${object} is valid.`);
+        } catch (error) {
+            await Log.create({ log: `Error during population for ${object}: ${error}`, degree: -1 });
+            return new Result(-1, null, `Error during population for ${object}: ${error}`);
+        }
     }
 };
 
