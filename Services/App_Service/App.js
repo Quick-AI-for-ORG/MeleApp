@@ -4,6 +4,7 @@ const dotenv = require("dotenv");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const expressLayouts = require("express-ejs-layouts");
+const path = require("path");
 
 dotenv.config({ path: "../../.env" });
 
@@ -18,7 +19,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(
   session({ secret: "Your_Secret_Key", saveUninitialized: true, resave: false })
 );
-app.use(express.static("../../UI/Public"));
+// Make sure the static file middleware is properly configured
+app.use(express.static(path.join(__dirname, '../../UI/Public')));
 app.use(expressLayouts);
 
 app.use("/", rootRouter);
