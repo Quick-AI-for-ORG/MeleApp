@@ -196,6 +196,7 @@ section {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  box-shadow: -10px 10px 20px rgba(22, 64, 77, 0.307);
 }
 .sensor-card i{
   color:#fca311
@@ -206,9 +207,7 @@ section {
   padding:2%;
   background: #16404d;
   transition: .3s;
-  border-top-right-radius: 10px;
   transform: translateY(100px);
-  box-shadow: 20px 10px 20px rgba(22, 64, 77, 0.951);
 
 }
 
