@@ -83,16 +83,12 @@ const dashboard =  (req, res) => {
 
 const upgrade = async (req, res) => {
     try {
-      const meleDB = mongoose.connection.useDb("meleDB");
-  
-      const collections = await meleDB.db.listCollections().toArray();
-  
-      const kits = await meleDB.db.collection("products").find({}).toArray();
-  
+     
+    await ctrlProduct.getProducts(req, res);
       res.render("upgrade", {
         user: req.session.user || "",
         layout: false,
-        kits: kits,
+        kits: req.session.products || [],
         googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY
       });
     } catch (error) {

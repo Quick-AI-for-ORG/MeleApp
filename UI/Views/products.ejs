@@ -29,7 +29,7 @@
             <% products.forEach(product=> { %>
                 <div class="product-card" data-category="<%= product.category %>">
                     <div class="product-image">
-                        <img src="<%= product.image %>" alt="<%= product.title %>">
+                        <img src="/Images/Products/<%= product.images[0] %>" alt="<%= product.title %>">
                         <div class="product-overlay">
                             <a href="/products/<%= product._id %>" class="view-btn">
                                 <i class="fas fa-eye me-2"></i>View Details
@@ -38,7 +38,7 @@
                     </div>
                     <div class="product-info">
                         <h3>
-                            <%= product.title %>
+                            <%= product.name %>
                         </h3>
                         <p class="product-description">
                             <%= product.description %>

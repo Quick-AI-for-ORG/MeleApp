@@ -248,6 +248,7 @@ body *:not(nav, nav *, footer, footer *) {
   overflow: hidden;
   box-shadow: 0 15px 30px rgba(252, 163, 17, 0.1);
   transition: transform 0.3s ease;
+  width:100%
 }
 
 .product-card:hover {
