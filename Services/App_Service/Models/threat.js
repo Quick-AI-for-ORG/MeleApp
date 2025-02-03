@@ -27,6 +27,10 @@ class Threat {
     return result;
   }
 
+  static async remove(id) {
+    return await Threat.crudInterface.remove(id, "threatModel", "_id");
+  }
+
   async create() {
     const result = await Threat.crudInterface.create(this, "threatModel", "_id");
     if (result.success.status) {

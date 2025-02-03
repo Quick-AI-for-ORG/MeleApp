@@ -27,6 +27,10 @@ class Reading {
     return result;
   }
 
+  static async remove(id) {
+    return await Reading.crudInterface.remove(id, "readingModel", "_id");
+  }
+
   async create() {
     const result = await Reading.crudInterface.create(this, "readingModel", "_id");
     if (result.success.status) {

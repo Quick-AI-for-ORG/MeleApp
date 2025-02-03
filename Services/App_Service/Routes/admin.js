@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
-
+const ctrlHive = require("../Controllers/ctrlHive");
 router.get("/dashboard", async (req, res) => {
   try {
     const meleDB = mongoose.connection.useDb("meleDB");
@@ -45,4 +45,6 @@ router.get("/dashboard", async (req, res) => {
   }
 });
 
+router.post("/addHive", ctrlHive.addHive);
+router.post("/removeHive", ctrlHive.removeHive);
 module.exports = router;

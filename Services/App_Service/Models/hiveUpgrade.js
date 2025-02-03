@@ -26,7 +26,9 @@ class HiveUpgrade {
     }
     return result;
   }
-
+  static async remove(id) {
+    return await HiveUpgrade.crudInterface.remove(id, "hiveUpgradeModel", "_id");
+  }
   async create() {
     const result = await HiveUpgrade.crudInterface.create(this, "hiveUpgradeModel", "_id");
     if (result.success.status) {

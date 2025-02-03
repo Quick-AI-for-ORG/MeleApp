@@ -1,7 +1,20 @@
 const Hive = require('../Models/Hive');
 
-const addHive = async (req, res) => {}
-const removeHive = async (req, res) => {}
+const addHive = async (req, res) => {
+    const hiveJSON = {
+        dimensions: req.body.dimensions,
+        numberOfFrames: req.body.numberOfFrames,
+        streamUrl: req.body.streamUrl,
+        apiaryRef:req.body.apiaryRef
+    }
+    const hive = new Hive(hiveJSON);
+    const result = await hive.create(req.body);
+    res.status(result.success.status ? 200 : 400).send(result);
+}
+const removeHive = async (req, res) => {
+    const result = await Hive.remove(req.body.id);
+    res.status(result.success.status ? 200 : 400).send(result);
+}
 const updateHive = async (req, res) => {}
 const getHive = async (req, res) => {}
 const getHives = async (req, res) => {}

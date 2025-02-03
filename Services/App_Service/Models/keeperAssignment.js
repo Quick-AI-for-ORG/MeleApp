@@ -27,6 +27,9 @@ class KeeperAssignment {
     return result;
   }
 
+  static async remove(id) {
+    return await KeeperAssignment.crudInterface.remove(id, "keeperAssignmentModel", "_id");
+  }
   async create() {
     const result = await KeeperAssignment.crudInterface.create(this, "keeperAssignmentModel", "_id");
     if (result.success.status) {

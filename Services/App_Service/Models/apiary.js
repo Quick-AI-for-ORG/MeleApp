@@ -19,6 +19,14 @@ class Apiary {
     return result;
   }
 
+  static async getByUser(userId){
+    const result = await Apiary.crudInterface.getByUser(userId, "apiaryModel", "owner");
+    if (result.success.status) {
+      result.data = result.data.map(apiary => new Apiary(apiary));
+    }
+    return result;
+  }
+
   static async getAll() {
     const result = await Apiary.crudInterface.getAll("apiaryModel");
     if (result.success.status) {

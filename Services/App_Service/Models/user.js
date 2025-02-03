@@ -11,6 +11,7 @@ class User {
   static crudInterface = crudInterface;
   static jsonToObject = jsonToObject;
   static attributes = ['name', 'role', 'email', 'password', 'tel', 'address', 'affiliation'];
+  static cascading = ['apiaryModel',  ];
 
   constructor(userJSON, role = "Owner") {
     User.jsonToObject(this, userJSON, { role: role });
@@ -57,6 +58,21 @@ class User {
   async remove() {
     return await User.crudInterface.remove(this.email, "userModel", "email");
   }
+  async getApiaries() {
+    const result = await Apiary.getByUser(this._id);
+    if(result.success.status) this.apiaries = result.data;
+    return result;
+  }
+
+  async getHives(){
+    for (let i = 0; i < this.apiaries.length; i++) {
+      const apiary = this.apiaries[i];
+      const result = await apiary.getHives();
+      if(!result.success.status) return result;
+      this.apiaries[i] = apiary;
+    }
+  }
+
 }
 
 module.exports = User;

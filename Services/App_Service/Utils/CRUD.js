@@ -62,6 +62,23 @@ const CRUDInterface = {
         return new Result(-1, null, `Error removing data: ${error}`);
       }
   },
+  removeAll: async function (primaryKey, model, compareKey) {
+    try {
+      const compareClause = { [compareKey]: primaryKey };
+      const result = await models[model].deleteMany(compareClause);
+      
+      if (result.deletedCount === 0) {
+        await Log.create({ log: `No records found with ${compareKey}: ${primaryKey}. Skipping deletion.`, degree: 0 });
+        return new Result(0, null, `No records found with ${compareKey}: ${primaryKey}. Skipping deletion.`);
+      } else {
+        await Log.create({ log: `Deleted ${result.deletedCount} records with ${compareKey}: ${primaryKey}`, degree: 1 });
+        return new Result(1, result, `Deleted ${result.deletedCount} records with ${compareKey}: ${primaryKey}`);
+      }
+    } catch (error) {
+      await Log.create({ log: `Error removing data: ${error}`, degree: -1 });
+      return new Result(-1, null, `Error removing data: ${error}`);
+    }
+  },  
   get: async function (primaryKey, model, compareKey) {
       try {
         const compareClause = {[compareKey]: primaryKey};
@@ -82,8 +99,8 @@ const CRUDInterface = {
       try {
         const records = await models[model].find();
         const resultData = records.map(record => record._doc);
-        await Log.create({log: `Found ${records.length} records.`, degree: 1});
-        return new Result(1, resultData, `Found ${records.length} records.`);
+        await Log.create({log: `Found ${records.length} records in ${model}.`, degree: 1});
+        return new Result(1, resultData, `Found ${records.length} records in ${model}..`);
       } catch (error) {
         await Log.create({log: `Error getting all data: ${error}`, degree: -1});
         return new Result(-1, null, `Error getting all data: ${error}`);
