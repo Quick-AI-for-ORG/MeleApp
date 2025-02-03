@@ -24,7 +24,22 @@
         <div class="product-container">
             <div class="product-form">
                 <div class="product-image-section">
-                    <img src="<%= product.image %>" alt="<%= product.title %>">
+                    <div class="slideshow-container">
+                        <div class="main-image">
+                            <img id="mainImage" src="/Images/Products/<%= product.images[0] %>"
+                                alt="<%= product.name %>">
+                            <button class="slide-btn prev" onclick="changeSlide(-1)">❮</button>
+                            <button class="slide-btn next" onclick="changeSlide(1)">❯</button>
+                        </div>
+                        <div class="thumbnail-container">
+                            <% product.images.forEach((image, index)=> { %>
+                                <div class="thumbnail <%= index === 0 ? 'active' : '' %>"
+                                    onclick="changeImage('<%= image %>', this)">
+                                    <img src="/Images/Products/<%= image %>" alt="<%= product.name %>">
+                                </div>
+                                <% }); %>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="product-details-section">
