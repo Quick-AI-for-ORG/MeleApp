@@ -28,6 +28,7 @@ app.use("/keeper", keeperRouter);
 
 
 app.set("layout", "Layouts/layout");
+
 app.set('views', "../../UI/Views");
 app.set('view engine', 'ejs');
 

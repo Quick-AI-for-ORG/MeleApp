@@ -11,7 +11,6 @@
 </head>
 
 <body>
-    <!-- Hero Section -->
     <header class="hero-section" style="background-image: url('/Images/mele_slideshow_5.jpg');">
         <!-- <div class="overlay"></div> -->
         <div class="container">
@@ -26,12 +25,16 @@
     <section class="about-section">
         <div class="container">
             <div class="row align-items-center">
-                <div id = "about-card" class="col-md-6">
+                <div id="about-card" class="col-md-6">
                     <h2>Our Mission</h2>
-                    <p>The journey began with a deep appreciation for the vital role bees play in sustaining ecosystems and supporting global food production. Concerned about the decline in bee populations, we decided to take action by starting our own beekeeping project. Our mission was simple: to create an environment where bees could thrive, using natural, sustainable practices that respect both the bees and the surrounding ecosystem.</p>
+                    <p>The journey began with a deep appreciation for the vital role bees play in sustaining ecosystems
+                        and supporting global food production. Concerned about the decline in bee populations, we
+                        decided to take action by starting our own beekeeping project. Our mission was simple: to create
+                        an environment where bees could thrive, using natural, sustainable practices that respect both
+                        the bees and the surrounding ecosystem.</p>
                 </div>
                 <div class="col-md-6">
-                    <img  src="/Images/about_card_1.jpg" alt="Beekeeping" class="img-fluid shadow-lg about-img active">
+                    <img src="/Images/about_card_1.jpg" alt="Beekeeping" class="img-fluid shadow-lg about-img active">
                 </div>
             </div>
         </div>
@@ -46,20 +49,23 @@
             <div class="quality-grid">
                 <div class="quality-card">
                     <div class="quality-top">
-                    <i class="fa-solid fa-utensils"></i>
-                    <h3>SDG-2: Zero Hunger</h3>
-                </div>
-                <h4 class="title">Promoting food security and improved nutrition by supporting bee populations, ensuring access to sufficient, safe, and nutritious food for all to end world hunger</h4>
+                        <i class="fa-solid fa-utensils"></i>
+                        <h3>SDG-2: Zero Hunger</h3>
+                    </div>
+                    <h4 class="title">Promoting food security and improved nutrition by supporting bee populations,
+                        ensuring access to sufficient, safe, and nutritious food for all to end world hunger</h4>
                 </div>
                 <div class="quality-card">
                     <div class="quality-top">
-                    <i class="fa-solid fa-hands-holding"></i>
-                    <h3>SDG-15: Life On Land</h3>
-                        </div>
-                        <h4 class="title">Protecting, restoring, and promoting the sustainable use of terrestrial ecosystems by supporting bee populations to help manage forests, combat desertification, and halt biodiversity loss</h4>
+                        <i class="fa-solid fa-hands-holding"></i>
+                        <h3>SDG-15: Life On Land</h3>
                     </div>
+                    <h4 class="title">Protecting, restoring, and promoting the sustainable use of terrestrial ecosystems
+                        by supporting bee populations to help manage forests, combat desertification, and halt
+                        biodiversity loss</h4>
                 </div>
             </div>
+        </div>
         </div>
     </section>
 
@@ -104,24 +110,29 @@
         <div class="container">
             <h2>Our Hive Monitoring Sensors</h2>
             <ul>
-                <% sensors.forEach(sensor => { %>
-                  <li class="sensor-card" style="background-image: url('/Images/<%= sensor.imagePath %>')">
-                    <div class="informations-container">
-                      <h2 class="title"><%= sensor.sensorType %></h2>
-                      <p class="sub-title">Model: <%= sensor.modelName %></p>
-                      <div class="more-information">
-                        <div class="info-and-date-container">
-                          <div class="box info">
-                            <i class="fa-solid fa-circle-info"></i>
-                          </div>
-                          <p class="disclaimer"><%= sensor.description %></p>
+                <% sensors.forEach(sensor=> { %>
+                    <li class="sensor-card" style="background-image: url('/Images/<%= sensor.imagePath %>')">
+                        <div class="informations-container">
+                            <h2 class="title">
+                                <%= sensor.sensorType %>
+                            </h2>
+                            <p class="sub-title">Model: <%= sensor.modelName %>
+                            </p>
+                            <div class="more-information">
+                                <div class="info-and-date-container">
+                                    <div class="box info">
+                                        <i class="fa-solid fa-circle-info"></i>
+                                    </div>
+                                    <p class="disclaimer">
+                                        <%= sensor.description %>
+                                    </p>
+                                </div>
+                            </div>
                         </div>
-                      </div>
-                    </div>
-                  </li>
-                <% }); %>
-              </ul>
-            </div>
+                    </li>
+                    <% }); %>
+            </ul>
+        </div>
         </div>
     </section>
 </body>

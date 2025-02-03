@@ -352,6 +352,10 @@
   right: 39%;
   transform: translate(0, -50%);
   margin: 0 20px 0 0;
+  -webkit-transform: translate(0, -50%);
+  -moz-transform: translate(0, -50%);
+  -ms-transform: translate(0, -50%);
+  -o-transform: translate(0, -50%);
 }
 
 .safe p {
