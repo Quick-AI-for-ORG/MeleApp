@@ -5,7 +5,7 @@ class Product {
 
   static crudInterface = crudInterface;
   static jsonToObject = jsonToObject;
-  static attributes = ['name', 'price', 'description', 'subscription'];
+  static attributes = ['name', 'price', 'description', 'subscription', 'images', 'counter'];
 
   constructor(productJSON) {
     Product.jsonToObject(this, productJSON);
