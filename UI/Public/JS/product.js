@@ -1,110 +1,79 @@
 document.addEventListener("DOMContentLoaded", function () {
-  let currentSlide = 0;
   const mainImage = document.getElementById("mainImage");
   const thumbnails = document.querySelectorAll(".thumbnail");
+  const prevBtn = document.querySelector(".prev");
+  const nextBtn = document.querySelector(".next");
+  let currentIndex = 0;
 
-  // Initialize first image as active
-  if (thumbnails.length > 0) {
-    thumbnails[0].classList.add("active");
+  // Hide navigation if less than 2 images
+  if (thumbnails.length <= 1) {
+    if (prevBtn) prevBtn.style.display = "none";
+    if (nextBtn) nextBtn.style.display = "none";
+    return; // Exit if there's only one image
   }
 
-  window.changeImage = function (imageSrc, thumbnail) {
-    mainImage.src = `/Images/Products/${imageSrc}`;
+  // Function to update image
+  function updateImage(index) {
+    // Remove active class from all thumbnails
     thumbnails.forEach((thumb) => thumb.classList.remove("active"));
-    thumbnail.classList.add("active");
-    currentSlide = Array.from(thumbnails).indexOf(thumbnail);
-  };
 
-  window.changeSlide = function (direction) {
-    currentSlide =
-      (currentSlide + direction + thumbnails.length) % thumbnails.length;
-    const newThumb = thumbnails[currentSlide];
-    const imageSrc = newThumb.querySelector("img").src.split("/").pop();
-    changeImage(imageSrc, newThumb);
-  };
+    // Add active class to current thumbnail
+    thumbnails[index].classList.add("active");
 
-  // Add click handlers to thumbnails
-  thumbnails.forEach((thumbnail) => {
-    thumbnail.addEventListener("click", function () {
-      const imageSrc = this.querySelector("img").src.split("/").pop();
-      changeImage(imageSrc, this);
-    });
+    // Update main image
+    const newImageSrc = thumbnails[index].querySelector("img").src;
+    mainImage.src = newImageSrc;
+
+    currentIndex = index;
+  }
+
+  // Previous button click
+  prevBtn.addEventListener("click", () => {
+    let newIndex = currentIndex - 1;
+    if (newIndex < 0) newIndex = thumbnails.length - 1;
+    updateImage(newIndex);
   });
 
-  // Add click handlers to prev/next buttons
-  document
-    .querySelector(".prev")
-    .addEventListener("click", () => changeSlide(-1));
-  document
-    .querySelector(".next")
-    .addEventListener("click", () => changeSlide(1));
+  // Next button click
+  nextBtn.addEventListener("click", () => {
+    let newIndex = currentIndex + 1;
+    if (newIndex >= thumbnails.length) newIndex = 0;
+    updateImage(newIndex);
+  });
 
+  // Thumbnail clicks
+  thumbnails.forEach((thumbnail, index) => {
+    thumbnail.addEventListener("click", () => updateImage(index));
+  });
+
+  // Arrow key navigation
   document.addEventListener("keydown", (e) => {
-    if (e.key === "ArrowLeft") changeSlide(-1);
-    if (e.key === "ArrowRight") changeSlide(1);
+    if (e.key === "ArrowLeft") prevBtn.click();
+    if (e.key === "ArrowRight") nextBtn.click();
   });
 
-  let touchstartX = 0;
-  mainImage.addEventListener("touchstart", (e) => {
-    touchstartX = e.changedTouches[0].screenX;
+  // Auto slideshow
+  let slideInterval = setInterval(() => nextBtn.click(), 180000); // 3 minutes
+
+  // Pause slideshow on user interaction
+  function resetSlideshow() {
+    clearInterval(slideInterval);
+    slideInterval = setInterval(() => nextBtn.click(), 180000);
+  }
+
+  // Add event listeners to reset slideshow
+  [prevBtn, nextBtn].forEach((btn) => {
+    btn.addEventListener("click", resetSlideshow);
   });
 
-  mainImage.addEventListener("touchend", (e) => {
-    const touchendX = e.changedTouches[0].screenX;
-    if (touchendX <= touchstartX) changeSlide(1);
-    if (touchendX >= touchstartX) changeSlide(-1);
+  thumbnails.forEach((thumb) => {
+    thumb.addEventListener("click", resetSlideshow);
   });
 
-  // Add quantity update function
+  // Quantity control
   window.updateQuantity = function (change) {
     const quantityInput = document.getElementById("quantity");
     const newValue = parseInt(quantityInput.value) + change;
-    if (newValue >= 1) {
-      quantityInput.value = newValue;
-    }
+    if (newValue >= 1) quantityInput.value = newValue;
   };
-
-  // Add auto-slideshow functionality
-  let slideInterval;
-
-  function startAutoSlide() {
-    slideInterval = setInterval(() => {
-      changeSlide(1);
-    }, 1800);
-  }
-
-  function resetAutoSlide() {
-    clearInterval(slideInterval);
-    startAutoSlide();
-  }
-
-  // Start auto-slideshow
-  startAutoSlide();
-
-  // Reset timer when user interacts with slideshow
-  thumbnails.forEach((thumbnail) => {
-    thumbnail.addEventListener("click", resetAutoSlide);
-  });
-
-  document.querySelector(".prev").addEventListener("click", resetAutoSlide);
-  document.querySelector(".next").addEventListener("click", resetAutoSlide);
-
-  // Reset timer on keyboard navigation
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
-      resetAutoSlide();
-    }
-  });
-
-  // Reset timer on touch interaction
-  mainImage.addEventListener("touchstart", resetAutoSlide);
-
-  // Pause slideshow when tab/window is not visible
-  document.addEventListener("visibilitychange", () => {
-    if (document.hidden) {
-      clearInterval(slideInterval);
-    } else {
-      startAutoSlide();
-    }
-  });
 });
