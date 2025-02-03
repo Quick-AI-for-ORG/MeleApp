@@ -10,6 +10,11 @@ const upgradeSchema = new mongoose.Schema({
         ref: 'Upgrades',
         required: true,
     }],
+    userRef: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Users',
+        required: true,
+    },
 }, { timestamps: true });
 
 module.exports = mongoose.model('HiveUpgrades', upgradeSchema);
