@@ -226,20 +226,40 @@ exports.getAllApiaries = async (req, res) => {
   try {
     const items = await meleDB
       .collection("apiaries")
-      .find({})
-      .sort({ createdAt: -1 })
+      .aggregate([
+        {
+          $lookup: {
+            from: "hives",
+            localField: "_id",
+            foreignField: "apiaryRef",
+            as: "hives"
+          }
+        },
+        {
+          $addFields: {
+            hiveCount: { $size: "$hives" }
+          }
+        },
+        {
+          $sort: { createdAt: -1 }
+        }
+      ])
       .toArray();
 
-    const formattedItems = items.map((item) => ({
+    const formattedItems = items.map(item => ({
       ...item,
       _id: item._id.toString(),
+      name: item.name || 'Unnamed Apiary',
+      location: item.location || 'No location',
+      hiveCount: item.hiveCount || 0,
       createdAt: item.createdAt ? new Date(item.createdAt).toISOString() : null,
-      updatedAt: item.updatedAt ? new Date(item.updatedAt).toISOString() : null,
+      updatedAt: item.updatedAt ? new Date(item.updatedAt).toISOString() : null
     }));
 
+    console.log('Formatted apiary items:', formattedItems); // Debug log
     res.json({ success: true, items: formattedItems });
   } catch (error) {
-    console.error("Error getting apiaries:", error);
+    console.error('Error getting apiaries:', error);
     res.status(500).json({ success: false, error: error.message });
   }
 };

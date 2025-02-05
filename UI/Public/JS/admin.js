@@ -10,6 +10,17 @@ function showConfirmModal(type, id, name) {
   // Store the delete information
   currentDeleteInfo = { type, id };
 
+  // For apiaries, get the name from the span if not provided
+  if (type === "apiary" && !name) {
+    const row = document.querySelector(`[data-${type}-id="${id}"]`);
+    if (row) {
+      const nameSpan = row.querySelector("[data-name]");
+      if (nameSpan) {
+        name = nameSpan.dataset.name;
+      }
+    }
+  }
+
   // Set confirmation message
   message.textContent = `Are you sure you want to delete ${type} "${name}"?`;
 
@@ -389,7 +400,9 @@ function getCellsForType(item, type) {
       ];
     case "apiary":
       return [
-        item.name,
+        `<span data-name="${item.name}">${
+          item.name || "Unnamed Apiary"
+        }</span>`,
         item.location || "No location",
         item.hiveCount || "0",
         new Date(item.createdAt).toLocaleDateString(),
