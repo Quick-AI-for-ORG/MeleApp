@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile</title>
+    <link rel="stylesheet" href="/CSS/profile.css">
+    <link rel="stylesheet" href="/CSS/layout.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Include the navbar -->
+    <%- include('Partials/navbar', { user: user }) %>
+
+        <div class="profile-container">
+            <div class="profile-card">
+                <% if (message) { %>
+                    <div class="alert <%= message.includes('Error') || message.includes('Invalid') ? 'alert-danger' : 'alert-success' %>"
+                        role="alert">
+                        <%= message %>
+                    </div>
+                    <% } %>
+
+                        <div class="profile-header">
+                            <h1>My Profile</h1>
+                            <button class="edit-btn" onclick="toggleEdit()">
+                                <i class="fas fa-edit"></i> Edit Profile
+                            </button>
+                        </div>
+
+                        <form id="profileForm" action="/keeper/profile/update" method="POST"
+                            onsubmit="return validateForm()">
+                            <div class="form-group">
+                                <label for="firstName">First Name</label>
+                                <input type="text" id="firstName" name="firstName"
+                                    value="<%= user.name ? user.name.split(' ')[0] : '' %>" pattern="[A-Za-z\s]{2,}"
+                                    title="Name must contain at least 2 letters" readonly required>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Last Name</label>
+                                <input type="text" id="lastName" name="lastName"
+                                    value="<%= user.name ? user.name.split(' ').slice(1).join(' ') : '' %>"
+                                    pattern="[A-Za-z\s]{2,}" title="Name must contain at least 2 letters" readonly
+                                    required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" value="<%= user.email %>" readonly required>
+                                <div class="invalid-feedback">
+                                    Please enter a valid email address
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Role</label>
+                                <input type="text" value="<%= user.role || 'Beekeeper' %>" readonly disabled>
+                            </div>
+                            <div class="form-group password-group" style="display: none;">
+                                <label for="password">New Password</label>
+                                <div class="password-wrapper">
+                                    <input type="password" id="password" name="password" minlength="6"
+                                        placeholder="Leave blank to keep current password">
+                                    <button type="button" class="toggle-password" onclick="togglePassword()">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                                <div class="password-requirements">
+                                    Password must be at least 6 characters long
+                                </div>
+                            </div>
+                            <div class="form-actions" style="display: none;">
+                                <button type="button" class="cancel-btn" onclick="cancelEdit()">Cancel</button>
+                                <button type="submit" class="save-btn">Save Changes</button>
+                            </div>
+                        </form>
+            </div>
+        </div>
+
+        <script>
+            // Clear any messages after 5 seconds
+            setTimeout(() => {
+                const alert = document.querySelector('.alert');
+                if (alert) {
+                    alert.style.display = 'none';
+                }
+            }, 5000);
+
+            function toggleEdit() {
+                const form = document.getElementById('profileForm');
+                const inputs = form.getElementsByTagName('input');
+                const actions = form.querySelector('.form-actions');
+                const passwordGroup = form.querySelector('.password-group');
+
+                for (let input of inputs) {
+                    if (!input.disabled) {
+                        input.readOnly = false;
+                    }
+                }
+
+                actions.style.display = 'flex';
+                passwordGroup.style.display = 'block';
+                document.querySelector('.edit-btn').style.display = 'none';
+            }
+
+            function cancelEdit() {
+                const form = document.getElementById('profileForm');
+                const inputs = form.getElementsByTagName('input');
+                const actions = form.querySelector('.form-actions');
+                const passwordGroup = form.querySelector('.password-group');
+
+                for (let input of inputs) {
+                    if (!input.disabled) {
+                        input.readOnly = true;
+                    }
+                }
+
+                actions.style.display = 'none';
+                passwordGroup.style.display = 'none';
+                document.querySelector('.edit-btn').style.display = 'block';
+                form.reset();
+            }
+
+            function validateForm() {
+                const form = document.getElementById('profileForm');
+                const firstName = form.firstName.value.trim();
+                const lastName = form.lastName.value.trim();
+                const email = form.email.value.trim();
+                const password = form.password.value;
+
+                // Validate names
+                if (!/^[A-Za-z\s]{2,}$/.test(firstName) || !/^[A-Za-z\s]{2,}$/.test(lastName)) {
+                    showError("Names must contain at least 2 letters and only alphabets");
+                    return false;
+                }
+
+                // Validate email
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                    showError("Please enter a valid email address");
+                    return false;
+                }
+
+                // Validate password if provided
+                if (password && password.length < 6) {
+                    showError("Password must be at least 6 characters long");
+                    return false;
+                }
+
+                return true;
+            }
+
+            function showError(message) {
+                const alertDiv = document.createElement('div');
+                alertDiv.className = 'alert alert-danger';
+                alertDiv.textContent = message;
+
+                const existingAlert = document.querySelector('.alert');
+                if (existingAlert) {
+                    existingAlert.remove();
+                }
+
+                document.querySelector('.profile-header').insertAdjacentElement('beforebegin', alertDiv);
+
+                setTimeout(() => alertDiv.remove(), 5000);
+            }
+
+            function togglePassword() {
+                const passwordInput = document.getElementById('password');
+                const toggleBtn = document.querySelector('.toggle-password i');
+
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    toggleBtn.classList.replace('fa-eye', 'fa-eye-slash');
+                } else {
+                    passwordInput.type = 'password';
+                    toggleBtn.classList.replace('fa-eye-slash', 'fa-eye');
+                }
+            }
+        </script>
+        <!-- Include Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
