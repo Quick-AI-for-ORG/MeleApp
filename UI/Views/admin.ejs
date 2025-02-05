@@ -126,20 +126,12 @@
                                     <i class="fas fa-user-circle"></i>
                                 </div>
                                 <div class="activity-info">
-                                    <h4>
-                                        <%= user.firstName %>
-                                            <%= user.lastName %>
-                                    </h4>
-                                    <p>
-                                        <%= user.email %>
-                                    </p>
-                                    <!-- Update the user role display in the activity item -->
+                                    <h4><%= user.firstName %> <%= user.lastName %></h4>
+                                    <p><%= user.email %></p>
                                     <p class="user-role <%= user.role || 'beekeeper' %>">
                                         <%= user.role || 'beekeeper' %>
                                     </p>
-                                    <span class="timestamp">
-                                        Joined <%= new Date(user.createdAt).toLocaleDateString() %>
-                                    </span>
+                                    <span class="timestamp">Joined <%= new Date(user.createdAt).toLocaleDateString() %></span>
                                 </div>
                                 <div class="activity-actions">
                                     <button class="action-btn edit" onclick='showEditModal("user", "<%= user._id %>")'>

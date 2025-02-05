@@ -2,13 +2,25 @@
   max-width: 800px;
   margin: 2rem auto;
   padding: 0 1rem;
+  background-color: #fff8e1; /* Light yellow background */
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(252, 163, 17, 0.1);
 }
 
 .profile-card {
   background: white;
   border-radius: 12px;
   padding: 2rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(22, 64, 77, 0.1);
+  border: 1px solid rgba(252, 163, 17, 0.2); /* Subtle honey-colored border */
+}
+
+/* Add a nice hover effect on the card */
+.profile-card:hover {
+  box-shadow: 0 6px 12px rgba(252, 163, 17, 0.15);
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
 }
 
 .profile-header {
@@ -160,4 +172,42 @@ input:invalid + .invalid-feedback {
 .alert-danger {
   background-color: #ef4444;
   color: white;
+}
+
+.title-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.title-icon {
+  width: 48px;
+  height: 48px;
+  background: rgba(252, 163, 17, 0.1);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fca311;
+  font-size: 1.5rem;
+  border: 1px solid rgba(252, 163, 17, 0.2);
+}
+
+.title-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.title-text h1 {
+  margin: 0;
+  color: #16404d;
+  font-size: 1.8rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.subtitle {
+  color: #6b7280;
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
 }
