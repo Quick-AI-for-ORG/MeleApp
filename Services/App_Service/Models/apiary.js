@@ -17,20 +17,13 @@ class Apiary {
         "userModel": this.owner,
       }
     }
+    this.hives = []
   }
 
   static async get(id) {
     const result = await Apiary.crudInterface.get(id, "apiaryModel", "_id");
     if (result.success.status) {
       result.data = new Apiary(result.data);
-    }
-    return result;
-  }
-
-  static async getByUser(userId){
-    const result = await Apiary.crudInterface.getByUser(userId, "apiaryModel", "owner");
-    if (result.success.status) {
-      result.data = result.data.map(apiary => new Apiary(apiary));
     }
     return result;
   }
@@ -78,6 +71,12 @@ class Apiary {
     const cascade = await Apiary.dependency.cascade(this.references.sub, this, 'apiaryRef');
     if (!cascade.success.status) return cascade;
     return await Apiary.crudInterface.remove(this._id, "apiaryModel", "_id");
+  }
+
+  async getHive(){
+    const result = await Apiary.dependency.populate('HiveModel', this, 'apiaryRef');
+    if(result.success.status) this.hives = result.data;
+    return result;
   }
 }
 

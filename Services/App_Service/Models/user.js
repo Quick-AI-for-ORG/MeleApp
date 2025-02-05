@@ -19,6 +19,7 @@ class User {
     this.references = {
       sub: ['keeperAssignmentModel', 'hiveUpgradeModel'],
     }
+    this.apiaries = []
   }
   static async hashPassword(password) {
     return await bcrypt.hash(password, HASH_SALT);
@@ -74,11 +75,10 @@ class User {
     return await User.crudInterface.remove(this.email, "userModel", "email");
   }
   async getApiaries() {
-    const result = await Apiary.getByUser(this._id);
+    const result = await User.dependency.populate('apiaryModel', this, 'owner')
     if(result.success.status) this.apiaries = result.data;
     return result;
   }
-
 }
 
 module.exports = User;

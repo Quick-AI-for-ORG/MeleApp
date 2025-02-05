@@ -1,6 +1,8 @@
 const crudInterface = require("../Utils/CRUD");
 const jsonToObject = require("../Utils/Mapper");
 const dependency = require("../Utils/Dependency");
+
+const Product = require("./Product");
 class Hive {
 
   static crudInterface = crudInterface;
@@ -17,6 +19,9 @@ class Hive {
         "apiaryModel": this.apiaryRef,
       }
     }
+    this.product = null
+    this.threats = []
+    this.readings = []
   }
 
   static async get(id) {
@@ -70,6 +75,28 @@ class Hive {
     const cascade = await Hive.dependency.cascade(this.references.sub, this, 'hiveRef');
     if (!cascade.success.status) return cascade;
     return await Hive.crudInterface.remove(this._id, "hiveModel", "_id");
+  }
+
+  async getProduct(){
+    const result = await Hive.dependency.populate('hiveUpgradeModel', this, 'hiveRef')
+    if(result.success.status) {
+      const populatuin = await Product.get(result.data.productRef)
+      if(populatuin.success.status) this.product = populatuin.data;
+      else return populatuin
+    }
+    return result;
+  }
+
+  async getReadings(){
+    const result = await Hive.dependency.populate('readingModel', this, 'hiveRef')
+    if(result.success.status) this.readings = result.data;
+    return result;
+  }
+
+  async getThreats(){
+    const result = await Hive.dependency.populate('threatModel', this, 'hiveRef')
+    if(result.success.status) this.threats = result.data;
+    return result;
   }
 }
 

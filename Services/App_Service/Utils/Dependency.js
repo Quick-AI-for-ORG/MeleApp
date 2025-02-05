@@ -32,15 +32,13 @@ const dependencyInterface = {
     },
     populate: async function (reference, object, compareKey) {
         try {
-            for (let model of reference) {
-                const result = await CRUDInterface.getAll(object._id, model, compareKey);
-                if (!result.success.status) return result;
-            }
+            const result = await CRUDInterface.getAllFiltered(object._id, reference, compareKey);
+            if (!result.success.status) return result;
             await Log.create({ log: `Population for ${object} is valid.`, degree: 1 });
-            return new Result(1, true, `Population for ${object} is valid.`);
+            return new Result(1, result.data, `Population for ${object} from ${reference} is successfull.`);
         } catch (error) {
-            await Log.create({ log: `Error during population for ${object}: ${error}`, degree: -1 });
-            return new Result(-1, null, `Error during population for ${object}: ${error}`);
+            await Log.create({ log: `Error during population for ${object} from ${reference}: ${error}`, degree: -1 });
+            return new Result(-1, null, `Error during population for ${object} from ${reference}: ${error}`);
         }
     }
 };

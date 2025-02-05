@@ -105,6 +105,22 @@ const CRUDInterface = {
         await Log.create({log: `Error getting all data: ${error}`, degree: -1});
         return new Result(-1, null, `Error getting all data: ${error}`);
       }
+  },
+  getAllFiltered: async function (primaryKey, model, compareKey) {
+    try {
+      const compareClause = {[compareKey]: primaryKey};
+      const records = await models[model].find(compareClause);
+      const resultData = records.map(record => record._doc);
+      if (resultData.length === 0) {
+        await Log.create({log: `No records found in ${model} with ${compareClause}.`, degree: 0});
+        return new Result(0, null, `No records found in ${model} with ${compareClause}.`);
+      }
+      await Log.create({ log: `Found ${records.length} records in ${model} with ${compareClause}.`, degree: 1 });
+      return new Result(1, resultData, `Found ${records.length} records in ${model} with ${compareClause}.`);
+    } catch (error) {
+      await Log.create({log: `Error getting all data: ${error}`, degree: -1});
+      return new Result(-1, null, `Error getting all data: ${error}`);
+    }
   }
 };
 
