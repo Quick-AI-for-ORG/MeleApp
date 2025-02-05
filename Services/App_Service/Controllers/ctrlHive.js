@@ -1,23 +1,65 @@
 const Hive = require('../Models/Hive');
+const Result = require("../../Shared/Result");
 
 const addHive = async (req, res) => {
-    const hiveJSON = {
-        dimensions: req.body.dimensions,
-        numberOfFrames: req.body.numberOfFrames,
-        streamUrl: req.body.streamUrl,
-        apiaryRef:req.body.apiaryRef
+    try {
+        const hiveJSON = {
+            dimensions: req.body.dimensions,
+            numberOfFrames: req.body.numberOfFrames,
+            streamUrl: req.body.streamUrl,
+            apiaryRef: req.body.apiaryRef
+        };
+        const hive = new Hive(hiveJSON);
+        const result = await hive.create();
+        return result.toJSON();
+    } catch (error) {
+        return new Result(-1, null, `Error creating hive: ${error.message}`);
     }
-    const hive = new Hive(hiveJSON);
-    const result = await hive.create(req.body);
-    res.status(result.success.status ? 200 : 400).send(result);
 }
+
 const removeHive = async (req, res) => {
-    const result = await Hive.remove(req.body.id);
-    res.status(result.success.status ? 200 : 400).send(result);
+    try {
+        const result = await Hive.remove(req.body._id);
+        return result.toJSON();
+    } catch (error) {
+        return new Result(-1, null, `Error deleting hive: ${error.message}`);
+    }
 }
-const updateHive = async (req, res) => {}
-const getHive = async (req, res) => {}
-const getHives = async (req, res) => {}
+
+const updateHive = async (req, res) => {
+    try {
+        let update = {};
+        Hive.attributes.forEach(attr => {
+            if (req.body.hasOwnProperty(attr)) {
+                update[attr] = req.body[attr];
+            }
+        });
+        const result = await Hive.modify(update);
+        return result.toJSON();
+    } catch (error) {
+        return new Result(-1, null, `Error updating hive: ${error.message}`);
+    }
+}
+
+const getHive = async (req, res) => {
+    try {
+        const result = await Hive.get(req.body._id);
+        return result.toJSON();
+    } catch (error) {
+        return new Result(-1, null, `Error fetching hive: ${error.message}`);
+    }
+}
+
+const getHives = async (req, res) => {
+    try {
+        const result = await Hive.getAll();
+        req.session.hives = result.data || [];
+        return result.toJSON();
+    } catch (error) {
+        return new Result(-1, null, `Error fetching hives: ${error.message}`);
+    }
+}
+
 const getHiveTemperature = async (req, res) => {}
 const getHiveHumidity = async (req, res) => {}
 const getHiveWeight = async (req, res) => {}

@@ -1,14 +1,23 @@
 const crudInterface = require("../Utils/CRUD");
 const jsonToObject = require("../Utils/Mapper");
+const dependency = require("../Utils/Dependency");
+
 
 class Reading {
 
   static crudInterface = crudInterface;
   static jsonToObject = jsonToObject;
+  static dependency = dependency;
   static attributes = ['sensorRef', 'sensorValue', 'hiveRef', 'frameNum'];
 
   constructor(readingJSON) {
     Reading.jsonToObject(this, readingJSON);
+    this.references = {
+      parent: {
+        "hiveModel": this.hiveRef,
+        "sensorModel": this.sensorRef
+      }
+    }
   }
 
   static async get(id) {
@@ -32,6 +41,8 @@ class Reading {
   }
 
   async create() {
+    const valid = await Reading.dependency.validate(this.references.parent, this);
+    if (!valid.success.status) return valid;
     const result = await Reading.crudInterface.create(this, "readingModel", "_id");
     if (result.success.status) {
       result.data = Reading.jsonToObject(this, result.data);

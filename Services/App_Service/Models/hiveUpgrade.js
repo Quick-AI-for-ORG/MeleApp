@@ -1,14 +1,23 @@
 const crudInterface = require("../Utils/CRUD");
 const jsonToObject = require("../Utils/Mapper");
+const dependency = require("../Utils/Dependency");
 
 class HiveUpgrade {
 
   static crudInterface = crudInterface;
   static jsonToObject = jsonToObject;
-  static attributes = ['hiveRef', 'upgradeRef', 'userRef'];
+  static dependency = dependency;
+  static attributes = ['hiveRef', 'productRef', 'userRef'];
 
   constructor(upgradeJSON) {
     HiveUpgrade.jsonToObject(this, upgradeJSON);
+    this.references = {
+      parent: {
+        "hiveModel": this.hiveRef,
+        "productModel": this.productRef,
+        "userModel": this.userRef
+      }
+    }
   }
 
   static async get(id) {
@@ -30,6 +39,8 @@ class HiveUpgrade {
     return await HiveUpgrade.crudInterface.remove(id, "hiveUpgradeModel", "_id");
   }
   async create() {
+    const valid = await HiveUpgrade.dependency.validate(this.references.parent, this);
+    if (!valid.success.status) return valid;
     const result = await HiveUpgrade.crudInterface.create(this, "hiveUpgradeModel", "_id");
     if (result.success.status) {
       result.data = HiveUpgrade.jsonToObject(this, result.data);

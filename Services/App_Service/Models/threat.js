@@ -1,14 +1,21 @@
 const crudInterface = require("../Utils/CRUD");
 const jsonToObject = require("../Utils/Mapper");
+const dependency = require("../Utils/Dependency");
 
 class Threat {
 
   static crudInterface = crudInterface;
   static jsonToObject = jsonToObject;
+  static dependency = dependency;
   static attributes = ['threatType', 'hiveRef', 'action'];
 
   constructor(threatJSON) {
     Threat.jsonToObject(this, threatJSON);
+    this.references = {
+      parent: {
+        "hiveModel": this.hiveRef
+      }
+    }
   }
 
   static async get(id) {
@@ -32,6 +39,8 @@ class Threat {
   }
 
   async create() {
+    const valid = await Threat.dependency.validate(this.references.parent, this);
+    if (!valid.success.status) return valid;
     const result = await Threat.crudInterface.create(this, "threatModel", "_id");
     if (result.success.status) {
       result.data = Threat.jsonToObject(this, result.data);
