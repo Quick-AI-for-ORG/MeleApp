@@ -322,6 +322,18 @@ body {
   align-items: center;
 }
 
+/* Add specific z-index values for different modal types */
+#viewAllModal {
+  z-index: 1000;
+}
+
+#confirmationModal,
+#addUserModal,
+#addSensorModal,
+#addProductModal {
+  z-index: 1200; /* Higher than viewAllModal */
+}
+
 .modal-content {
   background: white;
   width: 90%;
@@ -330,6 +342,7 @@ body {
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
   position: relative;
   margin: 2rem auto;
+  z-index: inherit; /* Inherit z-index from parent modal */
 }
 
 .modal-header {
@@ -658,4 +671,6 @@ body {
 .table-actions {
   display: flex;
   gap: 0.5rem;
+  position: relative;
+  z-index: 1100;
 }

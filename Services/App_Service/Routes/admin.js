@@ -14,7 +14,6 @@ router.get("/dashboard", async (req, res) => {
     const sensorsCount = await meleDB.collection("sensors").countDocuments();
     const productsCount = await meleDB.collection("products").countDocuments();
 
-    // Get recent hives with apiary names - Fixed pipeline
     const recentHives = await meleDB
       .collection("hives")
       .aggregate([
@@ -23,7 +22,7 @@ router.get("/dashboard", async (req, res) => {
         {
           $lookup: {
             from: "apiaries",
-            localField: "apiaryRef", // Changed from apiaryId to apiaryRef
+            localField: "apiaryRef",
             foreignField: "_id",
             as: "apiary",
           },
