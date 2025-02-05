@@ -1,0 +1,50 @@
+<nav class="navbar navbar-expand-lg fixed-top bg-light navbar-light">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <img id="logo" src="/IMAGES/Logo.png" alt="Mele Logo" draggable="false" height="50" />
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link mx-2" href="/products">
+                        <img src="/Images/apiary.png" alt="honey" class="nav-icon honey-icon">Products
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link mx-2" href="/aboutus">
+                        <img src="/Images/bee.png" alt="info" class="nav-icon info-icon">About Us
+                    </a>
+                </li>
+                <% if (user) { %>
+                    <li class="nav-item ms-3">
+                        <a class="btn toggled rounded-pill" href="/keeper/profile">
+                            <i class="fas fa-user-circle fa-lg pe-2"></i>My Profile
+                        </a>
+                    </li>
+                    <li class="nav-item ms-3">
+                        <a id="on" class="btn toggled rounded-pill" href="/keeper">
+                            <i class="fas fa-tachometer-alt fa-lg pe-2"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item ms-3">
+                        <a id="off" class="btn rounded-pill" href="/keeper/logout">
+                            <i class="fas fa-sign-out-alt fa-lg pe-2"></i>Logout
+                        </a>
+                    </li>
+                <% } else { %>
+                    <li class="nav-item ms-3">
+                        <a id="on" class="btn toggled rounded-pill" href="/keeper/login">Sign in</a>
+                    </li>
+                    <li class="nav-item ms-3">
+                        <a id="off" class="btn rounded-pill" href="/keeper/signup">Sign up</a>
+                    </li>
+                <% } %>
+            </ul>
+        </div>
+    </div>
+</nav>

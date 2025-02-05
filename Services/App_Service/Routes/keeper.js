@@ -9,7 +9,7 @@ router.get("/", (req, res) => {
     req.session.message = "Please Login to view this page.";
     res.redirect("/keeper/login");
   } 
-  else res.redirect("keeper/profile")
+  else res.render("beekeeper", { layout: false, user: req.session.user });
 });
 router.get("/signup", ctrlPages._KEEPER.signup);
 router.get("/login", ctrlPages._KEEPER.login);
@@ -60,9 +60,15 @@ router.get("/profile", (req, res) => {
         req.session.message = "Please login to access your profile";
         return res.redirect("/keeper/login");
     }
+    
+    // Clear any message after displaying it
+    const message = req.session.message;
+    req.session.message = null;
+
     res.render("profile", {
-        layout: true,
-        user: req.session.user
+        layout: false, // Change to false since we don't want the default layout
+        user: req.session.user,
+        message: message
     });
 });
 
@@ -89,23 +95,32 @@ router.post("/profile/update", async (req, res) => {
             { $set: updateData }
         );
 
-        // Update session data
+        // Update session data and add success message
         req.session.user = {
             ...req.session.user,
             firstName,
             lastName,
             email
         };
+        req.session.message = "Profile updated successfully";
 
         res.redirect("/keeper/profile");
     } catch (error) {
         console.error("Profile update error:", error);
-        res.status(500).send("Error updating profile");
+        req.session.message = "Error updating profile";
+        res.redirect("/keeper/profile");
     }
 });
 
+router.get("/login", ctrlPages._KEEPER.login);
+router.get("/signup", ctrlPages._KEEPER.signup);
+router.get("/dashboard", ctrlPages._KEEPER.dashboard);
 
 router.get("*", (req, res) => {
-  res.redirect('/keeper')
+  if (!req.session.user) {
+    return res.redirect('/keeper/login');
+  }
+  res.redirect('/keeper');
 });
+
 module.exports = router;
