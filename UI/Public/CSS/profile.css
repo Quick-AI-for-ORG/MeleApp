@@ -108,3 +108,56 @@
 .cancel-btn:hover {
   background: #e5e7eb;
 }
+
+.password-wrapper {
+  position: relative;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #6b7280;
+}
+
+.toggle-password:hover {
+  color: #16404d;
+}
+
+.password-requirements {
+  font-size: 0.8rem;
+  color: #6b7280;
+  margin-top: 0.5rem;
+}
+
+.invalid-feedback {
+  display: none;
+  color: #ef4444;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+input:invalid + .invalid-feedback {
+  display: block;
+}
+
+.alert {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.alert-success {
+  background-color: #10b981;
+  color: white;
+}
+
+.alert-danger {
+  background-color: #ef4444;
+  color: white;
+}

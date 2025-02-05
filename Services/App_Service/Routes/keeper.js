@@ -5,11 +5,10 @@ const ctrlPages = require("../Controllers/ctrlPages");
 const ctrlUser = require("../Controllers/ctrlUser");
 
 router.get("/", (req, res) => {
-  if (!req.session.user){
+  if (!req.session.user) {
     req.session.message = "Please Login to view this page.";
     res.redirect("/keeper/login");
-  } 
-  else res.render("beekeeper", { layout: false, user: req.session.user });
+  } else res.render("beekeeper", { layout: false, user: req.session.user });
 });
 router.get("/signup", ctrlPages._KEEPER.signup);
 router.get("/login", ctrlPages._KEEPER.login);
@@ -33,7 +32,7 @@ router.get("/upgrade", async (req, res) => {
       user: req.session.user || "",
       layout: false,
       kits: kits,
-      googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY
+      googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
     });
   } catch (error) {
     console.error("Database Error:", error);
@@ -50,66 +49,83 @@ router.post("/upgrade", (req, res) => {
   res.redirect("/keeper/dashboard");
 });
 
-router.post("/register", ctrlUser.register)
-router.post("/login", ctrlUser.login)
+router.post("/register", ctrlUser.register);
+router.post("/login", ctrlUser.login);
 
+router.get("/profile", async (req, res) => {
+  if (!req.session.user) {
+    req.session.message = "Please login to access your profile";
+    return res.redirect("/keeper/login");
+  }
 
+  try {
+    const meleDB = mongoose.connection.useDb("meleDB");
+    const userData = await meleDB
+      .collection("users")
+      .findOne({ _id: new mongoose.Types.ObjectId(req.session.user._id) });
 
-router.get("/profile", (req, res) => {
-    if (!req.session.user) {
-        req.session.message = "Please login to access your profile";
-        return res.redirect("/keeper/login");
+    if (!userData) {
+      req.session.message = "User not found";
+      return res.redirect("/keeper/login");
     }
-    
-    // Clear any message after displaying it
+
     const message = req.session.message;
     req.session.message = null;
 
     res.render("profile", {
-        layout: false, // Change to false since we don't want the default layout
-        user: req.session.user,
-        message: message
+      layout: false,
+      user: userData,
+      message: message,
     });
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    req.session.message = "Error loading profile";
+    res.redirect("/keeper/login");
+  }
 });
 
 router.post("/profile/update", async (req, res) => {
-    try {
-        const { firstName, lastName, email, password } = req.body;
-        const userId = req.session.user._id;
-        const meleDB = mongoose.connection.useDb("meleDB");
+  try {
+    const { firstName, lastName, email, password } = req.body;
+    const userId = req.session.user._id;
+    const meleDB = mongoose.connection.useDb("meleDB");
 
-        const updateData = {
-            firstName,
-            lastName,
-            email,
-            updatedAt: new Date()
-        };
+    // Combine firstName and lastName into name
+    const name = `${firstName} ${lastName}`.trim();
 
-        // Only include password in update if it was provided
-        if (password && password.trim() !== '') {
-            updateData.password = password;
-        }
+    const updateData = {
+      name,
+      email,
+      updatedAt: new Date(),
+    };
 
-        await meleDB.collection("users").updateOne(
-            { _id: new mongoose.Types.ObjectId(userId) },
-            { $set: updateData }
-        );
-
-        // Update session data and add success message
-        req.session.user = {
-            ...req.session.user,
-            firstName,
-            lastName,
-            email
-        };
-        req.session.message = "Profile updated successfully";
-
-        res.redirect("/keeper/profile");
-    } catch (error) {
-        console.error("Profile update error:", error);
-        req.session.message = "Error updating profile";
-        res.redirect("/keeper/profile");
+    if (password && password.trim() !== "") {
+      updateData.password = password;
     }
+
+    await meleDB
+      .collection("users")
+      .updateOne(
+        { _id: new mongoose.Types.ObjectId(userId) },
+        { $set: updateData }
+      );
+
+    // Update session data
+    req.session.user = {
+      ...req.session.user,
+      name,
+      firstName,
+      lastName,
+      email,
+    };
+
+    req.session.message = "Profile updated successfully";
+    res.redirect("/keeper/profile");
+  } catch (error) {
+    console.error("Profile update error:", error);
+    req.session.message = "Error updating profile";
+    res.redirect("/keeper/profile");
+  }
 });
 
 router.get("/login", ctrlPages._KEEPER.login);
@@ -118,9 +134,9 @@ router.get("/dashboard", ctrlPages._KEEPER.dashboard);
 
 router.get("*", (req, res) => {
   if (!req.session.user) {
-    return res.redirect('/keeper/login');
+    return res.redirect("/keeper/login");
   }
-  res.redirect('/keeper');
+  res.redirect("/keeper");
 });
 
 module.exports = router;
