@@ -364,12 +364,11 @@ function displayItems(items, type) {
 function getCellsForType(item, type) {
   switch (type) {
     case "user":
+      const role = item.role || "beekeeper";
       return [
         `${item.firstName || ""} ${item.lastName || ""}`,
         item.email,
-        `<span class="user-role ${item.role || "beekeeper"}">${
-          item.role || "beekeeper"
-        }</span>`,
+        `<span class="user-role ${role}">${role}</span>`,
         new Date(item.createdAt).toLocaleDateString(),
       ];
     case "product":
