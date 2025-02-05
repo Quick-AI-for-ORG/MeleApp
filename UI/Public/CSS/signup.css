@@ -23,7 +23,10 @@ body {
 section {
   min-height: 120vh;
 }
-
+.row{
+  margin: 0%;
+  padding: 0%;
+}
 .container {
   padding-top: 4rem;
   padding-bottom: 4rem;

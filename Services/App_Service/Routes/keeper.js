@@ -1,22 +1,18 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
+const ctrlPages = require("../Controllers/ctrlPages");
+const ctrlUser = require("../Controllers/ctrlUser");
 
 router.get("/", (req, res) => {
-  req.session.message = "Please login to access this page";
-  res.redirect("/keeper/login");
+  if (!req.session.user){
+    req.session.message = "Please Login to view this page.";
+    res.redirect("/keeper/login");
+  } 
+  else res.redirect("keeper/profile")
 });
-router.get("/signup", (req, res) => {
-  let message = req.session.message === undefined ? null : req.session.message;
-  req.session.message = undefined;
-  res.render("signup", { layout: false, message: message });
-});
-
-router.get("/login", (req, res) => {
-  let message = req.session.message === undefined ? null : req.session.message;
-  req.session.message = undefined;
-  res.render("login", { layout: false, message: message });
-});
+router.get("/signup", ctrlPages._KEEPER.signup);
+router.get("/login", ctrlPages._KEEPER.login);
 
 router.get("/dashboard", (req, res) => {
   res.render("beekeeper", {
@@ -53,6 +49,11 @@ router.post("/upgrade", (req, res) => {
   const upgradeData = req.body;
   res.redirect("/keeper/dashboard");
 });
+
+router.post("/register", ctrlUser.register)
+router.post("/login", ctrlUser.login)
+
+
 
 router.get("/profile", (req, res) => {
     if (!req.session.user) {
@@ -103,4 +104,8 @@ router.post("/profile/update", async (req, res) => {
     }
 });
 
+
+router.get("*", (req, res) => {
+  res.redirect('/keeper')
+});
 module.exports = router;
