@@ -155,4 +155,11 @@ router.post("/addProduct", ctrlAdmin.addProduct);
 // Add update route
 router.put("/updateUser", ctrlAdmin.updateUser);
 
+// Add new routes for getting all items
+router.get("/getAllUsers", ctrlAdmin.getAllUsers);
+router.get("/getAllProducts", ctrlAdmin.getAllProducts);
+router.get("/getAllSensors", ctrlAdmin.getAllSensors);
+router.get("/getAllHives", ctrlAdmin.getAllHives);
+router.get("/getAllApiaries", ctrlAdmin.getAllApiaries);
+
 module.exports = router;

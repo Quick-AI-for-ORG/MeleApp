@@ -440,6 +440,27 @@
         </div>
     </div>
 
+    <!-- View All Modal Template -->
+    <div id="viewAllModal" class="modal">
+        <div class="modal-content view-all-content">
+            <div class="modal-header">
+                <h3 id="viewAllTitle">All Items</h3>
+                <button class="close" onclick="closeViewAllModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Search..." onkeyup="filterItems()">
+                </div>
+                <div class="table-container">
+                    <table id="viewAllTable">
+                        <thead id="viewAllTableHead"></thead>
+                        <tbody id="viewAllTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="/JS/admin.js"></script>
     <style>
         .notification {

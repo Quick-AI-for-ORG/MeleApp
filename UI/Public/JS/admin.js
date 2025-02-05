@@ -216,25 +216,243 @@ function showNotification(message, type) {
   }, 3000);
 }
 
+// View All functionality
+function showViewAllModal(type) {
+  if (!type) {
+    console.error('No type provided to showViewAllModal');
+    return;
+  }
+
+  const modal = document.getElementById('viewAllModal');
+  const title = document.getElementById('viewAllTitle');
+  const tableHead = document.getElementById('viewAllTableHead');
+  const tableBody = document.getElementById('viewAllTableBody');
+  
+  if (!modal || !title || !tableHead || !tableBody) {
+    console.error('Required modal elements not found');
+    return;
+  }
+
+  // Clear previous content
+  tableHead.innerHTML = '';
+  tableBody.innerHTML = '';
+
+  // Show loading state
+  tableBody.innerHTML = '<tr><td colspan="5">Loading...</td></tr>';
+  
+  // Update title and show modal
+  title.textContent = `All ${type.charAt(0).toUpperCase() + type.slice(1)}s`;
+  modal.style.display = 'flex';
+
+  // Define headers and fetch data
+  const headers = getHeadersForType(type);
+  tableHead.innerHTML = `<tr>${headers.map(h => `<th>${h}</th>`).join('')}<th>Actions</th></tr>`;
+
+  // Fetch and display data
+  fetchAllItems(type)
+    .then(items => {
+      if (items && items.length > 0) {
+        displayItems(items, type);
+      } else {
+        tableBody.innerHTML = `<tr><td colspan="${headers.length + 1}">No items found</td></tr>`;
+      }
+    })
+    .catch(error => {
+      console.error('Error in showViewAllModal:', error);
+      tableBody.innerHTML = `<tr><td colspan="${headers.length + 1}">Error loading data</td></tr>`;
+      showNotification('Error loading data', 'error');
+    });
+}
+
+function closeViewAllModal() {
+  const modal = document.getElementById('viewAllModal');
+  modal.style.display = 'none';
+}
+
+function getHeadersForType(type) {
+  switch(type) {
+    case 'user':
+      return ['Name', 'Email', 'Role', 'Joined Date'];
+    case 'product':
+      return ['Name', 'Price', 'Description', 'Added Date'];
+    case 'sensor':
+      return ['Name', 'Type', 'Model', 'Status', 'Hive'];
+    case 'hive':
+      return ['Apiary', 'Frames', 'Dimensions', 'Added Date'];
+    case 'apiary':
+      return ['Name', 'Location', 'Hive Count', 'Added Date'];
+    default:
+      return [];
+  }
+}
+
+async function fetchAllItems(type) {
+  try {
+    console.log(`Fetching all ${type}s...`);
+    const response = await fetch(`/admin/getAll${type}s`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    console.log(`Fetched ${type}s:`, data);
+    if (data.success) {
+      return data.items || [];
+    } else {
+      throw new Error(data.error || 'Failed to fetch items');
+    }
+  } catch (error) {
+    console.error(`Error fetching ${type}s:`, error);
+    showNotification(`Error fetching ${type}s: ${error.message}`, 'error');
+    return [];
+  }
+}
+
+function displayItems(items, type) {
+  const tableBody = document.getElementById('viewAllTableBody');
+  tableBody.innerHTML = '';
+  
+  items.forEach(item => {
+    const row = document.createElement('tr');
+    const cells = getCellsForType(item, type);
+    
+    cells.forEach(cell => {
+      const td = document.createElement('td');
+      td.innerHTML = cell;
+      row.appendChild(td);
+    });
+    
+    // Add actions column
+    const actionsTd = document.createElement('td');
+    actionsTd.innerHTML = `
+      <div class="table-actions">
+        <button class="action-btn edit" onclick="showEditModal('${type}', '${item._id}')">
+          <i class="fas fa-edit"></i>
+        </button>
+        <button class="action-btn delete" onclick="showConfirmModal('${type}', '${item._id}', '${item.name}')">
+          <i class="fas fa-trash"></i>
+        </button>
+      </div>
+    `;
+    row.appendChild(actionsTd);
+    
+    tableBody.appendChild(row);
+  });
+}
+
+function getCellsForType(item, type) {
+  switch(type) {
+    case 'user':
+      return [
+        `${item.firstName || ''} ${item.lastName || ''}`,
+        item.email,
+        item.role || 'User',
+        new Date(item.createdAt).toLocaleDateString()
+      ];
+    case 'product':
+      return [
+        item.name,
+        `$${parseFloat(item.price).toFixed(2)}`,
+        item.description || 'No description',
+        new Date(item.createdAt).toLocaleDateString()
+      ];
+    case 'sensor':
+      return [
+        item.name,
+        item.sensorType,
+        item.modelName,
+        `<span class="sensor-status ${item.status?.toLowerCase()}">${item.status || 'Unknown'}</span>`,
+        item.hiveName || 'Unassigned'
+      ];
+    case 'hive':
+      return [
+        item.apiaryName || 'Unassigned',
+        item.numberOfFrames || '0',
+        item.dimentions ? 
+          `${item.dimentions.length}x${item.dimentions.width}x${item.dimentions.height}` : 
+          'N/A',
+        new Date(item.createdAt).toLocaleDateString()
+      ];
+    case 'apiary':
+      return [
+        item.name,
+        item.location || 'No location',
+        item.hiveCount || '0',
+        new Date(item.createdAt).toLocaleDateString()
+      ];
+    default:
+      return [];
+  }
+}
+
+function filterItems() {
+  const input = document.getElementById('searchInput');
+  const filter = input.value.toLowerCase();
+  const tbody = document.getElementById('viewAllTableBody');
+  const rows = tbody.getElementsByTagName('tr');
+
+  for (let row of rows) {
+    const cells = row.getElementsByTagName('td');
+    let shouldShow = false;
+    
+    for (let cell of cells) {
+      if (cell.textContent.toLowerCase().indexOf(filter) > -1) {
+        shouldShow = true;
+        break;
+      }
+    }
+    
+    row.style.display = shouldShow ? '' : 'none';
+  }
+}
+
 // Event Listeners
 document.addEventListener("DOMContentLoaded", () => {
-  // Close button in modal
-  const closeBtn = document.querySelector(".modal .close");
-  if (closeBtn) {
-    closeBtn.addEventListener("click", hideConfirmModal);
-  }
+  // Update View All button listeners
+  document.querySelectorAll('.view-all').forEach(button => {
+    button.addEventListener('click', function() {
+      // Get the type from the closest activity-card
+      const cardClass = this.closest('.activity-card').className;
+      // Extract the type (users, products, etc.)
+      const match = cardClass.match(/\b(users|products|sensors|hives|apiaries)-list\b/);
+      if (match) {
+        const type = match[1].slice(0, -1); // Remove 's' from the end
+        console.log('Opening view all for:', type);
+        showViewAllModal(type);
+      } else {
+        console.error('Could not determine type from class:', cardClass);
+      }
+    });
+  });
 
-  // Confirm delete button
-  const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
-  if (confirmDeleteBtn) {
-    confirmDeleteBtn.addEventListener("click", handleDelete);
-  }
+  // Update modal close handlers
+  document.querySelectorAll('.modal .close').forEach(button => {
+    button.addEventListener('click', function() {
+      const modal = this.closest('.modal');
+      if (modal) {
+        if (modal.id === 'viewAllModal') {
+          closeViewAllModal();
+        } else if (modal.id === 'confirmationModal') {
+          hideConfirmModal();
+        } else {
+          const type = modal.id.replace('add', '').replace('Modal', '').toLowerCase();
+          closeAddModal(type);
+        }
+      }
+    });
+  });
 
-  // Close modal when clicking outside
-  window.onclick = function (event) {
-    const modal = document.getElementById("confirmationModal");
-    if (event.target === modal) {
-      hideConfirmModal();
+  // Window click handler for modals
+  window.onclick = function(event) {
+    if (event.target.classList.contains('modal')) {
+      const modalId = event.target.id;
+      if (modalId === 'viewAllModal') {
+        closeViewAllModal();
+      } else if (modalId === 'confirmationModal') {
+        hideConfirmModal();
+      } else {
+        const type = modalId.replace('add', '').replace('Modal', '').toLowerCase();
+        closeAddModal(type);
+      }
     }
   };
 });
