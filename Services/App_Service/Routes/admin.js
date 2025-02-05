@@ -152,4 +152,7 @@ router.post("/addUser", ctrlAdmin.addUser);
 router.post("/addSensor", ctrlAdmin.addSensor);
 router.post("/addProduct", ctrlAdmin.addProduct);
 
+// Add update route
+router.put("/updateUser", ctrlAdmin.updateUser);
+
 module.exports = router;

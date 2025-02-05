@@ -105,3 +105,26 @@ exports.addProduct = async (req, res) => {
     res.status(500).json({ success: false, error: error.message });
   }
 };
+
+exports.updateUser = async (req, res) => {
+  try {
+    const { userId, ...updateData } = req.body;
+    const result = await meleDB.collection("users").updateOne(
+      { _id: new mongoose.Types.ObjectId(userId) },
+      { 
+        $set: {
+          ...updateData,
+          updatedAt: new Date()
+        }
+      }
+    );
+    
+    if (result.matchedCount === 0) {
+      return res.status(404).json({ success: false, error: "User not found" });
+    }
+    
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
