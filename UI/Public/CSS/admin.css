@@ -32,6 +32,26 @@ body {
   gap: 1rem;
 }
 
+.header-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.add-btn {
+  background: #16404d;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.add-btn:hover {
+  background: #fca311;
+  transform: translateY(-2px);
+}
+
 /* Stats Grid */
 .stats-grid {
   display: grid;
@@ -397,6 +417,32 @@ body {
     color: #6b7280;
     margin: 0.25rem 0;
     line-height: 1.4;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #4b5563;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 0.875rem;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
 }
 
 /* Responsive Design */

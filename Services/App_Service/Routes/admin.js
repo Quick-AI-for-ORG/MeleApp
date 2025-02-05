@@ -147,4 +147,9 @@ router.delete("/user", ctrlAdmin.deleteUser);
 router.delete("/sensor", ctrlAdmin.deleteSensor);
 router.delete("/product", ctrlAdmin.deleteProduct);
 
+// Add new addition routes
+router.post("/addUser", ctrlAdmin.addUser);
+router.post("/addSensor", ctrlAdmin.addSensor);
+router.post("/addProduct", ctrlAdmin.addProduct);
+
 module.exports = router;

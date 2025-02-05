@@ -75,6 +75,60 @@ async function handleDelete() {
   hideConfirmModal();
 }
 
+// Show add modal
+function showAddModal(type) {
+  const modal = document.getElementById(
+    `add${type.charAt(0).toUpperCase() + type.slice(1)}Modal`
+  );
+  modal.style.display = "flex";
+}
+
+// Close add modal
+function closeAddModal(type) {
+  const modal = document.getElementById(
+    `add${type.charAt(0).toUpperCase() + type.slice(1)}Modal`
+  );
+  modal.style.display = "none";
+  const form = document.getElementById(
+    `add${type.charAt(0).toUpperCase() + type.slice(1)}Form`
+  );
+  if (form) form.reset();
+}
+
+// Handle form submission
+async function handleAdd(event, type) {
+  event.preventDefault();
+  const form = event.target;
+  const formData = new FormData(form);
+  const data = Object.fromEntries(formData);
+
+  try {
+    const response = await fetch(
+      `/admin/add${type.charAt(0).toUpperCase() + type.slice(1)}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
+
+    const result = await response.json();
+    if (result.success) {
+      showNotification(`${type} added successfully`, "success");
+      closeAddModal(type);
+      // Reload the page to show new data
+      location.reload();
+    } else {
+      showNotification(`Error adding ${type}`, "error");
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    showNotification(`Error adding ${type}`, "error");
+  }
+}
+
 // Show notification
 function showNotification(message, type) {
   const notification = document.createElement("div");
