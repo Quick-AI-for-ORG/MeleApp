@@ -455,20 +455,24 @@ body {
   margin: 0.25rem 0;
 }
 
-.sensor-status.active {
+.sensor-status.on {
   background: rgba(16, 185, 129, 0.1);
   color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.2);
 }
 
-.sensor-status.inactive {
+.sensor-status.off {
   background: rgba(239, 68, 68, 0.1);
   color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.2);
 }
 
+/* Remove or comment out the old status styles */
+/* .sensor-status.active,
+.sensor-status.inactive,
 .sensor-status.maintenance {
-  background: rgba(252, 163, 17, 0.1);
-  color: #fca311;
-}
+    ...
+} */
 
 .sensor-description {
   font-size: 0.875rem;
@@ -673,4 +677,73 @@ body {
   gap: 0.5rem;
   position: relative;
   z-index: 1100;
+}
+
+/* User role display */
+.user-role {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  background: rgba(22, 64, 77, 0.1);
+  color: #16404d;
+  margin: 0.25rem 0;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+/* User role styles with nice colors */
+.user-role {
+  display: inline-block;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin: 0.25rem 0;
+  text-transform: capitalize;
+}
+
+/* Different colors for each role */
+.user-role:contains("admin") {
+  background: rgba(79, 70, 229, 0.1);
+  color: #4f46e5;
+  border: 1px solid rgba(79, 70, 229, 0.2);
+}
+
+.user-role:contains("owner") {
+  background: rgba(252, 163, 17, 0.1);
+  color: #fca311;
+  border: 1px solid rgba(252, 163, 17, 0.2);
+}
+
+.user-role:contains("beekeeper") {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+/* Style for role select in forms */
+.form-group select[name="role"] {
+  border-width: 2px;
+}
+
+.form-group select[name="role"] option[value="admin"] {
+  color: #4f46e5;
+  font-weight: 500;
+}
+
+.form-group select[name="role"] option[value="owner"] {
+  color: #fca311;
+  font-weight: 500;
+}
+
+.form-group select[name="role"] option[value="beekeeper"] {
+  color: #10b981;
+  font-weight: 500;
+}
+
+/* Table cell role styles */
+#viewAllTable td .user-role {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
 }

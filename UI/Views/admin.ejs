@@ -120,6 +120,7 @@
                     </div>
                     <div class="card-content">
                         <% recentUsers.forEach(user=> { %>
+                            <!-- Update the user activity item -->
                             <div class="activity-item" data-user-id="<%= user._id %>">
                                 <div class="user-avatar">
                                     <i class="fas fa-user-circle"></i>
@@ -132,6 +133,10 @@
                                     <p>
                                         <%= user.email %>
                                     </p>
+                                    <!-- Update the user role display in the activity item -->
+                                    <p class="user-role <%= user.role || 'beekeeper' %>">
+                                        <%= user.role || 'beekeeper' %>
+                                    </p>
                                     <span class="timestamp">
                                         Joined <%= new Date(user.createdAt).toLocaleDateString() %>
                                     </span>
@@ -141,7 +146,7 @@
                                         <i class="fas fa-edit"></i>
                                     </button>
                                     <button class="action-btn delete"
-                                        onclick='showConfirmModal("user", "<%= user._id %>", "<%= user.name %>")'>
+                                        onclick='showConfirmModal("user", "<%= user._id %>", "<%= user.firstName %>")'>
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </div>
@@ -348,6 +353,14 @@
                         <input type="email" id="email" name="email" required>
                     </div>
                     <div class="form-group">
+                        <label for="role">Role</label>
+                        <select id="role" name="role" required>
+                            <option value="beekeeper">Beekeeper</option>
+                            <option value="owner">Owner</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label for="password">Password</label>
                         <input type="password" id="password" name="password" required>
                     </div>
@@ -370,17 +383,9 @@
             <form id="addSensorForm" onsubmit="handleAdd(event, 'sensor')">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="name">Sensor Name</label>
-                        <input type="text" id="name" name="name" required>
-                    </div>
-                    <div class="form-group">
                         <label for="sensorType">Type</label>
-                        <select id="sensorType" name="sensorType" required>
-                            <option value="temperature">Temperature</option>
-                            <option value="humidity">Humidity</option>
-                            <option value="weight">Weight</option>
-                            <option value="camera">Camera</option>
-                        </select>
+                        <input type="text" id="sensorType" name="sensorType" required 
+                               placeholder="Enter sensor type (e.g., Temperature, Humidity)">
                     </div>
                     <div class="form-group">
                         <label for="modelName">Model Name</label>
@@ -393,9 +398,8 @@
                     <div class="form-group">
                         <label for="status">Status</label>
                         <select id="status" name="status" required>
-                            <option value="active">Active</option>
-                            <option value="inactive">Inactive</option>
-                            <option value="maintenance">Maintenance</option>
+                            <option value="on">On</option>
+                            <option value="off">Off</option>
                         </select>
                     </div>
                 </div>
@@ -418,17 +422,16 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="productName">Product Name</label>
-                        <input type="text" id="productName" name="name" required 
-                            placeholder="Enter product name">
+                        <input type="text" id="productName" name="name" required placeholder="Enter product name">
                     </div>
                     <div class="form-group price-group">
                         <label for="price">Price</label>
-                        <input type="number" id="price" name="price" min="0" step="0.01" required 
-                            placeholder="0.00" oninput="validatePrice(this)">
+                        <input type="number" id="price" name="price" min="0" step="0.01" required placeholder="0.00"
+                            oninput="validatePrice(this)">
                     </div>
                     <div class="form-group">
                         <label for="description">Description</label>
-                        <textarea id="productDescription" name="description" rows="3" 
+                        <textarea id="productDescription" name="description" rows="3"
                             placeholder="Enter product description"></textarea>
                     </div>
                 </div>

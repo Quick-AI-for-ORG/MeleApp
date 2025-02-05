@@ -93,7 +93,15 @@ router.get("/dashboard", async (req, res) => {
       .collection("users")
       .find(
         {},
-        { projection: { firstName: 1, lastName: 1, email: 1, createdAt: 1 } }
+        { 
+          projection: { 
+            firstName: 1, 
+            lastName: 1, 
+            email: 1, 
+            role: 1, // Add role to projection
+            createdAt: 1 
+          } 
+        }
       )
       .sort({ createdAt: -1 })
       .limit(5)

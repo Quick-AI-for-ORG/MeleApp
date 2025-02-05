@@ -104,11 +104,16 @@ function showEditModal(type, id) {
     if (type === "user") {
       const name = item.querySelector("h4").textContent.trim().split(" ");
       const email = item.querySelector("p").textContent.trim();
+      const role = item
+        .querySelector(".user-role")
+        .textContent.trim()
+        .toLowerCase();
 
       form.firstName.value = name[0] || "";
       form.lastName.value = name[1] || "";
       form.email.value = email;
-      form.password.style.display = "none"; // Hide password field for edit
+      form.role.value = role;
+      form.password.style.display = "none";
       form.dataset.mode = "edit";
       form.dataset.id = id;
     }
@@ -219,68 +224,74 @@ function showNotification(message, type) {
 // View All functionality
 function showViewAllModal(type) {
   if (!type) {
-    console.error('No type provided to showViewAllModal');
+    console.error("No type provided to showViewAllModal");
     return;
   }
 
-  const modal = document.getElementById('viewAllModal');
-  const title = document.getElementById('viewAllTitle');
-  const tableHead = document.getElementById('viewAllTableHead');
-  const tableBody = document.getElementById('viewAllTableBody');
-  
+  const modal = document.getElementById("viewAllModal");
+  const title = document.getElementById("viewAllTitle");
+  const tableHead = document.getElementById("viewAllTableHead");
+  const tableBody = document.getElementById("viewAllTableBody");
+
   if (!modal || !title || !tableHead || !tableBody) {
-    console.error('Required modal elements not found');
+    console.error("Required modal elements not found");
     return;
   }
 
   // Clear previous content
-  tableHead.innerHTML = '';
-  tableBody.innerHTML = '';
+  tableHead.innerHTML = "";
+  tableBody.innerHTML = "";
 
   // Show loading state
   tableBody.innerHTML = '<tr><td colspan="5">Loading...</td></tr>';
-  
+
   // Update title and show modal
   title.textContent = `All ${type.charAt(0).toUpperCase() + type.slice(1)}s`;
-  modal.style.display = 'flex';
+  modal.style.display = "flex";
 
   // Define headers and fetch data
   const headers = getHeadersForType(type);
-  tableHead.innerHTML = `<tr>${headers.map(h => `<th>${h}</th>`).join('')}<th>Actions</th></tr>`;
+  tableHead.innerHTML = `<tr>${headers
+    .map((h) => `<th>${h}</th>`)
+    .join("")}<th>Actions</th></tr>`;
 
   // Fetch and display data
   fetchAllItems(type)
-    .then(items => {
+    .then((items) => {
       if (items && items.length > 0) {
         displayItems(items, type);
       } else {
-        tableBody.innerHTML = `<tr><td colspan="${headers.length + 1}">No items found</td></tr>`;
+        tableBody.innerHTML = `<tr><td colspan="${
+          headers.length + 1
+        }">No items found</td></tr>`;
       }
     })
-    .catch(error => {
-      console.error('Error in showViewAllModal:', error);
-      tableBody.innerHTML = `<tr><td colspan="${headers.length + 1}">Error loading data</td></tr>`;
-      showNotification('Error loading data', 'error');
+    .catch((error) => {
+      console.error("Error in showViewAllModal:", error);
+      tableBody.innerHTML = `<tr><td colspan="${
+        headers.length + 1
+      }">Error loading data</td></tr>`;
+      showNotification("Error loading data", "error");
     });
 }
 
 function closeViewAllModal() {
-  const modal = document.getElementById('viewAllModal');
-  modal.style.display = 'none';
+  const modal = document.getElementById("viewAllModal");
+  modal.style.display = "none";
 }
 
 function getHeadersForType(type) {
-  switch(type) {
-    case 'user':
-      return ['Name', 'Email', 'Role', 'Joined Date'];
-    case 'product':
-      return ['Name', 'Price', 'Description', 'Added Date'];
-    case 'sensor':
-      return ['Name', 'Type', 'Model', 'Status', 'Hive'];
-    case 'hive':
-      return ['Apiary', 'Frames', 'Dimensions', 'Added Date'];
-    case 'apiary':
-      return ['Name', 'Location', 'Hive Count', 'Added Date'];
+  switch (type) {
+    case "user":
+      return ["Name", "Email", "Role", "Joined Date"];
+    case "product":
+      return ["Name", "Price", "Description", "Added Date"];
+    case "sensor":
+      return ["Type", "Model", "Status", "Description", "Hive"];
+    case "hive":
+      return ["Apiary", "Frames", "Dimensions", "Added Date"];
+    case "apiary":
+      return ["Name", "Location", "Hive Count", "Added Date"];
     default:
       return [];
   }
@@ -298,31 +309,31 @@ async function fetchAllItems(type) {
     if (data.success) {
       return data.items || [];
     } else {
-      throw new Error(data.error || 'Failed to fetch items');
+      throw new Error(data.error || "Failed to fetch items");
     }
   } catch (error) {
     console.error(`Error fetching ${type}s:`, error);
-    showNotification(`Error fetching ${type}s: ${error.message}`, 'error');
+    showNotification(`Error fetching ${type}s: ${error.message}`, "error");
     return [];
   }
 }
 
 function displayItems(items, type) {
-  const tableBody = document.getElementById('viewAllTableBody');
-  tableBody.innerHTML = '';
-  
-  items.forEach(item => {
-    const row = document.createElement('tr');
+  const tableBody = document.getElementById("viewAllTableBody");
+  tableBody.innerHTML = "";
+
+  items.forEach((item) => {
+    const row = document.createElement("tr");
     const cells = getCellsForType(item, type);
-    
-    cells.forEach(cell => {
-      const td = document.createElement('td');
+
+    cells.forEach((cell) => {
+      const td = document.createElement("td");
       td.innerHTML = cell;
       row.appendChild(td);
     });
-    
+
     // Add actions column
-    const actionsTd = document.createElement('td');
+    const actionsTd = document.createElement("td");
     actionsTd.innerHTML = `
       <div class="table-actions">
         <button class="action-btn edit" onclick="showEditModal('${type}', '${item._id}')">
@@ -334,50 +345,54 @@ function displayItems(items, type) {
       </div>
     `;
     row.appendChild(actionsTd);
-    
+
     tableBody.appendChild(row);
   });
 }
 
 function getCellsForType(item, type) {
-  switch(type) {
-    case 'user':
+  switch (type) {
+    case "user":
       return [
-        `${item.firstName || ''} ${item.lastName || ''}`,
+        `${item.firstName || ""} ${item.lastName || ""}`,
         item.email,
-        item.role || 'User',
-        new Date(item.createdAt).toLocaleDateString()
+        `<span class="user-role ${item.role || "beekeeper"}">${
+          item.role || "beekeeper"
+        }</span>`,
+        new Date(item.createdAt).toLocaleDateString(),
       ];
-    case 'product':
+    case "product":
       return [
         item.name,
         `$${parseFloat(item.price).toFixed(2)}`,
-        item.description || 'No description',
-        new Date(item.createdAt).toLocaleDateString()
+        item.description || "No description",
+        new Date(item.createdAt).toLocaleDateString(),
       ];
-    case 'sensor':
+    case "sensor":
       return [
-        item.name,
         item.sensorType,
         item.modelName,
-        `<span class="sensor-status ${item.status?.toLowerCase()}">${item.status || 'Unknown'}</span>`,
-        item.hiveName || 'Unassigned'
+        `<span class="sensor-status ${item.status?.toLowerCase()}">${
+          item.status === "on" ? "On" : "Off"
+        }</span>`,
+        item.description || "No description",
+        item.hiveName || "Unassigned",
       ];
-    case 'hive':
+    case "hive":
       return [
-        item.apiaryName || 'Unassigned',
-        item.numberOfFrames || '0',
-        item.dimentions ? 
-          `${item.dimentions.length}x${item.dimentions.width}x${item.dimentions.height}` : 
-          'N/A',
-        new Date(item.createdAt).toLocaleDateString()
+        item.apiaryName || "Unassigned",
+        item.numberOfFrames || "0",
+        item.dimentions
+          ? `${item.dimentions.length}x${item.dimentions.width}x${item.dimentions.height}`
+          : "N/A",
+        new Date(item.createdAt).toLocaleDateString(),
       ];
-    case 'apiary':
+    case "apiary":
       return [
         item.name,
-        item.location || 'No location',
-        item.hiveCount || '0',
-        new Date(item.createdAt).toLocaleDateString()
+        item.location || "No location",
+        item.hiveCount || "0",
+        new Date(item.createdAt).toLocaleDateString(),
       ];
     default:
       return [];
@@ -385,56 +400,61 @@ function getCellsForType(item, type) {
 }
 
 function filterItems() {
-  const input = document.getElementById('searchInput');
+  const input = document.getElementById("searchInput");
   const filter = input.value.toLowerCase();
-  const tbody = document.getElementById('viewAllTableBody');
-  const rows = tbody.getElementsByTagName('tr');
+  const tbody = document.getElementById("viewAllTableBody");
+  const rows = tbody.getElementsByTagName("tr");
 
   for (let row of rows) {
-    const cells = row.getElementsByTagName('td');
+    const cells = row.getElementsByTagName("td");
     let shouldShow = false;
-    
+
     for (let cell of cells) {
       if (cell.textContent.toLowerCase().indexOf(filter) > -1) {
         shouldShow = true;
         break;
       }
     }
-    
-    row.style.display = shouldShow ? '' : 'none';
+
+    row.style.display = shouldShow ? "" : "none";
   }
 }
 
 // Event Listeners
 document.addEventListener("DOMContentLoaded", () => {
   // Update View All button listeners
-  document.querySelectorAll('.view-all').forEach(button => {
-    button.addEventListener('click', function() {
+  document.querySelectorAll(".view-all").forEach((button) => {
+    button.addEventListener("click", function () {
       // Get the type from the closest activity-card
-      const cardClass = this.closest('.activity-card').className;
+      const cardClass = this.closest(".activity-card").className;
       // Extract the type (users, products, etc.)
-      const match = cardClass.match(/\b(users|products|sensors|hives|apiaries)-list\b/);
+      const match = cardClass.match(
+        /\b(users|products|sensors|hives|apiaries)-list\b/
+      );
       if (match) {
         const type = match[1].slice(0, -1); // Remove 's' from the end
-        console.log('Opening view all for:', type);
+        console.log("Opening view all for:", type);
         showViewAllModal(type);
       } else {
-        console.error('Could not determine type from class:', cardClass);
+        console.error("Could not determine type from class:", cardClass);
       }
     });
   });
 
   // Update modal close handlers
-  document.querySelectorAll('.modal .close').forEach(button => {
-    button.addEventListener('click', function() {
-      const modal = this.closest('.modal');
+  document.querySelectorAll(".modal .close").forEach((button) => {
+    button.addEventListener("click", function () {
+      const modal = this.closest(".modal");
       if (modal) {
-        if (modal.id === 'viewAllModal') {
+        if (modal.id === "viewAllModal") {
           closeViewAllModal();
-        } else if (modal.id === 'confirmationModal') {
+        } else if (modal.id === "confirmationModal") {
           hideConfirmModal();
         } else {
-          const type = modal.id.replace('add', '').replace('Modal', '').toLowerCase();
+          const type = modal.id
+            .replace("add", "")
+            .replace("Modal", "")
+            .toLowerCase();
           closeAddModal(type);
         }
       }
@@ -442,15 +462,18 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Window click handler for modals
-  window.onclick = function(event) {
-    if (event.target.classList.contains('modal')) {
+  window.onclick = function (event) {
+    if (event.target.classList.contains("modal")) {
       const modalId = event.target.id;
-      if (modalId === 'viewAllModal') {
+      if (modalId === "viewAllModal") {
         closeViewAllModal();
-      } else if (modalId === 'confirmationModal') {
+      } else if (modalId === "confirmationModal") {
         hideConfirmModal();
       } else {
-        const type = modalId.replace('add', '').replace('Modal', '').toLowerCase();
+        const type = modalId
+          .replace("add", "")
+          .replace("Modal", "")
+          .toLowerCase();
         closeAddModal(type);
       }
     }

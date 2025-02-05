@@ -133,11 +133,22 @@ exports.getAllUsers = async (req, res) => {
   try {
     const items = await meleDB
       .collection("users")
-      .find({})
+      .find(
+        {},
+        {
+          projection: {
+            firstName: 1,
+            lastName: 1,
+            email: 1,
+            role: 1,
+            createdAt: 1,
+            updatedAt: 1,
+          },
+        }
+      )
       .sort({ createdAt: -1 })
       .toArray();
 
-    // Convert ObjectIds to strings and format dates
     const formattedItems = items.map((item) => ({
       ...item,
       _id: item._id.toString(),
