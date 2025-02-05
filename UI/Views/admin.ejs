@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <link rel="stylesheet" href="/CSS/admin.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
 </head>
+
 <body>
     <div class="container">
         <!-- Header -->
@@ -37,7 +39,9 @@
                         <h3>Total Hives</h3>
                     </div>
                     <div class="stat-content">
-                        <p class="stat-value"><%= stats.hives %></p>
+                        <p class="stat-value">
+                            <%= stats.hives %>
+                        </p>
                         <p class="stat-label">Active Hives</p>
                     </div>
                 </div>
@@ -50,7 +54,9 @@
                         <h3>Total Apiaries</h3>
                     </div>
                     <div class="stat-content">
-                        <p class="stat-value"><%= stats.apiaries %></p>
+                        <p class="stat-value">
+                            <%= stats.apiaries %>
+                        </p>
                         <p class="stat-label">Registered Apiaries</p>
                     </div>
                 </div>
@@ -63,7 +69,9 @@
                         <h3>Total Users</h3>
                     </div>
                     <div class="stat-content">
-                        <p class="stat-value"><%= stats.users %></p>
+                        <p class="stat-value">
+                            <%= stats.users %>
+                        </p>
                         <p class="stat-label">Registered Users</p>
                     </div>
                 </div>
@@ -76,7 +84,9 @@
                         <h3>Active Sensors</h3>
                     </div>
                     <div class="stat-content">
-                        <p class="stat-value"><%= stats.sensors %></p>
+                        <p class="stat-value">
+                            <%= stats.sensors %>
+                        </p>
                         <p class="stat-label">Deployed Sensors</p>
                     </div>
                 </div>
@@ -89,7 +99,9 @@
                         <h3>Total Products</h3>
                     </div>
                     <div class="stat-content">
-                        <p class="stat-value"><%= stats.products %></p>
+                        <p class="stat-value">
+                            <%= stats.products %>
+                        </p>
                         <p class="stat-label">Available Products</p>
                     </div>
                 </div>
@@ -104,14 +116,19 @@
                         <button class="view-all">View All</button>
                     </div>
                     <div class="card-content">
-                        <% recentUsers.forEach(user => { %>
-                            <div class="activity-item">
+                        <% recentUsers.forEach(user=> { %>
+                            <div class="activity-item" data-user-id="<%= user._id %>">
                                 <div class="user-avatar">
                                     <i class="fas fa-user-circle"></i>
                                 </div>
                                 <div class="activity-info">
-                                    <h4><%= user.firstName %> <%= user.lastName %></h4>
-                                    <p><%= user.email %></p>
+                                    <h4>
+                                        <%= user.firstName %>
+                                            <%= user.lastName %>
+                                    </h4>
+                                    <p>
+                                        <%= user.email %>
+                                    </p>
                                     <span class="timestamp">
                                         Joined <%= new Date(user.createdAt).toLocaleDateString() %>
                                     </span>
@@ -120,12 +137,13 @@
                                     <button class="action-btn edit">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <button class="action-btn delete">
+                                    <button class="action-btn delete"
+                                        onclick="showConfirmModal('user', '<%= user._id %>', '<%= user.firstName %> <%= user.lastName %>')">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </div>
                             </div>
-                        <% }); %>
+                            <% }); %>
                     </div>
                 </div>
 
@@ -136,14 +154,17 @@
                         <button class="view-all">View All</button>
                     </div>
                     <div class="card-content">
-                        <% recentProducts.forEach(product => { %>
-                            <div class="activity-item">
+                        <% recentProducts.forEach(product=> { %>
+                            <div class="activity-item" data-product-id="<%= product._id %>">
                                 <div class="product-icon">
                                     <i class="fas fa-box"></i>
                                 </div>
                                 <div class="activity-info">
-                                    <h4><%= product.name %></h4>
-                                    <p>$<%= product.price %></p>
+                                    <h4>
+                                        <%= product.name %>
+                                    </h4>
+                                    <p>$<%= product.price %>
+                                    </p>
                                     <span class="timestamp">
                                         Added <%= new Date(product.createdAt).toLocaleDateString() %>
                                     </span>
@@ -152,17 +173,69 @@
                                     <button class="action-btn edit">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <button class="action-btn delete">
+                                    <button class="action-btn delete"
+                                        onclick="showConfirmModal('product', '<%= product._id %>', '<%= product.name %>')">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </div>
                             </div>
-                        <% }); %>
+                            <% }); %>
                     </div>
                 </div>
             </div>
         </main>
     </div>
+
+    <!-- Update the Confirmation Modal -->
+    <div id="confirmationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Confirm Deletion</h3>
+                <button class="close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="confirmMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button class="cancel-btn" onclick="hideConfirmModal()">Cancel</button>
+                <button class="delete-btn" id="confirmDeleteBtn">Delete</button>
+            </div>
+        </div>
+    </div>
+
     <script src="/JS/admin.js"></script>
+    <style>
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: white;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+        }
+
+        .notification.success {
+            background-color: #10b981;
+        }
+
+        .notification.error {
+            background-color: #ef4444;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
 </body>
+
 </html>

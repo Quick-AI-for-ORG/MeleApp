@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 const ctrlHive = require("../Controllers/ctrlHive");
+const ctrlAdmin = require("../Controllers/ctrlAdmin");
+
 router.get("/dashboard", async (req, res) => {
   try {
     const meleDB = mongoose.connection.useDb("meleDB");
@@ -47,4 +49,12 @@ router.get("/dashboard", async (req, res) => {
 
 router.post("/addHive", ctrlHive.addHive);
 router.post("/removeHive", ctrlHive.removeHive);
+
+// Add new deletion routes
+router.delete("/hive", ctrlAdmin.deleteHive);
+router.delete("/apiary", ctrlAdmin.deleteApiary);
+router.delete("/user", ctrlAdmin.deleteUser);
+router.delete("/sensor", ctrlAdmin.deleteSensor);
+router.delete("/product", ctrlAdmin.deleteProduct);
+
 module.exports = router;
