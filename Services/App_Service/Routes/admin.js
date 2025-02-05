@@ -14,12 +14,24 @@ router.get("/dashboard", async (req, res) => {
     const sensorsCount = await meleDB.collection("sensors").countDocuments();
     const productsCount = await meleDB.collection("products").countDocuments();
 
+    // Updated users query to include name
     const recentUsers = await meleDB
       .collection("users")
-      .find({})
+      .find(
+        {},
+        { projection: { firstName: 1, lastName: 1, email: 1, createdAt: 1 } }
+      )
       .sort({ createdAt: -1 })
       .limit(5)
       .toArray();
+
+    // Map users to include full name
+    const usersWithNames = recentUsers.map((user) => ({
+      ...user,
+      name:
+        `${user.firstName || ""} ${user.lastName || ""}`.trim() ||
+        user.email.split("@")[0],
+    }));
 
     // Get recent products
     const recentProducts = await meleDB
@@ -38,7 +50,7 @@ router.get("/dashboard", async (req, res) => {
         sensors: sensorsCount,
         products: productsCount,
       },
-      recentUsers,
+      recentUsers: usersWithNames,
       recentProducts,
     });
   } catch (error) {
