@@ -23,7 +23,7 @@ router.get("/dashboard", async (req, res) => {
         {
           $lookup: {
             from: "apiaries",
-            localField: "apiaryId",
+            localField: "apiaryRef", // Changed from apiaryId to apiaryRef
             foreignField: "_id",
             as: "apiary",
           },
@@ -31,19 +31,16 @@ router.get("/dashboard", async (req, res) => {
         {
           $addFields: {
             apiaryName: { $arrayElemAt: ["$apiary.name", 0] },
-            // Provide default values if dimensions is missing
-            dimensions: {
-              $ifNull: ["$dimensions", { length: 0, width: 0, height: 0 }]
-            },
-            numFrames: { $ifNull: ["$numFrames", 0] }
           },
         },
         {
           $project: {
+            _id: 1,
             name: 1,
             apiaryName: 1,
-            dimensions: 1,
-            numFrames: 1,
+            dimentions: 1,
+            numberOfFrames: 1,
+            streamUrl: 1,
             createdAt: 1,
           },
         },

@@ -198,15 +198,21 @@
                                     <i class="fas fa-archive"></i>
                                 </div>
                                 <div class="activity-info">
-                                    <h4><%= hive.name %></h4>
-                                    <p>Apiary: <%= hive.apiaryName %></p>
-                                    <p class="hive-details">
-                                        Dimensions: 
-                                        <%= (hive.dimensions && typeof hive.dimensions === 'object') ? 
-                                            `${hive.dimensions.length || 0}x${hive.dimensions.width || 0}x${hive.dimensions.height || 0}` : '0x0x0' %> cm
-                                        | Frames: <%= hive.numFrames || 0 %>
+
+                                    <p>Apiary: <%= hive.apiaryName || 'Unknown Apiary' %>
                                     </p>
-                                    <span class="timestamp">Added <%= new Date(hive.createdAt).toLocaleDateString() %></span>
+                                    <p class="hive-details">
+                                        Dimensions: <%= hive.dimentions ?
+                                            `${hive.dimentions.length}x${hive.dimentions.width}x${hive.dimentions.height}`
+                                            : '0x0x0' %> cm
+                                            | Frames: <%= hive.numberOfFrames || 0 %>
+                                    </p>
+                                    <% if (hive.streamUrl) { %>
+                                        <p class="stream-url">Stream: <%= hive.streamUrl %>
+                                        </p>
+                                        <% } %>
+                                            <span class="timestamp">Added <%= new
+                                                    Date(hive.createdAt).toLocaleDateString() %></span>
                                 </div>
                                 <div class="activity-actions">
                                     <button class="action-btn edit">
@@ -272,13 +278,19 @@
                                     <i class="fas fa-microchip"></i>
                                 </div>
                                 <div class="activity-info">
-                                    <h4><%= sensor.name %></h4>
-                                    <p>Type: <%= sensor.sensorType %> | Model: <%= sensor.modelName %></p>
+                                    <h4>
+                                        <%= sensor.name %>
+                                    </h4>
+                                    <p>Type: <%= sensor.sensorType %> | Model: <%= sensor.modelName %>
+                                    </p>
                                     <p class="sensor-status <%= sensor.status.toLowerCase() %>">
                                         Status: <%= sensor.status %>
                                     </p>
-                                    <p class="sensor-description"><%= sensor.description %></p>
-                                    <span class="timestamp">Added <%= new Date(sensor.createdAt).toLocaleDateString() %></span>
+                                    <p class="sensor-description">
+                                        <%= sensor.description %>
+                                    </p>
+                                    <span class="timestamp">Added <%= new Date(sensor.createdAt).toLocaleDateString() %>
+                                    </span>
                                 </div>
                                 <div class="activity-actions">
                                     <button class="action-btn edit">
