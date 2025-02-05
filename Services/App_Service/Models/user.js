@@ -2,6 +2,7 @@ const Result = require("../../Shared/Result")
 
 const crudInterface = require("../Utils/CRUD");
 const jsonToObject = require("../Utils/Mapper");
+const dependency = require("../Utils/Dependency");
 
 const bcrypt = require("bcrypt");
 const HASH_SALT = 12;
@@ -10,16 +11,22 @@ class User {
 
   static crudInterface = crudInterface;
   static jsonToObject = jsonToObject;
+  static dependency = dependency;
   static attributes = ['name', 'role', 'email', 'password', 'tel', 'address', 'affiliation'];
-  static cascading = ['apiaryModel',  ];
 
   constructor(userJSON, role = "Owner") {
     User.jsonToObject(this, userJSON, { role: role });
+    this.references = {
+      sub: ['keeperAssignmentModel', 'hiveUpgradeModel'],
+    }
   }
   static async hashPassword(password) {
     return await bcrypt.hash(password, HASH_SALT);
   }
   static async remove(email) {
+    const user = await User.get(email);
+    const cascade = await User.dependency.cascade(user.references.sub, user, 'userRef');
+    if (!cascade.success.status) return cascade;
     return await User.crudInterface.remove(email, "userModel", "email");
   }
   static async get(email) {
@@ -62,6 +69,8 @@ class User {
     return result
   }
   async remove() {
+    const cascade = await User.dependency.cascade(this.references.sub, this, 'userRef');
+    if (!cascade.success.status) return cascade;
     return await User.crudInterface.remove(this.email, "userModel", "email");
   }
   async getApiaries() {

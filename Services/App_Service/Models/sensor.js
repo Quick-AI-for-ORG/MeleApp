@@ -1,14 +1,19 @@
 const crudInterface = require("../Utils/CRUD");
 const jsonToObject = require("../Utils/Mapper");
+const dependency = require("../Utils/Dependency");
 
 class Sensor {
 
   static crudInterface = crudInterface;
   static jsonToObject = jsonToObject;
+  static dependency = dependency;
   static attributes = ['sensorType', 'status', 'description', 'imagePath', 'modelName'];
 
   constructor(sensorJSON) {
     Sensor.jsonToObject(this, sensorJSON);
+     this.references = {
+      sub: ['readingModel'],
+    }
   }
 
   static async get(sensorType) {
@@ -28,6 +33,9 @@ class Sensor {
   }
 
   static async remove(sensorType) {
+    const sensor = await Sensor.get(sensorType);
+    const cascade = await Sensor.dependency.cascade(sensor.references.sub, sensor, 'sensorRef');
+    if (!cascade.success.status) return cascade;
     return await Sensor.crudInterface.remove(sensorType, "sensorModel", "sensorType");
   }
 
@@ -56,6 +64,8 @@ class Sensor {
   }
 
   async remove() {
+    const cascade = await Sensor.dependency.cascade(this.references.sub, this, 'sensorRef');
+    if (!cascade.success.status) return cascade;
     return await Sensor.crudInterface.remove(this.sensorType, "sensorModel", "sensorType");
   }
 }

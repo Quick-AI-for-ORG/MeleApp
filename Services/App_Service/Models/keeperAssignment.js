@@ -1,14 +1,23 @@
 const crudInterface = require("../Utils/CRUD");
 const jsonToObject = require("../Utils/Mapper");
+const dependency = require("../Utils/Dependency");
 
 class KeeperAssignment {
 
   static crudInterface = crudInterface;
   static jsonToObject = jsonToObject;
+  static dependency = dependency;
   static attributes = ['beekeeperRef', 'hiveRef', 'apiaryRef'];
 
   constructor(assignmentJSON) {
     KeeperAssignment.jsonToObject(this, assignmentJSON);
+    this.references = {
+      parent: {
+        "userModel": this.beekeeperRef,
+        "hiveModel": this.hiveRef,
+        "apiaryModel": this.apiaryRef
+      }
+    }
   }
 
   static async get(id) {
@@ -31,6 +40,8 @@ class KeeperAssignment {
     return await KeeperAssignment.crudInterface.remove(id, "keeperAssignmentModel", "_id");
   }
   async create() {
+    const valid = await KeeperAssignment.dependency.validate(this.references.parent, this);
+    if (!valid.success.status) return valid;
     const result = await KeeperAssignment.crudInterface.create(this, "keeperAssignmentModel", "_id");
     if (result.success.status) {
       result.data = KeeperAssignment.jsonToObject(this, result.data);

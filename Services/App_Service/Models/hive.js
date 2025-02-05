@@ -12,7 +12,7 @@ class Hive {
   constructor(hiveJSON) {
     Hive.jsonToObject(this, hiveJSON);
     this.references = {
-      sub: ['threatModel', 'keeperAssignmentModel', 'hiveUpgradeModel'],
+      sub: ['threatModel', 'keeperAssignmentModel', 'hiveUpgradeModel', 'readingModel'],
       parent:{
         "apiaryModel": this.apiaryRef,
       }
@@ -35,6 +35,9 @@ class Hive {
     return result;
   }
   static async remove(id) {
+    const hive = new Hive({ _id: id });
+    const cascade = await Hive.dependency.cascade(hive.references.sub, hive, 'hiveRef');
+    if (!cascade.success.status) return cascade;
     return await Hive.crudInterface.remove(id, "hiveModel", "_id");
   }
 
@@ -64,6 +67,8 @@ class Hive {
   }
 
   async remove() {
+    const cascade = await Hive.dependency.cascade(this.references.sub, this, 'hiveRef');
+    if (!cascade.success.status) return cascade;
     return await Hive.crudInterface.remove(this._id, "hiveModel", "_id");
   }
 }
