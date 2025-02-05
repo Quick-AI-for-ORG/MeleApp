@@ -289,7 +289,7 @@ body {
 .modal-content {
     background: white;
     width: 90%;
-    max-width: 400px;
+    max-width: 500px;
     border-radius: 12px;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
     position: relative;
@@ -301,6 +301,8 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background: #f8fafc;
+    border-radius: 12px 12px 0 0;
 }
 
 .modal-header .close {
@@ -313,8 +315,8 @@ body {
 }
 
 .modal-body {
-    padding: 2rem 1.5rem;
-    text-align: center;
+    padding: 2rem;
+    text-align: left;
     color: #4b5563;
 }
 
@@ -330,9 +332,15 @@ body {
     padding: 0.75rem 1.5rem;
     background: #f3f4f6;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
     color: #4b5563;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.cancel-btn:hover {
+    background: #e5e7eb;
 }
 
 .delete-btn {
@@ -419,30 +427,100 @@ body {
     line-height: 1.4;
 }
 
+/* Enhanced Form Styles */
 .form-group {
-  margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    position: relative;
 }
 
 .form-group label {
-  display: block;
-  margin-bottom: 0.5rem;
-  color: #4b5563;
-  font-weight: 500;
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #16404d;
+    font-weight: 500;
+    font-size: 0.9rem;
 }
 
 .form-group input,
 .form-group select,
 .form-group textarea {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #e5e7eb;
-  border-radius: 6px;
-  font-size: 0.875rem;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    background-color: #f9fafb;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #fca311;
+    box-shadow: 0 0 0 3px rgba(252, 163, 17, 0.1);
+    background-color: white;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #9ca3af;
+}
+
+.form-group select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%236b7280' viewBox='0 0 16 16'%3E%3Cpath d='M8 10.5l4-4H4l4 4z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 2.5rem;
 }
 
 .form-group textarea {
   resize: vertical;
   min-height: 80px;
+}
+
+.submit-btn {
+    background: #16404d;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.submit-btn:hover {
+    background: #fca311;
+    transform: translateY(-1px);
+}
+
+/* Price input specific styles */
+.form-group.price-group {
+    position: relative;
+}
+
+.form-group.price-group::before {
+    content: "$";
+    position: absolute;
+    left: 1rem;
+    top: 2.3rem;
+    color: #6b7280;
+}
+
+.form-group.price-group input {
+    padding-left: 1.75rem;
+}
+
+/* Invalid input styles */
+.form-group input:invalid,
+.form-group select:invalid {
+    border-color: #ef4444;
+}
+
+.form-group input:invalid:focus {
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
 }
 
 /* Responsive Design */

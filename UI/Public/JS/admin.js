@@ -136,12 +136,31 @@ function closeAddModal(type) {
   }
 }
 
+// Add this new function for price validation
+function validatePrice(input) {
+  if (input.value < 0) {
+    input.value = 0;
+  }
+  // Format to 2 decimal places
+  input.value = parseFloat(input.value).toFixed(2);
+}
+
 // Handle form submission
 async function handleAdd(event, type) {
   event.preventDefault();
   const form = event.target;
   const formData = new FormData(form);
   const data = Object.fromEntries(formData);
+
+  // Validate price for products
+  if (type === "product") {
+    const price = parseFloat(data.price);
+    if (price < 0) {
+      showNotification("Price cannot be negative", "error");
+      return;
+    }
+    data.price = price.toFixed(2);
+  }
 
   const isEdit = form.dataset.mode === "edit";
   const endpoint = isEdit
@@ -171,11 +190,17 @@ async function handleAdd(event, type) {
       // Reload the page to show new data
       location.reload();
     } else {
-      showNotification(`Error ${isEdit ? "updating" : "adding"} ${type}`, "error");
+      showNotification(
+        `Error ${isEdit ? "updating" : "adding"} ${type}`,
+        "error"
+      );
     }
   } catch (error) {
     console.error("Error:", error);
-    showNotification(`Error ${isEdit ? "updating" : "adding"} ${type}`, "error");
+    showNotification(
+      `Error ${isEdit ? "updating" : "adding"} ${type}`,
+      "error"
+    );
   }
 }
 
