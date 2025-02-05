@@ -137,7 +137,7 @@
                                     <button class="action-btn edit">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <button class="action-btn delete" 
+                                    <button class="action-btn delete"
                                         onclick='showConfirmModal("user", "<%= user._id %>", "<%= user.name %>")'>
                                         <i class="fas fa-trash"></i>
                                     </button>
@@ -175,6 +175,117 @@
                                     </button>
                                     <button class="action-btn delete"
                                         onclick="showConfirmModal('product', '<%= product._id %>', '<%= product.name %>')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <% }); %>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity-section">
+                <!-- Hives List -->
+                <div class="activity-card hives-list">
+                    <div class="card-header">
+                        <h3><i class="fas fa-archive"></i> Recent Hives</h3>
+                        <button class="view-all">View All</button>
+                    </div>
+                    <div class="card-content">
+                        <% recentHives.forEach(hive=> { %>
+                            <div class="activity-item" data-hive-id="<%= hive._id %>">
+                                <div class="hive-icon">
+                                    <i class="fas fa-archive"></i>
+                                </div>
+                                <div class="activity-info">
+                                    <h4><%= hive.name %></h4>
+                                    <p>Apiary: <%= hive.apiaryName %></p>
+                                    <p class="hive-details">
+                                        Dimensions: 
+                                        <%= (hive.dimensions && typeof hive.dimensions === 'object') ? 
+                                            `${hive.dimensions.length || 0}x${hive.dimensions.width || 0}x${hive.dimensions.height || 0}` : '0x0x0' %> cm
+                                        | Frames: <%= hive.numFrames || 0 %>
+                                    </p>
+                                    <span class="timestamp">Added <%= new Date(hive.createdAt).toLocaleDateString() %></span>
+                                </div>
+                                <div class="activity-actions">
+                                    <button class="action-btn edit">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="action-btn delete"
+                                        onclick="showConfirmModal('hive', '<%= hive._id %>', '<%= hive.name %>')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <% }); %>
+                    </div>
+                </div>
+
+                <!-- Apiaries List -->
+                <div class="activity-card apiaries-list">
+                    <div class="card-header">
+                        <h3><i class="fas fa-warehouse"></i> Recent Apiaries</h3>
+                        <button class="view-all">View All</button>
+                    </div>
+                    <div class="card-content">
+                        <% recentApiaries.forEach(apiary=> { %>
+                            <div class="activity-item" data-apiary-id="<%= apiary._id %>">
+                                <div class="apiary-icon">
+                                    <i class="fas fa-warehouse"></i>
+                                </div>
+                                <div class="activity-info">
+                                    <h4>
+                                        <%= apiary.name %>
+                                    </h4>
+                                    <p>Location: <%= apiary.location %>
+                                    </p>
+                                    <span class="timestamp">Added <%= new Date(apiary.createdAt).toLocaleDateString() %>
+                                    </span>
+                                </div>
+                                <div class="activity-actions">
+                                    <button class="action-btn edit">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="action-btn delete"
+                                        onclick="showConfirmModal('apiary', '<%= apiary._id %>', '<%= apiary.name %>')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <% }); %>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity-section">
+                <!-- Sensors List -->
+                <div class="activity-card sensors-list">
+                    <div class="card-header">
+                        <h3><i class="fas fa-microchip"></i> Recent Sensors</h3>
+                        <button class="view-all">View All</button>
+                    </div>
+                    <div class="card-content">
+                        <% recentSensors.forEach(sensor=> { %>
+                            <div class="activity-item" data-sensor-id="<%= sensor._id %>">
+                                <div class="sensor-icon">
+                                    <i class="fas fa-microchip"></i>
+                                </div>
+                                <div class="activity-info">
+                                    <h4><%= sensor.name %></h4>
+                                    <p>Type: <%= sensor.sensorType %> | Model: <%= sensor.modelName %></p>
+                                    <p class="sensor-status <%= sensor.status.toLowerCase() %>">
+                                        Status: <%= sensor.status %>
+                                    </p>
+                                    <p class="sensor-description"><%= sensor.description %></p>
+                                    <span class="timestamp">Added <%= new Date(sensor.createdAt).toLocaleDateString() %></span>
+                                </div>
+                                <div class="activity-actions">
+                                    <button class="action-btn edit">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="action-btn delete"
+                                        onclick="showConfirmModal('sensor', '<%= sensor._id %>', '<%= sensor.name %>')">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </div>

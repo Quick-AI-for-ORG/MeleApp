@@ -328,6 +328,77 @@ body {
     background: #dc2626;
 }
 
+/* Additional icon styles */
+.hive-icon,
+.apiary-icon,
+.sensor-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #16404d;
+}
+
+.hive-icon {
+  background: rgba(252, 163, 17, 0.1);
+  color: #fca311;
+}
+
+.apiary-icon {
+  background: rgba(22, 64, 77, 0.1);
+  color: #16404d;
+}
+
+.sensor-icon {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+/* Adjust spacing for multiple sections */
+.activity-section + .activity-section {
+  margin-top: 2rem;
+}
+
+/* Hive and Sensor specific styles */
+.hive-details {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin: 0.25rem 0;
+}
+
+.sensor-status {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin: 0.25rem 0;
+}
+
+.sensor-status.active {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+}
+
+.sensor-status.inactive {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
+
+.sensor-status.maintenance {
+    background: rgba(252, 163, 17, 0.1);
+    color: #fca311;
+}
+
+.sensor-description {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin: 0.25rem 0;
+    line-height: 1.4;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .activity-section {

@@ -14,6 +14,84 @@ router.get("/dashboard", async (req, res) => {
     const sensorsCount = await meleDB.collection("sensors").countDocuments();
     const productsCount = await meleDB.collection("products").countDocuments();
 
+    // Get recent hives with apiary names - Fixed pipeline
+    const recentHives = await meleDB
+      .collection("hives")
+      .aggregate([
+        { $sort: { createdAt: -1 } },
+        { $limit: 5 },
+        {
+          $lookup: {
+            from: "apiaries",
+            localField: "apiaryId",
+            foreignField: "_id",
+            as: "apiary",
+          },
+        },
+        {
+          $addFields: {
+            apiaryName: { $arrayElemAt: ["$apiary.name", 0] },
+            // Provide default values if dimensions is missing
+            dimensions: {
+              $ifNull: ["$dimensions", { length: 0, width: 0, height: 0 }]
+            },
+            numFrames: { $ifNull: ["$numFrames", 0] }
+          },
+        },
+        {
+          $project: {
+            name: 1,
+            apiaryName: 1,
+            dimensions: 1,
+            numFrames: 1,
+            createdAt: 1,
+          },
+        },
+      ])
+      .toArray();
+
+    // Get recent apiaries
+    const recentApiaries = await meleDB
+      .collection("apiaries")
+      .find({})
+      .sort({ createdAt: -1 })
+      .limit(5)
+      .toArray();
+
+    // Get recent sensors with additional fields - Fixed pipeline
+    const recentSensors = await meleDB
+      .collection("sensors")
+      .aggregate([
+        { $sort: { createdAt: -1 } },
+        { $limit: 5 },
+        {
+          $lookup: {
+            from: "hives",
+            localField: "hiveId",
+            foreignField: "_id",
+            as: "hive",
+          },
+        },
+        {
+          $addFields: {
+            hiveName: { $arrayElemAt: ["$hive.name", 0] },
+          },
+        },
+        {
+          $project: {
+            name: 1,
+            sensorType: 1,
+            status: 1,
+            description: 1,
+            imagePath: 1,
+            modelName: 1,
+            hiveName: 1,
+            createdAt: 1,
+          },
+        },
+      ])
+      .toArray();
+
     // Updated users query to include name
     const recentUsers = await meleDB
       .collection("users")
@@ -50,6 +128,9 @@ router.get("/dashboard", async (req, res) => {
         sensors: sensorsCount,
         products: productsCount,
       },
+      recentHives,
+      recentApiaries,
+      recentSensors,
       recentUsers: usersWithNames,
       recentProducts,
     });
