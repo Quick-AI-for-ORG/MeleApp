@@ -29,6 +29,14 @@ class Product {
   static async remove(id) {
     return await Hive.crudInterface.remove(id, "productModel", "_id");
   }
+
+  static async modify(newProduct) {
+    const result = await Product.crudInterface.modify(newProduct.name, newProduct, "productModel", "name");
+    if (result.success.status) {
+      result.data = Product.jsonToObject(newProduct, result.data);
+    }
+    return result;
+  }
   async create() {
     const result = await Product.crudInterface.create(this, "productModel", "name");
     if (result.success.status) {

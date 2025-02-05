@@ -31,6 +31,14 @@ class Sensor {
     return await Sensor.crudInterface.remove(sensorType, "sensorModel", "sensorType");
   }
 
+  static async modify(newSensor) {
+    const result = await Sensor.crudInterface.modify(newSensor.sensorType, newSensor, "sensorModel", "sensorType");
+    if (result.success.status) {
+      result.data = Sensor.jsonToObject(newSensor, result.data);
+    }
+    return result;
+  }
+
   async create() {
     const result = await Sensor.crudInterface.create(this, "sensorModel", "sensorType");
     if (result.success.status) {

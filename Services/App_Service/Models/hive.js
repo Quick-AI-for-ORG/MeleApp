@@ -37,6 +37,14 @@ class Hive {
   static async remove(id) {
     return await Hive.crudInterface.remove(id, "hiveModel", "_id");
   }
+
+  static async modify(newHive) {
+    const result = await Hive.crudInterface.modify(newHive._id, newHive, "hiveModel", "_id");
+    if (result.success.status) {
+      result.data = Hive.jsonToObject(newHive, result.data);
+    }
+    return result;
+  }
   async create() {
     const valid = await Hive.dependency.validate(this.references.parent,this);
     if (!valid.success.status) return valid;

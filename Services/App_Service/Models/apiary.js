@@ -34,6 +34,16 @@ class Apiary {
     }
     return result;
   }
+  static async modify(newApiary) {
+    const result = await Apiary.crudInterface.modify(newApiary._id, newApiary, "apiaryModel", "_id");
+    if (result.success.status) {
+      result.data = Apiary.jsonToObject(newApiary, result.data);
+    }
+    return result;
+  }
+  static async remove(id) {
+    return await Apiary.crudInterface.remove(id, "apiaryModel", "_id");
+  }
 
   async create() {
     const result = await Apiary.crudInterface.create(this, "apiaryModel", "_id");
