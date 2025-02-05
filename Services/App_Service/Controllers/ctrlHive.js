@@ -8,12 +8,12 @@ const addHive = async (req, res) => {
         apiaryRef:req.body.apiaryRef
     }
     const hive = new Hive(hiveJSON);
-    const result = await hive.create(req.body);
-    res.status(result.success.status ? 200 : 400).send(result);
+    const result = await hive.create();
+    return result.toJSON();
 }
 const removeHive = async (req, res) => {
     const result = await Hive.remove(req.body.id);
-    res.status(result.success.status ? 200 : 400).send(result);
+    return result.toJSON();
 }
 const updateHive = async (req, res) => {}
 const getHive = async (req, res) => {}

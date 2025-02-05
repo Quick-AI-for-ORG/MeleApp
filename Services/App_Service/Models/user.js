@@ -44,6 +44,12 @@ class User {
     return new Result(1, new User(result.data, result.data.role), "User Logged In Successfully.");
   }
 
+  static async modify(newUser) {
+    const result = await User.crudInterface.modify(newUser.email, newUser, "userModel", "email");
+    if(result.success.status) result.data = User.jsonToObject(newUser, result.data);
+    return result
+  }
+
   async create() {
     this.password = await User.hashPassword(this.password);
     const result = await User.crudInterface.create(this, "userModel", "email");
@@ -62,15 +68,6 @@ class User {
     const result = await Apiary.getByUser(this._id);
     if(result.success.status) this.apiaries = result.data;
     return result;
-  }
-
-  async getHives(){
-    for (let i = 0; i < this.apiaries.length; i++) {
-      const apiary = this.apiaries[i];
-      const result = await apiary.getHives();
-      if(!result.success.status) return result;
-      this.apiaries[i] = apiary;
-    }
   }
 
 }
