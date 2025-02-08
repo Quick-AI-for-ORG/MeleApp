@@ -116,6 +116,10 @@ const login = async (req, res) => {
     }
 }
 
+const logout = (req, res) => {
+    req.session.user = undefined;
+    res.redirect('/')
+}
 module.exports = {
     addUser,
     removeUser,
@@ -123,5 +127,6 @@ module.exports = {
     getUser,
     getUsers,
     register,
-    login
+    login,
+    logout
 }

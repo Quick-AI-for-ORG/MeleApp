@@ -6,7 +6,7 @@ const ctrlUser = require("../Controllers/ctrlUser");
 
 router.get("/", (req, res) => {
   if (!req.session.user) {
-    req.session.message = "Please Login to view this page.";
+    if(!req.session.message) req.session.message = "Please Login to view this page.";
     res.redirect("/keeper/login");
   } else res.render("beekeeper", { layout: false, user: req.session.user });
 });
@@ -51,6 +51,7 @@ router.post("/upgrade", (req, res) => {
 
 router.post("/register", ctrlUser.register);
 router.post("/login", ctrlUser.login);
+router.get("/logout", ctrlUser.logout);
 
 router.get("/profile", async (req, res) => {
   if (!req.session.user) {
