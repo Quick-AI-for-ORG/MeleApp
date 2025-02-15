@@ -18,17 +18,13 @@ class Product {
 
   static async get(name) {
     const result = await Product.crudInterface.get(name, "productModel", "name");
-    if (result.success.status) {
-      result.data = new Product(result.data);
-    }
+    if (result.success.status) result.data = new Product(result.data);
     return result;
   }
 
   static async getAll() {
     const result = await Product.crudInterface.getAll("productModel");
-    if (result.success.status) {
-      result.data = result.data.map(product => new Product(product));
-    }
+    if (result.success.status) result.data = result.data.map(product => new Product(product));
     return result;
   }
   static async remove(id) {

@@ -1,7 +1,6 @@
 /* start allrooms */
 /* Room Cards */
 body {
-  background-image: url("/IMAGES/abdullah-omar-wU6S5-pMlns-unsplash.jpg");
   background-size: cover;
   background-position: center;
   width: 100vw;
@@ -199,7 +198,7 @@ body *:not(nav, nav *, footer, footer *) {
 /* Hero Section */
 .products-hero {
   background: linear-gradient(rgba(22, 64, 77, 0.7), rgba(22, 64, 77, 0.7)),
-    url("/Images/honey-hero.jpg");
+    url("/Images/products.jpg");
   background-size: cover;
   background-position: center;
   height: 300px;
@@ -353,5 +352,8 @@ body *:not(nav, nav *, footer, footer *) {
 
   .product-card {
     margin: 0 1rem;
+  }
+  .products-grid {
+    grid-template-columns: repeat(auto-fit, minmax(48%, 2fr));
   }
 }

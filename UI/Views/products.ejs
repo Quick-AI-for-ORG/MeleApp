@@ -29,7 +29,7 @@
                             <a id="<%=product._id%>" class="view-btn">
                                 <i class="fas fa-eye me-2"></i> View Details
                                 <form id="form-<%=product._id%>" action="/product" method="POST">
-                                    <input type="hidden" name="productName" value="<%= product.name %>">
+                                    <input type="hidden" name="name" value="<%= product.name %>">
                                 </form>
                             </a>
                         </div>

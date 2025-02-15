@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mele</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/CSS/404.css">
+    <%- include('./Partials/head.ejs') %>
+
+</head>
+<body>
+    <section class="container not">
+        <div class="row">
+            <div class="col-6 text-center">
+                <img src="/Images/bee_samaga.png" alt="Not Found Bee" class="img-fluid">
+            </div>
+            <div class="col-6 text-center my-auto not-info">
+                <h1>OH NO!</h1>
+                <h2>Are you lost? It's okay.</h2>
+                <p>Honeybees can get lost too if their navigation is disrupted by pesticides, environmental changes, or disorientation, or maybe even meddling in habitats that are not theirs in your case?</p>
+                <a href="/" class="button">Back to Mele!</a>
+            </div>
+        </div>
+    </section>
+    <img src="/Images/bee_cursor.png" alt="Running Bee" class="img-fluid" id="bee-cursor">
+    <script>
+        let lastX = 0; // Stores the last known cursor X position
+
+        document.addEventListener("mousemove", (event) => {
+            const follower = document.getElementById("bee-cursor");
+
+            follower.style.left = `${event.clientX-50}px`;
+            follower.style.top = `${event.clientY-50}px`;
+
+          
+            if (event.clientX > lastX) {
+                follower.style.transform = "translate(-50%, -50%) scaleX(-1)"; 
+            } else if (event.clientX < lastX) {
+                follower.style.transform = "translate(-50%, -50%) scaleX(1)"; 
+            }
+
+            lastX = event.clientX; 
+        });
+    </script>
+</body>
+</html>
