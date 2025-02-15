@@ -171,5 +171,4 @@ router.get("/getAllHives", ctrlAdmin.getAllHives);
 router.get("/getAllApiaries", ctrlAdmin.getAllApiaries);
 
 
-router.get('*', ctrlPages._PUBLIC.notFound);
 module.exports = router;

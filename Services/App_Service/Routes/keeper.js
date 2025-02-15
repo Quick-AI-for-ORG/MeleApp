@@ -9,76 +9,18 @@ router.get("/", (req, res) => {
   else res.redirect("/keeper/dashboard");
 });
 
+
+
 router.get("/signup", ctrlPages._KEEPER.signup);
 router.get("/login", ctrlPages._KEEPER.login);
 router.get("/dashboard", ctrlPages._KEEPER.dashboard);
 router.get("/logout", ctrlUser.logout);
+router.get("/upgrade", ctrlPages._KEEPER.upgrade);
+router.get("/profile", ctrlPages._KEEPER.profile);
 
 router.post("/register", ctrlUser.register);
 router.post("/login", ctrlUser.login);
 
-router.get("/upgrade", async (req, res) => {
-  try {
-    const meleDB = mongoose.connection.useDb("meleDB");
-
-    const collections = await meleDB.db.listCollections().toArray();
-
-    const kits = await meleDB.db.collection("products").find({}).toArray();
-
-    res.render("upgrade", {
-      user: req.session.user || "",
-      layout: false,
-      kits: kits,
-      googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
-    });
-  } catch (error) {
-    console.error("Database Error:", error);
-    res.render("upgrade", {
-      user: req.session.user || "",
-      layout: false,
-      kits: [],
-    });
-  }
-});
-
-router.post("/upgrade", (req, res) => {
-  const upgradeData = req.body;
-  res.redirect("/keeper/dashboard");
-});
-
-
-
-router.get("/profile", async (req, res) => {
-  if (!req.session.user) {
-    req.session.message = "Please login to access your profile";
-    return res.redirect("/keeper/login");
-  }
-
-  try {
-    const meleDB = mongoose.connection.useDb("meleDB");
-    const userData = await meleDB
-      .collection("users")
-      .findOne({ _id: new mongoose.Types.ObjectId(req.session.user._id) });
-
-    if (!userData) {
-      req.session.message = "User not found";
-      return res.redirect("/keeper/login");
-    }
-
-    const message = req.session.message;
-    req.session.message = null;
-
-    res.render("profile", {
-      layout: false,
-      user: userData,
-      message: message,
-    });
-  } catch (error) {
-    console.error("Error fetching user data:", error);
-    req.session.message = "Error loading profile";
-    res.redirect("/keeper/login");
-  }
-});
 
 router.post("/profile/update", async (req, res) => {
   try {
@@ -128,6 +70,4 @@ router.post("/profile/update", async (req, res) => {
 router.get("*", (req, res) => {
   res.redirect("/keeper");
 });
-
-router.get('*', ctrlPages._PUBLIC.notFound);
 module.exports = router;

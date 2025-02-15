@@ -46,12 +46,25 @@ const product =  async (req, res) => {
       });
   }
 
+  
+
 const dashboard =  (req, res) => {
   let message = req.session.message === undefined ? null : req.session.message;
   req.session.message = undefined;
   res.render("beekeeper", {
     layout: false,
     message: message,
+    user: req.session.user || "",
+  });
+}
+
+const profile =  (req, res) => {
+  let message = req.session.message === undefined ? null : req.session.message;
+  req.session.message = undefined;
+  res.render("profile", {
+    layout: false,
+    message: message,
+    user: req.session.user || "",
   });
 }
 
@@ -59,24 +72,14 @@ const notFound = (req, res) => {
     res.render("404", { user: req.session.user || "" });
 }
 
-const upgrade = async (req, res) => {
-    try {
-     
-    await ctrlProduct.getProducts(req, res);
+const upgrade = async (req, res) => {     
+      await ctrlProduct.getProducts(req, res);
       res.render("upgrade", {
         user: req.session.user || "",
         layout: false,
         kits: req.session.products || [],
         googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY
       });
-    } catch (error) {
-      console.error("Database Error:", error);
-      res.render("upgrade", {
-        user: req.session.user || "",
-        layout: false,
-        kits: [],
-      });
-    }
   }
 
 const postUpgrade = (req, res) => {
@@ -86,6 +89,6 @@ const postUpgrade = (req, res) => {
 
 module.exports = {
     _PUBLIC: {home, about, products,product, noLogin, notFound},
-    _KEEPER: {login, signup, dashboard, upgrade, postUpgrade},
+    _KEEPER: {login, signup, profile, dashboard, upgrade, postUpgrade},
     _ADMIN: {},
 }
