@@ -129,4 +129,5 @@ router.get("*", (req, res) => {
   res.redirect("/keeper");
 });
 
+router.get('*', ctrlPages._PUBLIC.notFound);
 module.exports = router;

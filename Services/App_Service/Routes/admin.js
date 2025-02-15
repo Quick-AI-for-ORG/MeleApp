@@ -3,6 +3,7 @@ const router = express.Router();
 const mongoose = require("mongoose");
 const ctrlHive = require("../Controllers/ctrlHive");
 const ctrlAdmin = require("../Controllers/ctrlAdmin");
+const ctrlPages = require("../Controllers/ctrlPages");
 
 router.get("/dashboard", async (req, res) => {
   try {
@@ -169,4 +170,6 @@ router.get("/getAllSensors", ctrlAdmin.getAllSensors);
 router.get("/getAllHives", ctrlAdmin.getAllHives);
 router.get("/getAllApiaries", ctrlAdmin.getAllApiaries);
 
+
+router.get('*', ctrlPages._PUBLIC.notFound);
 module.exports = router;

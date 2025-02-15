@@ -30,7 +30,7 @@
 
         document.addEventListener("mousemove", (event) => {
             const follower = document.getElementById("bee-cursor");
-
+            follower.style.visibility = "visible";
             follower.style.left = `${event.clientX-50}px`;
             follower.style.top = `${event.clientY-50}px`;
 
