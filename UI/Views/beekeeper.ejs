@@ -32,7 +32,9 @@
                     </h2>
                 </div>
                 <nav class="nav">
-                    <a href="/keeper/profile" class="nav-link active"><%=user.name%>'s Profile</a>
+                    <a href="/keeper/profile" class="nav-link active">
+                        <%=user.name%>'s Profile
+                    </a>
                     <!-- <a href="#" class="nav-link">Home</a> -->
                 </nav>
             </div>
@@ -578,6 +580,72 @@
                                     <!-- Add more rows as needed -->
                                 </tbody>
                             </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Purchased Kits Section -->
+                <div class="purchased-kits-section">
+                    <div class="kits-card">
+                        <h3 class="kits-title">
+                            <i class="fas fa-box-open"></i>
+                            Installed Hive Kits
+                        </h3>
+                        <div class="kits-list">
+                            <div class="kit-item">
+                                <div class="kit-info">
+                                    <h4>The Mele-RIMBA Kit</h4>
+                                    <span class="kit-status active">Active</span>
+                                </div>
+                                <button class="kit-action-btn" onclick="requestKitRemoval('rimba')">
+                                    <i class="fas fa-times"></i>
+                                    Request Removal
+                                </button>
+                            </div>
+
+                            <div class="kit-item">
+                                <div class="kit-info">
+                                    <h4>Internal Hive Monitoring Kit</h4>
+                                    <span class="kit-status active">Active</span>
+                                </div>
+                                <button class="kit-action-btn" onclick="requestKitRemoval('monitoring')">
+                                    <i class="fas fa-times"></i>
+                                    Request Removal
+                                </button>
+                            </div>
+
+                            <div class="kit-item">
+                                <div class="kit-info">
+                                    <h4>ThermoHygro-Regulators Kit</h4>
+                                    <span class="kit-status active">Active</span>
+                                </div>
+                                <button class="kit-action-btn" onclick="requestKitRemoval('thermohygro')">
+                                    <i class="fas fa-times"></i>
+                                    Request Removal
+                                </button>
+                            </div>
+
+                            <div class="kit-item">
+                                <div class="kit-info">
+                                    <h4>Yield Scanner Kit</h4>
+                                    <span class="kit-status active">Active</span>
+                                </div>
+                                <button class="kit-action-btn" onclick="requestKitRemoval('scanner')">
+                                    <i class="fas fa-times"></i>
+                                    Request Removal
+                                </button>
+                            </div>
+
+                            <div class="kit-item">
+                                <div class="kit-info">
+                                    <h4>On Door Intrusion Prevention Kit</h4>
+                                    <span class="kit-status active">Active</span>
+                                </div>
+                                <button class="kit-action-btn" onclick="requestKitRemoval('intrusion')">
+                                    <i class="fas fa-times"></i>
+                                    Request Removal
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>

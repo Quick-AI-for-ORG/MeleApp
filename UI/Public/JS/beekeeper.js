@@ -648,3 +648,23 @@ function togglePassword() {
     toggleButton.classList.add("fa-eye");
   }
 }
+
+function requestKitRemoval(kitId) {
+  const kitNames = {
+    rimba: "The Mele-RIMBA Kit",
+    monitoring: "Internal Hive Monitoring Kit",
+    thermohygro: "ThermoHygro-Regulators Kit",
+    scanner: "Yield Scanner Kit",
+    intrusion: "On Door Intrusion Prevention Kit",
+  };
+
+  if (
+    confirm(`Are you sure you want to request removal of ${kitNames[kitId]}?`)
+  ) {
+    // Here you would normally send a request to the server
+    // For now, just show a notification
+    alert(
+      `Removal request for ${kitNames[kitId]} has been sent to the administrator.`
+    );
+  }
+}
