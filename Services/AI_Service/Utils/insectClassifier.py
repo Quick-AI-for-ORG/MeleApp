@@ -4,8 +4,8 @@ from ultralytics import YOLO
 from tensorflow.lite.python.interpreter import Interpreter
 
 yoloPath = '../Models/Insect.pt'  
-beePath = '../Models/Quantized_Bee.tflite'
-waspPath = '../Models/Quantized_Wasp.tflite'
+beePath = '../Models/quantizedBee.tflite'
+waspPath = '../Models/quantizedWasp.tflite'
 
 class insectClassifier:
     def __init__(self,beePath,waspPath,yoloPath,yoloThreshold=0.3,classifierThreshold=0.8,waspThreshold=5,inputSize=(224,224),skipFrames=1):
@@ -54,8 +54,8 @@ class insectClassifier:
                     cropped_input = cv2.resize(cropped_region, self.inputSize)
                     cropped_input = np.expand_dims(cropped_input, axis=0)  
                     
-                    bee_score = np.max(self.quantized_classify(self.beeModel,cropped_input))
-                    wasp_score = np.max(self.quantized_classify(self.waspModel,cropped_input))
+                    bee_score = np.max(self.quantizedClassify(self.beeModel,cropped_input))
+                    wasp_score = np.max(self.quantizedClassify(self.waspModel,cropped_input))
                     
                     
                     if (bee_score < self.classifierThreshold and  wasp_score < self.classifierThreshold):
