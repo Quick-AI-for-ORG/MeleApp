@@ -12,6 +12,50 @@
         src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/2.1.0/chartjs-plugin-annotation.min.js"></script>
     <%- include('./Partials/head.ejs') %>
 
+        <style>
+            .upgrade-price {
+                color: #10b981;
+                font-weight: 600;
+                margin-left: 1rem;
+            }
+
+            .upgrade-description {
+                font-size: 0.875rem;
+                color: #6b7280;
+                margin-top: 0.5rem;
+            }
+
+            .notification {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 12px 24px;
+                border-radius: 6px;
+                color: white;
+                z-index: 1000;
+                animation: slideIn 0.3s ease;
+            }
+
+            .notification.success {
+                background-color: #10b981;
+            }
+
+            .notification.error {
+                background-color: #ef4444;
+            }
+
+            @keyframes slideIn {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+        </style>
 </head>
 
 <body>
@@ -587,10 +631,16 @@
                 <!-- Purchased Kits Section -->
                 <div class="purchased-kits-section">
                     <div class="kits-card">
-                        <h3 class="kits-title">
-                            <i class="fas fa-box-open"></i>
-                            Installed Hive Kits
-                        </h3>
+                        <div class="kits-header">
+                            <h3 class="kits-title">
+                                <i class="fas fa-box-open"></i>
+                                Installed Hive Kits
+                            </h3>
+                            <button class="purchase-upgrade-btn" onclick="openUpgradeModal()">
+                                <i class="fas fa-plus"></i>
+                                Purchase Upgrade
+                            </button>
+                        </div>
                         <div class="kits-list">
                             <div class="kit-item">
                                 <div class="kit-info">
@@ -603,7 +653,7 @@
                                 </button>
                             </div>
 
-                            <div class="kit-item">
+                            <!-- <div class="kit-item">
                                 <div class="kit-info">
                                     <h4>Internal Hive Monitoring Kit</h4>
                                     <span class="kit-status active">Active</span>
@@ -612,9 +662,9 @@
                                     <i class="fas fa-times"></i>
                                     Request Removal
                                 </button>
-                            </div>
+                            </div> -->
 
-                            <div class="kit-item">
+                            <!-- <div class="kit-item">
                                 <div class="kit-info">
                                     <h4>ThermoHygro-Regulators Kit</h4>
                                     <span class="kit-status active">Active</span>
@@ -623,7 +673,7 @@
                                     <i class="fas fa-times"></i>
                                     Request Removal
                                 </button>
-                            </div>
+                            </div> -->
 
                             <div class="kit-item">
                                 <div class="kit-info">
@@ -651,6 +701,23 @@
                 </div>
             </div>
         </main>
+    </div>
+    <div id="upgradeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Available Hive Upgrades</h3>
+                <button class="close-modal" onclick="closeUpgradeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="upgrades-list" id="upgradesList">
+                    <!-- Upgrades will be populated here -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="cancel-btn" onclick="closeUpgradeModal()">Cancel</button>
+                <button class="submit-btn" onclick="purchaseUpgrades()">Purchase Selected</button>
+            </div>
+        </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="/JS/beekeeper.js"></script>

@@ -1192,3 +1192,76 @@ canvas {
   background: #f9f9f9;
   color: #16404d;
 }
+
+.kits-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.purchase-upgrade-btn {
+  background: #16404d;
+  color: white;
+  border: none;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.purchase-upgrade-btn:hover {
+  background: #fca311;
+  transform: translateY(-2px);
+}
+
+.upgrades-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.upgrade-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: #fbf5dd;
+  border-radius: 8px;
+}
+
+.upgrade-item.installed {
+  opacity: 0.7;
+  background: #f3f4f6;
+}
+
+.upgrade-checkbox {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.upgrade-checkbox:disabled {
+  cursor: not-allowed;
+}
+
+.upgrade-info {
+  flex: 1;
+}
+
+.upgrade-name {
+  font-weight: 600;
+  color: #16404d;
+}
+
+.upgrade-status {
+  font-size: 0.75rem;
+  color: #10b981;
+  margin-left: 0.5rem;
+}
