@@ -303,6 +303,8 @@ function getHeadersForType(type) {
       return ["Apiary", "Frames", "Dimensions", "Added Date"];
     case "apiary":
       return ["Name", "Location", "Hive Count", "Added Date"];
+    case "hiveupgrade":
+      return ["ID", "Operational Status", "Created Date"];
     default:
       return [];
   }
@@ -316,7 +318,7 @@ async function fetchAllItems(type) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
-    console.log(`Fetched ${type}s:`, data);
+    console.log(`Fetched ${type}s data:`, data);
     if (data.success) {
       return data.items || [];
     } else {
@@ -406,6 +408,14 @@ function getCellsForType(item, type) {
         item.hiveCount || "0",
         new Date(item.createdAt).toLocaleDateString(),
       ];
+    case "hiveupgrade":
+      return [
+        item._id,
+        `<span class="operational-status ${
+          item.operational ? "active" : "inactive"
+        }">${item.operational ? "Operational" : "Non-operational"}</span>`,
+        new Date(item.createdAt).toLocaleDateString(),
+      ];
     default:
       return [];
   }
@@ -439,10 +449,13 @@ document.addEventListener("DOMContentLoaded", () => {
     button.addEventListener("click", function () {
       // Get the type from the closest activity-card
       const cardClass = this.closest(".activity-card").className;
-      // Extract the type (users, products, etc.)
+      console.log("Card class:", cardClass);
+
+      // Updated regex to include hiveupgrades
       const match = cardClass.match(
-        /\b(users|products|sensors|hives|apiaries)-list\b/
+        /\b(users|products|sensors|hives|apiaries|hiveupgrades)-list\b/
       );
+
       if (match) {
         const type = match[1].slice(0, -1); // Remove 's' from the end
         console.log("Opening view all for:", type);

@@ -137,7 +137,7 @@
                                         <%= user.role || 'beekeeper' %>
                                     </p>
                                     <span class="timestamp">Joined <%= new Date(user.createdAt).toLocaleDateString() %>
-                                            </span>
+                                    </span>
                                 </div>
                                 <div class="activity-actions">
                                     <button class="action-btn edit" onclick='showEditModal("user", "<%= user._id %>")'>
@@ -301,6 +301,37 @@
 
                                     <button class="action-btn delete"
                                         onclick="showConfirmModal('sensor', '<%= sensor._id %>', '<%= sensor.name %>')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <% }); %>
+                    </div>
+                </div>
+
+                <!-- Hive Upgrades List -->
+                <div class="activity-card hiveupgrades-list">
+                    <div class="card-header">
+                        <h3><i class="fas fa-tools"></i> Hive Upgrades</h3>
+                        <button class="view-all">View All</button>
+                    </div>
+                    <div class="card-content">
+                        <% recentHiveUpgrades.forEach(upgrade=> { %>
+                            <div class="activity-item" data-hiveupgrade-id="<%= upgrade._id %>">
+                                <div class="hiveupgrade-icon">
+                                    <i class="fas fa-tools"></i>
+                                </div>
+                                <div class="activity-info">
+                                    <h4>ID: <%= upgrade._id %>
+                                    </h4>
+                                    <p class="operational-status <%= upgrade.operational ? 'active' : 'inactive' %>">
+                                        <%= upgrade.operational ? 'Deployed' : 'Pending' %>
+                                    </p>
+
+                                </div>
+                                <div class="activity-actions">
+                                    <button class="action-btn delete"
+                                        onclick="showConfirmModal('hiveupgrade', '<%= upgrade._id %>', '<%= upgrade._id %>')">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </div>

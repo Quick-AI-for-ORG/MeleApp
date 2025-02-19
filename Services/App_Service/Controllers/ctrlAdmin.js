@@ -300,3 +300,37 @@ exports.getAllSensors = async (req, res) => {
     res.status(500).json({ success: false, error: error.message });
   }
 };
+
+exports.getAllHiveUpgrades = async (req, res) => {
+  try {
+    console.log("Fetching hive upgrades...");
+    const items = await meleDB
+      .collection("hiveupgrades")
+      .find(
+        {},
+        {
+          projection: {
+            _id: 1,
+            operational: 1,
+            createdAt: 1,
+          },
+        }
+      )
+      .sort({ createdAt: -1 })
+      .toArray();
+
+    console.log("Raw hive upgrades:", items);
+
+    const formattedItems = items.map((item) => ({
+      ...item,
+      _id: item._id.toString(),
+      createdAt: item.createdAt ? new Date(item.createdAt).toISOString() : null,
+    }));
+
+    console.log("Formatted hive upgrades:", formattedItems);
+    res.json({ success: true, items: formattedItems });
+  } catch (error) {
+    console.error("Error getting hive upgrades:", error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
