@@ -109,22 +109,21 @@ body {
   align-items: center;
   justify-content: center;
   position: relative;
-  width:100%;
+  width: 100%;
   overflow: hidden;
 }
 
 .thumbnail img {
   width: 100%;
-  padding:5%;
+  padding: 5%;
   transition: transform 0.3s ease;
   margin-top: -10%;
-
 }
 
 .product-details-section {
   padding: 3rem;
 }
-.fa-info-circle{
+.fa-info-circle {
   margin-top: -4%;
   margin-right: 2%;
 }
@@ -199,7 +198,7 @@ body {
 .add-to-cart-btn:hover {
   background: #fca311;
   transform: translateY(-2px);
-  color: white
+  color: white;
 }
 
 @media (max-width: 768px) {
@@ -308,4 +307,21 @@ body {
   right: 10px;
 }
 
-/* Remove unused styles and keep essential ones */
+.subscription-info {
+  margin: 15px 0;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.subscription-info i {
+  color: #28a745;
+}
+
+.subscription-info span {
+  font-size: 1.1em;
+  color: #333;
+}
