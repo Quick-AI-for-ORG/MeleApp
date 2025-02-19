@@ -421,6 +421,44 @@ function getCellsForType(item, type) {
   }
 }
 
+async function deployHiveUpgrade(id) {
+  try {
+    const response = await fetch("/admin/deployHiveUpgrade", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ upgradeId: id }),
+    });
+
+    const result = await response.json();
+    if (result.success) {
+      showNotification("Hive upgrade deployed successfully", "success");
+      // Update the UI
+      const item = document.querySelector(`[data-hiveupgrade-id="${id}"]`);
+      if (item) {
+        const status = item.querySelector(".operational-status");
+        const deployBtn = item.querySelector(".action-btn.deploy");
+
+        if (status) {
+          status.classList.remove("inactive");
+          status.classList.add("active");
+          status.textContent = "Deployed";
+        }
+
+        if (deployBtn) {
+          deployBtn.remove();
+        }
+      }
+    } else {
+      showNotification(result.error || "Error deploying upgrade", "error");
+    }
+  } catch (error) {
+    console.error("Deploy error:", error);
+    showNotification("Error deploying upgrade", "error");
+  }
+}
+
 function filterItems() {
   const input = document.getElementById("searchInput");
   const filter = input.value.toLowerCase();

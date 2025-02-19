@@ -273,6 +273,15 @@ body {
   transform: translateY(-2px);
 }
 
+.action-btn.deploy {
+  color: #10b981;
+}
+
+.action-btn.deploy:hover {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: #059669;
+}
+
 /* Notification styles */
 .notification {
   position: fixed;

@@ -334,3 +334,40 @@ exports.getAllHiveUpgrades = async (req, res) => {
     res.status(500).json({ success: false, error: error.message });
   }
 };
+
+exports.deployHiveUpgrade = async (req, res) => {
+  try {
+    const { upgradeId } = req.body;
+    const result = await meleDB.collection("hiveupgrades").updateOne(
+      {
+        _id: new mongoose.Types.ObjectId(upgradeId),
+        operational: false, // Only allow update if it's not already deployed
+      },
+      {
+        $set: {
+          operational: true,
+          deployedAt: new Date(),
+        },
+      }
+    );
+
+    if (result.matchedCount === 0) {
+      return res.status(400).json({
+        success: false,
+        error: "Upgrade not found or already deployed",
+      });
+    }
+
+    if (result.modifiedCount === 0) {
+      return res.status(400).json({
+        success: false,
+        error: "No changes made",
+      });
+    }
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error("Error deploying hive upgrade:", error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+};

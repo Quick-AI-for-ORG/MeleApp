@@ -180,4 +180,7 @@ router.get("/getAllHives", ctrlAdmin.getAllHives);
 router.get("/getAllApiaries", ctrlAdmin.getAllApiaries);
 router.get("/getAllHiveUpgrades", ctrlAdmin.getAllHiveUpgrades);
 
+// Add deploy route for hive upgrades
+router.post("/deployHiveUpgrade", ctrlAdmin.deployHiveUpgrade);
+
 module.exports = router;

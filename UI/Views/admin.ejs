@@ -327,13 +327,18 @@
                                     <p class="operational-status <%= upgrade.operational ? 'active' : 'inactive' %>">
                                         <%= upgrade.operational ? 'Deployed' : 'Pending' %>
                                     </p>
-
                                 </div>
                                 <div class="activity-actions">
-                                    <button class="action-btn delete"
-                                        onclick="showConfirmModal('hiveupgrade', '<%= upgrade._id %>', '<%= upgrade._id %>')">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
+                                    <% if (!upgrade.operational) { %>
+                                        <button class="action-btn deploy"
+                                            onclick="deployHiveUpgrade('<%= upgrade._id %>')">
+                                            <i class="fas fa-rocket"></i>
+                                        </button>
+                                        <% } %>
+                                            <button class="action-btn delete"
+                                                onclick="showConfirmModal('hiveupgrade', '<%= upgrade._id %>', '<%= upgrade._id %>')">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
                                 </div>
                             </div>
                             <% }); %>
