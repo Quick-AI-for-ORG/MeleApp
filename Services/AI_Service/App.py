@@ -10,7 +10,7 @@ sys.path.append(os.path.join(os.path.dirname('../Shared')))
 from Shared.Result import Result
 from Utils.insectClassifier import insectClassifier
 from Utils.tempForecast import tempForecast
-from Utils.vibrationAnomaly import vibrationAnomaly
+from Utils.vibrationAnomaly import vibrationAnomalyDetector
 from Utils.honeyInspector import honeyInspector
 
 
@@ -19,12 +19,11 @@ waspPath = "Models/quantizedWasp.tflite"
 yoloPath = "Models/Insect.pt"
 forecastPath = "Models/arimaModel.joblib"
 inspectorPath = "Models/Honeycomb.pt"
-# anomalyPath = "Models/vibration_classifier.pkl"
 
 classifier = insectClassifier(beePath,waspPath,yoloPath)
 forecaster = tempForecast(forecastPath)
 honeyInspector = honeyInspector(inspectorPath,0.3)
-# anomaly = vibrationAnomaly(anomalyPath)
+anomalyDetector = vibrationAnomalyDetector()
 
 app = Flask(__name__)
 
@@ -83,8 +82,22 @@ def honeyInspect():
     except Exception as e:
         return jsonify({"error":str(e)})
 
-# @app.route('/anomaly', methods=['POST'])
-# def anomaly():
+@app.route('/normal', methods=['POST'])
+def fitNormal():
+    try:
+        data = request.get_json()
+        vibrationAnomalyDetector.train(data["vibrationReadings"] , 5)
+        return jsonify({"status":"Sucessfully trained"})
+    except Exception as e:
+        return jsonify({"error":str(e)})
+@app.route("/anomaly",methods=["POST"])
+def detectAnomaly():
+    try:
+        data = request.get_json()
+        predictions, errors, threshold, anomalies = vibrationAnomalyDetector.test(data["vibrationReadings"])
+        return jsonify({"anomalies":anomalies})
+    except Exception as e:
+        return jsonify({"error":str(e)})
 #     try:
 #         data = request.get_json()
 #         if not data or 'input' not in data:

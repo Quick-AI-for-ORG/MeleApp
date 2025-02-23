@@ -1,71 +1,49 @@
+import random
 import numpy as np
 import pandas as pd
-import joblib
 import matplotlib.pyplot as plt
-from statsmodels.tsa.arima.model import ARIMA
-from sklearn.metrics import mean_squared_error, mean_absolute_error
+from tensorflow.keras.layers import Dense, Input
+from tensorflow.keras.models import Sequential
+from sklearn.metrics import mean_squared_error
+from sklearn.preprocessing import StandardScaler
 
-class vibrationAnomaly:
-    def __init__(self, modelPath):
-        self.model = joblib.load(modelPath)
-    
-    @staticmethod
-    def loadAndPreprocessData(inputData):
-        data = pd.read_csv(inputData)
-        data['Date_Time'] = pd.to_datetime(data['Date_Time'])
-        data = data.drop_duplicates(subset='Date_Time').sort_values(by='Date_Time').reset_index(drop=True)
-        data = data.set_index('Date_Time').asfreq('D')
-        data = data.interpolate(method='time')  
-        return data
-    
-    @staticmethod
-    def splitData(data, targetColumn, splitRatio=0.8):
-        splitIndex = int(len(data) * splitRatio)
-        trainData = data.iloc[:splitIndex][targetColumn]
-        testData = data.iloc[splitIndex:][targetColumn]
-        return trainData, testData
-    
-    @staticmethod
-    def trainArimaModel(trainData, order=(1, 1, 1)):
-        model = ARIMA(trainData, order=order)
-        modelFit = model.fit()
-        return modelFit
-    
-    @staticmethod
-    def generateForecast(model, steps):
-        forecast = model.forecast(steps=steps)
-        return forecast
-    
-    @staticmethod
-    def smape(actual, forecast):
-        actual = np.array(actual)
-        forecast = np.array(forecast)
-        numerator = np.abs(forecast - actual)
-        denominator = (np.abs(actual) + np.abs(forecast)) / 2
-        return 100 * np.mean(numerator / denominator)
-    
-    @staticmethod
-    def printMetrics(actual, forecast, modelName="ARIMA"):
-        mse = mean_squared_error(actual, forecast)
-        mad = mean_absolute_error(actual, forecast)
-        smapeVal = vibrationForecast.smape(actual, forecast)
+class vibrationAnomalyDetector():
+    def __init__(self, n1=16,n2=8):
+        self.n1 = n1
+        self.n2 = n2
+        encoder = Sequential([
+        Input(shape=(1,)), 
+        Dense(n1, activation='relu'),
+        Dense(n2, activation='relu')
+        ])
+
         
-        print(f"\nMetrics for {modelName}:")
-        print(f"\tMean Squared Error (MSE): {mse:.5f}")
-        print(f"\tMean Absolute Deviation (MAD): {mad:.5f}")
-        print(f"\tRoot Mean Squared Error (RMSE): {np.sqrt(mse):.5f}")
-        print(f"\tSymmetric Mean Absolute Percentage Error (SMAPE): {smapeVal:.5f}")
+        decoder = Sequential([
+        Input(shape=(n2,)),
+        Dense(n1, activation='relu'),  
+        Dense(1, activation='linear')                    
+        ])
+        
+        model = Sequential([encoder, decoder])
+        self.model = model.compile(optimizer='adam', loss='mean_squared_error')
+    def normalize(self,data,test):
+        normalizer = StandardScaler()
+        xTrain = normalizer.fit_transform(data.values.reshape(-1,1))
+        xTest = normalizer.transform(test.values.reshape(-1,1))
+        return xTrain, xTest
     
-    @staticmethod
-    def plotForecastsVsActual(dates, actual, forecasted, modelName="ARIMA"):
-       
-        plt.figure(figsize=(10, 5))
-        plt.plot(dates, actual, marker='o', linestyle='-', label='Actual Vibration')
-        plt.plot(dates, forecasted, marker='o', linestyle='-', label='Forecasted Vibration')
-        plt.title(f'Actual vs Forecasted Vibrations using {modelName}')
-        plt.xlabel('Date')
-        plt.ylabel('Vibration')
-        plt.xticks(rotation=45)
-        plt.legend()
-        plt.tight_layout()
-        plt.show()
+    def train(self,data,epochs=100):
+        self.model.fit(data,data,epochs=epochs, shuffle = True, batch_size=32, validation_split=0.2, verbose=1)
+    def test(self,data,threshold = 85):
+        errors = []
+        anomalies = []
+        predictions = self.model.predict(data)
+        for i in range(len(data)):
+            mse = mean_squared_error(data[i], predictions[i])
+            errors.append(mse)
+        
+        threshold =  np.percentile(errors, threshold)  
+        for i in range(len(data)):
+            if errors[i] >= threshold:
+                anomalies.append(f"Anomaly Detected for weight: {data[i][0]:.4f} with Mean Squared Error (MSE): {errors[i]:.4f}")
+        return predictions, errors, threshold, anomalies
