@@ -29,26 +29,10 @@ router.post("/upgrade", async (req, res) => {
   }
 
   try {
-    const {
-      apiaryName,
-      hivesCount,
-      latitude,
-      longitude,
-      kitSelection,
-      framesCount,
-      length,
-      width,
-      height,
-    } = req.body;
-
-    // Save the upgrade request to database (implement this based on your schema)
-    // ...
-
-    // Send confirmation email
+    // Send confirmation email with all form data
     const emailSent = await sendUpgradeConfirmation(
       req.session.user.email,
-      apiaryName,
-      hivesCount
+      req.body // Pass the entire form data object
     );
 
     if (!emailSent) {
