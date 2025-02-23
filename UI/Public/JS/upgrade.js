@@ -63,8 +63,8 @@ document.addEventListener("DOMContentLoaded", function () {
 function closeConfirmation() {
   const modal = document.getElementById("confirmationModal");
   modal.style.display = "none";
-  // Now submit the form and redirect
-  document.querySelector(".upgrade-form").submit();
+  // Remove the form submission and just reset the form
+  document.querySelector(".upgrade-form").reset();
 }
 
 function validateForm() {
