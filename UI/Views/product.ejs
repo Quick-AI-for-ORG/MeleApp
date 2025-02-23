@@ -23,37 +23,46 @@
                                 alt="<%= product.name %>">
                             <button class="slide-btn prev" onclick="changeSlide(-1)">❮</button>
                             <button class="slide-btn next" onclick="changeSlide(1)">❯</button>
-                        </div>
-                        <div class="thumbnail-container">
-                            <% product.images.forEach((image, index)=> { %>
-                                <div class="thumbnail <%= index === 0 ? 'active' : '' %>"
-                                    onclick="changeImage('<%= image %>', this)">
-                                    <img src="/Images/Products/<%= image %>" alt="<%= product.name %>">
-                                </div>
-                                <% }); %>
-                        </div>
                     </div>
-                </div>
-
-                <div class="product-details-section">
-                    <h1 class="title">
-                        <%= product.name %>
-                    </h1>
-                    <div class="price-tag">
-                        <i class="fas fa-tag"></i>
-                        <span><small>EGP</small> <%= parseFloat(product.price).toFixed(2) %></span>
+                    <div class="thumbnail-container">
+                        <% product.images.forEach((image, index)=> { %>
+                            <div class="thumbnail <%= index === 0 ? 'active' : '' %>"
+                                onclick="changeImage('<%= image %>', this)">
+                                <img src="/Images/Products/<%= image %>" alt="<%= product.name %>">
+                            </div>
+                            <% }); %>
                     </div>
-
-                    <p class="description"><i class="fas fa-info-circle"></i>
-                        <%= product.description %>
-                    </p>
-
-                    <a href="/keeper/upgrade" class="add-to-cart-btn">
-                        <i class="fas fa-shopping-cart"></i> Join Mele Keepers
-                    </a>
                 </div>
             </div>
+
+            <div class="product-details-section">
+                <h1 class="title">
+                    <%= product.name %>
+                </h1>
+                <div class="price-tag">
+                    <i class="fas fa-tag"></i>
+                    <span><small>EGP</small>
+                        <%= parseFloat(product.price).toFixed(2) %>
+                    </span>
+                </div>
+
+                <% if (product.subscription) { %>
+                    <div class="subscription-info">
+                        <i class="fas fa-sync-alt"></i>
+                        <span>Monthly Subscription: <%= product.subscription %> EGP</span>
+                    </div>
+                    <% } %>
+
+                        <p class="description"><i class="fas fa-info-circle"></i>
+                            <%= product.description %>
+                        </p>
+
+                        <a href="/keeper/upgrade" class="add-to-cart-btn">
+                            <i class="fas fa-shopping-cart"></i> Join Mele Keepers
+                        </a>
+            </div>
         </div>
+    </div>
     </div>
     <script src="/JS/product.js"></script>
 </body>

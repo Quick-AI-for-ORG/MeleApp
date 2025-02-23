@@ -54,13 +54,14 @@ const updateUser = async (req, res) => {
                 update[attr] = req.body[attr];
             }
         });
+        update.name = req.body.firstName + ' ' + req.body.lastName
         if (req.body.email == req.session.user.email) {
             const user = new User(req.session.user)
             update.email = user.email
             const result = await user.modify(update)
             if (result.success.status) req.session.user = result.data
             else req.session.message = result.message
-            res.redirect('/keeper')
+            res.redirect('/keeper/profile')
         }
         else {
             const result = await User.modify(update)
@@ -119,6 +120,11 @@ const login = async (req, res) => {
 const logout = (req, res) => {
     req.session.user = undefined;
     res.redirect('/')
+}
+
+
+const upgrade = (req, res) => {
+    
 }
 module.exports = {
     addUser,

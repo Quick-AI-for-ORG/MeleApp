@@ -28,7 +28,7 @@ const signup = async (req, res) => {
 }
 const noLogin = (req, res) => {
   req.session.message = "Please login to access this page";
-  res.redirect("/keeper/login");
+  return res.redirect("/keeper/login");
 }
 const products = async (req, res) => {
     req.session.productDetails = undefined;
@@ -38,7 +38,7 @@ const products = async (req, res) => {
 
 
 const product =  async (req, res) => {
-    if(req.body.productName) await ctrlProduct.getProduct(req, res)
+    if(req.body.name) await ctrlProduct.getProduct(req, res)
     if(!req.session.productDetails) res.redirect("/products");
       res.render("product", {
         user: req.session.user || "",
@@ -46,31 +46,40 @@ const product =  async (req, res) => {
       });
   }
 
+  
+
 const dashboard =  (req, res) => {
+  let message = req.session.message === undefined ? null : req.session.message;
+  req.session.message = undefined;
   res.render("beekeeper", {
     layout: false,
-    message: req.body.message === undefined ? null : req.body.message,
+    message: message,
+    user: req.session.user || "",
   });
 }
 
-const upgrade = async (req, res) => {
-    try {
-     
-    await ctrlProduct.getProducts(req, res);
+const profile =  (req, res) => {
+  let message = req.session.message === undefined ? null : req.session.message;
+  req.session.message = undefined;
+  res.render("profile", {
+    layout: false,
+    message: message,
+    user: req.session.user || "",
+  });
+}
+
+const notFound = (req, res) => {
+    res.render("404", { user: req.session.user || "" });
+}
+
+const upgrade = async (req, res) => {     
+      await ctrlProduct.getProducts(req, res);
       res.render("upgrade", {
         user: req.session.user || "",
         layout: false,
         kits: req.session.products || [],
         googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY
       });
-    } catch (error) {
-      console.error("Database Error:", error);
-      res.render("upgrade", {
-        user: req.session.user || "",
-        layout: false,
-        kits: [],
-      });
-    }
   }
 
 const postUpgrade = (req, res) => {
@@ -79,7 +88,7 @@ const postUpgrade = (req, res) => {
   }
 
 module.exports = {
-    _PUBLIC: {home, about, products,product},
-    _KEEPER: {login, signup,noLogin,dashboard,upgrade,postUpgrade},
+    _PUBLIC: {home, about, products,product, noLogin, notFound},
+    _KEEPER: {login, signup, profile, dashboard, upgrade, postUpgrade},
     _ADMIN: {},
 }

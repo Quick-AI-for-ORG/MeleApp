@@ -15,6 +15,11 @@ const upgradeSchema = new mongoose.Schema({
         ref: 'Users',
         required: true,
     },
+    operational:{
+        type: Boolean,
+        required: true,
+        default: false
+    }
 }, { timestamps: true });
 
 module.exports = mongoose.model('HiveUpgrades', upgradeSchema);

@@ -53,7 +53,7 @@ class User {
   }
 
   static async modify(newUser) {
-    const result = await User.crudInterface.modify(newUser.email, newUser, "userModel", "email");
+    const result = await User.crudInterface.modify(newUser._id, newUser, "userModel", "_id");
     if(result.success.status) result.data = User.jsonToObject(newUser, result.data);
     return result
   }
@@ -78,6 +78,10 @@ class User {
     const result = await User.dependency.populate('apiaryModel', this, 'owner')
     if(result.success.status) this.apiaries = result.data;
     return result;
+  }
+
+  async purchaseUpgrade(upgrade){
+    
   }
 }
 

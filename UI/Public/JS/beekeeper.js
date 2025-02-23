@@ -618,6 +618,13 @@ window.onclick = function (event) {
   if (event.target === modal) {
     closeModal();
   }
+  if (event.target.classList.contains("modal")) {
+    if (event.target.id === "upgradeModal") {
+      closeUpgradeModal();
+    } else if (event.target.id === "beekeeperModal") {
+      closeModal();
+    }
+  }
 };
 
 function closeModal() {
@@ -647,4 +654,150 @@ function togglePassword() {
     toggleButton.classList.remove("fa-eye-slash");
     toggleButton.classList.add("fa-eye");
   }
+}
+
+function requestKitRemoval(kitId) {
+  const kitNames = {
+    rimba: "The Mele-RIMBA Kit",
+    monitoring: "Internal Hive Monitoring Kit",
+    thermohygro: "ThermoHygro-Regulators Kit",
+    scanner: "Yield Scanner Kit",
+    intrusion: "On Door Intrusion Prevention Kit",
+  };
+
+  if (
+    confirm(`Are you sure you want to request removal of ${kitNames[kitId]}?`)
+  ) {
+    // Here you would normally send a request to the server
+    // For now, just show a notification
+    alert(
+      `Removal request for ${kitNames[kitId]} has been sent to the administrator.`
+    );
+  }
+}
+
+function openUpgradeModal() {
+  const modal = document.getElementById("upgradeModal");
+  modal.style.display = "block";
+  fetchAvailableUpgrades();
+}
+
+function closeUpgradeModal() {
+  const modal = document.getElementById("upgradeModal");
+  modal.style.display = "none";
+}
+
+async function fetchAvailableUpgrades() {
+  try {
+    // Update endpoint to use the existing getProducts controller
+    const response = await fetch("/keeper/getProducts", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    console.log("Fetched products:", result);
+
+    if (result.data) {
+      displayAvailableUpgrades(result.data);
+    } else {
+      throw new Error("No products data received");
+    }
+  } catch (error) {
+    console.error("Error fetching upgrades:", error);
+    showNotification(`Error fetching upgrades: ${error.message}`, "error");
+  }
+}
+
+function displayAvailableUpgrades(products) {
+  const upgradesList = document.getElementById("upgradesList");
+  const installedKits = Array.from(
+    document.querySelectorAll(".kit-info h4")
+  ).map((el) => el.textContent.trim());
+
+  if (!products || products.length === 0) {
+    upgradesList.innerHTML = "<p>No upgrades available.</p>";
+    return;
+  }
+
+  upgradesList.innerHTML = products
+    .map((product) => {
+      const isInstalled = installedKits.includes(product.name);
+      return `
+          <div class="upgrade-item ${isInstalled ? "installed" : ""}">
+              <input type="checkbox" 
+                  class="upgrade-checkbox" 
+                  value="${product._id}"
+                  ${isInstalled ? "checked disabled" : ""}
+              >
+              <div class="upgrade-info">
+                  <span class="upgrade-name">${product.name}</span>
+                  ${
+                    isInstalled
+                      ? '<span class="upgrade-status">(Already Installed)</span>'
+                      : product.description
+                      ? `<p class="upgrade-description">${product.description}</p>`
+                      : ""
+                  }
+              </div>
+          </div>
+      `;
+    })
+    .join("");
+}
+
+async function purchaseUpgrades() {
+  const selectedUpgrades = Array.from(
+    document.querySelectorAll(".upgrade-checkbox:checked:not(:disabled)")
+  ).map((cb) => cb.value);
+
+  if (selectedUpgrades.length === 0) {
+    showNotification("Please select at least one upgrade", "error");
+    return;
+  }
+
+  if (confirm("Are you sure you want to purchase these upgrades?")) {
+    try {
+      const response = await fetch("/api/purchaseProducts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ productIds: selectedUpgrades }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      if (result.success) {
+        showNotification("Upgrades purchased successfully", "success");
+        closeUpgradeModal();
+        location.reload();
+      } else {
+        throw new Error(result.message || "Error purchasing upgrades");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      showNotification(`Error processing purchase: ${error.message}`, "error");
+    }
+  }
+}
+
+function showNotification(message, type) {
+  const notification = document.createElement("div");
+  notification.className = `notification ${type}`;
+  notification.textContent = message;
+  document.body.appendChild(notification);
+
+  setTimeout(() => {
+    notification.remove();
+  }, 3000);
 }

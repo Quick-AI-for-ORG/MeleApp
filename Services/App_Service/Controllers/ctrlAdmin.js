@@ -300,3 +300,74 @@ exports.getAllSensors = async (req, res) => {
     res.status(500).json({ success: false, error: error.message });
   }
 };
+
+exports.getAllHiveUpgrades = async (req, res) => {
+  try {
+    console.log("Fetching hive upgrades...");
+    const items = await meleDB
+      .collection("hiveupgrades")
+      .find(
+        {},
+        {
+          projection: {
+            _id: 1,
+            operational: 1,
+            createdAt: 1,
+          },
+        }
+      )
+      .sort({ createdAt: -1 })
+      .toArray();
+
+    console.log("Raw hive upgrades:", items);
+
+    const formattedItems = items.map((item) => ({
+      ...item,
+      _id: item._id.toString(),
+      createdAt: item.createdAt ? new Date(item.createdAt).toISOString() : null,
+    }));
+
+    console.log("Formatted hive upgrades:", formattedItems);
+    res.json({ success: true, items: formattedItems });
+  } catch (error) {
+    console.error("Error getting hive upgrades:", error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+exports.deployHiveUpgrade = async (req, res) => {
+  try {
+    const { upgradeId } = req.body;
+    const result = await meleDB.collection("hiveupgrades").updateOne(
+      {
+        _id: new mongoose.Types.ObjectId(upgradeId),
+        operational: false, // Only allow update if it's not already deployed
+      },
+      {
+        $set: {
+          operational: true,
+          deployedAt: new Date(),
+        },
+      }
+    );
+
+    if (result.matchedCount === 0) {
+      return res.status(400).json({
+        success: false,
+        error: "Upgrade not found or already deployed",
+      });
+    }
+
+    if (result.modifiedCount === 0) {
+      return res.status(400).json({
+        success: false,
+        error: "No changes made",
+      });
+    }
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error("Error deploying hive upgrade:", error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+};

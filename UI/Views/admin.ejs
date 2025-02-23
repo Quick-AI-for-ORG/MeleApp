@@ -137,7 +137,7 @@
                                         <%= user.role || 'beekeeper' %>
                                     </p>
                                     <span class="timestamp">Joined <%= new Date(user.createdAt).toLocaleDateString() %>
-                                            </span>
+                                    </span>
                                 </div>
                                 <div class="activity-actions">
                                     <button class="action-btn edit" onclick='showEditModal("user", "<%= user._id %>")'>
@@ -153,37 +153,36 @@
                     </div>
                 </div>
 
-                <!-- Recent Products -->
-                <div class="activity-card products-list">
+                <!-- Hive Upgrades List (Moved here) -->
+                <div class="activity-card hiveupgrades-list">
                     <div class="card-header">
-                        <h3><i class="fas fa-box"></i> Recent Products</h3>
-                        <div class="header-actions">
-                            <button class="add-btn" onclick="showAddModal('product')">Add New</button>
-                            <button class="view-all">View All</button>
-                        </div>
+                        <h3><i class="fas fa-tools"></i> Hive Upgrades</h3>
+                        <button class="view-all">View All</button>
                     </div>
                     <div class="card-content">
-                        <% recentProducts.forEach(product=> { %>
-                            <div class="activity-item" data-product-id="<%= product._id %>">
-                                <div class="product-icon">
-                                    <i class="fas fa-box"></i>
+                        <% recentHiveUpgrades.forEach(upgrade=> { %>
+                            <div class="activity-item" data-hiveupgrade-id="<%= upgrade._id %>">
+                                <div class="hiveupgrade-icon">
+                                    <i class="fas fa-tools"></i>
                                 </div>
                                 <div class="activity-info">
-                                    <h4>
-                                        <%= product.name %>
+                                    <h4>ID: <%= upgrade._id %>
                                     </h4>
-                                    <p>$<%= product.price %>
+                                    <p class="operational-status <%= upgrade.operational ? 'active' : 'inactive' %>">
+                                        <%= upgrade.operational ? 'Deployed' : 'Pending' %>
                                     </p>
-                                    <span class="timestamp">
-                                        Added <%= new Date(product.createdAt).toLocaleDateString() %>
-                                    </span>
                                 </div>
                                 <div class="activity-actions">
-                                    </button>
-                                    <button class="action-btn delete"
-                                        onclick="showConfirmModal('product', '<%= product._id %>', '<%= product.name %>')">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
+                                    <% if (!upgrade.operational) { %>
+                                        <button class="action-btn deploy"
+                                            onclick="deployHiveUpgrade('<%= upgrade._id %>')">
+                                            <i class="fas fa-rocket"></i>
+                                        </button>
+                                        <% } %>
+                                            <button class="action-btn delete"
+                                                onclick="showConfirmModal('hiveupgrade', '<%= upgrade._id %>', '<%= upgrade._id %>')">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
                                 </div>
                             </div>
                             <% }); %>
@@ -301,6 +300,43 @@
 
                                     <button class="action-btn delete"
                                         onclick="showConfirmModal('sensor', '<%= sensor._id %>', '<%= sensor.name %>')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <% }); %>
+                    </div>
+                </div>
+
+                <!-- Recent Products -->
+                <div class="activity-card products-list">
+                    <div class="card-header">
+                        <h3><i class="fas fa-box"></i> Recent Products</h3>
+                        <div class="header-actions">
+                            <button class="add-btn" onclick="showAddModal('product')">Add New</button>
+                            <button class="view-all">View All</button>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <% recentProducts.forEach(product=> { %>
+                            <div class="activity-item" data-product-id="<%= product._id %>">
+                                <div class="product-icon">
+                                    <i class="fas fa-box"></i>
+                                </div>
+                                <div class="activity-info">
+                                    <h4>
+                                        <%= product.name %>
+                                    </h4>
+                                    <p>$<%= product.price %>
+                                    </p>
+                                    <span class="timestamp">
+                                        Added <%= new Date(product.createdAt).toLocaleDateString() %>
+                                    </span>
+                                </div>
+                                <div class="activity-actions">
+                                    </button>
+                                    <button class="action-btn delete"
+                                        onclick="showConfirmModal('product', '<%= product._id %>', '<%= product.name %>')">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </div>

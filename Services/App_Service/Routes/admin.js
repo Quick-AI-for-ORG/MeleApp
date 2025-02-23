@@ -3,6 +3,7 @@ const router = express.Router();
 const mongoose = require("mongoose");
 const ctrlHive = require("../Controllers/ctrlHive");
 const ctrlAdmin = require("../Controllers/ctrlAdmin");
+const ctrlPages = require("../Controllers/ctrlPages");
 
 router.get("/dashboard", async (req, res) => {
   try {
@@ -93,14 +94,14 @@ router.get("/dashboard", async (req, res) => {
       .collection("users")
       .find(
         {},
-        { 
-          projection: { 
-            firstName: 1, 
-            lastName: 1, 
-            email: 1, 
+        {
+          projection: {
+            firstName: 1,
+            lastName: 1,
+            email: 1,
             role: 1, // Add role to projection
-            createdAt: 1 
-          } 
+            createdAt: 1,
+          },
         }
       )
       .sort({ createdAt: -1 })
@@ -123,6 +124,14 @@ router.get("/dashboard", async (req, res) => {
       .limit(5)
       .toArray();
 
+    // Get recent hive upgrades
+    const recentHiveUpgrades = await meleDB
+      .collection("hiveupgrades")
+      .find({})
+      .sort({ createdAt: -1 })
+      .limit(5)
+      .toArray();
+
     res.render("admin", {
       layout: false,
       stats: {
@@ -137,6 +146,7 @@ router.get("/dashboard", async (req, res) => {
       recentSensors,
       recentUsers: usersWithNames,
       recentProducts,
+      recentHiveUpgrades, // Add this line
     });
   } catch (error) {
     console.error("Database Error:", error);
@@ -168,5 +178,9 @@ router.get("/getAllProducts", ctrlAdmin.getAllProducts);
 router.get("/getAllSensors", ctrlAdmin.getAllSensors);
 router.get("/getAllHives", ctrlAdmin.getAllHives);
 router.get("/getAllApiaries", ctrlAdmin.getAllApiaries);
+router.get("/getAllHiveUpgrades", ctrlAdmin.getAllHiveUpgrades);
+
+// Add deploy route for hive upgrades
+router.post("/deployHiveUpgrade", ctrlAdmin.deployHiveUpgrade);
 
 module.exports = router;

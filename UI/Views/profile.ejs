@@ -14,7 +14,7 @@
 <body>
     <!-- Include the navbar -->
     <%- include('Partials/navbar', { user: user }) %>
-
+    <%- include('./Layouts/message.ejs') %>
         <div class="profile-container">
             <div class="profile-card">
                 <% if (message) { %>
@@ -87,7 +87,6 @@
         </div>
 
         <script>
-            // Clear any messages after 5 seconds
             setTimeout(() => {
                 const alert = document.querySelector('.alert');
                 if (alert) {
@@ -186,7 +185,6 @@
                 }
             }
         </script>
-        <!-- Include Bootstrap JS -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

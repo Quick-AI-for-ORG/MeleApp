@@ -18,6 +18,7 @@
     "express": "^4.21.2",
     "express-ejs-layouts": "^2.5.1",
     "express-session": "^1.18.1",
+    "mele_app": "file:",
     "mongoose": "^8.3.4",
     "nodemon": "^3.1.9"
   }

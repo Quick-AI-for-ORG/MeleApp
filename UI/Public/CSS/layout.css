@@ -8,8 +8,7 @@ span {
   font-size: medium;
   vertical-align: middle;
 }
-/* Start Footer */
-/* Style for the entire footer */
+
 footer {
   background-color: #16404d;
   color: #fff;
@@ -21,16 +20,14 @@ footer {
   width: 100%;
 }
 
-/* Style for footer content */
 .footer-content {
   display: flex;
   justify-content: space-between;
   max-width: 1300px;
   margin: 0 auto;
-  flex-wrap: wrap; /* Allow flex items to wrap to the next line */
+  flex-wrap: wrap;
 }
 
-/* Style for the contact details */
 .contact-details {
   text-align: left;
   max-width: 400px;
@@ -48,19 +45,18 @@ footer {
   font-size: 14px;
 }
 
-/* Style for the contact form */
 .contact-form {
   display: flex;
   flex-direction: column;
   text-align: left;
-  max-width: 400px; /* Limit the width to keep it smaller */
+  max-width: 400px;
   margin: 0 auto;
 }
 
 .contact-form h3 {
-  font-size: 16px; /* Slightly smaller font size for the heading */
+  font-size: 16px;
   margin-bottom: 8px;
-  color: #ffffff; /* Purple color for headings */
+  color: #ffffff;
 }
 
 .contact-form label {
@@ -72,7 +68,7 @@ footer {
 .contact-form input,
 .contact-form textarea {
   width: 100%;
-  padding: 6px; /* Slightly smaller padding */
+  padding: 6px;
   margin-top: 4px;
   border: 1px solid #555;
   border-radius: 5px;
@@ -84,7 +80,7 @@ footer {
   color: #fff;
   border: none;
   border-radius: 5px;
-  padding: 6px 15px; /* Slightly smaller padding */
+  padding: 6px 15px;
   margin-top: 8px;
   cursor: pointer;
   font-size: 14px;
@@ -94,9 +90,8 @@ footer {
   background-color: #fca311;
 }
 
-/* Style for the "We Proudly Accept" section */
 .accept {
-  max-width: 150px; /* Adjust the max-width as per your design */
+  max-width: 150px;
   text-align: center;
 }
 
@@ -106,7 +101,7 @@ footer {
 }
 
 .accept img {
-  max-width: 100%; /* Ensure the images fit within the section */
+  max-width: 100%;
   height: auto;
   margin-top: 8px;
 }
@@ -115,9 +110,11 @@ footer {
   position: relative;
   z-index: 1;
 }
+
 ::-webkit-scrollbar {
   display: none;
 }
+
 @keyframes moving {
   0% {
     opacity: 0;
@@ -128,31 +125,34 @@ footer {
     transform: translateX(0px);
   }
 }
+
 footer *,
 .navbar-nav {
-  animation: moving 1.5s ease-in-out; /* Adjust duration as needed */
+  animation: moving 1.5s ease-in-out;
 }
+
 #searchResults {
   position: absolute;
-  top: 100%; /* Position it below the search bar */
+  top: 100%;
   left: 25%;
   width: 34%;
-  background-color: #fff; /* Set background color */
-  border: 1px solid #ccc; /* Add a border for better visibility */
-  z-index: 1000; /* Set a z-index to control stacking order */
+  background-color: #fff;
+  border: 1px solid #ccc;
+  z-index: 1000;
   display: none;
   overflow: scroll;
-  scrollbar-width: thin; /* For Firefox */
-  scrollbar-color: darkgray lightgray; /* For Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: darkgray lightgray;
 }
 
 #searchResults a {
   display: block;
-  font-size: 14px; /* Increase font size */
+  font-size: 14px;
   color: #000;
   padding: 5px;
   margin: 0;
 }
+
 #searchResults a:hover {
   border: 3px solid #fca311;
   border-radius: 10px;
@@ -160,7 +160,7 @@ footer *,
 
 .navbar {
   border-bottom: 2px solid #fca311;
-  margin-bottom: 0.5rem; /* Reduced from 3rem */
+  margin-bottom: 0.5rem;
 }
 
 .nav-link {
@@ -174,7 +174,6 @@ footer *,
   color: #fca311 !important;
 }
 
-/* Navbar Icon Styles */
 .nav-link i {
   color: #fca311;
   transition: transform 0.3s ease, color 0.3s ease;
@@ -184,7 +183,6 @@ footer *,
   color: #df951d;
 }
 
-/* Make icons slightly larger */
 .fa-lg {
   font-size: 1.2em;
 }
@@ -194,7 +192,6 @@ footer *,
   color: #16404d;
   transition: all 0.3s ease;
   vertical-align: middle;
-  transition: all 0.3s ease;
 }
 
 #on,
@@ -218,39 +215,81 @@ hr {
   opacity: 0.5;
 }
 
-/* Layout Spacing */
 body {
-  padding-top: 80px; /* Reduced from 90px */
-  margin-bottom: 30px; /* Reduced from 60px */
+  padding-top: 80px;
+  margin-bottom: 30px;
 }
 
-/* Content Wrapper */
 main {
-  min-height: calc(100vh - 80px - 30px); /* Updated to match new spacing */
-  margin-bottom: 2rem; /* Reduced from 5rem */
-} /* Custom Nav Icons */
+  min-height: calc(100vh - 80px - 30px);
+  margin-bottom: 2rem;
+}
+
 .nav-icon {
   width: 24px;
   height: 24px;
   margin-right: 8px;
   transition: transform 0.3s ease;
   vertical-align: middle;
-} /* Keep honey and bee icons original */
+}
+
 .honey-icon,
 .bee-icon,
 .info-icon {
   filter: none;
 }
-/* .info-icon {
-  filter: brightness(0) saturate(100%) invert(72%) sepia(32%) saturate(1496%)
-    hue-rotate(346deg) brightness(97%) contrast(95%);
-}
-
-.nav-link:hover .info-icon {
-  filter: brightness(0) saturate(100%) invert(24%) sepia(16%) saturate(1966%)
-    hue-rotate(153deg) brightness(94%) contrast(87%);
-} */
 
 .nav-link:hover .nav-icon {
   transform: scale(1.1);
+}
+
+/* Responsive Footer */
+@media (max-width: 1024px) {
+  .footer-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .contact-details,
+  .contact-form {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column;
+  }
+
+  .contact-details,
+  .contact-form,
+  .accept {
+    max-width: 90%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-details h3,
+  .contact-form h3 {
+    font-size: 18px;
+  }
+
+  .contact-details p,
+  .contact-form label,
+  .accept p {
+    font-size: 12px;
+  }
+
+  .contact-form input,
+  .contact-form textarea {
+    font-size: 12px;
+    padding: 4px;
+  }
+
+  .contact-form button {
+    font-size: 12px;
+    padding: 4px 10px;
+  }
 }

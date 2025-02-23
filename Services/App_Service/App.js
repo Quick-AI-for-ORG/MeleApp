@@ -12,6 +12,7 @@ const app = express();
 const rootRouter = require("./Routes/root")
 const keeperRouter = require("./Routes/keeper")
 const adminRouter = require("./Routes/admin")
+const ctrlPages = require("./Controllers/ctrlPages")
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -26,6 +27,7 @@ app.use(expressLayouts);
 app.use("/", rootRouter);
 app.use("/keeper", keeperRouter);
 app.use("/admin", adminRouter);
+app.get('*', ctrlPages._PUBLIC.notFound);
 
 app.set("layout", "Layouts/layout");
 
