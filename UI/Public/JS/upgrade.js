@@ -23,35 +23,48 @@ document.addEventListener("DOMContentLoaded", function () {
     event.preventDefault();
 
     if (validateForm()) {
-      // Show confirmation modal
-      const modal = document.getElementById("confirmationModal");
-      modal.style.display = "flex";
-
-      // Don't submit form automatically
-      return false;
+      // Submit form data using fetch
+      fetch("/keeper/upgrade", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          apiaryName: document.getElementById("apiaryName").value,
+          hivesCount: document.getElementById("hivesCount").value,
+          latitude: document.getElementById("latitude").value,
+          longitude: document.getElementById("longitude").value,
+          kitSelection: Array.from(
+            document.querySelectorAll('input[name="kitSelection"]:checked')
+          ).map((input) => input.value),
+          framesCount: document.getElementById("framesCount").value,
+          length: document.getElementById("length").value,
+          width: document.getElementById("width").value,
+          height: document.getElementById("height").value,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            const modal = document.getElementById("confirmationModal");
+            modal.style.display = "flex";
+          } else {
+            alert("Failed to process upgrade request. Please try again.");
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          alert("An error occurred. Please try again.");
+        });
     }
   });
-
-  // Validate location in form submission
-  const originalValidateForm = validateForm;
-
-  validateForm = function () {
-    if (
-      !document.getElementById("latitude").value ||
-      !document.getElementById("longitude").value
-    ) {
-      alert("Please select a location on the map");
-      return false;
-    }
-    return originalValidateForm();
-  };
 });
 
 function closeConfirmation() {
   const modal = document.getElementById("confirmationModal");
   modal.style.display = "none";
-  // Now submit the form and redirect
-  document.querySelector(".upgrade-form").submit();
+  // Remove the form submission and just reset the form
+  document.querySelector(".upgrade-form").reset();
 }
 
 function validateForm() {
@@ -82,7 +95,7 @@ function initMap() {
     center: { lat: 30.0444, lng: 31.2357 }, // Cairo coordinates
     zoom: 8,
     mapTypeControl: true,
-    streetViewControl: false
+    streetViewControl: false,
   });
 
   const searchInput = document.getElementById("searchLocation");

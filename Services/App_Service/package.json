@@ -20,6 +20,7 @@
     "express-session": "^1.18.1",
     "mele_app": "file:",
     "mongoose": "^8.3.4",
+    "nodemailer": "^6.10.0",
     "nodemon": "^3.1.9"
   }
 }
