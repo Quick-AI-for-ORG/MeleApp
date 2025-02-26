@@ -57,10 +57,10 @@ def forecast():
             temps = data['temps']
             data = forecaster.loadAndPreprocessData(dates, temps,'D')
             model = forecaster.trainArimaModel(data)
-            forecast = forecaster.generateForecast(model,10)
-            forecast = forecast.tolist()
+            forecasted = forecaster.generateForecast(model,10)
+            forecasted = forecasted.tolist()
             return jsonify({
-                "forecast": forecast
+                "forecast": forecasted
             })
         
         except Exception as e:
@@ -86,15 +86,18 @@ def honeyInspect():
 def fitNormal():
     try:
         data = request.get_json()
-        vibrationAnomalyDetector.train(data["vibrationReadings"] , 5)
+        data = np.array(data["vibrationReadings"])
+        anomalyDetector.train( data , 5)
         return jsonify({"status":"Sucessfully trained"})
     except Exception as e:
         return jsonify({"error":str(e)})
+
 @app.route("/anomaly",methods=["POST"])
 def detectAnomaly():
     try:
         data = request.get_json()
-        predictions, errors, threshold, anomalies = vibrationAnomalyDetector.test(data["vibrationReadings"])
+        data = np.array(data["vibrationReadings"])
+        predictions, errors, threshold, anomalies = anomalyDetector.test(data,75)
         return jsonify({"anomalies":anomalies})
     except Exception as e:
         return jsonify({"error":str(e)})
@@ -110,5 +113,6 @@ def detectAnomaly():
     
 #     except Exception as e:
 #         return jsonify({"error": str(e)}), 500
+
 if __name__ == '__main__':
     app.run(debug=True)
