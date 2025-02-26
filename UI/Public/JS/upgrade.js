@@ -58,6 +58,8 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
   });
+
+  initMap();
 });
 
 function closeConfirmation() {
@@ -90,58 +92,60 @@ let map;
 let marker;
 
 function initMap() {
-  console.log("Map initializing..."); // Debug log
-  map = new google.maps.Map(document.getElementById("map"), {
-    center: { lat: 30.0444, lng: 31.2357 }, // Cairo coordinates
-    zoom: 8,
-    mapTypeControl: true,
-    streetViewControl: false,
+  // Initialize the map
+  map = L.map("map").setView([30.0444, 31.2357], 8); // Cairo coordinates
+
+  // Add OpenStreetMap tile layer
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: "© OpenStreetMap contributors",
+  }).addTo(map);
+
+  // Add geocoding control
+  const geocoder = L.Control.geocoder({
+    defaultMarkGeocode: false,
+  }).addTo(map);
+
+  // Handle geocoding results
+  geocoder.on("markgeocode", function (e) {
+    const latlng = e.geocode.center;
+    placeMarker(latlng);
+    map.setView(latlng, 13);
   });
 
+  // Handle map clicks
+  map.on("click", function (e) {
+    placeMarker(e.latlng);
+  });
+
+  // Initialize search input
   const searchInput = document.getElementById("searchLocation");
-  const autocomplete = new google.maps.places.Autocomplete(searchInput);
-
-  map.addListener("click", (e) => {
-    placeMarker(e.latLng);
-  });
-
-  autocomplete.addListener("place_changed", () => {
-    const place = autocomplete.getPlace();
-    if (place.geometry) {
-      map.setCenter(place.geometry.location);
-      placeMarker(place.geometry.location);
-    }
+  searchInput.addEventListener("change", function () {
+    geocoder.geocode(this.value);
   });
 }
 
-// Make sure initMap is globally available
-window.initMap = initMap;
-
-function placeMarker(location) {
+function placeMarker(latlng) {
   if (marker) {
-    marker.setMap(null);
+    map.removeLayer(marker);
   }
-  marker = new google.maps.Marker({
-    position: location,
-    map: map,
-  });
 
-  document.getElementById("latitude").value = location.lat();
-  document.getElementById("longitude").value = location.lng();
+  marker = L.marker(latlng).addTo(map);
 
-  // Update display text
-  updateLocationDisplay(location);
+  document.getElementById("latitude").value = latlng.lat;
+  document.getElementById("longitude").value = latlng.lng;
+
+  // Update location display
+  updateLocationDisplay(latlng);
 }
 
-function updateLocationDisplay(location) {
-  const geocoder = new google.maps.Geocoder();
-  geocoder.geocode({ location: location }, (results, status) => {
-    if (status === "OK") {
-      if (results[0]) {
-        document.getElementById(
-          "selectedLocation"
-        ).textContent = `Selected: ${results[0].formatted_address}`;
-      }
+function updateLocationDisplay(latlng) {
+  // Use Leaflet's geocoding control to get address
+  const geocoder = L.Control.Geocoder.nominatim();
+  geocoder.reverse(latlng, map.getMaxZoom(), function (results) {
+    if (results && results.length > 0) {
+      document.getElementById(
+        "selectedLocation"
+      ).textContent = `Selected: ${results[0].name}`;
     }
   });
 }
