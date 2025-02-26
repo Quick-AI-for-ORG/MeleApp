@@ -22,6 +22,7 @@
   border-radius: 15px;
   padding: 2rem;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 
 .header {
@@ -286,6 +287,28 @@ input[type="range"] {
   outline: none;
   border-color: #e5e7eb;
   box-shadow: none;
+}
+
+.back-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: #16404d;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+  background: #fca311;
+  color: white;
+  transform: scale(1.1);
 }
 
 @keyframes slideIn {
