@@ -137,3 +137,5 @@ dist
 .pt
 
 Papers/*
+
+__pycache__/*

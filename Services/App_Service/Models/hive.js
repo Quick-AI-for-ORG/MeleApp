@@ -19,7 +19,7 @@ class Hive {
         "apiaryModel": this.apiaryRef,
       }
     }
-    this.product = null
+    this.products = []
     this.threats = []
     this.readings = []
   }
@@ -77,13 +77,9 @@ class Hive {
     return await Hive.crudInterface.remove(this._id, "hiveModel", "_id");
   }
 
-  async getProduct(){
+  async getProducts(){
     const result = await Hive.dependency.populate('hiveUpgradeModel', this, 'hiveRef')
-    if(result.success.status) {
-      const populatuin = await Product.get(result.data.productRef)
-      if(populatuin.success.status) this.product = populatuin.data;
-      else return populatuin
-    }
+    if(result.success.status) this.products = result.data;
     return result;
   }
 
