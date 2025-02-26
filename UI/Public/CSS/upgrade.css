@@ -261,6 +261,33 @@ input[type="range"] {
   transform: translateY(-2px);
 }
 
+.required-field {
+  color: #dc2626;
+  margin-left: 4px;
+}
+
+.location-status {
+  color: #dc2626;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+.location-status.selected {
+  color: #16404d;
+}
+
+.readonly-field {
+  background-color: #f3f4f6;
+  cursor: default;
+}
+
+.readonly-field:focus {
+  outline: none;
+  border-color: #e5e7eb;
+  box-shadow: none;
+}
+
 @keyframes slideIn {
   from {
     opacity: 0;

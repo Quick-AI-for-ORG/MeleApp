@@ -74,6 +74,13 @@ function validateForm() {
   const width = document.getElementById("width").value;
   const height = document.getElementById("height").value;
   const agreement = document.getElementById("agreement");
+  const latitude = document.getElementById("latitude").value;
+  const longitude = document.getElementById("longitude").value;
+
+  if (!latitude || !longitude) {
+    alert("Please select a location on the map");
+    return false;
+  }
 
   if (length <= 0 || width <= 0 || height <= 0) {
     alert("Please enter valid dimensions");
@@ -100,52 +107,47 @@ function initMap() {
     attribution: "© OpenStreetMap contributors",
   }).addTo(map);
 
-  // Add geocoding control
-  const geocoder = L.Control.geocoder({
+  // Add search control to the map
+  const searchControl = L.Control.geocoder({
     defaultMarkGeocode: false,
+    position: "topleft",
+    placeholder: "Search for a location...",
   }).addTo(map);
 
-  // Handle geocoding results
-  geocoder.on("markgeocode", function (e) {
-    const latlng = e.geocode.center;
-    placeMarker(latlng);
-    map.setView(latlng, 13);
+  // Handle search results
+  searchControl.on("markgeocode", function (e) {
+    const location = e.geocode.center;
+    updateLocation(location, e.geocode.name);
+    map.setView(location, 13);
   });
 
   // Handle map clicks
   map.on("click", function (e) {
-    placeMarker(e.latlng);
-  });
-
-  // Initialize search input
-  const searchInput = document.getElementById("searchLocation");
-  searchInput.addEventListener("change", function () {
-    geocoder.geocode(this.value);
+    const geocoder = L.Control.Geocoder.nominatim();
+    geocoder.reverse(e.latlng, map.getMaxZoom(), function (results) {
+      if (results && results.length > 0) {
+        updateLocation(e.latlng, results[0].name);
+      }
+    });
   });
 }
 
-function placeMarker(latlng) {
+// New function to handle location updates
+function updateLocation(latlng, address) {
+  // Update or create marker
   if (marker) {
     map.removeLayer(marker);
   }
-
   marker = L.marker(latlng).addTo(map);
 
-  document.getElementById("latitude").value = latlng.lat;
-  document.getElementById("longitude").value = latlng.lng;
+  // Update form fields
+  document.getElementById("searchLocation").value = address;
+  document.getElementById("latitude").value = latlng.lat.toFixed(6);
+  document.getElementById("longitude").value = latlng.lng.toFixed(6);
 
-  // Update location display
-  updateLocationDisplay(latlng);
-}
-
-function updateLocationDisplay(latlng) {
-  // Use Leaflet's geocoding control to get address
-  const geocoder = L.Control.Geocoder.nominatim();
-  geocoder.reverse(latlng, map.getMaxZoom(), function (results) {
-    if (results && results.length > 0) {
-      document.getElementById(
-        "selectedLocation"
-      ).textContent = `Selected: ${results[0].name}`;
-    }
-  });
+  // Update status message
+  const statusElement = document.getElementById("selectedLocation");
+  statusElement.textContent = `Selected: ${address}`;
+  statusElement.style.color = "#16404d";
+  statusElement.classList.add("selected");
 }

@@ -54,7 +54,17 @@ const sendUpgradeConfirmation = async (userEmail, formData) => {
                                                         ${
                                                           formData.latitude &&
                                                           formData.longitude
-                                                            ? `<p style="margin: 5px 0;">📍 <strong>Location:</strong> Lat: ${formData.latitude}, Long: ${formData.longitude}</p>`
+                                                            ? `<div style="margin: 15px 0; padding: 10px; background-color: #f8f9fa; border-radius: 6px;">
+                                                                <p style="margin: 5px 0;">📍 <strong>Installation Location:</strong></p>
+                                                                <p style="margin: 5px 0 10px 20px;">Coordinates: ${formData.latitude}, ${formData.longitude}</p>
+                                                                <p style="margin: 5px 0 5px 20px;">
+                                                                    <a href="https://www.openstreetmap.org/?mlat=${formData.latitude}&mlon=${formData.longitude}&zoom=15" 
+                                                                       style="color: #fca311; text-decoration: none;" 
+                                                                       target="_blank">
+                                                                       View on OpenStreetMap ↗
+                                                                    </a>
+                                                                </p>
+                                                              </div>`
                                                             : ""
                                                         }
                                                     </div>
