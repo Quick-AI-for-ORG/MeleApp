@@ -114,5 +114,11 @@ def detectAnomaly():
 #     except Exception as e:
 #         return jsonify({"error": str(e)}), 500
 
+
+@app.route('/plotting', methods=['GET'])
+def plot():
+    anomalyDetector.plotErrors()
+    anomalyDetector.plotReconstructedData()
+    return jsonify({"status":"Plotted"})
 if __name__ == '__main__':
     app.run(debug=True)
