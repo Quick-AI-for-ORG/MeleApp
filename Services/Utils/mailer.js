@@ -74,6 +74,30 @@ const sendUpgradeConfirmation = async (userEmail, formData) => {
                                     </td>
                                 </tr>
 
+                                <!-- Weather Information -->
+                                ${
+                                  formData.weather
+                                    ? `<tr>
+                                        <td style="padding: 0 20px 20px;">
+                                            <table width="100%" cellpadding="20" cellspacing="0" style="background-color: white; border-radius: 8px; border: 1px solid #fca311;">
+                                                <tr>
+                                                    <td>
+                                                        <h3 style="color: #fca311; margin: 0 0 15px;">Weather Conditions 🌤️</h3>
+                                                        <div style="color: #16404d;">
+                                                            <p style="margin: 5px 0;">📍 <strong>Location:</strong> ${formData.weather.location}</p>
+                                                            <p style="margin: 5px 0;">🌡️ <strong>Temperature:</strong> ${formData.weather.temperature}°C</p>
+                                                            <p style="margin: 5px 0;">💧 <strong>Humidity:</strong> ${formData.weather.humidity}%</p>
+                                                            <p style="margin: 5px 0;">💨 <strong>Wind Speed:</strong> ${formData.weather.windSpeed} m/s</p>
+                                                            <p style="margin: 5px 0;">☁️ <strong>Conditions:</strong> ${formData.weather.description}</p>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>`
+                                    : ""
+                                }
+
                                 <!-- Next Steps Section -->
                                 <tr>
                                     <td style="padding: 0 20px 20px;">

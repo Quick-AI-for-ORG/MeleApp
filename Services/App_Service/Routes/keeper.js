@@ -6,6 +6,7 @@ const ctrlUser = require("../Controllers/ctrlUser");
 const ctrlProduct = require("../Controllers/ctrlProduct");
 
 const { sendUpgradeConfirmation } = require("../../Utils/mailer");
+const weatherService = require("../../Utils/weatherService");
 
 router.get("/", (req, res) => {
   if (!req.session.user) ctrlPages._PUBLIC.noLogin(req, res);
@@ -29,10 +30,25 @@ router.post("/upgrade", async (req, res) => {
   }
 
   try {
-    // Send confirmation email with all form data
+    const { apiaryName, latitude, longitude } = req.body;
+
+    // Log weather data
+    const weatherData = await weatherService.logWeatherData(
+      apiaryName,
+      latitude,
+      longitude
+    );
+
+    // Add weather data to the email
+    const formDataWithWeather = {
+      ...req.body,
+      weather: weatherData,
+    };
+
+    // Send confirmation email with weather data
     const emailSent = await sendUpgradeConfirmation(
       req.session.user.email,
-      req.body // Pass the entire form data object
+      formDataWithWeather
     );
 
     if (!emailSent) {
