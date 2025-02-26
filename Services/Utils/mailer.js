@@ -3,7 +3,7 @@ const nodemailer = require("nodemailer");
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: "dalia2110446@miuegypt.edu.eg",
+    user: "melerimba@gmail.com",
     pass: process.env.EMAIL_PASSWORD,
   },
 });
@@ -11,7 +11,7 @@ const transporter = nodemailer.createTransport({
 const sendUpgradeConfirmation = async (userEmail, formData) => {
   try {
     const mailOptions = {
-      from: "dalia2110446@miuegypt.edu.eg",
+      from: "melerimba@gmail.com",
       to: userEmail,
       subject: "🐝 Mele Keeper Upgrade Confirmation",
       html: `
