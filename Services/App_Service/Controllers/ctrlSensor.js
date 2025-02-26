@@ -1,4 +1,5 @@
 const Sensor = require('../Models/Sensor');
+const Reading = require('../Models/Reading');
 const Result = require("../../Shared/Result");
 
 const addSensor = async (req, res) => {
@@ -63,12 +64,29 @@ const getSensors = async (req, res) => {
 
 const getSensorReading = async (req, res) => {}
 
-
+const addSensorReading = async (req, res) => {
+    try {
+        const sensor = await Sensor.get(req.body.sensorType);
+        if (!sensor.success.status) return sensor.toJSON();
+        const readingJSON = {
+            sensorRef: sensor.data._id,
+            sensorValue: req.body.sensorValue,
+            hiveRef: req.body.hiveRef,
+            frameNum: req.body.frameNum || null,
+        }
+        const reading = new Reading(readingJSON)
+        const result = await reading.create();
+        return result.toJSON()
+    } catch (error) {
+        return new Result(-1, null, `Error saving reading: ${error.message}`).toJSON();
+    }
+}
 module.exports = {
     addSensor,
     removeSensor,
     updateSensor,
     getSensor,
     getSensors,
-    getSensorReading
+    getSensorReading,
+    addSensorReading
 }

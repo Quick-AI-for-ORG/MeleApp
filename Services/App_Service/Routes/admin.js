@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const ctrlHive = require("../Controllers/ctrlHive");
 const ctrlAdmin = require("../Controllers/ctrlAdmin");
 const ctrlPages = require("../Controllers/ctrlPages");
+const ctrlSensor = require("../Controllers/ctrlSensor");
 
 router.get("/dashboard", async (req, res) => {
   try {
@@ -156,6 +157,8 @@ router.get("/dashboard", async (req, res) => {
 
 router.post("/addHive", ctrlHive.addHive);
 router.post("/removeHive", ctrlHive.removeHive);
+
+router.post("/addSensorReading", ctrlSensor.addSensorReading);
 
 // Add new deletion routes
 router.delete("/hive", ctrlAdmin.deleteHive);
