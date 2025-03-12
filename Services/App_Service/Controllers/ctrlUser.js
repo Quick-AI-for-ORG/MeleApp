@@ -128,18 +128,35 @@ const logout = (req, res) => {
 }
 
 const getApiaries = async (req, res) => {
-    const user = req.session.user
+    try {
+    const user = new User(req.session.user)
     if (user) {
         const result = await user.getApiaries()
         if(result.success.status) req.session.user.apiaries = result.data
         else req.session.message = result.message
-        return res.json(result.toJSON())
+        return result.toJSON()
     }
-    return res.json(new Result(-1, null, 'No user logged in').toJSON())
+    return new Result(-1, null, 'No user logged in').toJSON()
+    }
+    catch (error) {
+        return new Result(-1, null, `Error fetching apiaries: ${error.message}`).toJSON()
+    }
 }
 
 const upgrade = (req, res) => {
-    
+    try{
+        const user = req.session.user
+        if (user) {
+            const result = user.purchaseUpgrade(upgradeJSON)
+            if(result.success.status) req.session.user = result.data
+            else req.session.message = result.message
+            return res.json(result.toJSON())
+        }
+        return res.json(new Result(-1, null, 'No user logged in').toJSON())
+    }
+    catch (error) {
+        return res.json(new Result(-1, null, `Error upgrading user: ${error.message}`).toJSON())
+    }
 }
 
 module.exports = {

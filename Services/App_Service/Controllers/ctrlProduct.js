@@ -47,9 +47,9 @@ const getProduct = async (req, res) => {
     try {
         const result = await Product.get(req.body.name);
         req.session.productDetails = result.data || {};
-        return res.json(result.toJSON());
+        return result.toJSON();
     } catch (error) {
-        return res.json(new Result(-1, null, `Error fetching product: ${error.message}`).toJSON());
+        return new Result(-1, null, `Error fetching product: ${error.message}`).toJSON();
     }
 }
 
@@ -57,9 +57,9 @@ const getProducts = async (req, res) => {
     try {
         const result = await Product.getAll();
         req.session.products = result.data || [];
-        return res.json(result.toJSON());
+        return result.toJSON()
     } catch (error) {
-        return res.json(new Result(-1, null, `Error fetching products: ${error.message}`).toJSON());
+        return new Result(-1, null, `Error fetching products: ${error.message}`).toJSON();
     }
 }
 

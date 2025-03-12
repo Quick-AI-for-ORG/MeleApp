@@ -48,7 +48,7 @@ const getApiary = async (req, res) => {
         const result = await Apiary.get(req.body._id);
         return res.json(result.toJSON());
     } catch (error) {
-        return res.json(new Result(-1, null, `Error fetching apiary: ${error.message}`).toJSON());
+        return new Result(-1, null, `Error fetching apiary: ${error.message}`).toJSON();
     }
 }
 
@@ -56,9 +56,9 @@ const getApiaries = async (req, res) => {
     try {
         const result = await Apiary.getAll();
         req.session.apiaries = result.data || [];
-        return res.json(result.toJSON());
+        return result.toJSON();
     } catch (error) {
-        return res.json(new Result(-1, null, `Error fetching apiaries: ${error.message}`).toJSON());
+        return new Result(-1, null, `Error fetching apiaries: ${error.message}`).toJSON();
     }
 }
 

@@ -9,7 +9,6 @@ const weatherService = require("../../Utils/weatherService");
 const localStreamService = require("../../Streaming/localStreamService");
 
 
-
 router.post("/register", ctrlUser.register);
 router.post("/login", ctrlUser.login);
 
