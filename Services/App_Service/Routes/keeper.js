@@ -82,7 +82,7 @@ router.get("/getProducts", async (req, res) => {
 });
 
 router.get("/test-stream", (req, res) => {
-  res.render("test-stream", { user: req.session.user || null });
+  res.render("test-stream", { user: req.session.user || null , layout: false });
 });
 
 router.post("/start-stream", async (req, res) => {
