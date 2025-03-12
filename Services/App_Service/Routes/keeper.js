@@ -8,29 +8,26 @@ const { sendUpgradeConfirmation } = require("../../Utils/mailer");
 const weatherService = require("../../Utils/weatherService");
 const localStreamService = require("../../Streaming/localStreamService");
 
-router.get("/", (req, res) => {
-  if (!req.session.user) ctrlPages._PUBLIC.noLogin(req, res);
-  else res.redirect("/keeper/dashboard");
-});
 
-router.get("/signup", ctrlPages._KEEPER.signup);
-router.get("/login", ctrlPages._KEEPER.login);
-router.get("/dashboard", ctrlPages._KEEPER.dashboard);
-router.get("/logout", ctrlUser.logout);
-router.get("/upgrade", (req, res) => {
-  res.render("upgrade", {
-    user: req.session.user || null,
-    kits: [
-      // ...your kits array...
-    ],
-  });
-});
-router.get("/profile", (req, res) => {
-  res.render("profile", { user: req.session.user || null });
-});
 
 router.post("/register", ctrlUser.register);
 router.post("/login", ctrlUser.login);
+
+router.use( (req, res, next) => {
+  if(!req.session.user) res.redirect("/noLogin");
+  else next();
+})
+router.get("/", (req, res) => {
+  res.redirect("/keeper/dashboard");
+});
+
+
+router.get("/dashboard", ctrlPages._KEEPER.dashboard);
+router.get("/profile", ctrlPages._KEEPER.profile);
+
+router.get("/logout", ctrlUser.logout);
+router.get("/upgrade", ctrlPages._KEEPER.upgrade);
+
 router.post("/profile/update", ctrlUser.updateUser);
 
 router.post("/upgrade", async (req, res) => {

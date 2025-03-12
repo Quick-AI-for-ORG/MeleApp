@@ -28,7 +28,7 @@ const signup = async (req, res) => {
 }
 const noLogin = (req, res) => {
   req.session.message = "Please login to access this page";
-  return res.redirect("/keeper/login");
+  res.redirect("/login");
 }
 const products = async (req, res) => {
     req.session.productDetails = undefined;
@@ -72,13 +72,18 @@ const notFound = (req, res) => {
     res.render("404", { user: req.session.user || "" });
 }
 
-const upgrade = async (req, res) => {     
+const upgrade = async (req, res) => {   
+      let message = req.session.message === undefined ? null : req.session.message;
+      req.session.message = undefined; 
       await ctrlProduct.getProducts(req, res);
+      await ctrlUser.getApiaries(req, res);
       res.render("upgrade", {
         user: req.session.user || "",
         layout: false,
+        message: message,
         kits: req.session.products || [],
-        googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY
+        googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
+        appiaries: req.session.user.apiaries || [],
       });
   }
 
