@@ -5,13 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WebRTC Stream Test</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         .container {
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
             padding-top: 100px;
-            /* Add padding-top to account for fixed navbar */
         }
 
         .video-container {
@@ -58,10 +58,34 @@
             background: #f8d7da;
             color: #721c24;
         }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background: #16404d;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 1000;
+        }
+
+        .back-btn:hover {
+            background: #fca311;
+        }
     </style>
 </head>
 
 <body>
+    <a href="/keeper/dashboard" class="back-btn">
+        <i class="fas fa-arrow-left"></i> Back to Dashboard
+    </a>
     <div class="container">
         <h1>WebRTC Stream Test</h1>
         <div class="video-container">
@@ -79,9 +103,9 @@
         const hiveId = 'test-hive-1';
 
         async function startStream() {
-            try {
-                updateStatus('Requesting camera access...', 'info');
+            updateStatus('Requesting camera access...', 'info');
 
+            try {
                 // Get local camera stream
                 localStream = await navigator.mediaDevices.getUserMedia({
                     video: {
@@ -110,19 +134,17 @@
             } catch (error) {
                 console.error('Error:', error);
                 updateStatus('Failed to start stream: ' + error.message, 'error');
-                if (localStream) {
-                    localStream.getTracks().forEach(track => track.stop());
-                }
             }
         }
 
         function stopStream() {
             if (localStream) {
                 localStream.getTracks().forEach(track => track.stop());
+                const video = document.getElementById('remoteVideo');
+                video.srcObject = null;
+
+                updateStatus('Stream stopped', 'info');
             }
-            const video = document.getElementById('remoteVideo');
-            video.srcObject = null;
-            updateStatus('Stream stopped', 'info');
         }
 
         function updateStatus(message, type) {
