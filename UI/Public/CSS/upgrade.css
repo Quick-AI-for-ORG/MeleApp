@@ -311,6 +311,43 @@ input[type="range"] {
   transform: scale(1.1);
 }
 
+.apiary-input-container {
+  position: relative;
+  width: 100%;
+}
+
+.apiary-input-container input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: #fff;
+  transition: all 0.3s ease;
+}
+
+.apiary-input-container input:focus {
+  outline: none;
+  border-color: #fca311;
+  box-shadow: 0 0 0 3px rgba(252, 163, 17, 0.1);
+}
+
+.apiary-input-container input::placeholder {
+  color: #9ca3af;
+}
+
+/* Style for the datalist dropdown */
+input::-webkit-calendar-picker-indicator {
+  color: #16404d;
+  cursor: pointer;
+  opacity: 0.6;
+  padding: 0.2rem;
+}
+
+input::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
 @keyframes slideIn {
   from {
     opacity: 0;

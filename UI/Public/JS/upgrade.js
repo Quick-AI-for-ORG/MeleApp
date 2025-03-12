@@ -30,7 +30,11 @@ document.addEventListener("DOMContentLoaded", function () {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          apiaryName: document.getElementById("apiaryName").value,
+          apiarySelection: document.getElementById("apiarySelection").value,
+          apiaryName:
+            document.getElementById("apiarySelection").value === "new"
+              ? document.getElementById("apiaryName").value
+              : null,
           hivesCount: document.getElementById("hivesCount").value,
           latitude: document.getElementById("latitude").value,
           longitude: document.getElementById("longitude").value,
@@ -58,6 +62,19 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
   });
+
+  function handleApiarySelection(value) {
+    const newApiaryGroup = document.getElementById("newApiaryGroup");
+    const apiaryNameInput = document.getElementById("apiaryName");
+
+    if (value === "new") {
+      newApiaryGroup.style.display = "block";
+      apiaryNameInput.required = true;
+    } else {
+      newApiaryGroup.style.display = "none";
+      apiaryNameInput.required = false;
+    }
+  }
 
   initMap();
 });

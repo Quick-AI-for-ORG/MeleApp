@@ -27,8 +27,23 @@
 
             <form class="upgrade-form" action="/keeper/upgrade" method="POST" onsubmit="return false;">
                 <div class="form-group">
-                    <label for="apiaryName">Apiary Name</label>
-                    <input type="text" id="apiaryName" name="apiaryName" required placeholder="Enter your apiary name">
+                    <label for="apiarySelection">Select or Create Apiary</label>
+                    <div class="apiary-input-container">
+                        <input type="text" id="apiaryName" name="apiaryName" placeholder="Enter or select apiary name"
+                            required list="apiaryList" autocomplete="off">
+                        <datalist id="apiaryList">
+                            <% if (apiaries && apiaries.length> 0) { %>
+                                <% apiaries.forEach(apiary=> { %>
+                                    <option value="<%= apiary.name %>">
+                                        <% }); %>
+                                            <% } %>
+                        </datalist>
+                    </div>
+                </div>
+
+                <div class="form-group" id="newApiaryGroup" style="display: none;">
+                    <label for="apiaryName">New Apiary Name</label>
+                    <input type="text" id="apiaryName" name="apiaryName" placeholder="Enter new apiary name">
                 </div>
 
                 <div class="form-group">
