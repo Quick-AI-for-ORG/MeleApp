@@ -13,18 +13,18 @@ const addProduct = async (req, res) => {
         };
         const product = new Product(productJSON);
         const result = await product.create();
-        return result.toJSON();
+        return res.json(result.toJSON());
     } catch (error) {
-        return new Result(-1, null, `Error creating product: ${error.message}`);
+        return res.json(new Result(-1, null, `Error creating product: ${error.message}`).toJSON());
     }
 }
 
 const removeProduct = async (req, res) => {
     try {
         const result = await Product.remove(req.body.name);
-        return result.toJSON();
+        return res.json(result.toJSON());
     } catch (error) {
-        return new Result(-1, null, `Error deleting product: ${error.message}`);
+        return res.json(new Result(-1, null, `Error deleting product: ${error.message}`).toJSON());
     }
 }
 
@@ -37,9 +37,9 @@ const updateProduct = async (req, res) => {
             }
         });
         const result = await Product.modify(update);
-        return result.toJSON();
+        return res.json(result.toJSON());
     } catch (error) {
-        return new Result(-1, null, `Error updating product: ${error.message}`);
+        return res.json(new Result(-1, null, `Error updating product: ${error.message}`).toJSON());
     }
 }
 
@@ -47,9 +47,9 @@ const getProduct = async (req, res) => {
     try {
         const result = await Product.get(req.body.name);
         req.session.productDetails = result.data || {};
-        return result.toJSON();
+        return res.json(result.toJSON());
     } catch (error) {
-        return new Result(-1, null, `Error fetching product: ${error.message}`);
+        return res.json(new Result(-1, null, `Error fetching product: ${error.message}`).toJSON());
     }
 }
 
@@ -57,13 +57,11 @@ const getProducts = async (req, res) => {
     try {
         const result = await Product.getAll();
         req.session.products = result.data || [];
-        return result.toJSON();
+        return res.json(result.toJSON());
     } catch (error) {
-        return new Result(-1, null, `Error fetching products: ${error.message}`);
+        return res.json(new Result(-1, null, `Error fetching products: ${error.message}`).toJSON());
     }
 }
-
-const purchaseProduct = async (req, res) => {}
 
 module.exports = {
     addProduct,
@@ -71,5 +69,4 @@ module.exports = {
     updateProduct,
     getProduct,
     getProducts,
-    purchaseProduct
 }

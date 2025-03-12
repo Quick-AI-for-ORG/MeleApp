@@ -13,18 +13,18 @@ const addApiary = async (req, res) => {
         };
         const apiary = new Apiary(apiaryJSON);
         const result = await apiary.create();
-        return result.toJSON();
+        return res.json(result.toJSON());
     } catch (error) {
-        return new Result(-1, null, `Error creating apiary: ${error.message}`);
+        return res.json(new Result(-1, null, `Error creating apiary: ${error.message}`).toJSON());
     }
 }
 
 const removeApiary = async (req, res) => {
     try {
         const result = await Apiary.remove(req.body._id);
-        return result.toJSON();
+        return res.json(result.toJSON());
     } catch (error) {
-        return new Result(-1, null, `Error deleting apiary: ${error.message}`);
+        return res.json(new Result(-1, null, `Error deleting apiary: ${error.message}`).toJSON());
     }
 }
 
@@ -37,18 +37,18 @@ const updateApiary = async (req, res) => {
             }
         });
         const result = await Apiary.modify(update);
-        return result.toJSON();
+        return res.json(result.toJSON());
     } catch (error) {
-        return new Result(-1, null, `Error updating apiary: ${error.message}`);
+        return res.json(new Result(-1, null, `Error updating apiary: ${error.message}`).toJSON());
     }
 }
 
 const getApiary = async (req, res) => {
     try {
         const result = await Apiary.get(req.body._id);
-        return result.toJSON();
+        return res.json(result.toJSON());
     } catch (error) {
-        return new Result(-1, null, `Error fetching apiary: ${error.message}`);
+        return res.json(new Result(-1, null, `Error fetching apiary: ${error.message}`).toJSON());
     }
 }
 
@@ -56,9 +56,9 @@ const getApiaries = async (req, res) => {
     try {
         const result = await Apiary.getAll();
         req.session.apiaries = result.data || [];
-        return result.toJSON();
+        return res.json(result.toJSON());
     } catch (error) {
-        return new Result(-1, null, `Error fetching apiaries: ${error.message}`);
+        return res.json(new Result(-1, null, `Error fetching apiaries: ${error.message}`).toJSON());
     }
 }
 

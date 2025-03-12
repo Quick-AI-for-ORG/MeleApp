@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const mongoose = require("mongoose");
 const ctrlPages = require("../Controllers/ctrlPages");
 const ctrlUser = require("../Controllers/ctrlUser");
 const ctrlProduct = require("../Controllers/ctrlProduct");

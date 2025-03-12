@@ -13,18 +13,18 @@ const addSensor = async (req, res) => {
         }
         const sensor = new Sensor(sensorJSON)
         const result = await sensor.create();
-        return result.toJSON();
+        return res.json(result.toJSON());
     } catch (error) {
-        return new Result(-1, null, `Error creating sensor: ${error.message}`);
+        return res.json(new Result(-1, null, `Error creating sensor: ${error.message}`).toJSON());
     }
 }
 
 const removeSensor = async (req, res) => {
     try {
         const result = await Sensor.remove(req.body.sensorType)
-        return result.toJSON();
+        return res.json(result.toJSON());
     } catch (error) {
-        return new Result(-1, null, `Error deleting sensor: ${error.message}`);
+        return res.json(new Result(-1, null, `Error deleting sensor: ${error.message}`).toJSON());
     }
 }
 
@@ -37,18 +37,18 @@ const updateSensor = async (req, res) => {
             }
         });
         const result = await Sensor.modify(update);
-        return result.toJSON();
+        return res.json(result.toJSON());
     } catch (error) {
-        return new Result(-1, null, `Error updating sensor: ${error.message}`);
+        return res.json(new Result(-1, null, `Error updating sensor: ${error.message}`).toJSON());
     }
 }
 
 const getSensor = async (req, res) => {
     try {
         const result = await Sensor.get(req.body.sensorType);
-        return result.toJSON();
+        return res.json(result.toJSON());
     } catch (error) {
-        return new Result(-1, null, `Error fetching sensor: ${error.message}`);
+        return res.json(new Result(-1, null, `Error fetching sensor: ${error.message}`).toJSON());
     }
 }
 
@@ -56,9 +56,9 @@ const getSensors = async (req, res) => {
     try {
         const result = await Sensor.getAll();
         req.session.sensors = result.data || [];
-        return result.toJSON();
+        return res.json(result.toJSON());
     } catch (error) {
-        return new Result(-1, null, `Error fetching sensors: ${error.message}`);
+        return res.json(new Result(-1, null, `Error fetching sensors: ${error.message}`).toJSON());
     }
 }
 
@@ -67,7 +67,7 @@ const getSensorReading = async (req, res) => {}
 const addSensorReading = async (req, res) => {
     try {
         const sensor = await Sensor.get(req.body.sensorType);
-        if (!sensor.success.status) return sensor.toJSON();
+        if (!sensor.success.status) return res.json(sensor.toJSON());
         const readingJSON = {
             sensorRef: sensor.data._id,
             sensorValue: req.body.sensorValue,
@@ -76,11 +76,12 @@ const addSensorReading = async (req, res) => {
         }
         const reading = new Reading(readingJSON)
         const result = await reading.create();
-        return result.toJSON()
+        return res.json(result.toJSON())
     } catch (error) {
-        return new Result(-1, null, `Error saving reading: ${error.message}`).toJSON();
+        return res.json(new Result(-1, null, `Error saving reading: ${error.message}`).toJSON());
     }
 }
+
 module.exports = {
     addSensor,
     removeSensor,
