@@ -1,19 +1,20 @@
 const mongoose = require("mongoose");
 const meleDB = mongoose.connection.useDb("meleDB");
+const Result = require("../../Shared/Result");
 
-exports.deleteHive = async (req, res) => {
+const deleteHive = async (req, res) => {
   try {
     const { hiveId } = req.body;
     await meleDB
       .collection("hives")
       .deleteOne({ _id: new mongoose.Types.ObjectId(hiveId) });
-    res.json({ success: true });
+    return new Result(1, { success: true }, "Hive deleted successfully");
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    return new Result(-1, null, `Error deleting hive: ${error.message}`);
   }
 };
 
-exports.deleteApiary = async (req, res) => {
+const deleteApiary = async (req, res) => {
   try {
     const { apiaryId } = req.body;
     await meleDB
@@ -21,49 +22,49 @@ exports.deleteApiary = async (req, res) => {
       .deleteOne({ _id: new mongoose.Types.ObjectId(apiaryId) });
     // Also delete associated hives
     await meleDB.collection("hives").deleteMany({ apiaryId: apiaryId });
-    res.json({ success: true });
+    return new Result(1, { success: true }, "Apiary and associated hives deleted successfully");
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    return new Result(-1, null, `Error deleting apiary: ${error.message}`);
   }
 };
 
-exports.deleteUser = async (req, res) => {
+const deleteUser = async (req, res) => {
   try {
     const { userId } = req.body;
     await meleDB
       .collection("users")
       .deleteOne({ _id: new mongoose.Types.ObjectId(userId) });
-    res.json({ success: true });
+    return new Result(1, { success: true }, "User deleted successfully");
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    return new Result(-1, null, `Error deleting user: ${error.message}`);
   }
 };
 
-exports.deleteSensor = async (req, res) => {
+const deleteSensor = async (req, res) => {
   try {
     const { sensorId } = req.body;
     await meleDB
       .collection("sensors")
       .deleteOne({ _id: new mongoose.Types.ObjectId(sensorId) });
-    res.json({ success: true });
+    return new Result(1, { success: true }, "Sensor deleted successfully");
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    return new Result(-1, null, `Error deleting sensor: ${error.message}`);
   }
 };
 
-exports.deleteProduct = async (req, res) => {
+const deleteProduct = async (req, res) => {
   try {
     const { productId } = req.body;
     await meleDB
       .collection("products")
       .deleteOne({ _id: new mongoose.Types.ObjectId(productId) });
-    res.json({ success: true });
+    return new Result(1, { success: true }, "Product deleted successfully");
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    return new Result(-1, null, `Error deleting product: ${error.message}`);
   }
 };
 
-exports.addUser = async (req, res) => {
+const addUser = async (req, res) => {
   try {
     const userData = {
       ...req.body,
@@ -71,13 +72,13 @@ exports.addUser = async (req, res) => {
       updatedAt: new Date(),
     };
     const result = await meleDB.collection("users").insertOne(userData);
-    res.json({ success: true, id: result.insertedId });
+    return new Result(1, { id: result.insertedId }, "User added successfully");
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    return new Result(-1, null, `Error adding user: ${error.message}`);
   }
 };
 
-exports.addSensor = async (req, res) => {
+const addSensor = async (req, res) => {
   try {
     const sensorData = {
       ...req.body,
@@ -85,13 +86,13 @@ exports.addSensor = async (req, res) => {
       updatedAt: new Date(),
     };
     const result = await meleDB.collection("sensors").insertOne(sensorData);
-    res.json({ success: true, id: result.insertedId });
+    return new Result(1, { id: result.insertedId }, "Sensor added successfully");
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    return new Result(-1, null, `Error adding sensor: ${error.message}`);
   }
 };
 
-exports.addProduct = async (req, res) => {
+const addProduct = async (req, res) => {
   try {
     const productData = {
       ...req.body,
@@ -100,13 +101,13 @@ exports.addProduct = async (req, res) => {
       updatedAt: new Date(),
     };
     const result = await meleDB.collection("products").insertOne(productData);
-    res.json({ success: true, id: result.insertedId });
+    return new Result(1, { id: result.insertedId }, "Product added successfully");
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    return new Result(-1, null, `Error adding product: ${error.message}`);
   }
 };
 
-exports.updateUser = async (req, res) => {
+const updateUser = async (req, res) => {
   try {
     const { userId, ...updateData } = req.body;
     const result = await meleDB.collection("users").updateOne(
@@ -120,16 +121,16 @@ exports.updateUser = async (req, res) => {
     );
 
     if (result.matchedCount === 0) {
-      return res.status(404).json({ success: false, error: "User not found" });
+      return new Result(-1, null, "User not found");
     }
 
-    res.json({ success: true });
+    return new Result(1, { success: true }, "User updated successfully");
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    return new Result(-1, null, `Error updating user: ${error.message}`);
   }
 };
 
-exports.getAllUsers = async (req, res) => {
+const getAllUsers = async (req, res) => {
   try {
     const items = await meleDB
       .collection("users")
@@ -156,14 +157,13 @@ exports.getAllUsers = async (req, res) => {
       updatedAt: item.updatedAt ? new Date(item.updatedAt).toISOString() : null,
     }));
 
-    res.json({ success: true, items: formattedItems });
+    return new Result(1, formattedItems, "Users retrieved successfully");
   } catch (error) {
-    console.error("Error getting users:", error);
-    res.status(500).json({ success: false, error: error.message });
+    return new Result(-1, null, `Error getting users: ${error.message}`);
   }
 };
 
-exports.getAllProducts = async (req, res) => {
+const getAllProducts = async (req, res) => {
   try {
     const items = await meleDB
       .collection("products")
@@ -178,14 +178,13 @@ exports.getAllProducts = async (req, res) => {
       updatedAt: item.updatedAt ? new Date(item.updatedAt).toISOString() : null,
     }));
 
-    res.json({ success: true, items: formattedItems });
+    return new Result(1, formattedItems, "Products retrieved successfully");
   } catch (error) {
-    console.error("Error getting products:", error);
-    res.status(500).json({ success: false, error: error.message });
+    return new Result(-1, null, `Error getting products: ${error.message}`);
   }
 };
 
-exports.getAllHives = async (req, res) => {
+const getAllHives = async (req, res) => {
   try {
     const items = await meleDB
       .collection("hives")
@@ -215,14 +214,13 @@ exports.getAllHives = async (req, res) => {
       updatedAt: item.updatedAt ? new Date(item.updatedAt).toISOString() : null,
     }));
 
-    res.json({ success: true, items: formattedItems });
+    return new Result(1, formattedItems, "Hives retrieved successfully");
   } catch (error) {
-    console.error("Error getting hives:", error);
-    res.status(500).json({ success: false, error: error.message });
+    return new Result(-1, null, `Error getting hives: ${error.message}`);
   }
 };
 
-exports.getAllApiaries = async (req, res) => {
+const getAllApiaries = async (req, res) => {
   try {
     const items = await meleDB
       .collection("apiaries")
@@ -256,15 +254,13 @@ exports.getAllApiaries = async (req, res) => {
       updatedAt: item.updatedAt ? new Date(item.updatedAt).toISOString() : null,
     }));
 
-    console.log("Formatted apiary items:", formattedItems); // Debug log
-    res.json({ success: true, items: formattedItems });
+    return new Result(1, formattedItems, "Apiaries retrieved successfully");
   } catch (error) {
-    console.error("Error getting apiaries:", error);
-    res.status(500).json({ success: false, error: error.message });
+    return new Result(-1, null, `Error getting apiaries: ${error.message}`);
   }
 };
 
-exports.getAllSensors = async (req, res) => {
+const getAllSensors = async (req, res) => {
   try {
     const items = await meleDB
       .collection("sensors")
@@ -294,16 +290,14 @@ exports.getAllSensors = async (req, res) => {
       updatedAt: item.updatedAt ? new Date(item.updatedAt).toISOString() : null,
     }));
 
-    res.json({ success: true, items: formattedItems });
+    return new Result(1, formattedItems, "Sensors retrieved successfully");
   } catch (error) {
-    console.error("Error getting sensors:", error);
-    res.status(500).json({ success: false, error: error.message });
+    return new Result(-1, null, `Error getting sensors: ${error.message}`);
   }
 };
 
-exports.getAllHiveUpgrades = async (req, res) => {
+const getAllHiveUpgrades = async (req, res) => {
   try {
-    console.log("Fetching hive upgrades...");
     const items = await meleDB
       .collection("hiveupgrades")
       .find(
@@ -319,23 +313,19 @@ exports.getAllHiveUpgrades = async (req, res) => {
       .sort({ createdAt: -1 })
       .toArray();
 
-    console.log("Raw hive upgrades:", items);
-
     const formattedItems = items.map((item) => ({
       ...item,
       _id: item._id.toString(),
       createdAt: item.createdAt ? new Date(item.createdAt).toISOString() : null,
     }));
 
-    console.log("Formatted hive upgrades:", formattedItems);
-    res.json({ success: true, items: formattedItems });
+    return new Result(1, formattedItems, "Hive upgrades retrieved successfully");
   } catch (error) {
-    console.error("Error getting hive upgrades:", error);
-    res.status(500).json({ success: false, error: error.message });
+    return new Result(-1, null, `Error getting hive upgrades: ${error.message}`);
   }
 };
 
-exports.deployHiveUpgrade = async (req, res) => {
+const deployHiveUpgrade = async (req, res) => {
   try {
     const { upgradeId } = req.body;
     const result = await meleDB.collection("hiveupgrades").updateOne(
@@ -352,22 +342,34 @@ exports.deployHiveUpgrade = async (req, res) => {
     );
 
     if (result.matchedCount === 0) {
-      return res.status(400).json({
-        success: false,
-        error: "Upgrade not found or already deployed",
-      });
+      return new Result(-1, null, "Upgrade not found or already deployed");
     }
 
     if (result.modifiedCount === 0) {
-      return res.status(400).json({
-        success: false,
-        error: "No changes made",
-      });
+      return new Result(-1, null, "No changes made");
     }
 
-    res.json({ success: true });
+    return new Result(1, { success: true }, "Hive upgrade deployed successfully");
   } catch (error) {
-    console.error("Error deploying hive upgrade:", error);
-    res.status(500).json({ success: false, error: error.message });
+    return new Result(-1, null, `Error deploying hive upgrade: ${error.message}`);
   }
+};
+
+module.exports = {
+  deleteHive,
+  deleteApiary,
+  deleteUser,
+  deleteSensor,
+  deleteProduct,
+  addUser,
+  addSensor,
+  addProduct,
+  updateUser,
+  getAllUsers,
+  getAllProducts,
+  getAllHives,
+  getAllApiaries,
+  getAllSensors,
+  getAllHiveUpgrades,
+  deployHiveUpgrade
 };

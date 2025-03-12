@@ -1,5 +1,6 @@
 const User = require('../Models/User')
 const Result = require("../../Shared/Result")
+
 const addUser = async (req, res) => {
     try {
         const userJSON = {
@@ -12,37 +13,40 @@ const addUser = async (req, res) => {
         }
         const user = new User(userJSON)
         const result = await user.create()
-        return result.toJSON()
+        return res.json(result.toJSON())
     }
     catch (error) {
-        return new Result(-1, null, `Error creating user: ${error.message}`)
+        return res.json(new Result(-1, null, `Error creating user: ${error.message}`).toJSON())
     }
 }
+
 const removeUser = async (req, res) => {
     try {
         const result = await User.remove(req.body.email);
-        return result.toJSON();
+        return res.json(result.toJSON());
     }
     catch (error) {
-        return new Result(-1, null, `Error deleting user: ${error.message}`)
+        return res.json(new Result(-1, null, `Error deleting user: ${error.message}`).toJSON())
     }
 }
+
 const getUser = async (req, res) => {
     try {
         const result = await User.get(req.body.email)
-        return result.toJSON()
+        return res.json(result.toJSON())
     }
     catch (error) {
-        return new Result(-1, null, `Error fetching user: ${error.message}`)
+        return res.json(new Result(-1, null, `Error fetching user: ${error.message}`).toJSON())
     }
 }
+
 const getUsers = async (req, res) => {
     try {
         const result = await User.getAll();
-        return result.toJSON();
+        return res.json(result.toJSON());
     }
     catch (error) {
-        return new Result(-1, null, `Error fetching users: ${error.message}`)
+        return res.json(new Result(-1, null, `Error fetching users: ${error.message}`).toJSON())
     }
 }
 
@@ -65,11 +69,11 @@ const updateUser = async (req, res) => {
         }
         else {
             const result = await User.modify(update)
-            return result.toJSON()
+            return res.json(result.toJSON())
         }
     }
     catch (error) {
-        return new Result(-1, null, `Error updating user: ${error.message}`)
+        return res.json(new Result(-1, null, `Error updating user: ${error.message}`).toJSON())
     }
 }
 
@@ -90,9 +94,10 @@ const register = async (req, res) => {
         res.redirect('/keeper')
     }
     catch (error) {
-        return new Result(-1, null, `Error creating user: ${error.message}`)
+        return res.json(new Result(-1, null, `Error creating user: ${error.message}`).toJSON())
     }
 }
+
 const login = async (req, res) => {
     try {
         const result = await User.login(req.body.email, req.body.password)
@@ -113,7 +118,7 @@ const login = async (req, res) => {
         res.redirect('/keeper')
     }
     catch (error) {
-        return new Result(-1, null, `Error fetching user: ${error.message}`)
+        return res.json(new Result(-1, null, `Error fetching user: ${error.message}`).toJSON())
     }
 }
 
@@ -122,10 +127,21 @@ const logout = (req, res) => {
     res.redirect('/')
 }
 
+const getApiaries = async (req, res) => {
+    const user = req.session.user
+    if (user) {
+        const result = await user.getApiaries()
+        if(result.success.status) req.session.user.apiaries = result.data
+        else req.session.message = result.message
+        return res.json(result.toJSON())
+    }
+    return res.json(new Result(-1, null, 'No user logged in').toJSON())
+}
 
 const upgrade = (req, res) => {
     
 }
+
 module.exports = {
     addUser,
     removeUser,
@@ -134,5 +150,6 @@ module.exports = {
     getUsers,
     register,
     login,
-    logout
+    logout,
+    getApiaries
 }

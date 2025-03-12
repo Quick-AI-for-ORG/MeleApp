@@ -11,18 +11,18 @@ const addHive = async (req, res) => {
         };
         const hive = new Hive(hiveJSON);
         const result = await hive.create();
-        return result.toJSON();
+        return res.json(result.toJSON());
     } catch (error) {
-        return new Result(-1, null, `Error creating hive: ${error.message}`);
+        return res.json(new Result(-1, null, `Error creating hive: ${error.message}`).toJSON());
     }
 }
 
 const removeHive = async (req, res) => {
     try {
         const result = await Hive.remove(req.body._id);
-        return result.toJSON();
+        return res.json(result.toJSON());
     } catch (error) {
-        return new Result(-1, null, `Error deleting hive: ${error.message}`);
+        return res.json(new Result(-1, null, `Error deleting hive: ${error.message}`).toJSON());
     }
 }
 
@@ -35,18 +35,18 @@ const updateHive = async (req, res) => {
             }
         });
         const result = await Hive.modify(update);
-        return result.toJSON();
+        return res.json(result.toJSON());
     } catch (error) {
-        return new Result(-1, null, `Error updating hive: ${error.message}`);
+        return res.json(new Result(-1, null, `Error updating hive: ${error.message}`).toJSON());
     }
 }
 
 const getHive = async (req, res) => {
     try {
         const result = await Hive.get(req.body._id);
-        return result.toJSON();
+        return res.json(result.toJSON());
     } catch (error) {
-        return new Result(-1, null, `Error fetching hive: ${error.message}`);
+        return res.json(new Result(-1, null, `Error fetching hive: ${error.message}`).toJSON());
     }
 }
 
@@ -54,9 +54,9 @@ const getHives = async (req, res) => {
     try {
         const result = await Hive.getAll();
         req.session.hives = result.data || [];
-        return result.toJSON();
+        return res.json(result.toJSON());
     } catch (error) {
-        return new Result(-1, null, `Error fetching hives: ${error.message}`);
+        return res.json(new Result(-1, null, `Error fetching hives: ${error.message}`).toJSON());
     }
 }
 
