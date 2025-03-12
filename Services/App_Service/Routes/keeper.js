@@ -7,6 +7,7 @@ const ctrlProduct = require("../Controllers/ctrlProduct");
 
 const { sendUpgradeConfirmation } = require("../../Utils/mailer");
 const weatherService = require("../../Utils/weatherService");
+const localStreamService = require("../../Streaming/localStreamService");
 
 router.get("/", (req, res) => {
   if (!req.session.user) ctrlPages._PUBLIC.noLogin(req, res);
@@ -17,8 +18,17 @@ router.get("/signup", ctrlPages._KEEPER.signup);
 router.get("/login", ctrlPages._KEEPER.login);
 router.get("/dashboard", ctrlPages._KEEPER.dashboard);
 router.get("/logout", ctrlUser.logout);
-router.get("/upgrade", ctrlPages._KEEPER.upgrade);
-router.get("/profile", ctrlPages._KEEPER.profile);
+router.get("/upgrade", (req, res) => {
+  res.render("upgrade", {
+    user: req.session.user || null,
+    kits: [
+      // ...your kits array...
+    ],
+  });
+});
+router.get("/profile", (req, res) => {
+  res.render("profile", { user: req.session.user || null });
+});
 
 router.post("/register", ctrlUser.register);
 router.post("/login", ctrlUser.login);
@@ -71,7 +81,30 @@ router.get("/getProducts", async (req, res) => {
   }
 });
 
+router.get("/test-stream", (req, res) => {
+  res.render("test-stream", { user: req.session.user || null });
+});
+
+router.post("/start-stream", async (req, res) => {
+  const { hiveId } = req.body;
+  const result = await localStreamService.startStream(hiveId);
+  res.json(result);
+});
+
+router.post("/handle-answer", async (req, res) => {
+  const { hiveId, answer } = req.body;
+  const result = await localStreamService.handleAnswer(hiveId, answer);
+  res.json(result);
+});
+
+router.post("/add-ice-candidate", async (req, res) => {
+  const { hiveId, candidate } = req.body;
+  const result = await localStreamService.addIceCandidate(hiveId, candidate);
+  res.json(result);
+});
+
 router.get("*", (req, res) => {
   res.redirect("/keeper");
 });
+
 module.exports = router;

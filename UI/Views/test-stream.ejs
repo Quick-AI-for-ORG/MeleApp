@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebRTC Stream Test</title>
+    <style>
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .video-container {
+            margin-top: 20px;
+        }
+
+        video {
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #16404d;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #fca311;
+        }
+
+        #status {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>WebRTC Stream Test</h1>
+        <div class="video-container">
+            <video id="remoteVideo" autoplay playsinline></video>
+        </div>
+        <div class="controls">
+            <button onclick="startStream()">Start Stream</button>
+            <button onclick="stopStream()">Stop Stream</button>
+        </div>
+        <div id="status"></div>
+    </div>
+
+    <script>
+        let localStream;
+        const hiveId = 'test-hive-1';
+
+        async function startStream() {
+            try {
+                updateStatus('Requesting camera access...', 'info');
+
+                // Get local camera stream
+                localStream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 }
+                    },
+                    audio: false
+                });
+
+                const video = document.getElementById('remoteVideo');
+                video.srcObject = localStream;
+
+                // Notify server about stream start
+                const response = await fetch('/keeper/start-stream', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ hiveId })
+                });
+
+                const data = await response.json();
+                if (data.status === 'success') {
+                    updateStatus('Stream started successfully', 'success');
+                } else {
+                    throw new Error(data.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                updateStatus('Failed to start stream: ' + error.message, 'error');
+                if (localStream) {
+                    localStream.getTracks().forEach(track => track.stop());
+                }
+            }
+        }
+
+        function stopStream() {
+            if (localStream) {
+                localStream.getTracks().forEach(track => track.stop());
+            }
+            const video = document.getElementById('remoteVideo');
+            video.srcObject = null;
+            updateStatus('Stream stopped', 'info');
+        }
+
+        function updateStatus(message, type) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = type;
+        }
+    </script>
+</body>
+
+</html>
