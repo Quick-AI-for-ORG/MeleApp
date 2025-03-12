@@ -9,10 +9,10 @@ const path = require("path");
 dotenv.config({ path: "../../.env" });
 
 const app = express();
-const rootRouter = require("./Routes/root")
-const keeperRouter = require("./Routes/keeper")
-const adminRouter = require("./Routes/admin")
-const ctrlPages = require("./Controllers/ctrlPages")
+const rootRouter = require("./Routes/root");
+const keeperRouter = require("./Routes/keeper");
+const adminRouter = require("./Routes/admin");
+const ctrlPages = require("./Controllers/ctrlPages");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -21,18 +21,24 @@ app.use(
   session({ secret: "Your_Secret_Key", saveUninitialized: true, resave: false })
 );
 // Make sure the static file middleware is properly configured
-app.use(express.static(path.join(__dirname, '../../UI/Public')));
+app.use(express.static(path.join(__dirname, "../../UI/Public")));
 app.use(expressLayouts);
+
+// Add this before your route middleware
+app.use((req, res, next) => {
+  res.locals.user = req.session.user || null;
+  next();
+});
 
 app.use("/", rootRouter);
 app.use("/keeper", keeperRouter);
 app.use("/admin", adminRouter);
-app.get('*', ctrlPages._PUBLIC.notFound);
+app.get("*", ctrlPages._PUBLIC.notFound);
 
 app.set("layout", "Layouts/layout");
 
-app.set('views', "../../UI/Views");
-app.set('view engine', 'ejs');
+app.set("views", "../../UI/Views");
+app.set("view engine", "ejs");
 
 mongoose
   .connect(process.env.MONGODB_URI)
