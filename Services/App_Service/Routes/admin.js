@@ -186,4 +186,9 @@ router.get("/getAllHiveUpgrades", ctrlAdmin.getAllHiveUpgrades);
 // Add deploy route for hive upgrades
 router.post("/deployHiveUpgrade", ctrlAdmin.deployHiveUpgrade);
 
+// Add test-stream route
+router.get("/test-stream", (req, res) => {
+  res.render("test-stream", { layout: false });
+});
+
 module.exports = router;
