@@ -168,3 +168,38 @@ function updateLocation(latlng, address) {
   statusElement.style.color = "#16404d";
   statusElement.classList.add("selected");
 }
+
+function toggleApiaryList() {
+  const dropdownList = document.getElementById("apiaryList");
+  dropdownList.classList.toggle("active");
+}
+
+function selectApiary(id, name) {
+  const input = document.getElementById("apiaryInput");
+  const idInput = document.getElementById("selectedApiaryId");
+  input.value = name;
+  idInput.value = id;
+
+  const dropdownList = document.getElementById("apiaryList");
+  dropdownList.classList.remove("active");
+}
+
+function filterApiaries(searchText) {
+  const items = document.querySelectorAll(".dropdown-item");
+  items.forEach((item) => {
+    if (item.textContent.toLowerCase().includes(searchText.toLowerCase())) {
+      item.style.display = "flex";
+    } else {
+      item.style.display = "none";
+    }
+  });
+}
+
+// Close dropdown when clicking outside
+document.addEventListener("click", function (e) {
+  const dropdown = document.querySelector(".custom-dropdown");
+  const dropdownList = document.getElementById("apiaryList");
+  if (!dropdown.contains(e.target)) {
+    dropdownList.classList.remove("active");
+  }
+});

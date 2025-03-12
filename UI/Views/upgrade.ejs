@@ -27,17 +27,25 @@
 
             <form class="upgrade-form" action="/keeper/upgrade" method="POST" onsubmit="return false;">
                 <div class="form-group">
-                    <label for="apiarySelection">Select or Create Apiary</label>
-                    <div class="apiary-input-container">
-                        <input type="text" id="apiaryName" name="apiaryName" placeholder="Enter or select apiary name"
-                            required list="apiaryList" autocomplete="off">
-                        <datalist id="apiaryList">
+                    <label for="apiaryInput">Select or Create Apiary</label>
+                    <div class="custom-dropdown">
+                        <input type="text" id="apiaryInput" placeholder="Type or select apiary name" autocomplete="off"
+                            oninput="filterApiaries(this.value)" onclick="toggleApiaryList()">
+                        <div id="apiaryList" class="dropdown-list">
+                            <div class="dropdown-item" onclick="selectApiary('new', 'Create New Apiary')">
+                                <i class="fas fa-plus"></i> Create New Apiary
+                            </div>
                             <% if (apiaries && apiaries.length> 0) { %>
                                 <% apiaries.forEach(apiary=> { %>
-                                    <option value="<%= apiary.name %>">
-                                        <% }); %>
-                                            <% } %>
-                        </datalist>
+                                    <div class="dropdown-item"
+                                        onclick="selectApiary('<%= apiary._id %>', '<%= apiary.name %>')">
+                                        <i class="fas fa-warehouse"></i>
+                                        <%= apiary.name %>
+                                    </div>
+                                    <% }); %>
+                                        <% } %>
+                        </div>
+                        <input type="hidden" id="selectedApiaryId" name="apiaryId">
                     </div>
                 </div>
 

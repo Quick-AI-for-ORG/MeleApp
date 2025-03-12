@@ -336,16 +336,110 @@ input[type="range"] {
   color: #9ca3af;
 }
 
-/* Style for the datalist dropdown */
+/* Custom styling for datalist dropdown */
 input::-webkit-calendar-picker-indicator {
-  color: #16404d;
-  cursor: pointer;
-  opacity: 0.6;
-  padding: 0.2rem;
+  display: none;
 }
 
-input::-webkit-calendar-picker-indicator:hover {
-  opacity: 1;
+input[list]::-webkit-calendar-picker-indicator {
+  display: none;
+}
+
+input[list] {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%2316404d" viewBox="0 0 16 16"><path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: calc(100% - 0.75rem) center;
+  padding-right: 2.5rem;
+  cursor: pointer;
+}
+
+/* Styling for the suggestion list */
+datalist {
+  position: absolute;
+  max-height: 200px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+datalist option {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  color: #16404d;
+  transition: all 0.2s ease;
+}
+
+datalist option:hover {
+  background-color: #f3f4f6;
+}
+
+datalist option:not(:last-child) {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.custom-dropdown {
+  position: relative;
+  width: 100%;
+}
+
+.custom-dropdown input[type="text"] {
+  width: 100%;
+  padding: 0.75rem;
+  padding-right: 2.5rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: #fff;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%2316404d" viewBox="0 0 16 16"><path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: calc(100% - 0.75rem) center;
+  cursor: pointer;
+}
+
+.dropdown-list {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  max-height: 200px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  overflow-y: auto;
+  margin-top: 4px;
+}
+
+.dropdown-list.active {
+  display: block;
+}
+
+.dropdown-item {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  color: #16404d;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dropdown-item:hover {
+  background-color: #f3f4f6;
+}
+
+.dropdown-item i {
+  color: #fca311;
+  width: 16px;
+}
+
+.dropdown-item:not(:last-child) {
+  border-bottom: 1px solid #e5e7eb;
 }
 
 @keyframes slideIn {
