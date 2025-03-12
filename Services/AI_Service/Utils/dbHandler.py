@@ -7,7 +7,7 @@ from pymongo import AsyncMongoClient
 sys.path.append(os.path.join(os.path.dirname('../../Shared')))
 from Shared.Result import Result
 
-class CRUDInterface:
+class DBHandler:
     def __init__(self):
         load_dotenv("../../../.env")
         self.Result = Result        
@@ -77,56 +77,6 @@ class CRUDInterface:
             })
             return self.Result(-1, None, f"Error modifying data: {error}")
 
-    async def remove(self, primaryKey, collectionName, compareKey):
-        try:
-            collection = self.db[collectionName]
-            compareClause = {compareKey: primaryKey}
-            result = await collection.find_one_and_delete(compareClause)
-            
-            if not result:
-                await self.logs.insert_one({
-                    "log": f"Record with {compareKey}: {primaryKey} not found. Skipping deletion.",
-                    "degree": 0
-                })
-                return self.Result(0, None, f"Record with {compareKey}: {primaryKey} not found. Skipping deletion.")
-            else:
-                await self.logs.insert_one({
-                    "log": f"Deleted record with {compareKey}: {primaryKey}", 
-                    "degree": 1
-                })
-                return self.Result(1, result, f"Deleted record with {compareKey}: {primaryKey}")
-        except Exception as error:
-            await self.logs.insert_one({
-                "log": f"Error removing data: {error}", 
-                "degree": -1
-            })
-            return self.Result(-1, None, f"Error removing data: {error}")
-
-    async def removeAll(self, primaryKey, collectionName, compareKey):
-        try:
-            collection = self.db[collectionName]
-            compareClause = {compareKey: primaryKey}
-            result = await collection.delete_many(compareClause)
-            
-            if result.deleted_count == 0:
-                await self.logs.insert_one({
-                    "log": f"No records found with {compareKey}: {primaryKey}. Skipping deletion.",
-                    "degree": 0
-                })
-                return self.Result(0, None, f"No records found with {compareKey}: {primaryKey}. Skipping deletion.")
-            else:
-                await self.logs.insert_one({
-                    "log": f"Deleted {result.deleted_count} records with {compareKey}: {primaryKey}",
-                    "degree": 1
-                })
-                return self.Result(1, {"deleted_count": result.deleted_count}, f"Deleted {result.deleted_count} records with {compareKey}: {primaryKey}")
-        except Exception as error:
-            await self.logs.insert_one({
-                "log": f"Error removing data: {error}", 
-                "degree": -1
-            })
-            return self.Result(-1, None, f"Error removing data: {error}")
-
     async def get(self, primaryKey, collectionName, compareKey):
         try:
             collection = self.db[collectionName]
@@ -171,12 +121,15 @@ class CRUDInterface:
             })
             return self.Result(-1, None, f"Error getting all data: {error}")
 
-    async def getAllFiltered(self, primaryKey, collectionName, compareKey):
+    async def getAllFiltered(self, primaryKey, collectionName, compareKey, optional=None, sort=1, limit=None):
         try:
             collection = self.db[collectionName]
+            if(not limit): limit = collection.count_documents({})
             compareClause = {compareKey: primaryKey}
+            if(optional): compareClause[optional[0]] = optional[1]
             records = []
-            async for record in collection.find(compareClause):
+            
+            async for record in collection.find(compareClause).sort("timestamp",sort).limit(limit):
                 records.append(record)
             
             if len(records) == 0:
