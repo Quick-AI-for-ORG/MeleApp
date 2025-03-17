@@ -95,8 +95,11 @@ function validateForm() {
   const longitude = document.getElementById("longitude").value;
 
   if (!latitude || !longitude) {
-    alert("Please select a location on the map");
-    return false;
+    // Only check map location if creating new apiary
+    if (document.getElementById("selectedApiaryId").value === "new") {
+      alert("Please select a location on the map");
+      return false;
+    }
   }
 
   if (length <= 0 || width <= 0 || height <= 0) {
@@ -174,11 +177,32 @@ function toggleApiaryList() {
   dropdownList.classList.toggle("active");
 }
 
-function selectApiary(id, name) {
+function selectApiary(id, name, isNew) {
   const input = document.getElementById("apiaryInput");
   const idInput = document.getElementById("selectedApiaryId");
+  const mapSection = document.getElementById("mapSection");
+  const mapRequiredMark = document.getElementById("mapRequiredMark");
+  const latitudeInput = document.getElementById("latitude");
+  const longitudeInput = document.getElementById("longitude");
+
   input.value = name;
   idInput.value = id;
+
+  // Handle map requirement
+  if (isNew) {
+    mapSection.classList.remove("disabled");
+    mapRequiredMark.style.display = "inline";
+    latitudeInput.required = true;
+    longitudeInput.required = true;
+  } else {
+    mapSection.classList.add("disabled");
+    mapRequiredMark.style.display = "none";
+    latitudeInput.required = false;
+    longitudeInput.required = false;
+    // Clear map values when selecting existing apiary
+    latitudeInput.value = "";
+    longitudeInput.value = "";
+  }
 
   const dropdownList = document.getElementById("apiaryList");
   dropdownList.classList.remove("active");

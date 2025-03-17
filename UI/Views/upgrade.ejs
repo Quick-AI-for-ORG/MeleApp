@@ -32,13 +32,13 @@
                         <input type="text" id="apiaryInput" placeholder="Type or select apiary name" autocomplete="off"
                             oninput="filterApiaries(this.value)" onclick="toggleApiaryList()">
                         <div id="apiaryList" class="dropdown-list">
-                            <div class="dropdown-item" onclick="selectApiary('new', 'Create New Apiary')">
+                            <div class="dropdown-item" onclick="selectApiary('new', 'Create New Apiary', true)">
                                 <i class="fas fa-plus"></i> Create New Apiary
                             </div>
                             <% if (apiaries && apiaries.length> 0) { %>
                                 <% apiaries.forEach(apiary=> { %>
                                     <div class="dropdown-item"
-                                        onclick="selectApiary('<%= apiary._id %>', '<%= apiary.name %>')">
+                                        onclick="selectApiary('<%= apiary._id %>', '<%= apiary.name %>', false)">
                                         <i class="fas fa-warehouse"></i>
                                         <%= apiary.name %>
                                     </div>
@@ -54,8 +54,8 @@
                     <input type="text" id="apiaryName" name="apiaryName" placeholder="Enter new apiary name">
                 </div>
 
-                <div class="form-group">
-                    <label>Apiary Location <span class="required-field">*</span></label>
+                <div class="form-group map-container" id="mapSection">
+                    <label>Apiary Location <span class="required-field" id="mapRequiredMark">*</span></label>
                     <div id="mapContainer">
                         <input type="text" id="searchLocation" readonly placeholder="Selected location will appear here"
                             class="readonly-field">

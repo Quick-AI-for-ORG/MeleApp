@@ -25,6 +25,16 @@
                     <h2 class="nav-title">Admin Dashboard</h2>
                 </div>
             </div>
+            <div class="header-right">
+                <a href="/keeper/upgrade" class="nav-btn upgrade-btn">
+                    <i class="fas fa-arrow-up-right-from-square"></i>
+                    Upgrade
+                </a>
+                <a href="/keeper/logout" class="nav-btn logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Sign Out
+                </a>
+            </div>
         </header>
 
         <!-- Main Content -->
@@ -327,8 +337,9 @@
                                     <h4>
                                         <%= product.name %>
                                     </h4>
-                                    <p>$<%= product.price %>
-                                    </p>
+                                    <p>$<%= product.price %> | <span class="product-counter">
+                                                <%= product.counter || 0 %> Purchases
+                                            </span></p>
                                     <span class="timestamp">
                                         Added <%= new Date(product.createdAt).toLocaleDateString() %>
                                     </span>
@@ -464,6 +475,25 @@
                             oninput="validatePrice(this)">
                     </div>
                     <div class="form-group">
+                        <label for="subscription">Subscription Type (optional)</label>
+                        <input type="text" id="subscription" name="subscription"
+                            placeholder="e.g., Monthly, Yearly, One-time">
+                    </div>
+                    <div class="form-group">
+                        <label>Sensors</label>
+                        <div class="sensors-grid">
+                            <% recentSensors.forEach(sensor=> { %>
+                                <div class="sensor-checkbox">
+                                    <input type="checkbox" id="sensor-<%= sensor.sensorType %>" name="sensorTypes"
+                                        value="<%= sensor.sensorType %>">
+                                    <label for="sensor-<%= sensor.sensorType %>">
+                                        <%= sensor.sensorType %>
+                                    </label>
+                                </div>
+                                <% }); %>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label for="description">Description</label>
                         <textarea id="productDescription" name="description" rows="3"
                             placeholder="Enter product description"></textarea>
@@ -517,6 +547,45 @@
 
         .notification.error {
             background-color: #ef4444;
+        }
+
+        .sensors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 0.75rem;
+            margin-top: 0.5rem;
+            padding: 0.5rem;
+            background: #f9fafb;
+            border-radius: 8px;
+        }
+
+        .sensor-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            border-radius: 6px;
+            background-color: white;
+            border: 1px solid #e5e7eb;
+            transition: all 0.2s ease;
+        }
+
+        .sensor-checkbox:hover {
+            border-color: #16404d;
+        }
+
+        .sensor-checkbox input[type="checkbox"] {
+            width: 1.125rem;
+            height: 1.125rem;
+            accent-color: #16404d;
+            cursor: pointer;
+        }
+
+        .sensor-checkbox label {
+            font-size: 0.875rem;
+            color: #374151;
+            cursor: pointer;
+            user-select: none;
         }
 
         @keyframes slideIn {

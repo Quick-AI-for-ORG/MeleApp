@@ -193,7 +193,15 @@ async function handleAdd(event, type) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify({
+        name: form.name.value,
+        price: parseFloat(form.price.value),
+        description: form.description.value,
+        subscription: form.subscription.value,
+        sensorTypes: Array.from(
+          form.querySelectorAll('input[name="sensorTypes"]:checked')
+        ).map((input) => input.value),
+      }),
     });
 
     const result = await response.json();
@@ -377,6 +385,7 @@ function getCellsForType(item, type) {
       return [
         item.name,
         `$${parseFloat(item.price).toFixed(2)}`,
+        `<span class="product-counter">${item.counter || 0} units</span>`,
         item.description || "No description",
         new Date(item.createdAt).toLocaleDateString(),
       ];
