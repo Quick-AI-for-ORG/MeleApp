@@ -14,9 +14,9 @@ const addApiary = async (req, res) => {
         };
         const apiary = jsonToObject(apiaryJSON);
         const result = await apiary.create();
-        return res.json(result.toJSON());
+        return result;
     } catch (error) {
-        return res.json(new Result(-1, null, `Error creating apiary: ${error.message}`).toJSON());
+        return new Result(-1, null, `Error creating apiary: ${error.message}`);
     }
 }
 

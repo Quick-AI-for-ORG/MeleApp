@@ -78,6 +78,9 @@ class Apiary {
     if(result.success.status) this.hives = result.data;
     return result;
   }
+  async increment(numberOfHives){
+    this.numberOfHives = parseInt(numberOfHives, 10) + parseInt(this.numberOfHives, 10);
+    return await this.modify(this)
+  }
 }
-
 module.exports = Apiary;

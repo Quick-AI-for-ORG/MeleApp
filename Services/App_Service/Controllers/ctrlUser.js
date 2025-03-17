@@ -148,32 +148,7 @@ const getApiaries = async (req, res) => {
     }
 }
 
-const upgrade = (req, res) => {
-    try{
-        const user = jsonToObject(req.session.user)
 
-        const newApiary = !req.session.user.apiaries.some(apiary => apiary.name === req.body.apiaryName);
-        const apiaryJSON = {
-            name: req.body.apiaryName,
-            location: req.body.location,
-            numberOfHives: req.body.numberOfHives || 0,
-            owner: user._id
-        }
-        const upgradeJSON = {
-
-        }
-        if (user) {
-            const result = user.purchaseUpgrade(upgradeJSON)
-            if(result.success.status) req.session.user = result.data
-            else req.session.message = result.message
-            return res.json(result.toJSON())
-        }
-        return res.json(new Result(-1, null, 'No user logged in').toJSON())
-    }
-    catch (error) {
-        return res.json(new Result(-1, null, `Error upgrading user: ${error.message}`).toJSON())
-    }
-}
 
 module.exports = {
     _jsonToObject: jsonToObject,

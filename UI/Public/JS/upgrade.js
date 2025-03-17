@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
   // Range slider for frames
-  const framesSlider = document.getElementById("framesCount");
+  const framesSlider = document.getElementById("numberOfFrames");
   const framesOutput = document.getElementById("framesOutput");
 
   framesSlider.addEventListener("input", function () {
@@ -17,51 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     });
 
-  // Form validation
-  const form = document.querySelector(".upgrade-form");
-  form.addEventListener("submit", function (event) {
-    event.preventDefault();
-
-    if (validateForm()) {
-      // Submit form data using fetch
-      fetch("/keeper/upgrade", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          apiarySelection: document.getElementById("apiarySelection").value,
-          apiaryName:
-            document.getElementById("apiarySelection").value === "new"
-              ? document.getElementById("apiaryName").value
-              : null,
-          hivesCount: document.getElementById("hivesCount").value,
-          latitude: document.getElementById("latitude").value,
-          longitude: document.getElementById("longitude").value,
-          kitSelection: Array.from(
-            document.querySelectorAll('input[name="kitSelection"]:checked')
-          ).map((input) => input.value),
-          framesCount: document.getElementById("framesCount").value,
-          length: document.getElementById("length").value,
-          width: document.getElementById("width").value,
-          height: document.getElementById("height").value,
-        }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.success) {
-            const modal = document.getElementById("confirmationModal");
-            modal.style.display = "flex";
-          } else {
-            alert("Failed to process upgrade request. Please try again.");
-          }
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-          alert("An error occurred. Please try again.");
-        });
-    }
-  });
+ 
 
   function handleApiarySelection(value) {
     const newApiaryGroup = document.getElementById("newApiaryGroup");
@@ -225,5 +181,41 @@ document.addEventListener("click", function (e) {
   const dropdownList = document.getElementById("apiaryList");
   if (!dropdown.contains(e.target)) {
     dropdownList.classList.remove("active");
+  }
+});
+
+
+function selectApiary(id, name) {
+  document.getElementById('selectedApiaryId').value = id;
+  document.getElementById('apiaryInput').value = name;
+  document.getElementById('apiaryName').value = name;
+  
+  // Show/hide new apiary field
+  if (id === 'new') {
+      document.getElementById('newApiaryGroup').style.display = 'block';
+  } else {
+      document.getElementById('newApiaryGroup').style.display = 'none';
+  }
+  
+  // Hide dropdown
+  document.getElementById('apiaryList').style.display = 'none';
+}
+
+// Add this function to handle form submission
+document.querySelector('.upgrade-form').addEventListener('submit', function(event) {
+  // If "Create New Apiary" is selected, use the newApiaryName value
+  if (document.getElementById('selectedApiaryId').value === 'new') {
+      const newApiaryName = document.getElementById('newApiaryName').value;
+      if (newApiaryName.trim()) {
+          document.getElementById('apiaryName').value = newApiaryName;
+      } else {
+          // If no name is entered, use the value from the input field
+          document.getElementById('apiaryName').value = document.getElementById('apiaryInput').value;
+      }
+  }
+  
+  // If nothing is selected but text is entered in the input field
+  if (!document.getElementById('apiaryName').value && document.getElementById('apiaryInput').value) {
+      document.getElementById('apiaryName').value = document.getElementById('apiaryInput').value;
   }
 });

@@ -15,18 +15,12 @@ class WeatherService {
 
   async getWeatherData(lat, lon) {
     try {
-      console.log(
-        `Attempting to fetch weather data for coordinates: ${lat}, ${lon}`
-      );
-      console.log(`Using API key: ${this.apiKey}`);
+     
 
       const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${this.apiKey}&units=metric`;
-      console.log(`Request URL: ${url}`);
 
       const response = await axios.get(url);
 
-      // Log successful response
-      console.log("Weather API Response:", response.data);
 
       if (response.data.cod === 200) {
         const weather = response.data;

@@ -7,7 +7,11 @@ const jsonToObject = (json) => {
 const addHive = async (req, res) => {
     try {
         const hiveJSON = {
-            dimensions: req.body.dimensions,
+            dimensions: {
+                width: req.body.width,
+                height: req.body.height,
+                length: req.body.length
+            },
             numberOfFrames: req.body.numberOfFrames,
             streamUrl: req.body.streamUrl || "NA",
             apiaryRef: req.body.apiaryRef
