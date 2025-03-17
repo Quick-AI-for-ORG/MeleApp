@@ -7,11 +7,14 @@ class Product {
   static crudInterface = crudInterface;
   static jsonToObject = jsonToObject;
   static dependency = dependency;
-  static attributes = ['name', 'price', 'description', 'subscription', 'images', 'counter'];
+  static attributes = ['name', 'price', 'description', 'subscription', 'images', 'counter', 'sensors'];
 
   constructor(productJSON) {
     Product.jsonToObject(this, productJSON);
     this.references = {
+      parent: {
+        "sensorModel": this.sensors
+      },
       sub: ['hiveUpgradeModel'],
     }
   }
@@ -61,6 +64,16 @@ class Product {
     const cascade = await Product.dependency.cascade(this.references.sub, this, 'productRef');
     if (!cascade.success.status) return cascade;
     return await Product.crudInterface.remove(this.name, "productModel", "name");
+  }
+
+  async addSensors(sensors) {
+    this.sensors = sensors;
+    return await this.modify(this);
+  }
+
+  async increment(){
+    this.counter += 1;
+    return await this.modify(this);
   }
 }
 

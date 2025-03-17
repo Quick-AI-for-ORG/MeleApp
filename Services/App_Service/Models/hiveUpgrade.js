@@ -59,6 +59,11 @@ class HiveUpgrade {
   async remove() {
     return await HiveUpgrade.crudInterface.remove(this._id, "hiveUpgradeModel", "_id");
   }
+
+  async makeOperational(){
+    this.operational = true;
+    return await this.modify(this);
+  }
 }
 
 module.exports = HiveUpgrade;

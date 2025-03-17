@@ -1,19 +1,22 @@
 const Hive = require('../Models/Hive');
 const Result = require("../../Shared/Result");
 
+const jsonToObject = (json) => {
+    return new Hive(json)
+}
 const addHive = async (req, res) => {
     try {
         const hiveJSON = {
             dimensions: req.body.dimensions,
             numberOfFrames: req.body.numberOfFrames,
-            streamUrl: req.body.streamUrl,
+            streamUrl: req.body.streamUrl || "NA",
             apiaryRef: req.body.apiaryRef
         };
-        const hive = new Hive(hiveJSON);
+        const hive = jsonToObject(hiveJSON);
         const result = await hive.create();
-        return res.json(result.toJSON());
+        return result.toJSON()
     } catch (error) {
-        return res.json(new Result(-1, null, `Error creating hive: ${error.message}`).toJSON());
+        return new Result(-1, null, `Error creating hive: ${error.message}`).toJSON()
     }
 }
 
@@ -77,6 +80,7 @@ const turnOffCooler = async (req, res) => {}
 const getAnaomaly = async (req, res) => {} 
 
 module.exports = {
+    _jsonToObject: jsonToObject,
     addHive,
     removeHive,
     updateHive,

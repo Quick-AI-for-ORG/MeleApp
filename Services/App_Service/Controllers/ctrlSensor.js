@@ -2,6 +2,11 @@ const Sensor = require('../Models/Sensor');
 const Reading = require('../Models/Reading');
 const Result = require("../../Shared/Result");
 
+
+const jsonToObject = (json) => {
+    return new Sensor(json)
+}
+
 const addSensor = async (req, res) => {
     try {
         const sensorJSON = {
@@ -11,7 +16,7 @@ const addSensor = async (req, res) => {
             modelName: req.body.modelName || '',
             imagePath: req.body.imagePath
         }
-        const sensor = new Sensor(sensorJSON)
+        const sensor = jsonToObject(sensorJSON)
         const result = await sensor.create();
         return res.json(result.toJSON());
     } catch (error) {
@@ -83,6 +88,7 @@ const addSensorReading = async (req, res) => {
 }
 
 module.exports = {
+    _jsonToObject: jsonToObject,
     addSensor,
     removeSensor,
     updateSensor,

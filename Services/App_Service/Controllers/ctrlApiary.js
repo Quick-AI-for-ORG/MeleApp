@@ -1,17 +1,18 @@
 const Apiary = require('../Models/Apiary');
 const Result = require("../../Shared/Result");
 
+const jsonToObject = (json) => {
+    return new Apiary(json)
+}
 const addApiary = async (req, res) => {
     try {
         const apiaryJSON = {
-            name: req.body.name,
-            location: req.body.location,
-            temperature: req.body.temperature,
-            humidity: req.body.humidity,
+            name: req.body.apiaryName,
+            location: req.body.location || `${req.body.latitude} - ${req.body.longitude}`,
             numberOfHives: req.body.numberOfHives || 0,
-            owner: req.body.owner
+            owner: req.body.owner || req.session.user._id
         };
-        const apiary = new Apiary(apiaryJSON);
+        const apiary = jsonToObject(apiaryJSON);
         const result = await apiary.create();
         return res.json(result.toJSON());
     } catch (error) {
@@ -67,6 +68,7 @@ const getApiaryTemperature = async (req, res) => {}
 const getApiaryHumidity = async (req, res) => {}
 
 module.exports = {
+    _jsonToObject: jsonToObject,
     addApiary,
     removeApiary,
     updateApiary,

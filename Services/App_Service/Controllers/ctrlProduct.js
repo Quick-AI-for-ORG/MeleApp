@@ -1,6 +1,9 @@
 const Product = require('../Models/Product');
 const Result = require("../../Shared/Result");
 
+const jsonToObject = (json) => {
+    return new Product(json)
+}
 const addProduct = async (req, res) => {
     try {
         const productJSON = {
@@ -11,7 +14,7 @@ const addProduct = async (req, res) => {
             images: req.body.images || [],
             counter: req.body.counter || 0
         };
-        const product = new Product(productJSON);
+        const product = jsonToObject(productJSON);
         const result = await product.create();
         return res.json(result.toJSON());
     } catch (error) {
@@ -63,7 +66,10 @@ const getProducts = async (req, res) => {
     }
 }
 
+
+
 module.exports = {
+    _jsonToObject: jsonToObject,
     addProduct,
     removeProduct,
     updateProduct,

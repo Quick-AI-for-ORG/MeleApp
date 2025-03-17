@@ -1,6 +1,11 @@
 const User = require('../Models/User')
 const Result = require("../../Shared/Result")
 
+
+const jsonToObject = (json) => {
+    return new User(json)
+}
+
 const addUser = async (req, res) => {
     try {
         const userJSON = {
@@ -11,7 +16,7 @@ const addUser = async (req, res) => {
             address: req.body.address || '',
             affiliation: req.body.affiliation || '',
         }
-        const user = new User(userJSON)
+        const user = jsonToObject(userJSON)
         const result = await user.create()
         return res.json(result.toJSON())
     }
@@ -60,7 +65,7 @@ const updateUser = async (req, res) => {
         });
         update.name = req.body.firstName + ' ' + req.body.lastName
         if (req.body.email == req.session.user.email) {
-            const user = new User(req.session.user)
+            const user = jsonToObject(req.session.user)
             update.email = user.email
             const result = await user.modify(update)
             if (result.success.status) req.session.user = result.data
@@ -87,7 +92,7 @@ const register = async (req, res) => {
             address: req.body.address || '',
             affiliation: req.body.affiliation || '',
         }
-        const user = new User(userJSON)
+        const user = jsonToObject(userJSON)
         const result = await user.create()
         if (result.success.status) req.session.user = result.data
         else req.session.message = result.message
@@ -129,7 +134,7 @@ const logout = (req, res) => {
 
 const getApiaries = async (req, res) => {
     try {
-    const user = new User(req.session.user)
+    const user = jsonToObject(req.session.user)
     if (user) {
         const result = await user.getApiaries()
         if(result.success.status) req.session.user.apiaries = result.data
@@ -145,7 +150,18 @@ const getApiaries = async (req, res) => {
 
 const upgrade = (req, res) => {
     try{
-        const user = req.session.user
+        const user = jsonToObject(req.session.user)
+
+        const newApiary = !req.session.user.apiaries.some(apiary => apiary.name === req.body.apiaryName);
+        const apiaryJSON = {
+            name: req.body.apiaryName,
+            location: req.body.location,
+            numberOfHives: req.body.numberOfHives || 0,
+            owner: user._id
+        }
+        const upgradeJSON = {
+
+        }
         if (user) {
             const result = user.purchaseUpgrade(upgradeJSON)
             if(result.success.status) req.session.user = result.data
@@ -160,6 +176,7 @@ const upgrade = (req, res) => {
 }
 
 module.exports = {
+    _jsonToObject: jsonToObject,
     addUser,
     removeUser,
     updateUser,

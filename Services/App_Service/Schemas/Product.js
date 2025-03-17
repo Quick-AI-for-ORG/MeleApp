@@ -15,7 +15,7 @@ const productSchema = new mongoose.Schema({
     },
     subscription: {
         type: String,
-        required: true,
+        required: false,
     },
     images: {
         type: [String],
@@ -25,6 +25,11 @@ const productSchema = new mongoose.Schema({
     counter: {
         type: Number,
         default: 0
+    },
+    sensors: {
+        type:[mongoose.Schema.Types.ObjectId],
+        ref: 'Sensors',
+        default: [],
     }
 }, { timestamps: true });
 module.exports = mongoose.model('Products', productSchema);
