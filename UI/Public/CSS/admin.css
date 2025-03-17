@@ -27,6 +27,9 @@ body {
   border-radius: 10px;
   margin-bottom: 2rem;
   color: #fbf5dd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .header-left {
@@ -38,6 +41,12 @@ body {
 .header-actions {
   display: flex;
   gap: 1rem;
+}
+
+.header-right {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
 }
 
 .add-btn {
@@ -76,6 +85,41 @@ body {
   align-items: center;
   padding: 0.25rem;
   border-radius: 8px;
+}
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  color: #fbf5dd;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(251, 245, 221, 0.2);
+}
+
+.nav-btn:hover {
+  background: rgba(251, 245, 221, 0.1);
+  transform: translateY(-2px);
+}
+
+.upgrade-btn {
+  background: rgba(252, 163, 17, 0.2);
+}
+
+.upgrade-btn:hover {
+  background: #fca311;
+  color: #16404d;
+}
+
+.logout-btn {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+.logout-btn:hover {
+  background: #ef4444;
+  color: #fbf5dd;
 }
 
 /* Stats Grid */
