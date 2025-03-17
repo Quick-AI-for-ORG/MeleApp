@@ -70,14 +70,41 @@ body {
 .header-right {
   display: flex;
   gap: 1rem;
+  align-items: center;
 }
 
-.icon-btn {
-  background: none;
-  border: none;
-  padding: 0.5rem;
-  cursor: pointer;
-  color: #6b7280;
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  color: #16404d;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(22, 64, 77, 0.2);
+}
+
+.nav-btn:hover {
+  transform: translateY(-2px);
+}
+
+.upgrade-btn {
+  background: rgba(252, 163, 17, 0.2);
+}
+
+.upgrade-btn:hover {
+  background: #fca311;
+  color: #16404d;
+}
+
+.logout-btn {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+.logout-btn:hover {
+  background: #ef4444;
+  color: white;
 }
 
 /* Sidebar styles */
