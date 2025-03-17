@@ -385,6 +385,7 @@ function getCellsForType(item, type) {
       return [
         item.name,
         `$${parseFloat(item.price).toFixed(2)}`,
+        `<span class="product-counter">${item.counter || 0} units</span>`,
         item.description || "No description",
         new Date(item.createdAt).toLocaleDateString(),
       ];

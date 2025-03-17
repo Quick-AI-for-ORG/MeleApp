@@ -327,8 +327,9 @@
                                     <h4>
                                         <%= product.name %>
                                     </h4>
-                                    <p>$<%= product.price %>
-                                    </p>
+                                    <p>$<%= product.price %> | <span class="product-counter">
+                                                <%= product.counter || 0 %> Purchases
+                                            </span></p>
                                     <span class="timestamp">
                                         Added <%= new Date(product.createdAt).toLocaleDateString() %>
                                     </span>
