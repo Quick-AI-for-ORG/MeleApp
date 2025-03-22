@@ -7,6 +7,11 @@ function setSelectedApiary(apiaryId) {
   selectedApiaryId = apiaryId;
   const apiaryInput = $("#apiary");
   if (apiaryInput) apiaryInput.value = apiaryId;
+  const apiaries = JSON.parse($('#apiariesInjection').dataset.apiaries)
+  let apiary = apiaries.find(apiary => apiary._id === apiaryId);
+  $("#totalHives").innerText = apiary.numberOfHives || 0;
+  $("#totalTemperature").innerText = apiary.temperature || 0;
+  $("#totalHumidity").innerText = apiary.humidity || 0;
   fetchBeekeepers(apiaryId);
 }
 
@@ -18,6 +23,7 @@ function updateTitles(apiaryName, hiveName = "") {
     hiveTitle.textContent = hiveName;
     hiveTitle.classList[hiveName ? "add" : "remove"]("active");
   }
+
 }
 
 function toggleDashboards(showHive = false) {
@@ -95,7 +101,6 @@ function setupEventListeners() {
 document.addEventListener("DOMContentLoaded", function() {
   setupEventListeners();
   
-  // Auto-select first apiary
   setTimeout(() => {
     const firstApiaryTrigger = $(".nested-dropdown > .nested-trigger");
     if (firstApiaryTrigger) {

@@ -111,6 +111,7 @@
                         <i class="fas fa-chevron-down"></i>
                     </button>
                     <div class="dropdown-content">
+                        <div style="visibility:hidden;" id="apiariesInjection" data-apiaries='<%= JSON.stringify(apiaries) %>'></div>
                         <% if (Array.isArray(apiaries) && apiaries.length> 0) {
                             for (const apiary of apiaries) { %>
                             <div class="nested-dropdown">
@@ -172,7 +173,7 @@
                         <div class="weather-info">
                             <h3>Temperature</h3>
                             <div class="weather-value">
-                                <span class="value"></span>
+                                <span id="totalTemperature" class="value"></span>
                                 <span class="unit">°C</span>
                             </div>
                             <p class="weather-time"></p>
@@ -186,7 +187,7 @@
                         <div class="weather-info">
                             <h3>Humidity</h3>
                             <div class="weather-value">
-                                <span class="value"></span>
+                                <span id="totalHumidity" class="value"></span>
                                 <span class="unit">%</span>
                             </div>
                             <p class="weather-time"></p>
@@ -200,7 +201,7 @@
                         <div class="weather-info">
                             <h3>Total Beekeepers</h3>
                             <div class="weather-value">
-                                <span class="value"></span>
+                                <span id="totalBeekeepers" class="value"></span>
                                 <span class="unit">Active</span>
                             </div>
                             <p class="weather-time"></p>
@@ -214,7 +215,7 @@
                         <div class="weather-info">
                             <h3>Total Hives</h3>
                             <div class="weather-value">
-                                <span class="value"></span>
+                                <span id="totalHives" class="value"></span>
                                 <span class="unit">Monitored</span>
                             </div>
                             <p class="weather-time"></p>
@@ -228,7 +229,7 @@
                         <div class="weather-info">
                             <h3>Active Threats</h3>
                             <div class="weather-value">
-                                <span class="value"></span>
+                                <span id="totalThreats" class="value"></span>
                                 <span class="unit">Detected</span>
                             </div>
                             <p class="weather-time"></p>
