@@ -401,30 +401,19 @@ function initializeHiveCharts() {
 }
 
 // Beekeeper Management
-const defaultBeekeepers = [
-  {
-    id: "1",
-    firstName: "Ahmed",
-    lastName: "Hassan",
-    email: "ahmed.hassan@example.com",
-    phone: "+201234567890",
-    role: "Senior Beekeeper",
-    hives: 12,
-    experience: 8,
-    isActive: true,
-  },
-  {
-    id: "2",
-    firstName: "Sara",
-    lastName: "Mohamed",
-    email: "sara.mohamed@example.com",
-    phone: "+201234567891",
-    role: "Apiary Manager",
-    hives: 15,
-    experience: 5,
-    isActive: false,
-  },
-];
+// const defaultBeekeepers = [
+//   {
+//     id: "1",
+//     firstName: "Mele",
+//     lastName: "Team",
+//     email: "mele.rimba@gmail.com",
+//     phone: "+201234567890",
+//     role: "Senior Beekeeper",
+//     hives: 12,
+//     experience: 8,
+//     isActive: true,
+//   },
+// ];
 
 // Initialize data storage
 let beekeepers =
