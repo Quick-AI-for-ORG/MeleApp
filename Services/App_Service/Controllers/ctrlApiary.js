@@ -65,7 +65,7 @@ const getApiaries = async (req, res) => {
 
 const getApiaryHives = async (req, res) => {
     try {
-        const apiary = await Apiary.get(req.body.apiary);
+        const apiary = await Apiary.get(req.body._id);
         if(apiary.success.status) return apiary.toJSON();
         const result = await Apiary.getHives(apiary._id);
         return result.toJSON();
