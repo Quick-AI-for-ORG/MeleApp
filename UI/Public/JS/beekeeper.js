@@ -1,8 +1,19 @@
-let selectedApiaryId = null;
+/******************************
+ *   UTILITY FUNCTIONS        *
+ ******************************/
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => document.querySelectorAll(selector);
 const toggleDisplay = (el, show) => el && (el.style.display = show ? "block" : "none");
 
+/******************************
+ *   STATE VARIABLES          *
+ ******************************/
+let selectedApiaryId = null;
+let beekeepers = [];
+
+/******************************
+ *  APIARY MANAGEMENT FUNCTIONS *
+ ******************************/
 function setSelectedApiary(apiaryId) {
   selectedApiaryId = apiaryId;
   const apiaryInput = $("#apiary");
@@ -23,7 +34,6 @@ function updateTitles(apiaryName, hiveName = "") {
     hiveTitle.textContent = hiveName;
     hiveTitle.classList[hiveName ? "add" : "remove"]("active");
   }
-
 }
 
 function toggleDashboards(showHive = false) {
@@ -36,176 +46,9 @@ function toggleDashboards(showHive = false) {
   showHive ? initializeHiveCharts() : initializeCharts();
 }
 
-function createChart(ctx, config) {
-  if (!ctx) return null;
-  return new Chart(ctx.getContext("2d"), config);
-}
-
-function setupEventListeners() {
-  const apiaryDropdown = $("#apiaryDropdown");
-  const dropdownContent = $(".dropdown-content");
-  
-  if (apiaryDropdown && dropdownContent) {
-    apiaryDropdown.addEventListener("click", function(e) {
-      e.preventDefault();
-      const isActive = dropdownContent.classList.toggle("active");
-      dropdownContent.style.display = isActive ? "block" : "none";
-      
-      const icon = this.querySelector(".fa-chevron-down");
-      if (icon) icon.style.transform = isActive ? "rotate(180deg)" : "rotate(0deg)";
-    });
-  }
-  
-  document.addEventListener("click", function(e) {
-    if (e.target.closest(".nested-trigger")) {
-      e.preventDefault();
-      e.stopPropagation();
-      
-      const trigger = e.target.closest(".nested-trigger");
-      const content = trigger.nextElementSibling;
-      const isHiveTrigger = trigger.closest(".hive-item");
-      
-      // Update titles
-      const nameSpan = trigger.querySelector("span");
-      if (nameSpan) {
-        const name = nameSpan.textContent;
-        if (isHiveTrigger) {
-          const apiaryElement = trigger.closest(".nested-dropdown").querySelector(".nested-trigger span");
-          const apiaryName = apiaryElement ? apiaryElement.textContent : "";
-          updateTitles(apiaryName, name);
-        } else {
-          updateTitles(name);
-          
-          const apiaryId = trigger.dataset.apiaryId;
-          if (apiaryId) setSelectedApiary(apiaryId);
-        }
-      }
-      
-      if (content) {
-        const isVisible = content.classList.toggle("show");
-        content.style.display = isVisible ? "block" : "none";
-        
-        const chevron = trigger.querySelector(".fa-chevron-right");
-        if (chevron) chevron.style.transform = isVisible ? "rotate(90deg)" : "rotate(0deg)";
-      }
-      
-      toggleDashboards(isHiveTrigger);
-    }
-  });
-  
-  window.addEventListener("click", function(e) {
-    if (e.target.classList.contains("modal")) closeModal(e.target.id);
-  });
-}
-
-document.addEventListener("DOMContentLoaded", function() {
-  setupEventListeners();
-  
-  setTimeout(() => {
-    const firstApiaryTrigger = $(".nested-dropdown > .nested-trigger");
-    if (firstApiaryTrigger) {
-      const apiaryId = firstApiaryTrigger.dataset.apiaryId;
-      setSelectedApiary(apiaryId);
-      firstApiaryTrigger.click();
-      
-      const dropdownContent = $(".dropdown-content");
-      if (dropdownContent) {
-        dropdownContent.style.display = "block";
-        dropdownContent.classList.add("active");
-        
-        const mainDropdownIcon = $("#apiaryDropdown .fa-chevron-down");
-        if (mainDropdownIcon) mainDropdownIcon.style.transform = "rotate(180deg)";
-      }
-    }
-  }, 100);
-  
-  refreshBeekeepersList();
-  updateBeekeepersCount();
-});
-
-// Chart configurations
-const chartConfigs = {
-  weight: {
-    type: "bar",
-    data: {
-      labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-      datasets: [{
-        label: "Hive Weight (kg)",
-        data: [32.5, 33.1, 34.2, 33.8, 35.2, 34.9, 35.2],
-        backgroundColor: "#fca311",
-        borderRadius: 5
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: {
-        y: { beginAtZero: false, min: 30, max: 38, grid: { display: false } },
-        x: { grid: { display: false } }
-      }
-    }
-  },
-  
-  line: (color, bgColor) => ({
-    type: "line",
-    data: {
-      labels: monthlyData.labels,
-      datasets: [{
-        data: [25, 30, 35, 25, 30, 35, 40, 35, 40, 35, 40, 35],
-        borderColor: color,
-        backgroundColor: bgColor,
-        fill: true,
-        tension: 0.4,
-        pointRadius: 0
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: { y: { display: false }, x: { display: false } }
-    }
-  }),
-  
-  vibration: {
-    type: "line",
-    data: {
-      labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-      datasets: [{
-        label: "Vibration Level",
-        data: [2.1, 1.8, 2.3, 1.9, 2.4, 2.0, 1.7],
-        borderColor: "#4F46E5",
-        tension: 0.4,
-        fill: false
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      scales: {
-        y: { beginAtZero: true, grid: { display: false } },
-        x: { grid: { display: false } }
-      }
-    }
-  }
-};
-
-function initializeCharts() {
-  createChart($("#weightChart"), chartConfigs.weight);
-  createChart($("#tasksChart"), chartConfigs.line("#4F46E5", "rgba(79, 70, 229, 0.1)"));
-  createChart($("#projectsChart"), chartConfigs.line("#EF4444", "rgba(239, 68, 68, 0.1)"));
-}
-
-function initializeHiveCharts() {
-  createChart($("#hiveWeightChart"), chartConfigs.weight);
-  createChart($("#vibrationChart"), chartConfigs.vibration);
-}
-
-// Beekeeper management
-let beekeepers = [];
-
+/******************************
+ *  BEEKEEPER MANAGEMENT FUNCTIONS *
+ ******************************/
 async function fetchBeekeepers(apiaryId) {
   try {
     const response = await fetch("/keeper/getApiaryKeepers", {
@@ -270,7 +113,14 @@ function createBeekeeperCard(beekeeper) {
   `;
 }
 
+function updateBeekeepersCount() {
+  const countElement = $(".weather-card.total-beekeepers .weather-value .value");
+  if (countElement) countElement.textContent = beekeepers.length;
+}
 
+/******************************
+ *  MODAL MANAGEMENT FUNCTIONS *
+ ******************************/
 function openModal(mode, beekeeperId = null) {
   const modal = $("#beekeeperModal");
   const form = $("#beekeeperForm");
@@ -326,6 +176,9 @@ function togglePassword() {
   toggleButton.classList.toggle("fa-eye-slash", isVisible);
 }
 
+/******************************
+ *  FORM HANDLING FUNCTIONS   *
+ ******************************/
 function validateForm(data) {
   if (!/^[a-zA-Z\s]{2,}$/.test(data.firstName) || !/^[a-zA-Z\s]{2,}$/.test(data.lastName)) {
     alert("Please enter valid first and last names");
@@ -405,12 +258,9 @@ async function confirmDelete(beekeeper) {
   }
 }
 
-function updateBeekeepersCount() {
-  const countElement = $(".weather-card.total-beekeepers .weather-value .value");
-  if (countElement) countElement.textContent = beekeepers.length;
-}
-
-// Upgrades and kit management
+/******************************
+ *  UPGRADE & KIT MANAGEMENT  *
+ ******************************/
 function openUpgradeModal(id) {
   const modal = $("#upgradeModal");
   if (modal) {
@@ -418,8 +268,6 @@ function openUpgradeModal(id) {
     fetchAvailableUpgrades();
   }
 }
-
-
 
 async function fetchAvailableUpgrades() {
   try {
@@ -507,6 +355,9 @@ async function requestKitRemoval (kitId) {
   }
 }
 
+/******************************
+ *  NOTIFICATION & CONFIRMATION *
+ ******************************/
 function showNotification(message, type) {
   const notification = document.createElement("div");
   notification.className = `notification ${type}`;
@@ -545,3 +396,88 @@ function askToConfirm(message, title="Confirmation", confirmText="Confirm") {
     });
   });
 }
+
+/******************************
+ *  EVENT LISTENERS & INIT    *
+ ******************************/
+function setupEventListeners() {
+  const apiaryDropdown = $("#apiaryDropdown");
+  const dropdownContent = $(".dropdown-content");
+  
+  if (apiaryDropdown && dropdownContent) {
+    apiaryDropdown.addEventListener("click", function(e) {
+      e.preventDefault();
+      const isActive = dropdownContent.classList.toggle("active");
+      dropdownContent.style.display = isActive ? "block" : "none";
+      
+      const icon = this.querySelector(".fa-chevron-down");
+      if (icon) icon.style.transform = isActive ? "rotate(180deg)" : "rotate(0deg)";
+    });
+  }
+  
+  document.addEventListener("click", function(e) {
+    if (e.target.closest(".nested-trigger")) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const trigger = e.target.closest(".nested-trigger");
+      const content = trigger.nextElementSibling;
+      const isHiveTrigger = trigger.closest(".hive-item");
+      
+      // Update titles
+      const nameSpan = trigger.querySelector("span");
+      if (nameSpan) {
+        const name = nameSpan.textContent;
+        if (isHiveTrigger) {
+          const apiaryElement = trigger.closest(".nested-dropdown").querySelector(".nested-trigger span");
+          const apiaryName = apiaryElement ? apiaryElement.textContent : "";
+          updateTitles(apiaryName, name);
+        } else {
+          updateTitles(name);
+          
+          const apiaryId = trigger.dataset.apiaryId;
+          if (apiaryId) setSelectedApiary(apiaryId);
+        }
+      }
+      
+      if (content) {
+        const isVisible = content.classList.toggle("show");
+        content.style.display = isVisible ? "block" : "none";
+        
+        const chevron = trigger.querySelector(".fa-chevron-right");
+        if (chevron) chevron.style.transform = isVisible ? "rotate(90deg)" : "rotate(0deg)";
+      }
+      
+      toggleDashboards(isHiveTrigger);
+    }
+  });
+  
+  window.addEventListener("click", function(e) {
+    if (e.target.classList.contains("modal")) closeModal(e.target.id);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+  setupEventListeners();
+  
+  setTimeout(() => {
+    const firstApiaryTrigger = $(".nested-dropdown > .nested-trigger");
+    if (firstApiaryTrigger) {
+      const apiaryId = firstApiaryTrigger.dataset.apiaryId;
+      setSelectedApiary(apiaryId);
+      firstApiaryTrigger.click();
+      
+      const dropdownContent = $(".dropdown-content");
+      if (dropdownContent) {
+        dropdownContent.style.display = "block";
+        dropdownContent.classList.add("active");
+        
+        const mainDropdownIcon = $("#apiaryDropdown .fa-chevron-down");
+        if (mainDropdownIcon) mainDropdownIcon.style.transform = "rotate(180deg)";
+      }
+    }
+  }, 100);
+  
+  refreshBeekeepersList();
+  updateBeekeepersCount();
+});
