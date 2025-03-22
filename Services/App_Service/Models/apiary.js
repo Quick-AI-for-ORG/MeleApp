@@ -74,7 +74,7 @@ class Apiary {
   }
 
   async getHives(){
-    const result = await Apiary.dependency.populate('HiveModel', this, 'apiaryRef');
+    const result = await Apiary.dependency.populate('hiveModel', this, 'apiaryRef');
     if(result.success.status) this.hives = result.data;
     return result;
   }

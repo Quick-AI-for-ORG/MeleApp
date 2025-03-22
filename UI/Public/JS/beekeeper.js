@@ -1,33 +1,6 @@
-// Sample data for charts
-const monthlyData = {
-  labels: [
-    "JAN/23",
-    "FEB/23",
-    "MAR/23",
-    "APR/23",
-    "MAY/23",
-    "JUN/23",
-    "JUL/23",
-    "AUG/23",
-    "SEP/23",
-    "OCT/23",
-    "NOV/23",
-    "DEC/23",
-  ],
-  datasets: [
-    {
-      label: "Payment Record",
-      data: [20, 35, 25, 45, 15, 35, 45, 20, 35, 25, 30, 20],
-      borderColor: "#3b82f6",
-      tension: 0.4,
-      fill: false,
-      pointRadius: 0,
-    },
-  ],
-};
+
 
 document.addEventListener("DOMContentLoaded", function () {
-  // Main dropdown functionality
   const apiaryDropdown = document.getElementById("apiaryDropdown");
   const dropdownContent = document.querySelector(".dropdown-content");
 
@@ -37,10 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
       dropdownContent.style.display =
         dropdownContent.style.display === "block" ? "none" : "block";
 
-      // Toggle active class for styling
       dropdownContent.classList.toggle("active");
-
-      // Rotate icon
       const icon = this.querySelector(".fa-chevron-down");
       if (icon) {
         icon.style.transform = dropdownContent.classList.contains("active")
@@ -50,7 +20,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Handle nested dropdowns
   document
     .querySelectorAll(".nested-dropdown > .nested-trigger")
     .forEach((trigger) => {
@@ -58,18 +27,14 @@ document.addEventListener("DOMContentLoaded", function () {
         e.preventDefault();
         e.stopPropagation();
 
-        // Update title
         const apiaryName = this.querySelector("span").textContent;
         updateTitles(apiaryName);
-
-        // Toggle nested content
         const content = this.nextElementSibling;
         if (content) {
           content.style.display =
             content.style.display === "block" ? "none" : "block";
           content.classList.toggle("show");
 
-          // Rotate chevron
           const chevron = this.querySelector(".fa-chevron-right");
           if (chevron) {
             chevron.style.transform = content.classList.contains("show")
@@ -114,8 +79,32 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     });
 
-  // Initialize modal handlers
-  initializeModalHandlers();
+  initializeCharts();
+
+  const modal = document.getElementById("beekeeperModal");
+  if (modal) {
+    modal.addEventListener("click", function (event) {
+      if (event.target === modal) {
+        closeModal();
+      }
+    });
+  }
+
+  const closeButton = document.querySelector(".close-modal");
+  if (closeButton) {
+    closeButton.addEventListener("click", function (event) {
+      event.preventDefault();
+      closeModal();
+    });
+  }
+
+  const cancelButton = document.querySelector(".cancel-btn");
+  if (cancelButton) {
+    cancelButton.addEventListener("click", function (event) {
+      event.preventDefault();
+      closeModal();
+    });
+  }
 });
 
 function updateTitles(apiaryName, hiveName = "") {
@@ -138,7 +127,6 @@ function updateTitles(apiaryName, hiveName = "") {
 }
 
 function initializeCharts() {
-  // Weight Chart
   const weightCtx = document.getElementById("weightChart");
   if (weightCtx) {
     new Chart(weightCtx.getContext("2d"), {
@@ -197,12 +185,10 @@ function initializeCharts() {
     });
   }
 
-  // Initialize other charts
   initializeTasksChart();
   initializeProjectsChart();
 }
 
-// Function to initialize Tasks Completed chart
 function initializeTasksChart() {
   const tasksData = {
     labels: monthlyData.labels,
@@ -242,7 +228,6 @@ function initializeTasksChart() {
   });
 }
 
-// Function to initialize Projects chart
 function initializeProjectsChart() {
   const projectsData = {
     labels: monthlyData.labels,
@@ -372,26 +357,10 @@ function initializeHiveCharts() {
   }
 }
 
-// Beekeeper Management
-// const defaultBeekeepers = [
-//   {
-//     id: "1",
-//     firstName: "Mele",
-//     lastName: "Team",
-//     email: "mele.rimba@gmail.com",
-//     phone: "+201234567890",
-//     role: "Senior Beekeeper",
-//     hives: 12,
-//     experience: 8,
-//     isActive: true,
-//   },
-// ];
 
-// Initialize data storage
 let beekeepers =
   JSON.parse(localStorage.getItem("beekeepers")) || defaultBeekeepers;
 
-// Initialize beekeepers display on page load
 document.addEventListener("DOMContentLoaded", () => {
   refreshBeekeepersList();
   updateBeekeepersCount();
