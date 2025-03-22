@@ -52,17 +52,17 @@ const product = async (req, res) => {
 
 const dashboard = async (req, res) => {
   let message = req.session.message === undefined ? null : req.session.message;
-  await ctrlUser.getApiaries(req, res)
-  await ctrlUser.getKeepers(req, res)
+  await ctrlUser.getApiaries(req, res);
+  await ctrlUser.getKeepers(req, res);
   for (let [i, apiary] of req.session.user.apiaries.entries()) {
     req.body._id = apiary._id;
     let result = await ctrlApiary.getApiaryHives(req, res);
-    if(result.success.status) {
-      apiary.hives = [result.data] || []
-      req.session.user.apiaries[i] = apiary
-      req.session.user.apiaries.hives = apiary.hives
+    if (result.success.status) {
+      apiary.hives = result.data || [];
+      req.session.user.apiaries[i] = apiary;
+      req.session.user.apiaries.hives = apiary.hives;
     }
-  }  
+  }
   req.session.message = undefined;
   res.render("beekeeper", {
     layout: false,

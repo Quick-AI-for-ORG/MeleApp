@@ -117,40 +117,36 @@
                                 </button>
                                 <div class="nested-content">
                                     <% if (Array.isArray(apiary.hives) && apiary.hives.length> 0) { %>
-                                        <div class="hives-list">
-                                            <% for (let i=0; i < apiary.hives.length; i++) { %>
-                                                <div class="hive-item" data-hive-id="<%= apiary.hives[i]._id %>">
-                                                    <button class="nested-trigger">
-                                                        <span>Hive <%= apiary.hives[i]._id%> </span>
-                                                        <i class="fas fa-chevron-right"></i>
-                                                    </button>
-                                                    <div class="nested-content">
-                                                        <a href="/keeper/test-stream/<%= apiary.hives[i]._id %>/door"
-                                                            class="monitor-link" target="_blank">
-                                                            <i class="fas fa-video"></i> Door Camera
-                                                        </a>
-                                                        <a href="/keeper/test-stream/<%= apiary.hives[i]._id %>/honey"
-                                                            class="monitor-link" target="_blank">
-                                                            <i class="fas fa-eye"></i> Honey View
-                                                        </a>
-                                                        <a href="/keeper/test-stream/<%= apiary.hives[i]._id %>/internal"
-                                                            class="monitor-link" target="_blank">
-                                                            <i class="fas fa-temperature-high"></i> Internal
-                                                        </a>
-                                                    </div>
+                                        <% for (let i=0; i < apiary.hives.length; i++) { %>
+                                            <div class="hive-item">
+                                                <button class="nested-trigger">
+                                                    <span>Hive <%= i + 1 %> (ID: <%= apiary.hives[i]._id %>)</span>
+                                                    <i class="fas fa-chevron-right"></i>
+                                                </button>
+                                                <div class="nested-content">
+                                                    <a href="/keeper/test-stream" class="monitor-link" target="_blank">
+                                                        <i class="fas fa-video"></i> Door Camera
+                                                    </a>
+                                                    <a href="/keeper/test-stream" class="monitor-link" target="_blank">
+                                                        <i class="fas fa-eye"></i> Honey View
+                                                    </a>
+                                                    <a href="/keeper/test-stream" class="monitor-link" target="_blank">
+                                                        <i class="fas fa-temperature-high"></i> Internal
+                                                    </a>
                                                 </div>
-                                                <% } %>
-                                        </div>
-                                        <% } else { %>
-                                            <p class="no-data">No hives available</p>
+                                            </div>
                                             <% } %>
+                                                <% } else { %>
+                                                    <p class="no-data">No hives in this apiary</p>
+                                                    <% } %>
                                 </div>
                             </div>
-                            <% }} else { %>
-                                <div class="nested-dropdown">
-                                    <p class="no-data">No apiaries available</p>
-                                </div>
-                                <% } %>
+                            <% } %>
+                                <% } else { %>
+                                    <div class="nested-dropdown">
+                                        <p class="no-data">No apiaries available</p>
+                                    </div>
+                                    <% } %>
                     </div>
 
             </nav>
@@ -358,6 +354,7 @@
                             <div class="form-group">
                                 <label for="phone">Phone Number</label>
                                 <input type="tel" id="phone" name="phone" required>
+                                <input type="hidden" id="apiary" name="apiary" value="<%= apiaries[i]._id %>">
                             </div>
                             <div class="form-group password-group">
                                 <label for="password">Password</label>

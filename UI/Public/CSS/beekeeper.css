@@ -1299,24 +1299,3 @@ canvas {
   text-align: center;
   font-style: italic;
 }
-
-.hives-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.hive-item[data-hive-id] {
-  margin-left: 0.5rem;
-}
-
-.hive-item[data-hive-id] .nested-trigger {
-  font-size: 0.95rem;
-  padding: 0.5rem 0.75rem;
-}
-
-.hive-item[data-hive-id] .nested-trigger span {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
