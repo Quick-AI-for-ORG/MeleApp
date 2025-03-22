@@ -1,31 +1,3 @@
-// Sample data for charts
-const monthlyData = {
-  labels: [
-    "JAN/23",
-    "FEB/23",
-    "MAR/23",
-    "APR/23",
-    "MAY/23",
-    "JUN/23",
-    "JUL/23",
-    "AUG/23",
-    "SEP/23",
-    "OCT/23",
-    "NOV/23",
-    "DEC/23",
-  ],
-  datasets: [
-    {
-      label: "Payment Record",
-      data: [20, 35, 25, 45, 15, 35, 45, 20, 35, 25, 30, 20],
-      borderColor: "#3b82f6",
-      tension: 0.4,
-      fill: false,
-      pointRadius: 0,
-    },
-  ],
-};
-
 let selectedApiaryId = null;
 
 function setSelectedApiary(apiaryId) {
@@ -34,6 +6,7 @@ function setSelectedApiary(apiaryId) {
   if (apiaryInput) {
     apiaryInput.value = apiaryId;
   }
+  fetchBeekeepers(apiaryId);
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -421,8 +394,22 @@ function initializeHiveCharts() {
 // ];
 
 // Initialize data storage
-let beekeepers =
-  JSON.parse(localStorage.getItem("beekeepers")) || defaultBeekeepers;
+let beekeepers = [];
+
+// Update to fetch beekeepers from server
+async function fetchBeekeepers(apiaryId) {
+  try {
+    const response = await fetch(`/keeper/getBeekeepers/${apiaryId}`);
+    if (!response.ok) throw new Error("Failed to fetch beekeepers");
+    const data = await response.json();
+    beekeepers = data.beekeepers;
+    refreshBeekeepersList();
+    updateBeekeepersCount();
+  } catch (error) {
+    console.error("Error fetching beekeepers:", error);
+    showNotification("Error loading beekeepers", "error");
+  }
+}
 
 // Initialize beekeepers display on page load
 document.addEventListener("DOMContentLoaded", () => {
@@ -518,13 +505,12 @@ function openModal(mode, beekeeperId = null) {
   modal.style.display = "block";
 }
 
-function handleSubmit(event) {
+async function handleSubmit(event) {
   event.preventDefault();
   const form = event.target;
   const formData = new FormData(form);
   const data = Object.fromEntries(formData);
 
-  // Update to use selectedApiaryId
   if (!selectedApiaryId) {
     showNotification("Please select an apiary first", "error");
     return;
@@ -534,49 +520,38 @@ function handleSubmit(event) {
   if (!validateForm(data)) return;
 
   const isEdit = form.dataset.mode === "edit";
+  const endpoint = `/keeper/${isEdit ? "updateBeekeeper" : "addBeekeeper"}`;
+  const method = isEdit ? "PUT" : "POST";
 
-  if (isEdit) {
-    const beekeeperId = form.dataset.id;
-    // Find the beekeeper to maintain existing data
-    const existingBeekeeper = beekeepers.find((b) => b.id === beekeeperId);
-    if (existingBeekeeper) {
-      // Update only the form fields while preserving other data
-      const updatedBeekeeper = {
-        ...existingBeekeeper,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        email: data.email,
-        phone: data.phone,
-      };
+  try {
+    const response = await fetch(endpoint, {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
 
-      // Update in array
-      const index = beekeepers.findIndex((b) => b.id === beekeeperId);
-      beekeepers[index] = updatedBeekeeper;
+    if (!response.ok) throw new Error("Failed to save beekeeper");
 
-      // Save to localStorage
-      localStorage.setItem("beekeepers", JSON.stringify(beekeepers));
-
-      // Refresh the display
-      refreshBeekeepersList();
+    const result = await response.json();
+    if (result.success) {
+      showNotification(
+        `Beekeeper ${isEdit ? "updated" : "added"} successfully`,
+        "success"
+      );
+      fetchBeekeepers(selectedApiaryId); // Refresh the list
+      closeModal();
+    } else {
+      throw new Error(result.message);
     }
-  } else {
-    // Add new beekeeper
-    const newId = Date.now().toString();
-    const newBeekeeper = {
-      id: newId,
-      ...data,
-      role: "New Beekeeper",
-      hives: 0,
-      experience: 0,
-      isActive: true,
-    };
-    beekeepers.unshift(newBeekeeper);
-    localStorage.setItem("beekeepers", JSON.stringify(beekeepers));
-    refreshBeekeepersList();
-    updateBeekeepersCount();
+  } catch (error) {
+    console.error("Error:", error);
+    showNotification(
+      error.message || `Error ${isEdit ? "updating" : "adding"} beekeeper`,
+      "error"
+    );
   }
-
-  closeModal();
 }
 
 function validateForm(data) {
@@ -601,12 +576,26 @@ function validateForm(data) {
   return true;
 }
 
-function confirmDelete(beekeeperId) {
+async function confirmDelete(beekeeperId) {
   if (confirm("Are you sure you want to delete this beekeeper?")) {
-    beekeepers = beekeepers.filter((b) => b.id !== beekeeperId);
-    localStorage.setItem("beekeepers", JSON.stringify(beekeepers));
-    refreshBeekeepersList();
-    updateBeekeepersCount();
+    try {
+      const response = await fetch(`/keeper/deleteBeekeeper/${beekeeperId}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) throw new Error("Failed to delete beekeeper");
+
+      const result = await response.json();
+      if (result.success) {
+        showNotification("Beekeeper deleted successfully", "success");
+        fetchBeekeepers(selectedApiaryId); // Refresh the list
+      } else {
+        throw new Error(result.message);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      showNotification(error.message || "Error deleting beekeeper", "error");
+    }
   }
 }
 
@@ -675,8 +664,6 @@ function requestKitRemoval(kitId) {
   if (
     confirm(`Are you sure you want to request removal of ${kitNames[kitId]}?`)
   ) {
-    // Here you would normally send a request to the server
-    // For now, just show a notification
     alert(
       `Removal request for ${kitNames[kitId]} has been sent to the administrator.`
     );
