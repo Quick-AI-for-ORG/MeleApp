@@ -396,10 +396,16 @@ function initializeHiveCharts() {
 // Initialize data storage
 let beekeepers = [];
 
-// Update to fetch beekeepers from server
 async function fetchBeekeepers(apiaryId) {
   try {
-    const response = await fetch(`/keeper/getBeekeepers/${apiaryId}`);
+    const response = await fetch("/keeper/getBeekeepers", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ apiary: apiaryId }),
+    });
+
     if (!response.ok) throw new Error("Failed to fetch beekeepers");
     const data = await response.json();
     beekeepers = data.beekeepers;
