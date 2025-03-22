@@ -1,39 +1,45 @@
 const express = require("express");
 const router = express.Router();
-const ctrlPages = require("../Controllers/ctrlPages");
-const ctrlUser = require("../Controllers/ctrlUser");
-const ctrlProduct = require("../Controllers/ctrlProduct");
-const ctrlUpgrade = require("../Controllers/ctrlUpgrade");
 
+const controllers = {
+  user: require("../Controllers/ctrlUser"),
+  pages: require("../Controllers/ctrlPages"),
+  apiary: require("../Controllers/ctrlApiary"),
+  product: require("../Controllers/ctrlProduct"),
+  upgrade: require("../Controllers/ctrlUpgrade"),
+};
 
 const localStreamService = require("../../Streaming/localStreamService");
 
-
-router.post("/register", ctrlUser.register);
-router.post("/login", ctrlUser.login);
-
-router.use( (req, res, next) => {
-  if(!req.session.user) res.redirect("/noLogin");
+router.use((req, res, next) => {
+  if (!req.session.user) res.redirect("/noLogin");
   else next();
-})
+});
+
+router.post("/register", controllers.user.register);
+router.post("/login", controllers.user.login);
+
 router.get("/", (req, res) => {
   res.redirect("/keeper/dashboard");
 });
 
-router.get("/dashboard", ctrlPages._KEEPER.dashboard);
-router.get("/profile", ctrlPages._KEEPER.profile);
+router.get("/dashboard", controllers.pages._KEEPER.dashboard);
+router.get("/profile", controllers.pages._KEEPER.profile);
 
-router.get("/logout", ctrlUser.logout);
-router.get("/upgrade", ctrlPages._KEEPER.upgrade);
+router.get("/logout", controllers.user.logout);
+router.get("/upgrade", controllers.pages._KEEPER.upgrade);
 
-router.post("/profile/update", ctrlUser.updateUser);
-router.post("/upgrade", ctrlUpgrade.upgrade);
+router.post("/profile/update", controllers.user.updateUser);
+router.post("/upgrade", controllers.upgrade.upgrade);
 
-router.get("/getProducts", ctrlProduct.getProducts);
+router.get("/getProducts", controllers.product.getProducts);
 
 router.get("/test-stream", (req, res) => {
-  res.render("test-stream", { user: req.session.user || null , layout: false });
+  res.render("test-stream", { user: req.session.user || null, layout: false });
 });
+
+router.post("/getApiaryHives", controllers.apiary.getApiaryHives);
+
 
 router.post("/start-stream", async (req, res) => {
   const { hiveId } = req.body;
@@ -52,6 +58,7 @@ router.post("/add-ice-candidate", async (req, res) => {
   const result = await localStreamService.addIceCandidate(hiveId, candidate);
   res.json(result);
 });
+
 
 router.get("*", (req, res) => {
   res.redirect("/keeper");
