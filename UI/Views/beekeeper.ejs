@@ -71,7 +71,10 @@
 
                 <div class="nav-divider"></div>
                 <nav class="nav">
-                    <span class="active"><% if(user.role == 'Owner') {%> Owner <%} else{ %> Beekeeper <% } %> Dashboard:</span><%=user.name%> 
+                    <span class="active">
+                        <% if(user.role=='Owner' ) {%> Owner <%} else{ %> Beekeeper <% } %> Dashboard:
+                    </span>
+                    <%=user.name%>
                 </nav>
                 <div class="nav-divider"></div>
                 <div class="dynamic-title">
@@ -80,24 +83,24 @@
                         <span id="currentHiveTitle" class="hive-title"></span>
                     </h2>
                 </div>
-                <input type="hidden" id="sessionId" value= '<%=user._id%>'' >
-                <input type="hidden" id="sessionRole" value= '<%=user.role%>'' >
+                <input type="hidden" id="sessionId" value='<%=user._id%>'' >
+                <input type="hidden" id="sessionRole" value= ' <%=user.role%>'' >
             </div>
             <div class="header-right">
                 <a href="/keeper/profile" class="nav-btn profile-btn">
                     <i class="fas fa-user"></i>
                     Profile
                 </a>
-                <% if(user.role == 'Owner') { %>
-                <a href="/keeper/upgrade" class="nav-btn upgrade-btn">
-                    <i class="fas fa-arrow-up-right-from-square"></i>
-                    Upgrade
-                </a>
-                <% } %>
-                <a href="/keeper/logout" class="nav-btn logout-btn">
-                    <i class="fas fa-sign-out-alt"></i>
-                    Logout
-                </a>
+                <% if(user.role=='Owner' ) { %>
+                    <a href="/keeper/upgrade" class="nav-btn upgrade-btn">
+                        <i class="fas fa-arrow-up-right-from-square"></i>
+                        Upgrade
+                    </a>
+                    <% } %>
+                        <a href="/keeper/logout" class="nav-btn logout-btn">
+                            <i class="fas fa-sign-out-alt"></i>
+                            Logout
+                        </a>
             </div>
         </header>
 
@@ -113,7 +116,8 @@
                         <i class="fas fa-chevron-down"></i>
                     </button>
                     <div class="dropdown-content">
-                        <div style="visibility:hidden;" id="apiariesInjection" data-apiaries='<%= JSON.stringify(apiaries) %>'></div>
+                        <div style="visibility:hidden;" id="apiariesInjection"
+                            data-apiaries='<%= JSON.stringify(apiaries) %>'></div>
                         <% if (Array.isArray(apiaries) && apiaries.length> 0) {
                             for (const apiary of apiaries) { %>
                             <div class="nested-dropdown">
@@ -127,10 +131,12 @@
                                 </button>
                                 <div class="nested-content">
                                     <% if (Array.isArray(apiary.hives) && apiary.hives.length> 0) { %>
-                                        <% for (let i=0; i < apiary.hives.length; i++) { %>
+                                        <% for (let i=0; i < apiary.hives.length; i++) { const hive=apiary.hives[i]; %>
                                             <div class="hive-item">
-                                                <button class="nested-trigger">
-                                                    <span>Hive <%= i + 1 %> </span>
+                                                <button class="nested-trigger" data-hive-id="<%= hive._id %>"
+                                                    data-hive-name="Hive <%= i + 1 %>"
+                                                    data-apiary-id="<%= apiary._id %>">
+                                                    <span>Hive <%= i + 1 %></span>
                                                     <i class="fas fa-chevron-right"></i>
                                                 </button>
                                                 <div class="nested-content">
@@ -300,11 +306,11 @@
                 <div class="beekeepers-section">
                     <div class="section-header">
                         <h2 class="section-title">Beekeepers</h2>
-                        <% if(user.role == 'Owner') { %>
-                        <button class="add-beekeeper-btn" onclick="openModal('add')">
-                            <i class="fas fa-plus"></i> Add Beekeeper
-                        </button>
-                        <% } %>
+                        <% if(user.role=='Owner' ) { %>
+                            <button class="add-beekeeper-btn" onclick="openModal('add')">
+                                <i class="fas fa-plus"></i> Add Beekeeper
+                            </button>
+                            <% } %>
                     </div>
                     <div class="beekeepers-grid">
                         <div class="no-data-message">
@@ -349,7 +355,8 @@
                                 </div>
                             </div>
                             <div class="form-actions">
-                                <button type="button" class="cancel-btn" onclick="closeModal('beekeeperModal')">Cancel</button>
+                                <button type="button" class="cancel-btn"
+                                    onclick="closeModal('beekeeperModal')">Cancel</button>
                                 <button type="submit" class="submit-btn">Save</button>
                             </div>
                         </form>
@@ -530,13 +537,14 @@
                                 <i class="fas fa-box-open"></i>
                                 Installed Hive Kits
                             </h3>
-                            <div style="visibility:hidden" id="injectedProducts" data-products='<%= JSON.stringify(products) %>'></div>
-                            <% if(user.role == 'Owner') { %>
-                            <button class="purchase-upgrade-btn" onclick="openUpgradeModal()">
-                                <i class="fas fa-plus"></i>
-                                Purchase Upgrade
-                            </button>
-                            <% } %>
+                            <div style="visibility:hidden" id="injectedProducts"
+                                data-products='<%= JSON.stringify(products) %>'></div>
+                            <% if(user.role=='Owner' ) { %>
+                                <button class="purchase-upgrade-btn" onclick="openUpgradeModal()">
+                                    <i class="fas fa-plus"></i>
+                                    Purchase Upgrade
+                                </button>
+                                <% } %>
                         </div>
                         <div class="kits-list">
                             <div class="kit-item">
@@ -544,12 +552,12 @@
                                     <h4></h4>
                                     <span class="kit-status active"></span>
                                 </div>
-                                <% if(user.role == 'Owner') { %>
-                                <button class="kit-action-btn" onclick="requestKitRemoval('rimba')">
-                                    <i class="fas fa-times"></i>
-                                    Request Removal
-                                </button>
-                                <% } %>
+                                <% if(user.role=='Owner' ) { %>
+                                    <button class="kit-action-btn" onclick="requestKitRemoval('rimba')">
+                                        <i class="fas fa-times"></i>
+                                        Request Removal
+                                    </button>
+                                    <% } %>
                             </div>
                         </div>
                     </div>
