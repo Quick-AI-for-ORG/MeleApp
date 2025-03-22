@@ -49,13 +49,15 @@ const product = async (req, res) => {
   });
 };
 
-const dashboard = (req, res) => {
+const dashboard = async (req, res) => {
   let message = req.session.message === undefined ? null : req.session.message;
+  await ctrlUser.getApiaries(req, res)
   req.session.message = undefined;
   res.render("beekeeper", {
     layout: false,
     message: message,
     user: req.session.user || "",
+    apiaries: req.session.user.apiaries
   });
 };
 

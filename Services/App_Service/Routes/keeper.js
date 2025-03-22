@@ -5,8 +5,7 @@ const ctrlUser = require("../Controllers/ctrlUser");
 const ctrlProduct = require("../Controllers/ctrlProduct");
 const ctrlUpgrade = require("../Controllers/ctrlUpgrade");
 
-const { sendUpgradeConfirmation } = require("../../Utils/mailer");
-const weatherService = require("../../Utils/weatherService");
+
 const localStreamService = require("../../Streaming/localStreamService");
 
 

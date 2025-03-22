@@ -2,8 +2,8 @@ const User = require('../Models/User')
 const Result = require("../../Shared/Result")
 
 
-const jsonToObject = (json) => {
-    return new User(json)
+const jsonToObject = (json, role="Owner") => {
+    return new User(json, role)
 }
 
 const addUser = async (req, res) => {
@@ -148,7 +148,37 @@ const getApiaries = async (req, res) => {
     }
 }
 
+const getUpgrades = async (req, res) => {
+    try {
+    const user = jsonToObject(req.session.user)
+    if (user) {
+        const result = await user.getUpgrades()
+        if(result.success.status) req.session.user.upgrades = result.data
+        else req.session.message = result.message
+        return result.toJSON()
+    }
+    return new Result(-1, null, 'No user logged in').toJSON()
+    }
+    catch (error) {
+        return new Result(-1, null, `Error fetching upgrades: ${error.message}`).toJSON()
+    }
+}
 
+const getKeepers = async (req, res) => {
+    try {
+    const user = jsonToObject(req.session.user)
+    if (user) {
+        const result = await user.getKeepers()
+        if(result.success.status) req.session.user.keepers = result.data
+        else req.session.message = result.message
+        return result.toJSON()
+    }
+    return new Result(-1, null, 'No user logged in').toJSON()
+    }
+    catch (error) {
+        return new Result(-1, null, `Error fetching keepers: ${error.message}`).toJSON()
+    }
+}
 
 module.exports = {
     _jsonToObject: jsonToObject,
@@ -160,5 +190,7 @@ module.exports = {
     register,
     login,
     logout,
-    getApiaries
+    getApiaries,
+    getUpgrades,
+    getKeepers,
 }

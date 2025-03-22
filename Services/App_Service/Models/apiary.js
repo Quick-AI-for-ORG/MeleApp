@@ -73,7 +73,7 @@ class Apiary {
     return await Apiary.crudInterface.remove(this._id, "apiaryModel", "_id");
   }
 
-  async getHive(){
+  async getHives(){
     const result = await Apiary.dependency.populate('HiveModel', this, 'apiaryRef');
     if(result.success.status) this.hives = result.data;
     return result;

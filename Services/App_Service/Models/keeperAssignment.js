@@ -7,14 +7,13 @@ class KeeperAssignment {
   static crudInterface = crudInterface;
   static jsonToObject = jsonToObject;
   static dependency = dependency;
-  static attributes = ['beekeeperRef', 'hiveRef', 'apiaryRef'];
+  static attributes = ['beekeeperRef', 'apiaryRef'];
 
   constructor(assignmentJSON) {
     KeeperAssignment.jsonToObject(this, assignmentJSON);
     this.references = {
       parent: {
         "userModel": this.beekeeperRef,
-        "hiveModel": this.hiveRef,
         "apiaryModel": this.apiaryRef
       }
     }

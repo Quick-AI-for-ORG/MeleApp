@@ -1,6 +1,15 @@
 const mongoose = require("mongoose");
 const meleDB = mongoose.connection.useDb("meleDB");
 const Result = require("../../Shared/Result");
+const controllers = {
+  user: require("./ctrlUser"),
+  apiary: require("./ctrlApiary"),
+  sensor: require("./ctrlSensor"),
+  product: require("./ctrlProduct"),
+  hive: require("./ctrlHive"),
+  upgrade: require("./ctrlUpgrade"),
+  keeper: require("./ctrlKeeper"),
+}
 
 const deleteHive = async (req, res) => {
   try {

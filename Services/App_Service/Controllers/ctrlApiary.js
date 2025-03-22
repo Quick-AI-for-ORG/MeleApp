@@ -47,9 +47,9 @@ const updateApiary = async (req, res) => {
 const getApiary = async (req, res) => {
     try {
         const result = await Apiary.get(req.body._id);
-        return res.json(result.toJSON());
+        return result
     } catch (error) {
-        return new Result(-1, null, `Error fetching apiary: ${error.message}`).toJSON();
+        return new Result(-1, null, `Error fetching apiary: ${error.message}`)
     }
 }
 

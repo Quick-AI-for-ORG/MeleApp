@@ -6,11 +6,6 @@ const keeperAssignmentSchema = new mongoose.Schema({
         ref: 'Users',
         required: true,
     },
-    hiveRef: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Hives',
-        required: true,
-    },
     apiaryRef: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Apiaries',
