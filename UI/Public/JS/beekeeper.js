@@ -177,7 +177,7 @@ function togglePassword() {
 }
 
 /******************************
- *  FORM HANDLING FUNCTIONS   *
+ *  BEEKEEPER FORM HANDLING FUNCTIONS   *
  ******************************/
 function validateForm(data) {
   if (!/^[a-zA-Z\s]{2,}$/.test(data.firstName) || !/^[a-zA-Z\s]{2,}$/.test(data.lastName)) {

@@ -88,10 +88,12 @@
                     <i class="fas fa-user"></i>
                     Profile
                 </a>
+                <% if(user.role == 'Owner') { %>
                 <a href="/keeper/upgrade" class="nav-btn upgrade-btn">
                     <i class="fas fa-arrow-up-right-from-square"></i>
                     Upgrade
                 </a>
+                <% } %>
                 <a href="/keeper/logout" class="nav-btn logout-btn">
                     <i class="fas fa-sign-out-alt"></i>
                     Logout
@@ -298,9 +300,11 @@
                 <div class="beekeepers-section">
                     <div class="section-header">
                         <h2 class="section-title">Beekeepers</h2>
+                        <% if(user.role == 'Owner') { %>
                         <button class="add-beekeeper-btn" onclick="openModal('add')">
                             <i class="fas fa-plus"></i> Add Beekeeper
                         </button>
+                        <% } %>
                     </div>
                     <div class="beekeepers-grid">
                         <div class="no-data-message">
@@ -527,10 +531,12 @@
                                 Installed Hive Kits
                             </h3>
                             <div style="visibility:hidden" id="injectedProducts" data-products='<%= JSON.stringify(products) %>'></div>
+                            <% if(user.role == 'Owner') { %>
                             <button class="purchase-upgrade-btn" onclick="openUpgradeModal()">
                                 <i class="fas fa-plus"></i>
                                 Purchase Upgrade
                             </button>
+                            <% } %>
                         </div>
                         <div class="kits-list">
                             <div class="kit-item">
@@ -538,10 +544,12 @@
                                     <h4></h4>
                                     <span class="kit-status active"></span>
                                 </div>
+                                <% if(user.role == 'Owner') { %>
                                 <button class="kit-action-btn" onclick="requestKitRemoval('rimba')">
                                     <i class="fas fa-times"></i>
                                     Request Removal
                                 </button>
+                                <% } %>
                             </div>
                         </div>
                     </div>
