@@ -117,6 +117,50 @@ const makeOperational = async (req, res) => {
 }
 
 
+const getUpgradedHive = async (req, res) => {
+    try {
+        let result = await controllers.hive.getHive(req,res);
+        if(result.success.status) {
+            let hive = controllers.hive._jsonToObject(result.data);
+
+            result = await hive.getThreats();
+            if(!result.success.status) return res.json(result.toJSON());
+            hive.threats = result.data || [];
+
+            result = await hive.getReadings();
+            if(!result.success.status) return res.json(result.toJSON());
+            hive.readings = result.data || [];
+
+            result = await hive.getUpgrades();
+            if(!result.success.status) return res.json(result.toJSON());
+            hive.upgrades = result.data || [];
+
+            hive.products = [], hive.sensors = []
+            for (let i = 0; i < hive.upgrades.length; i++) {
+                req.body._id = hive.upgrades[i].productRef;
+                result = await controllers.product.getProduct(req,res)
+                if(!result.success.status) return res.json(result.toJSON());
+                let product = controllers.product._jsonToObject(result.data)
+                for (let j = 0; j < product.sensors; j++) {
+                    req.body._id = product.sensors[j];
+                    result = await controllers.sensor.getSensor(req,res)
+                    if(!result.success.status) return res.json(result.toJSON());
+                    const sensor = controllers.sensor._jsonToObject(result.data);
+                    product.sensors[j] = sensor;
+                    hive.sensors.some(s => s._id === sensor._id) || hive.sensors.push(sensor);
+                }
+                hive.products.push(product);
+            }
+
+            return res.json(new Result(1, hive, "Hive Fetched and Injected with data").toJSON());
+        }
+        else return res.json(result.toJSON());
+    } catch (error) {
+        return res.json(new Result(-1, null, `Error fetching hive: ${error.message}`).toJSON());
+    }
+}
+
+
 const sendEmail = async (req, res) => {
     try {
       const { apiaryName, latitude, longitude } = req.body;
@@ -152,5 +196,6 @@ module.exports = {
     getUpgrade,
     getUpgrades,
     makeOperational,
-    sendEmail
+    sendEmail,
+    getUpgradedHive
 }

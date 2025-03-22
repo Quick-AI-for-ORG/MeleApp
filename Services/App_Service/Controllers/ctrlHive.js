@@ -51,9 +51,9 @@ const updateHive = async (req, res) => {
 const getHive = async (req, res) => {
     try {
         const result = await Hive.get(req.body._id);
-        return res.json(result.toJSON());
+        return result;
     } catch (error) {
-        return res.json(new Result(-1, null, `Error fetching hive: ${error.message}`).toJSON());
+        return new Result(-1, null, `Error fetching hive: ${error.message}`);
     }
 }
 
@@ -67,14 +67,7 @@ const getHives = async (req, res) => {
     }
 }
 
-const getThreats = async (req, res) => {
-    try {
-        const result = await Hive.getThreats(req.body._id);
-        return res.json(result.toJSON());
-    } catch (error) {
-        return res.json(new Result(-1, null, `Error fetching hive threats: ${error.message}`).toJSON());
-    }
-}
+
 
 
 
@@ -85,5 +78,4 @@ module.exports = {
     updateHive,
     getHive,
     getHives,
-    getThreats
 }

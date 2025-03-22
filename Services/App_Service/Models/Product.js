@@ -19,8 +19,8 @@ class Product {
     }
   }
 
-  static async get(name) {
-    const result = await Product.crudInterface.get(name, "productModel", "name");
+  static async get(key, by="name") {
+    const result = await Product.crudInterface.get(key, "productModel", by);
     if (result.success.status) result.data = new Product(result.data);
     return result;
   }

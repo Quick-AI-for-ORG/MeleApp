@@ -77,7 +77,7 @@ class Hive {
     return await Hive.crudInterface.remove(this._id, "hiveModel", "_id");
   }
 
-  async getProducts(){
+  async getUpgrades(){
     const result = await Hive.dependency.populate('hiveUpgradeModel', this, 'hiveRef')
     if(result.success.status) this.products = result.data;
     return result;

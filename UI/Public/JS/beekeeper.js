@@ -67,12 +67,9 @@ async function fetchHiveData(hiveId) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ _id: hiveId }),
     });
-
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     const result = await response.json();
-
+    console.log(result);
     if (result.success.status) {
-      // Merge real-time data with static data
       updateHiveDashboard({
         ...currentHive,
         ...result.data,

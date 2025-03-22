@@ -48,7 +48,8 @@ const updateProduct = async (req, res) => {
 
 const getProduct = async (req, res) => {
     try {
-        const result = await Product.get(req.body.name);
+        const by = req.body.name == undefined ? "_id" : "name"
+        const result = await Product.get(req.body.name == undefined ? req.body._id : req.body.name, by);
         req.session.productDetails = result.data || {};
         return result.toJSON();
     } catch (error) {

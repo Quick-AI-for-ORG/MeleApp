@@ -16,8 +16,8 @@ class Sensor {
     }
   }
 
-  static async get(sensorType) {
-    const result = await Sensor.crudInterface.get(sensorType, "sensorModel", "sensorType");
+  static async get(key, by="sensorType") {
+    const result = await Sensor.crudInterface.get(key, "sensorModel", by);
     if (result.success.status) {
       result.data = new Sensor(result.data);
     }
