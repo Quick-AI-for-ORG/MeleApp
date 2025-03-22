@@ -1299,3 +1299,27 @@ canvas {
   text-align: center;
   font-style: italic;
 }
+
+.no-data-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: #fbf5dd;
+  border-radius: 12px;
+  width: 100%;
+  color: #6b7280;
+}
+
+.no-data-message i {
+  font-size: 3rem;
+  color: #16404d;
+  margin-bottom: 1rem;
+}
+
+.no-data-message p {
+  font-size: 1.1rem;
+  text-align: center;
+  font-style: italic;
+}

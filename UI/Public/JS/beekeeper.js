@@ -420,9 +420,19 @@ document.addEventListener("DOMContentLoaded", () => {
 function refreshBeekeepersList() {
   const container = document.querySelector(".beekeepers-grid");
   container.innerHTML = "";
-  beekeepers.forEach((beekeeper) => {
-    container.insertAdjacentHTML("beforeend", createBeekeeperCard(beekeeper));
-  });
+
+  if (beekeepers && beekeepers.length > 0) {
+    beekeepers.forEach((beekeeper) => {
+      container.insertAdjacentHTML("beforeend", createBeekeeperCard(beekeeper));
+    });
+  } else {
+    container.innerHTML = `
+      <div class="no-data-message">
+        <i class="fas fa-user-slash"></i>
+        <p>No beekeepers assigned to this apiary</p>
+      </div>
+    `;
+  }
 }
 
 function createBeekeeperCard(beekeeper) {
