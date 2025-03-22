@@ -3,6 +3,7 @@ const ctrlHive = require("../Controllers/ctrlHive");
 const ctrlSensor = require("../Controllers/ctrlSensor");
 const ctrlProduct = require("../Controllers/ctrlProduct");
 const ctrlUser = require("../Controllers/ctrlUser");
+const ctrlKeeper = require("../Controllers/ctrlKeeper");
 
 const home = async (req, res) => {
   res.render("mele", { user: req.session.user || "" });
@@ -52,12 +53,14 @@ const product = async (req, res) => {
 const dashboard = async (req, res) => {
   let message = req.session.message === undefined ? null : req.session.message;
   await ctrlUser.getApiaries(req, res)
+  await ctrlUser.getKeepers(req, res)
   req.session.message = undefined;
   res.render("beekeeper", {
     layout: false,
     message: message,
     user: req.session.user || "",
-    apiaries: req.session.user.apiaries
+    apiaries: req.session.user.apiaries || [],
+    keepers: req.session.user.keepers || [],
   });
 };
 

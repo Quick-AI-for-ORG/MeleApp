@@ -63,7 +63,16 @@ const getApiaries = async (req, res) => {
     }
 }
 
-const getApiaryHives = async (req, res) => {}
+const getApiaryHives = async (req, res) => {
+    try {
+        const apiary = await Apiary.get(req.body.apiary);
+        if(apiary.success.status) return apiary.toJSON();
+        const result = await Apiary.getHives(apiary._id);
+        return result.toJSON();
+    } catch (error) {
+        return new Result(-1, null, `Error fetching apiary hives: ${error.message}`).toJSON();
+    }
+}
 const getApiaryTemperature = async (req, res) => {}
 const getApiaryHumidity = async (req, res) => {}
 
@@ -75,6 +84,4 @@ module.exports = {
     getApiary,
     getApiaries,
     getApiaryHives,
-    getApiaryTemperature,
-    getApiaryHumidity
 }
