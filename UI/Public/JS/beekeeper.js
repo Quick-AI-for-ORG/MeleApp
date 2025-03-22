@@ -26,7 +26,40 @@ const monthlyData = {
   ],
 };
 
+let selectedApiaryId = null;
+
+function setSelectedApiary(apiaryId) {
+  selectedApiaryId = apiaryId;
+  const apiaryInput = document.getElementById("apiary");
+  if (apiaryInput) {
+    apiaryInput.value = apiaryId;
+  }
+}
+
 document.addEventListener("DOMContentLoaded", function () {
+  setTimeout(() => {
+    const firstApiaryTrigger = document.querySelector(
+      ".nested-dropdown > .nested-trigger"
+    );
+    if (firstApiaryTrigger) {
+      const apiaryId = firstApiaryTrigger.dataset.apiaryId;
+      setSelectedApiary(apiaryId);
+      firstApiaryTrigger.click();
+      const dropdownContent = document.querySelector(".dropdown-content");
+      if (dropdownContent) {
+        dropdownContent.style.display = "block";
+        dropdownContent.classList.add("active");
+
+        const mainDropdownIcon = document.querySelector(
+          "#apiaryDropdown .fa-chevron-down"
+        );
+        if (mainDropdownIcon) {
+          mainDropdownIcon.style.transform = "rotate(180deg)";
+        }
+      }
+    }
+  }, 100);
+
   // Main dropdown functionality
   const apiaryDropdown = document.getElementById("apiaryDropdown");
   const dropdownContent = document.querySelector(".dropdown-content");
@@ -450,6 +483,17 @@ function openModal(mode, beekeeperId = null) {
   const form = document.getElementById("beekeeperForm");
   const modalTitle = document.getElementById("modalTitle");
   const passwordGroup = document.querySelector(".password-group");
+  const apiaryInput = document.getElementById("apiary");
+
+  // Get current selected apiary ID
+  const currentApiaryTitle = document.getElementById("currentApiaryTitle");
+  const activeApiary = document.querySelector(".nested-trigger.active");
+  const apiaryId = activeApiary ? activeApiary.dataset.apiaryId : "";
+
+  // Set apiary ID in form
+  if (apiaryInput) {
+    apiaryInput.value = apiaryId;
+  }
 
   modalTitle.textContent =
     mode === "add" ? "Add New Beekeeper" : "Edit Beekeeper";
@@ -479,6 +523,13 @@ function handleSubmit(event) {
   const form = event.target;
   const formData = new FormData(form);
   const data = Object.fromEntries(formData);
+
+  // Update to use selectedApiaryId
+  if (!selectedApiaryId) {
+    showNotification("Please select an apiary first", "error");
+    return;
+  }
+  data.apiary = selectedApiaryId;
 
   if (!validateForm(data)) return;
 

@@ -108,7 +108,8 @@
                         <% if (Array.isArray(apiaries) && apiaries.length> 0) {
                             for (const apiary of apiaries) { %>
                             <div class="nested-dropdown">
-                                <button class="nested-trigger">
+                                <button class="nested-trigger" data-apiary-id="<%= apiary._id %>"
+                                    onclick="setSelectedApiary('<%= apiary._id %>')">
                                     <span>
                                         <%= apiary.name %> (<%= Array.isArray(apiary.hives) ? apiary.hives.length : 0 %>
                                                 hives)
@@ -120,7 +121,7 @@
                                         <% for (let i=0; i < apiary.hives.length; i++) { %>
                                             <div class="hive-item">
                                                 <button class="nested-trigger">
-                                                    <span>Hive <%= i + 1 %> (ID: <%= apiary.hives[i]._id %>)</span>
+                                                    <span>Hive <%= i + 1 %> </span>
                                                     <i class="fas fa-chevron-right"></i>
                                                 </button>
                                                 <div class="nested-content">
@@ -354,7 +355,7 @@
                             <div class="form-group">
                                 <label for="phone">Phone Number</label>
                                 <input type="tel" id="phone" name="phone" required>
-                                <input type="hidden" id="apiary" name="apiary" value="<%= apiaries[i]._id %>">
+                                <input type="hidden" id="apiary" name="apiary">
                             </div>
                             <div class="form-group password-group">
                                 <label for="password">Password</label>
