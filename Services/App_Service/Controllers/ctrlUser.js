@@ -27,7 +27,7 @@ const addUser = async (req, res) => {
 
 const removeUser = async (req, res) => {
     try {
-        const result = await User.remove(req.body.email);
+        const result = await User.remove(req.query.email);
         return res.json(result.toJSON());
     }
     catch (error) {
@@ -37,7 +37,8 @@ const removeUser = async (req, res) => {
 
 const getUser = async (req, res) => {
     try {
-        const result = await User.get(req.body.email)
+        const by = req.body.email == undefined ? "_id" : "email"
+        const result = await User.get(req.body.email == undefined ? req.body._id : req.body.email, by);
         return result
     }
     catch (error) {
@@ -95,7 +96,10 @@ const register = async (req, res) => {
         const user = jsonToObject(userJSON)
         const result = await user.create()
         if (result.success.status) req.session.user = result.data
-        else req.session.message = result.message
+        else {
+            req.session.message = result.message
+            return res.redirect('/signup')
+        }
         res.redirect('/keeper')
     }
     catch (error) {
@@ -119,6 +123,7 @@ const login = async (req, res) => {
             };
         } else {
             req.session.message = result.message
+            return res.redirect('/login')
         }
         res.redirect('/keeper')
     }

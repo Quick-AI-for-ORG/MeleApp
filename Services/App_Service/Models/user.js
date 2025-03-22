@@ -15,9 +15,9 @@ class User {
   static attributes = ['name', 'role', 'email', 'password', 'tel', 'address', 'affiliation'];
 
   constructor(userJSON, role = "Owner") {
-    User.jsonToObject(this, userJSON, { role: role });
+    User.jsonToObject(this, userJSON, !userJSON.role ? {role: role }: null);
     this.references = {
-      sub: ['keeperAssignmentModel', 'hiveUpgradeModel'],
+      sub: this.role == "Owner" ? ['apiaryModel', 'hiveUpgradeModel'] : ['keeperAssignmentModel'],
     }
     this.apiaries = []
   }
@@ -25,13 +25,13 @@ class User {
     return await bcrypt.hash(password, HASH_SALT);
   }
   static async remove(email) {
-    const user = await User.get(email);
-    const cascade = await User.dependency.cascade(user.references.sub, user, 'userRef');
-    if (!cascade.success.status) return cascade;
-    return await User.crudInterface.remove(email, "userModel", "email");
+    const result = await User.get(email);
+    if (!result.success.status) return result;
+    const user = new User(result.data);
+    return await user.remove();
   }
-  static async get(email) {
-    const result = await User.crudInterface.get(email, "userModel", "email");
+  static async get(key, by="email") {
+    const result = await User.crudInterface.get(key, "userModel", by);
     if (result.success.status) result.data =  new User(result.data, result.data.role);
     return result
   }
@@ -70,7 +70,7 @@ class User {
     return result
   }
   async remove() {
-    const cascade = await User.dependency.cascade(this.references.sub, this, 'userRef');
+    const cascade = await User.dependency.cascade(this.references.sub, this, this.role == "Owner" ? 'userRef' : 'beekeeperRef');
     if (!cascade.success.status) return cascade;
     return await User.crudInterface.remove(this.email, "userModel", "email");
   }

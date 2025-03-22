@@ -10,27 +10,27 @@ const assignKeeper = async (req, res) => {
     try {
         const user = controllers.user._jsonToObject(req.session.user);
         const userJSON = {
-            name: `${req.body.fname} ${req.body.lname}`,
+            name: `${req.body.firstName} ${req.body.lastName}`,
             email: req.body.email,
             password: req.body.password,
-            tel: req.body.phoneNumber,
+            tel: req.body.phone,
             address: user.address || '',
             affiliation: user.affiliation || '',
         }
-        const keeper = controllers.user._jsonToObject(userJSON, 'Keeper');
+        let keeper = controllers.user._jsonToObject(userJSON, 'Keeper');
         let result = await keeper.create();
         if (!result.success.status) return res.json(result.toJSON());
+        keeper._id = result.data._id;
 
         req.body._id = req.body.apiary
-        result = controllers.apiary.getApiary(req,res)
+        result = await controllers.apiary.getApiary(req,res)
         if (!result.success.status) return res.json(result.toJSON());
-
         const apiary = controllers.apiary._jsonToObject(result.data);
         const assignmentJSON = {
             apiaryRef: apiary._id,
-            keeperRef: keeper._id,
+            beekeeperRef: keeper._id,
         }
-        const assignment = keeperAssignment._jsonToObject(assignmentJSON);
+        const assignment = new keeperAssignment(assignmentJSON);
         result = await assignment.create();
         return res.json(result.toJSON());
     } catch (error) {
@@ -54,7 +54,7 @@ const getKeepers = async (req, res) => {
         if(result.success.success) {
             const keepers = []
             for (let i = 0; i < result.data.length; i++) {
-                let keeper = await controllers.user.getUser(result.data[i].keeperRef);
+                let keeper = await controllers.user.getUser(result.data[i].beekeeperRef);
                 if (!keeper.success.status) return keeper.toJSON();
                 keeper = controllers.user._jsonToObject(userResult.data);
                 keepers.append(keeper);
@@ -71,22 +71,23 @@ const getKeepers = async (req, res) => {
 const getApiaryKeepers = async (req, res) => {
     try {
         req.body._id = req.body.apiary
-        const result = await controllers.apiary.getApiary(req, res);
+        let result = await controllers.apiary.getApiary(req, res);
         if (!result.success.status) return result;
         const apiary = controllers.apiary._jsonToObject(result.data);
         result = await apiary.getAssignemnt();
         if (!result.success.status) return result.toJSON();
         const keepers = []
         for (let i = 0; i < result.data.length; i++) {
-            let keeper = await controllers.user.getUser(result.data[i].keeperRef);
+            req.body._id = result.data[i].beekeeperRef;
+            let keeper = await controllers.user.getUser(req, res);
             if (!keeper.success.status) return keeper.toJSON();
             keeper = controllers.user._jsonToObject(keeper.data);
-            keepers.append( keeper);
+            keepers.push(keeper);
         }
-        return new Result(1, keepers, 'Fetched apiary keepers successfully')
+        return res.json(new Result(1, keepers, 'Fetched Apiary Keepers Successfully').toJSON());
 
     } catch (error) {
-        return new Result(-1, null, `Error fetching apiary keepers: ${error.message}`).toJSON();
+        return res.json(new Result(-1, null, `Error fetching Apiary Keepers: ${error.message}`).toJSON());
     }
 }
 

@@ -41,9 +41,12 @@ router.get("/test-stream", (req, res) => {
   res.render("test-stream", { user: req.session.user || null, layout: false });
 });
 
+
+router.post("/assignKeeper", controllers.keeper.assignKeeper)
 router.post("/getApiaryHives", controllers.apiary.getApiaryHives)
 router.post("/getApiaryKeepers", controllers.keeper.getApiaryKeepers)
-router.post("/assignKeeper", controllers.keeper.assignKeeper)
+
+router.delete("/removeKeeper", controllers.user.removeUser)
 
 router.post("/start-stream", async (req, res) => {
   const { hiveId } = req.body;
