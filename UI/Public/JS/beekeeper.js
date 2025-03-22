@@ -114,36 +114,8 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     });
 
-  // Initialize charts
-  initializeCharts();
-
-  // Close modal when clicking outside
-  const modal = document.getElementById("beekeeperModal");
-  if (modal) {
-    modal.addEventListener("click", function (event) {
-      if (event.target === modal) {
-        closeModal();
-      }
-    });
-  }
-
-  // Close modal when clicking the X button
-  const closeButton = document.querySelector(".close-modal");
-  if (closeButton) {
-    closeButton.addEventListener("click", function (event) {
-      event.preventDefault();
-      closeModal();
-    });
-  }
-
-  // Close modal when clicking Cancel button
-  const cancelButton = document.querySelector(".cancel-btn");
-  if (cancelButton) {
-    cancelButton.addEventListener("click", function (event) {
-      event.preventDefault();
-      closeModal();
-    });
-  }
+  // Initialize modal handlers
+  initializeModalHandlers();
 });
 
 function updateTitles(apiaryName, hiveName = "") {
