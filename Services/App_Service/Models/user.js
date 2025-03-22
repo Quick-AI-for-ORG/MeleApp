@@ -85,12 +85,6 @@ class User {
     if(result.success.status) this.upgrades = result.data;
     return result;
   }
-
-  async getKeepers(){
-    const result = await User.dependency.populate('keeperAssignmentModel', this, 'userRef')
-    if(result.success.status) this.hives = result.data;
-    return result;
-  }
 }
 
 module.exports = User;

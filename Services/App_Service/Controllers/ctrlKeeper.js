@@ -48,7 +48,53 @@ const removeKeeper = async (req, res) => {
     }
 }
 
+const getKeepers = async (req, res) => {
+    try {
+        const result = await keeperAssignment.getAll();
+        if(result.success.success) {
+            const keepers = []
+            for (let i = 0; i < result.data.length; i++) {
+                let keeper = await controllers.user.getUser(result.data[i].keeperRef);
+                if (!keeper.success.status) return keeper.toJSON();
+                keeper = controllers.user._jsonToObject(userResult.data);
+                keepers.append(keeper);
+            }
+            req.session.keepers = keepers;
+            return new Result(1, keepers, 'Fetched keepers successfully').toJSON();
+        }
+        else return result.toJSON();
+    } catch (error) {
+        return new Result(-1, null, `Error fetching keepers: ${error.message}`).toJSON()
+    }
+}
+
+const getApiaryKeepers = async (req, res) => {
+    try {
+        req.body._id = req.body.apiary
+        const result = await controllers.apiary.getApiary(req, res);
+        if (!result.success.status) return result;
+        const apiary = controllers.apiary._jsonToObject(result.data);
+        result = await apiary.getAssignemnt();
+        if (!result.success.status) return result.toJSON();
+        const keepers = []
+        for (let i = 0; i < result.data.length; i++) {
+            let keeper = await controllers.user.getUser(result.data[i].keeperRef);
+            if (!keeper.success.status) return keeper.toJSON();
+            keeper = controllers.user._jsonToObject(keeper.data);
+            keepers.append( keeper);
+        }
+        return new Result(1, keepers, 'Fetched apiary keepers successfully')
+
+    } catch (error) {
+        return new Result(-1, null, `Error fetching apiary keepers: ${error.message}`).toJSON();
+    }
+}
+
+
+
 module.exports = {
     assignKeeper,
     removeKeeper,
+    getKeepers,
+    getApiaryKeepers,
 }

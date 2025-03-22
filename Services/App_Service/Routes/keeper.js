@@ -7,6 +7,8 @@ const controllers = {
   apiary: require("../Controllers/ctrlApiary"),
   product: require("../Controllers/ctrlProduct"),
   upgrade: require("../Controllers/ctrlUpgrade"),
+  keeper: require("../Controllers/ctrlKeeper"),
+  hive: require("../Controllers/ctrlHive"),
 };
 
 const localStreamService = require("../../Streaming/localStreamService");
@@ -39,8 +41,9 @@ router.get("/test-stream", (req, res) => {
   res.render("test-stream", { user: req.session.user || null, layout: false });
 });
 
-router.post("/getApiaryHives", controllers.apiary.getApiaryHives);
-
+router.post("/getApiaryHives", controllers.apiary.getApiaryHives)
+router.post("/getApiaryKeepers", controllers.keeper.getApiaryKeepers)
+router.post("/assignKeeper", controllers.keeper.assignKeeper)
 
 router.post("/start-stream", async (req, res) => {
   const { hiveId } = req.body;
