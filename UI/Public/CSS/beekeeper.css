@@ -55,14 +55,16 @@ body {
 
 .nav-link {
   text-decoration: none;
-  color: #16404d; /* Changed back to blue */
+ /* Changed back to blue */
   padding: 0.5rem 1rem;
   border-radius: 5px;
   transition: all 0.3s ease;
 }
-
-.nav-link:hover,
 .nav-link.active {
+  background: #16404d; ;
+  color: white;
+}
+.nav-link:hover{
   background: #fca311;
   color: white;
 }
@@ -91,8 +93,6 @@ body {
 
 .upgrade-btn {
   background: white;
-  border-radius: 15px;
-  border: solid 2px transparent;
   color: #b97a13;
   transition: all 0.1s ease;
 }
@@ -100,18 +100,23 @@ body {
 .upgrade-btn:hover {
   background: #fca311;
   color: white;
-}
+  border: solid 1px transparent;
 
+}
+.profile-btn:hover{
+  background: #16404d;
+  color: white;
+  border: solid 1px transparent;
+}
 .logout-btn {
   background: white;
-  border-radius: 15px;
-  border: solid 2px transparent;
-  color: #a01818;
+  color: #b61d1d;
   transition: all 0.1s ease;}
 
 .logout-btn:hover {
-  background: #ef4444;
+  background: #d31919;
   color: white;
+  border: solid 1px transparent;
 }
 
 /* Sidebar styles */
@@ -783,20 +788,19 @@ canvas {
   margin: 0 1rem;
 }
 
-.nav-title {
+.nav-title  {
   color: #16404d; /* Changed back to blue */
   font-size: 1.2rem;
   font-weight: 500;
-  margin-right: 2rem;
   position: relative;
   padding-right: 1rem;
 }
 
-.nav-title::after {
+.dynamic-title .nav-title::after {
   content: "";
   position: absolute;
-  bottom: -4px;
-  left: 0;
+  bottom: -50%;
+  left: -10%;
   width: 100%;
   height: 2px;
   background: #fca311;
@@ -1371,4 +1375,24 @@ box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   margin-bottom: 5%;
   color: white;
   background-color: #16404d;
+}
+
+.edit-sessioned {
+  float: right;
+  width: 15%;
+  text-decoration: none;
+  color: #16404d;
+  padding: 2%;
+  padding-left: 3%;
+  padding-right: 2%;
+  border-radius: 5px;
+  border: solid 2px transparent;
+  transition: all 0.3s ease;
+}
+.edit-sessioned i{
+  margin-left: 3%;
+}
+
+.edit-sessioned:hover {
+  color: #fca311;
 }

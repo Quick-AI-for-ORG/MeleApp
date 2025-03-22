@@ -68,6 +68,11 @@
                         <img id="logo" src="/IMAGES/Logo.png" alt="Mele Logo" draggable="false" height="50" />
                     </a>
                 </div>
+
+                <div class="nav-divider"></div>
+                <nav class="nav">
+                    <span class="active"><% if(user.role == 'Owner') {%> Owner <%} else{ %> Beekeeper <% } %> Dashboard:</span><%=user.name%> 
+                </nav>
                 <div class="nav-divider"></div>
                 <div class="dynamic-title">
                     <h2 class="nav-title">
@@ -75,13 +80,14 @@
                         <span id="currentHiveTitle" class="hive-title"></span>
                     </h2>
                 </div>
-                <nav class="nav">
-                    <a href="/keeper/profile" class="nav-link active">
-                        <%=user.name%>'s Profile
-                    </a>
-                </nav>
+                <input type="hidden" id="sessionId" value= '<%=user._id%>'' >
+                <input type="hidden" id="sessionRole" value= '<%=user.role%>'' >
             </div>
             <div class="header-right">
+                <a href="/keeper/profile" class="nav-btn profile-btn">
+                    <i class="fas fa-user"></i>
+                    Profile
+                </a>
                 <a href="/keeper/upgrade" class="nav-btn upgrade-btn">
                     <i class="fas fa-arrow-up-right-from-square"></i>
                     Upgrade

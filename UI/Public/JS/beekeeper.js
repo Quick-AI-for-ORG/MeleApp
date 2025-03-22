@@ -243,9 +243,15 @@ function createBeekeeperCard(beekeeper) {
         <h3>${beekeeper.name}</h3>
         <p class="role">Bee${beekeeper.role}</p>
       </div>
+       ${(beekeeper._id === $('#sessionId').value) ? `<span class="beekeeper-info">
+       <a href="/keeper/profile" class="edit-sessioned">
+                    <i class="fa-solid fa-user-pen"></i>                
+              </a>
+       </span>` : `
       <button class="contact-btn" onclick="window.location.href='mailto:${beekeeper.email}'">
         <i class="fas fa-envelope"></i>
-      </button>
+      </button>`}
+      ${ ($('#sessionRole').value != "Owner") ? "" : `
       <div class="beekeeper-actions">
         <button class="action-btn edit" onclick="openModal('edit', '${beekeeper.email}')">
           <i class="fas fa-edit"></i>
@@ -254,9 +260,11 @@ function createBeekeeperCard(beekeeper) {
           <i class="fas fa-trash"></i>
         </button>
       </div>
+      `}
     </div>
   `;
 }
+
 
 function openModal(mode, beekeeperId = null) {
   const modal = $("#beekeeperModal");

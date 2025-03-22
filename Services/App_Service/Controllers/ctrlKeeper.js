@@ -9,21 +9,27 @@ const controllers = {
 const assignKeeper = async (req, res) => {
     try {
         const user = controllers.user._jsonToObject(req.session.user);
-        const userJSON = {
-            name: `${req.body.firstName} ${req.body.lastName}`,
-            email: req.body.email,
-            password: req.body.password,
-            tel: req.body.phone,
-            address: user.address || '',
-            affiliation: user.affiliation || '',
-        }
-        let keeper = controllers.user._jsonToObject(userJSON, 'Keeper');
-        let result = await keeper.create();
-        if (!result.success.status) return res.json(result.toJSON());
-        keeper._id = result.data._id;
-
+        let keeper = null
+        const exists = await controllers.user.getUser(req, res);
+        if (exists.success.type == "Failure") {
+            const userJSON = {
+                name: `${req.body.firstName} ${req.body.lastName}`,
+                email: req.body.email,
+                password: req.body.password,
+                tel: req.body.phone,
+                address: user.address || '',
+                affiliation: user.affiliation || '',
+            }
+            keeper = controllers.user._jsonToObject(userJSON, 'Keeper');
+            const result = await keeper.create();
+            if (!result.success.status) return res.json(result.toJSON());
+            keeper._id = result.data._id;
+        }  
+        else if (exists.success.status) keeper = controllers.user._jsonToObject(exists.data);
+        else return res.json(exists.toJSON());
+        
         req.body._id = req.body.apiary
-        result = await controllers.apiary.getApiary(req,res)
+        let result = await controllers.apiary.getApiary(req,res)
         if (!result.success.status) return res.json(result.toJSON());
         const apiary = controllers.apiary._jsonToObject(result.data);
         const assignmentJSON = {
