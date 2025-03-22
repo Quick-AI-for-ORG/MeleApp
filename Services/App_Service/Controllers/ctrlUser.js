@@ -141,10 +141,12 @@ const getApiaries = async (req, res) => {
     try {
     const user = jsonToObject(req.session.user)
     if (user) {
+        if(user.role === "Owner"){
         const result = await user.getApiaries()
         if(result.success.status) req.session.user.apiaries = result.data
         else req.session.message = result.message
         return result.toJSON()
+        }
     }
     return new Result(-1, null, 'No user logged in').toJSON()
     }

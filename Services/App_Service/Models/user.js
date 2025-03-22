@@ -85,6 +85,12 @@ class User {
     if(result.success.status) this.upgrades = result.data;
     return result;
   }
+
+  async getAssigned(){
+    const result = await User.dependency.populate('keeperAssignmentModel', this, 'beekeeperRef')
+    if(result.success.status) this.assigned = result.data;
+    return result;
+  }
 }
 
 module.exports = User;

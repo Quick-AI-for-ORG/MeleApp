@@ -91,6 +91,26 @@ const getApiaryKeepers = async (req, res) => {
     }
 }
 
+const getKeeperApiaries = async (req, res) => {
+    try {
+        const user = controllers.user._jsonToObject(req.session.user);
+        const result = await user.getAssigned();
+        if (!result.success.status) return result.toJSON();
+        const apiaries = []
+        for (let i = 0; i < result.data.length; i++) {
+            req.body._id = result.data[i].apiaryRef;
+            let apiary = await controllers.apiary.getApiary(req, res);
+            if (!apiary.success.status) return apiary.toJSON();
+            apiary = controllers.apiary._jsonToObject(apiary.data);
+            apiaries.push(apiary);
+        }
+        req.session.user.apiaries = apiaries;
+        return new Result(1, apiaries, 'Fetched Apiaries Successfully').toJSON();
+    } catch (error) {
+        return new Result(-1, null, `Error fetching Apiaries: ${error.message}`).toJSON();
+    }
+}
+
 
 
 module.exports = {
@@ -98,4 +118,5 @@ module.exports = {
     removeKeeper,
     getKeepers,
     getApiaryKeepers,
+    getKeeperApiaries,
 }

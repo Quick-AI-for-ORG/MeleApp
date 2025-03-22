@@ -51,7 +51,8 @@ const product = async (req, res) => {
 };
 
 const dashboard = async (req, res) => {
-  await ctrlUser.getApiaries(req, res);
+  if(req.session.user.role == "Owner") await ctrlUser.getApiaries(req, res);
+  else await ctrlKeeper.getKeeperApiaries(req, res); 
   let hives = [],  keepers = []
   for (let [i, apiary] of req.session.user.apiaries.entries()) {
     req.body._id = apiary._id;

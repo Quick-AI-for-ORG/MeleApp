@@ -42,11 +42,9 @@ router.get("/test-stream", (req, res) => {
 });
 
 
-router.post("/assignKeeper", controllers.keeper.assignKeeper)
 router.post("/getApiaryHives", controllers.apiary.getApiaryHives)
 router.post("/getApiaryKeepers", controllers.keeper.getApiaryKeepers)
 
-router.delete("/removeKeeper", controllers.user.removeUser)
 
 router.post("/start-stream", async (req, res) => {
   const { hiveId } = req.body;
@@ -65,6 +63,14 @@ router.post("/add-ice-candidate", async (req, res) => {
   const result = await localStreamService.addIceCandidate(hiveId, candidate);
   res.json(result);
 });
+
+router.use((req, res, next) => {
+  if (req.session.user.role != "Owner") res.json({ success: {status: false}, message: "Unauthorized - Must be Apiary Owner to Continue" });
+  else next();
+});
+
+router.post("/assignKeeper", controllers.keeper.assignKeeper)
+router.delete("/removeKeeper", controllers.user.removeUser)
 
 
 router.get("*", (req, res) => {
