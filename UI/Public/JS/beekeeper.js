@@ -466,8 +466,8 @@ async function purchaseUpgrades() {
     showNotification("Please select at least one upgrade", "error");
     return;
   }
-
-  if (confirm("Are you sure you want to purchase these upgrades?")) {
+  const confirmation = await askToConfirm("Are you sure you want to purchase these upgrades?", "Purchase Upgrade", "Purchase");
+  if (confirmation) {
     try {
       const response = await fetch("/api/purchaseProducts", {
         method: "POST",
@@ -492,7 +492,7 @@ async function purchaseUpgrades() {
   }
 }
 
-function requestKitRemoval(kitId) {
+async function requestKitRemoval (kitId) {
   const kitNames = {
     rimba: "The Mele-RIMBA Kit",
     monitoring: "Internal Hive Monitoring Kit",
@@ -501,7 +501,8 @@ function requestKitRemoval(kitId) {
     intrusion: "On Door Intrusion Prevention Kit"
   };
 
-  if (confirm(`Are you sure you want to request removal of ${kitNames[kitId]}?`)) {
+  const confirmation = await askToConfirm(`Are you sure you want to request removal of ${kitNames[kitId]}?`, `${kitNames[kitId]}`, "Remove");
+  if (confirmation) {
     showNotification(`Removal request for ${kitNames[kitId]} has been sent to the administrator.`, 'success');
   }
 }

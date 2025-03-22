@@ -110,7 +110,7 @@ const CRUDInterface = {
     try {
       const compareClause = {[compareKey]: primaryKey};
       const records = await models[model].find(compareClause);
-      const resultData = records.map(record => record._doc);
+      const resultData = records.map(record => record._doc) || [];
       await Log.create({ log: `Found ${records.length} records in ${model} with ${compareClause}.`, degree: 1 });
       return new Result(1, resultData, `Found ${records.length} records in ${model} with ${compareClause}.`);
     } catch (error) {

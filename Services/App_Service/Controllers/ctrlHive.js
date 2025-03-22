@@ -67,21 +67,16 @@ const getHives = async (req, res) => {
     }
 }
 
-const getHiveTemperature = async (req, res) => {}
-const getHiveHumidity = async (req, res) => {}
-const getHiveWeight = async (req, res) => {}
-const getFramesWeight = async (req, res) => {}
-const watchLivestream = async (req, res) => {}
-const getHiveUpgrade = async (req, res) => {}
-const upgradeHive = async (req, res) => {}
-const assignKeeper = async (req, res) => {}
-const getAssignedKeeper = async (req, res) => {}
-const closeDoor = async (req, res) => {}
-const openDoor = async (req, res) => {}
-const getDoorStatus = async (req, res) => {}
-const turnOnCooler = async (req, res) => {}
-const turnOffCooler = async (req, res) => {}
-const getAnaomaly = async (req, res) => {} 
+const getThreats = async (req, res) => {
+    try {
+        const result = await Hive.getThreats(req.body._id);
+        return res.json(result.toJSON());
+    } catch (error) {
+        return res.json(new Result(-1, null, `Error fetching hive threats: ${error.message}`).toJSON());
+    }
+}
+
+
 
 module.exports = {
     _jsonToObject: jsonToObject,
@@ -90,19 +85,5 @@ module.exports = {
     updateHive,
     getHive,
     getHives,
-    getHiveTemperature,
-    getHiveHumidity,
-    getHiveWeight,
-    getFramesWeight,
-    watchLivestream,
-    getHiveUpgrade,
-    upgradeHive,
-    assignKeeper,
-    getAssignedKeeper,
-    closeDoor,
-    openDoor,
-    getDoorStatus,
-    turnOnCooler,
-    turnOffCooler,
-    getAnaomaly
+    getThreats
 }

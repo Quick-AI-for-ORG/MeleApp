@@ -51,29 +51,9 @@ const product = async (req, res) => {
 };
 
 const dashboard = async (req, res) => {
-  if(req.session.user.role == "Owner") await ctrlUser.getApiaries(req, res);
-  else await ctrlKeeper.getKeeperApiaries(req, res); 
-  let hives = [],  keepers = []
-  for (let [i, apiary] of req.session.user.apiaries.entries()) {
-    req.body._id = apiary._id;
-    let result = await ctrlApiary.getApiaryHives(req, res);
-    if (result.success.status) {
-      apiary.hives = result.data || [];
-      req.session.user.apiaries[i] = apiary;
-      req.session.user.apiaries[i].hives = apiary.hives;
-      hives.push(apiary.hives);
-    }
-    else req.session.message = result.message;
-    result = await ctrlKeeper.getApiaryKeepers(req, res);
-    if (result.success.status)  {
-      req.session.user.apiaries[i].keepers = result.data || [];
-      keepers.push(result.data);
-    }
-    else req.session.message = result.message;
-  }
+  let keepers, hives = await _inject(req, res);
   let message = req.session.message === undefined ? null : req.session.message;
   req.session.message = undefined;
-
   res.render("beekeeper", {
     layout: false,
     message: message,
@@ -114,9 +94,33 @@ const upgrade = async (req, res) => {
 };
 
 const postUpgrade = (req, res) => {
-  const upgradeData = req.body;
   res.redirect("/keeper/dashboard");
 };
+
+const _inject = async (req, res) => {
+  if(req.session.user.role == "Owner") await ctrlUser.getApiaries(req, res);
+  else await ctrlKeeper.getKeeperApiaries(req, res); 
+  let hives = [],  keepers = []
+  for (let [i, apiary] of req.session.user.apiaries.entries()) {
+    req.body._id = apiary._id;
+    let result = await ctrlApiary.getApiaryHives(req, res);
+    if (result.success.status) {
+      apiary.hives = result.data || [];
+      req.session.user.apiaries[i] = apiary;
+      req.session.user.apiaries[i].hives = apiary.hives;
+      hives.push(apiary.hives);
+    }
+    else req.session.message = result.message;
+    result = await ctrlKeeper.getApiaryKeepers(req, res);
+    if (result.success.status)  {
+      req.session.user.apiaries[i].keepers = result.data || [];
+      keepers.push(result.data);
+    }
+    else req.session.message = result.message;
+  }
+  return keepers, hives
+}
+
 
 module.exports = {
   _PUBLIC: { home, about, products, product, noLogin, notFound },
