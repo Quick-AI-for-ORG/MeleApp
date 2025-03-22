@@ -82,6 +82,7 @@ const notFound = (req, res) => {
 
 const upgrade = async (req, res) => {
   let message = req.session.message === undefined ? null : req.session.message;
+
   req.session.message = undefined;
   await ctrlProduct.getProducts(req, res);
   await ctrlUser.getApiaries(req, res);
@@ -110,6 +111,18 @@ const _inject = async (req, res) => {
       apiary.hives = result.data || [];
       req.session.user.apiaries[i] = apiary;
       req.session.user.apiaries[i].hives = apiary.hives;
+
+      for(let [j, object] of apiary.hives.entries()) {
+        let hive = ctrlHive._jsonToObject(object);
+        let result = await hive.getThreats();
+        if (result.success.status) {
+          hive.threats = result.data || [];
+          req.session.user.apiaries[i].hives[j] = hive
+          req.session.user.apiaries[i].hives[j].threats = hive.threats;
+        }
+        else req.session.message = result.message;
+      }
+
       hives.push(apiary.hives);
     }
     else req.session.message = result.message;
