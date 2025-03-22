@@ -62,10 +62,10 @@ async function fetchHiveData(hiveId) {
     updateHiveDashboard(currentHive);
 
     // Optional: Fetch additional real-time data from server
-    const response = await fetch("/keeper/getHiveData", {
+    const response = await fetch("/keeper/getHive", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ hive: hiveId }),
+      body: JSON.stringify({ _id: hiveId }),
     });
 
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
