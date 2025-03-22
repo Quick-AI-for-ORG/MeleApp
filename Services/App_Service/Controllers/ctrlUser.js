@@ -38,10 +38,10 @@ const removeUser = async (req, res) => {
 const getUser = async (req, res) => {
     try {
         const result = await User.get(req.body.email)
-        return res.json(result.toJSON())
+        return result
     }
     catch (error) {
-        return res.json(new Result(-1, null, `Error fetching user: ${error.message}`).toJSON())
+        return new Result(-1, null, `Error fetching user: ${error.message}`)
     }
 }
 

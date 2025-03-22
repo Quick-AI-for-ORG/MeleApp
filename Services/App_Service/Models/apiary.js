@@ -18,6 +18,7 @@ class Apiary {
       }
     }
     this.hives = []
+    this.assignment = [];
   }
 
   static async get(id) {
@@ -81,6 +82,12 @@ class Apiary {
   async increment(numberOfHives){
     this.numberOfHives = parseInt(numberOfHives, 10) + parseInt(this.numberOfHives, 10);
     return await this.modify(this)
+  }
+
+  async getAssignemnt(){
+    const result = await Apiary.dependency.populate('keeperAssignmentModel', this, 'apiaryRef');
+    if(result.success.status) this.assignment = result.data;
+    return result;
   }
 }
 module.exports = Apiary;
