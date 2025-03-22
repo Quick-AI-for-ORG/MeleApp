@@ -450,10 +450,6 @@ function createBeekeeperCard(beekeeper) {
                         <i class="fas fa-box-open"></i>
                         <span>${beekeeper.hives || 0} Hives</span>
                     </div>
-                    <div class="stat-item">
-                        <i class="fas fa-clock"></i>
-                        <span>${beekeeper.experience || 0} Years</span>
-                    </div>
                 </div>
             </div>
             <button class="contact-btn" onclick="window.location.href='mailto:${
@@ -490,7 +486,6 @@ function openModal(mode, beekeeperId = null) {
   if (mode === "edit" && beekeeperId) {
     const beekeeper = beekeepers.find((b) => b.id === beekeeperId);
     if (beekeeper) {
-      // Populate form with existing data
       form.firstName.value = beekeeper.firstName;
       form.lastName.value = beekeeper.lastName;
       form.email.value = beekeeper.email;
@@ -678,7 +673,6 @@ function closeUpgradeModal() {
 
 async function fetchAvailableUpgrades() {
   try {
-    // Update endpoint to use the existing getProducts controller
     const response = await fetch("/keeper/getProducts", {
       method: "GET",
       headers: {
@@ -693,11 +687,9 @@ async function fetchAvailableUpgrades() {
     const result = await response.json();
     console.log("Fetched products:", result);
 
-    if (result.data) {
+    if (result.success.status) {
       displayAvailableUpgrades(result.data);
-    } else {
-      throw new Error("No products data received");
-    }
+    } 
   } catch (error) {
     console.error("Error fetching upgrades:", error);
     showNotification(`Error fetching upgrades: ${error.message}`, "error");
