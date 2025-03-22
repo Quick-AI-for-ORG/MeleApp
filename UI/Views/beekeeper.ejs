@@ -105,7 +105,8 @@
                         <i class="fas fa-chevron-down"></i>
                     </button>
                     <div class="dropdown-content">
-                        <% apiaries.forEach(apiary=> { %>
+                        <% if (Array.isArray(apiaries) && apiaries.length> 0) {
+                            for (const apiary of apiaries) { %>
                             <div class="nested-dropdown">
                                 <button class="nested-trigger">
                                     <span>
@@ -114,32 +115,38 @@
                                     <i class="fas fa-chevron-right"></i>
                                 </button>
                                 <div class="nested-content">
-                                    <% apiary.hives.forEach(hive=> { %>
-                                        <div class="hive-item">
-                                            <button class="nested-trigger">
-                                                <span>
-                                                    <%= hive.name %>
-                                                </span>
-                                                <i class="fas fa-chevron-right"></i>
-                                            </button>
-                                            <div class="nested-content">
-                                                <a href="/keeper/test-stream" class="monitor-link" target="_blank">
-                                                    <i class="fas fa-video"></i> Door Camera
-                                                </a>
-                                                <a href="/keeper/test-stream" class="monitor-link" target="_blank">
-                                                    <i class="fas fa-eye"></i> Honey View
-                                                </a>
-                                                <a href="/keeper/test-stream" class="monitor-link" target="_blank">
-                                                    <i class="fas fa-temperature-high"></i> Internal
-                                                </a>
+                                    <% if (Array.isArray(apiary.hives) && apiary.hives.length> 0) {
+                                        for (let i = 0; i < apiary.hives.length; i++) { %>
+                                            <div class="hive-item">
+                                                <button class="nested-trigger">
+                                                    <span>Hive <%= i + 1 %></span>
+                                                    <i class="fas fa-chevron-right"></i>
+                                                </button>
+                                                <div class="nested-content">
+                                                    <a href="/keeper/test-stream" class="monitor-link" target="_blank">
+                                                        <i class="fas fa-video"></i> Door Camera
+                                                    </a>
+                                                    <a href="/keeper/test-stream" class="monitor-link" target="_blank">
+                                                        <i class="fas fa-eye"></i> Honey View
+                                                    </a>
+                                                    <a href="/keeper/test-stream" class="monitor-link" target="_blank">
+                                                        <i class="fas fa-temperature-high"></i> Internal
+                                                    </a>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <% }); %>
+                                            <% }} else { %>
+                                                <div class="nested-content">
+                                                    <p class="no-data">No hives available</p>
+                                                </div>
+                                                <% } %>
                                 </div>
                             </div>
-                            <% }); %>
+                            <% }} else { %>
+                                <div class="nested-dropdown">
+                                    <p class="no-data">No apiaries available</p>
+                                </div>
+                                <% } %>
                     </div>
-                </div>
 
             </nav>
         </aside>
