@@ -52,6 +52,7 @@ const product = async (req, res) => {
 
 const dashboard = async (req, res) => {
   let keepers, hives = await _inject(req, res);
+  await ctrlProduct.getProducts(req, res);
   let message = req.session.message === undefined ? null : req.session.message;
   req.session.message = undefined;
   res.render("beekeeper", {
@@ -61,6 +62,7 @@ const dashboard = async (req, res) => {
     apiaries: req.session.user.apiaries || [],
     keepers: keepers || [],
     hives: hives || [],
+    products: req.session.products || [],
   });
 };
 

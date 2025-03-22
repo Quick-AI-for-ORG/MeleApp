@@ -181,17 +181,17 @@ function togglePassword() {
  ******************************/
 function validateForm(data) {
   if (!/^[a-zA-Z\s]{2,}$/.test(data.firstName) || !/^[a-zA-Z\s]{2,}$/.test(data.lastName)) {
-    alert("Please enter valid first and last names");
+    showNotification("Please enter valid first and last names", "error");
     return false;
   }
 
   if (!/^\+?[\d\s-]{10,}$/.test(data.phone)) {
-    alert("Please enter a valid phone number");
+    showNotification("Please enter a valid phone number", "error");
     return false;
   }
 
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
-    alert("Please enter a valid email address");
+    showNotification("Please enter a valid email address", "error");
     return false;
   }
 
@@ -232,7 +232,6 @@ async function handleSubmit(event) {
       showNotification(result.message, "error");
     }
   } catch (error) {
-    console.error("Error:", error);
     showNotification(error.message || `Error ${isEdit ? "updating" : "adding"} beekeeper`, "error");
   }
 }
@@ -261,24 +260,12 @@ async function confirmDelete(beekeeper) {
 /******************************
  *  UPGRADE & KIT MANAGEMENT  *
  ******************************/
-function openUpgradeModal(id) {
+function openUpgradeModal() {
+  const products = JSON.parse($("#injectedProducts").dataset.products)
   const modal = $("#upgradeModal");
   if (modal) {
     modal.style.display = "block";
-    fetchAvailableUpgrades();
-  }
-}
-
-async function fetchAvailableUpgrades() {
-  try {
-    const response = await fetch("/keeper/getProducts");
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-
-    const result = await response.json();
-    if (result.success.status) displayAvailableUpgrades(result.data);
-  } catch (error) {
-    console.error("Error fetching upgrades:", error);
-    showNotification(`Error fetching upgrades: ${error.message}`, "error");
+    displayAvailableUpgrades(products);
   }
 }
 

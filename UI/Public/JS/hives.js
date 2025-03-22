@@ -1,4 +1,4 @@
-```Notifications and Confirmations```
+/*Notifications and Confirmations*/
 function showNotification(message, type) {
     const notification = document.createElement("div");
     notification.className = `notification ${type}`;
@@ -40,6 +40,6 @@ function showNotification(message, type) {
 
 
 
-```Fetching Hive Data```
+/*Fetching Hive Data*/
 const apiaries = JSON.parse($('#apiariesInjection').dataset.apiaries)
 
