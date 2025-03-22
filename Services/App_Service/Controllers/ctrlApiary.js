@@ -65,9 +65,10 @@ const getApiaries = async (req, res) => {
 
 const getApiaryHives = async (req, res) => {
     try {
-        const apiary = await Apiary.get(req.body._id);
-        if(apiary.success.status) return apiary.toJSON();
-        const result = await Apiary.getHives(apiary._id);
+        let result = await Apiary.get(req.body._id);
+        if(!result.success.status) return result.toJSON();
+        const apiary = jsonToObject(result.data);
+        result = await apiary.getHives(apiary._id);
         return result.toJSON();
     } catch (error) {
         return new Result(-1, null, `Error fetching apiary hives: ${error.message}`).toJSON();

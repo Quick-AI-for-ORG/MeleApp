@@ -60,6 +60,7 @@ const dashboard = async (req, res) => {
     if(result.success.status) {
       apiary.hives = [result.data] || []
       req.session.user.apiaries[i] = apiary
+      req.session.user.apiaries.hives = apiary.hives
     }
   }  
   req.session.message = undefined;
@@ -69,6 +70,7 @@ const dashboard = async (req, res) => {
     user: req.session.user || "",
     apiaries: req.session.user.apiaries || [],
     keepers: req.session.user.keepers || [],
+    hives: req.session.user.apiaries.hives || [],
   });
 };
 
