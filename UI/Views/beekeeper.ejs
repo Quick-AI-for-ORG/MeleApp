@@ -110,35 +110,40 @@
                             <div class="nested-dropdown">
                                 <button class="nested-trigger">
                                     <span>
-                                        <%= apiary.name %>
+                                        <%= apiary.name %> (<%= Array.isArray(apiary.hives) ? apiary.hives.length : 0 %>
+                                                hives)
                                     </span>
                                     <i class="fas fa-chevron-right"></i>
                                 </button>
                                 <div class="nested-content">
-                                    <% if (Array.isArray(apiary.hives) && apiary.hives.length> 0) {
-                                        for (let i = 0; i < apiary.hives.length; i++) { %>
-                                            <div class="hive-item">
-                                                <button class="nested-trigger">
-                                                    <span>Hive <%= i + 1 %></span>
-                                                    <i class="fas fa-chevron-right"></i>
-                                                </button>
-                                                <div class="nested-content">
-                                                    <a href="/keeper/test-stream" class="monitor-link" target="_blank">
-                                                        <i class="fas fa-video"></i> Door Camera
-                                                    </a>
-                                                    <a href="/keeper/test-stream" class="monitor-link" target="_blank">
-                                                        <i class="fas fa-eye"></i> Honey View
-                                                    </a>
-                                                    <a href="/keeper/test-stream" class="monitor-link" target="_blank">
-                                                        <i class="fas fa-temperature-high"></i> Internal
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <% }} else { %>
-                                                <div class="nested-content">
-                                                    <p class="no-data">No hives available</p>
+                                    <% if (Array.isArray(apiary.hives) && apiary.hives.length> 0) { %>
+                                        <div class="hives-list">
+                                            <% for (let i=0; i < apiary.hives.length; i++) { %>
+                                                <div class="hive-item" data-hive-id="<%= apiary.hives[i]._id %>">
+                                                    <button class="nested-trigger">
+                                                        <span>Hive <%= apiary.hives[i]._id%> </span>
+                                                        <i class="fas fa-chevron-right"></i>
+                                                    </button>
+                                                    <div class="nested-content">
+                                                        <a href="/keeper/test-stream/<%= apiary.hives[i]._id %>/door"
+                                                            class="monitor-link" target="_blank">
+                                                            <i class="fas fa-video"></i> Door Camera
+                                                        </a>
+                                                        <a href="/keeper/test-stream/<%= apiary.hives[i]._id %>/honey"
+                                                            class="monitor-link" target="_blank">
+                                                            <i class="fas fa-eye"></i> Honey View
+                                                        </a>
+                                                        <a href="/keeper/test-stream/<%= apiary.hives[i]._id %>/internal"
+                                                            class="monitor-link" target="_blank">
+                                                            <i class="fas fa-temperature-high"></i> Internal
+                                                        </a>
+                                                    </div>
                                                 </div>
                                                 <% } %>
+                                        </div>
+                                        <% } else { %>
+                                            <p class="no-data">No hives available</p>
+                                            <% } %>
                                 </div>
                             </div>
                             <% }} else { %>
