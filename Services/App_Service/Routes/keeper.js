@@ -11,13 +11,14 @@ const controllers = {
 
 const localStreamService = require("../../Streaming/localStreamService");
 
+router.post("/register", controllers.user.register);
+router.post("/login", controllers.user.login);
+
 router.use((req, res, next) => {
   if (!req.session.user) res.redirect("/noLogin");
   else next();
 });
 
-router.post("/register", controllers.user.register);
-router.post("/login", controllers.user.login);
 
 router.get("/", (req, res) => {
   res.redirect("/keeper/dashboard");
