@@ -14,37 +14,15 @@ from Utils.vibrationAnomaly import vibrationAnomalyDetector
 from Utils.honeyInspector import honeyInspector
 
 
-beePath = "Models/quantizedBee.tflite"
-waspPath = "Models/quantizedWasp.tflite"
-yoloPath = "Models/Insect.pt"
 forecastPath = "Models/arimaModel.joblib"
 inspectorPath = "Models/Honeycomb.pt"
 
-classifier = insectClassifier(beePath,waspPath,yoloPath)
 forecaster = tempForecast(forecastPath)
 honeyInspector = honeyInspector(inspectorPath,0.3)
 anomalyDetector = vibrationAnomalyDetector()
 
 app = Flask(__name__)
 
-@app.route('/classifyInsect', methods=['POST'])
-def classifyInsect():
-    try:
-        data = request.json
-        if not data or 'input' not in data:
-            return jsonify({"error": "Invalid input format. Send JSON with 'input' key"}), 400
-        
-        input_data = np.array(data['input'])  
-        input_data = np.expand_dims(input_data, axis=0) 
-        
-        frame = classifier.processFrame(input_data)
-
-        return jsonify({
-            frame: frame
-        })
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
     
 @app.route('/forecast', methods=['POST'])
 def forecast():
@@ -101,18 +79,7 @@ def detectAnomaly():
         return jsonify({"anomalies":anomalies})
     except Exception as e:
         return jsonify({"error":str(e)})
-#     try:
-#         data = request.get_json()
-#         if not data or 'input' not in data:
-#             return jsonify({"error": "Invalid input format. Send JSON with 'input' key"}), 400
-        
-#         input_data = np.array(data['input'])
-#         input_data = np.expand_dims(input_data, axis=0)
-#         result = anomaly.forecast(input_data)
-#         return jsonify({"result": result})
-    
-#     except Exception as e:
-#         return jsonify({"error": str(e)}), 500
+
 
 
 @app.route('/plotting', methods=['GET'])
