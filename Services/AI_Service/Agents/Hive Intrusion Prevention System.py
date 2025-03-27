@@ -3,7 +3,6 @@ import cv2
 import time
 import threading
 import numpy as np
-from mss import mss
 import RPi.GPIO as GPIO
 from ultralytics import YOLO
 from tensorflow import keras
