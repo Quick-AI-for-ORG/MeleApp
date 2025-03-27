@@ -1,3 +1,23 @@
+/* Variables for consistent colors and values */
+:root {
+  --primary: #16404d;
+  --secondary: #fca311;
+  --bg-light: #fbf5dd;
+  --danger: #ef4444;
+  --success: #10b981;
+  --purple: #4f46e5;
+  --text-dark: #1f2937;
+  --text-gray: #6b7280;
+  --text-light: #9ca3af;
+  --border-light: #e5e7eb;
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-honey: 0 4px 6px rgba(252, 163, 17, 0.1);
+  --border-radius-sm: 6px;
+  --border-radius: 10px;
+  --border-radius-lg: 12px;
+  --transition: all 0.3s ease;
+}
+
 /* Reset and base styles */
 * {
   margin: 0;
@@ -7,8 +27,8 @@
 
 body {
   font-family: "Arial", sans-serif;
-  background: #fbf5dd;
-  color: #1f2937;
+  background: var(--bg-light);
+  color: var(--text-dark);
 }
 
 .container {
@@ -27,11 +47,11 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 0 2rem;
-  background: white; /* Changed back to white */
-  border-radius: 10px;
+  background: white;
+  border-radius: var(--border-radius);
 }
 
-.header-left {
+.header-left, .header-right {
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -53,37 +73,65 @@ body {
   gap: 1rem;
 }
 
-.nav-link {
-  text-decoration: none;
- /* Changed back to blue */
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-  transition: all 0.3s ease;
-}
-.nav-link.active {
-  background: #16404d; ;
-  color: white;
-}
-.nav-link:hover{
-  background: #fca311;
-  color: white;
+.nav-divider {
+  width: 2px;
+  height: 30px;
+  background: rgba(22, 64, 77, 0.1);
+  margin: 0 1rem;
 }
 
-.header-right {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
+.nav-title {
+  color: var(--primary);
+  font-size: 1.2rem;
+  font-weight: 500;
+  position: relative;
+  padding-right: 1rem;
 }
 
+.dynamic-title .nav-title::after {
+  content: "";
+  position: absolute;
+  bottom: -50%;
+  left: -10%;
+  width: 100%;
+  height: 2px;
+  background: var(--secondary);
+  transform: scaleX(0);
+  transition: var(--transition);
+}
+
+.nav-title:hover::after {
+  transform: scaleX(1);
+}
+
+.hive-title {
+  display: inline-block;
+  opacity: 0;
+  margin-left: 0.5rem;
+  color: var(--secondary);
+  transition: var(--transition);
+}
+
+.hive-title.active {
+  opacity: 1;
+}
+
+.hive-title::before {
+  content: "- ";
+  color: var(--primary);
+  margin-right: 0.25rem;
+}
+
+/* Nav buttons - shared styles */
 .nav-btn {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
-  border-radius: 6px;
-  color: #16404d;
+  border-radius: var(--border-radius-sm);
+  color: var(--primary);
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition: var(--transition);
   border: 1px solid rgba(22, 64, 77, 0.2);
 }
 
@@ -91,39 +139,39 @@ body {
   transform: translateY(-2px);
 }
 
+/* Specific button styles */
 .upgrade-btn {
-  background: white;
   color: #b97a13;
-  transition: all 0.1s ease;
 }
 
 .upgrade-btn:hover {
-  background: #fca311;
+  background: var(--secondary);
   color: white;
-  border: solid 1px transparent;
+  border-color: transparent;
+}
 
-}
-.profile-btn:hover{
-  background: #16404d;
+.profile-btn:hover {
+  background: var(--primary);
   color: white;
-  border: solid 1px transparent;
+  border-color: transparent;
 }
+
 .logout-btn {
-  background: white;
   color: #b61d1d;
-  transition: all 0.1s ease;}
+}
 
 .logout-btn:hover {
   background: #d31919;
   color: white;
-  border: solid 1px transparent;
+  border-color: transparent;
 }
 
 /* Sidebar styles */
 .sidebar {
   grid-row: 2 / -1;
-  background: white;
-  border-radius: 10px;
+  background: var(--primary);
+  color: white;
+  border-radius: var(--border-radius);
   padding: 1rem;
 }
 
@@ -133,59 +181,35 @@ body {
   gap: 0.5rem;
 }
 
-.sidebar-link {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem;
-  text-decoration: none;
-  color: #6b7280;
-  border-radius: 0.375rem;
-}
-
-.sidebar-link:hover {
-  background-color: #f3f4f6;
-}
-
-.sidebar-link.active {
-  background-color: #3b82f6;
-  color: white;
-}
-
-/* Nested Dropdowns */
+/* Dropdown styles */
 .dropdown-container {
   position: relative;
   width: 100%;
   margin-bottom: 1rem;
 }
 
-.dropdown-trigger,
-.nested-trigger {
+.dropdown-trigger, .nested-trigger {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
   padding: 0.75rem;
-  background: none;
   border: none;
-  color: #16404d;
   cursor: pointer;
-  border-radius: 0.375rem;
-  transition: all 0.3s ease;
+  transition: var(--transition);
+  user-select: none;
 }
 
 .dropdown-trigger {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   padding: 0.75rem 1rem;
-  background: #16404d; /* Changed back to blue */
-  color: white; /* Changed text to white */
-  border: none;
+  background: var(--primary);
+  color: white;
   border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
+}
+
+.sidebar-nav .dropdown-trigger {
+  background: #f9f9f9;
+  color: var(--primary);
 }
 
 .dropdown-trigger .trigger-content {
@@ -195,28 +219,22 @@ body {
 }
 
 .dropdown-trigger:hover {
-  background: #fca311; /* Changed hover to honey color */
-  color: white; /* Keep text white on hover */
+  background: var(--secondary);
+  color: white;
 }
 
 .nested-trigger {
-  width: 100%;
   text-align: left;
   padding: 0.5rem 1rem;
-  background: #fbf5dd; /* Light honey background */
-  border: none;
-  color: #16404d; /* Blue text */
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  background: var(--bg-light);
+  color: var(--primary);
   border-radius: 4px;
   transition: all 0.2s ease;
 }
 
 .nested-trigger:hover {
-  background: #fca311; /* Honey color on hover */
-  color: white; /* White text on hover */
+  background: var(--secondary);
+  color: white;
 }
 
 .dropdown-content {
@@ -225,11 +243,10 @@ body {
   padding: 1rem;
   margin-top: 0.5rem;
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow);
 }
 
-.dropdown-content.active,
-.nested-content.active {
+.dropdown-content.active, .nested-content.active {
   display: block;
   animation: slideDown 0.3s ease;
 }
@@ -249,7 +266,7 @@ body {
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
-  color: #16404d; /* Blue text */
+  color: var(--primary);
   text-decoration: none;
   font-size: 0.9rem;
   transition: all 0.2s ease;
@@ -257,16 +274,16 @@ body {
 }
 
 .monitor-link:hover {
-  background: #fca311; /* Honey color on hover */
-  color: white; /* White text on hover */
+  background: var(--secondary);
+  color: white;
 }
 
 .nested-dropdown {
   margin: 0.25rem 0;
 }
 
-.fa-chevron-right,
-.fa-chevron-down {
+/* Icon animations */
+.fa-chevron-right, .fa-chevron-down {
   transition: transform 0.3s ease;
 }
 
@@ -276,11 +293,6 @@ body {
 
 .dropdown-trigger.active .fa-chevron-down {
   transform: rotate(180deg);
-}
-
-.fa-chevron-down,
-.fa-chevron-right {
-  transition: transform 0.3s ease;
 }
 
 @keyframes slideDown {
@@ -300,68 +312,105 @@ body {
   padding: 1rem;
 }
 
-/* Stats grid */
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.stat-card {
+/* Card base styles */
+.weather-card, .chart-card, .threats-card, .table-card, .beekeepers-section, .kits-card {
   background: white;
-  border-radius: 10px;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-honey);
+}
+
+/* Weather/Stats cards */
+.weather-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.weather-card {
   padding: 1.5rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.stat-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  gap: 1.5rem;
+  transition: var(--transition);
 }
 
-.stat-icon {
-  width: 3rem;
-  height: 3rem;
-  background-color: #ebf5ff;
-  color: #3b82f6;
-  border-radius: 50%;
+.weather-card:hover {
+  transform: translateY(-5px);
+}
+
+.weather-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--border-radius-lg);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
 }
 
-.stat-value {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 0.25rem;
+/* Weather icon colors */
+.weather-card.temp .weather-icon,
+.weather-card.total-hives .weather-icon,
+.weather-card.hive-temp .weather-icon {
+  background: rgba(252, 163, 17, 0.1);
+  color: var(--secondary);
 }
 
-.stat-title {
-  color: #6b7280;
+.weather-card.humidity .weather-icon,
+.weather-card.hive-humidity .weather-icon {
+  background: rgba(22, 64, 77, 0.1);
+  color: var(--primary);
+}
+
+.weather-card.total-beekeepers .weather-icon,
+.weather-card.frames .weather-icon {
+  background: rgba(79, 70, 229, 0.1);
+  color: var(--purple);
+}
+
+.weather-card.total-threats .weather-icon,
+.weather-card.hive-threats .weather-icon {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--danger);
+}
+
+.weather-card.sensors .weather-icon {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--success);
+}
+
+.weather-info {
+  flex: 1;
+}
+
+.weather-info h3 {
+  color: var(--text-gray);
   font-size: 0.875rem;
-  margin-bottom: 1rem;
-}
-
-.progress-bar {
-  height: 0.5rem;
-  background-color: #e5e7eb;
-  border-radius: 0.25rem;
   margin-bottom: 0.5rem;
 }
 
-.progress {
-  height: 100%;
-  background-color: #3b82f6;
-  border-radius: 0.25rem;
+.weather-value {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
 }
 
-.stat-subtitle {
-  color: #6b7280;
-  font-size: 0.875rem;
+.weather-value .value {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.weather-value .unit {
+  color: var(--text-gray);
+  font-size: 1rem;
+}
+
+.weather-time {
+  color: var(--text-gray);
+  font-size: 0.75rem;
 }
 
 /* Charts grid */
@@ -371,66 +420,145 @@ body {
   gap: 1rem;
 }
 
-.chart-card {
-  background: white;
-  border-radius: 10px;
+.chart-card, .threats-card {
   padding: 1.5rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  height: 400px; /* Fixed height for charts */
+  height: 400px;
 }
 
-.chart-title {
+.chart-card canvas {
+  max-height: 300px !important;
+  width: 100% !important;
+}
+
+.chart-title, .threats-title, .table-title, .kits-title {
   font-size: 1.2rem;
   font-weight: 600;
   margin-bottom: 1rem;
-  color: #16404d;
-}
-
-.chart-footer {
+  color: var(--primary);
   display: flex;
-  justify-content: space-between;
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid #e5e7eb;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.chart-stat {
+.chart-title, .threats-title {
+  margin-bottom: 1.5rem;
+}
+
+.threats-title i, .table-title i, .kits-title i {
+  color: var(--secondary);
+}
+
+/* Threats styles */
+.threats-card {
+  overflow-y: auto;
+}
+
+.threats-list {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 1rem;
 }
 
-.chart-stat span {
-  color: #6b7280;
+.threat-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 8px;
+  background: var(--bg-light);
+  transition: var(--transition);
+}
+
+.threat-item:hover {
+  transform: translateX(5px);
+}
+
+.threat-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+/* Threat colors */
+.threat-item.high .threat-icon {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--danger);
+}
+
+.threat-item.medium .threat-icon {
+  background: rgba(252, 163, 17, 0.1);
+  color: var(--secondary);
+}
+
+.threat-item.low .threat-icon {
+  background: rgba(22, 64, 77, 0.1);
+  color: var(--primary);
+}
+
+.threat-info {
+  flex: 1;
+}
+
+.threat-info h4 {
+  color: var(--primary);
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.threat-info p {
+  color: var(--text-gray);
   font-size: 0.875rem;
+  margin-bottom: 0.25rem;
 }
 
-.chart-stat strong {
-  font-size: 1.125rem;
-  color: #1f2937;
+.timestamp {
+  color: var(--text-light);
+  font-size: 0.75rem;
 }
 
-/* Canvas size control */
-canvas {
-  max-height: 300px !important; /* Control chart height */
-  width: 100% !important;
+.threat-severity {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  color: white;
+}
+
+.threat-item.high .threat-severity {
+  background: var(--danger);
+}
+
+.threat-item.medium .threat-severity {
+  background: var(--secondary);
+}
+
+.threat-item.low .threat-severity {
+  background: var(--primary);
 }
 
 /* Beekeepers Section */
 .beekeepers-section {
   margin-top: 2rem;
   padding: 2rem;
-  background: white;
-  border-radius: 15px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
 }
 
 .section-title {
-  color: #16404d;
+  color: var(--primary);
   font-size: 1.5rem;
   margin-bottom: 1.5rem;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid #fca31130;
+  border-bottom: 2px solid rgba(252, 163, 17, 0.2);
 }
 
 .beekeepers-grid {
@@ -443,9 +571,9 @@ canvas {
   display: flex;
   align-items: center;
   padding: 1.5rem;
-  background: #fbf5dd;
-  border-radius: 12px;
-  transition: transform 0.3s ease;
+  background: var(--bg-light);
+  border-radius: var(--border-radius-lg);
+  transition: var(--transition);
   position: relative;
 }
 
@@ -460,7 +588,7 @@ canvas {
 
 .beekeeper-avatar i {
   font-size: 3rem;
-  color: #16404d;
+  color: var(--primary);
 }
 
 .status-badge {
@@ -470,12 +598,12 @@ canvas {
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: #9ca3af;
-  border: 2px solid #fbf5dd;
+  background: var(--text-light);
+  border: 2px solid var(--bg-light);
 }
 
 .status-badge.active {
-  background: #22c55e;
+  background: var(--success);
 }
 
 .beekeeper-info {
@@ -483,7 +611,7 @@ canvas {
 }
 
 .beekeeper-info h3 {
-  color: #16404d;
+  color: var(--primary);
   font-size: 1.1rem;
   margin-bottom: 0.25rem;
 }
@@ -504,461 +632,30 @@ canvas {
   align-items: center;
   gap: 0.5rem;
   font-size: 0.9rem;
-  color: #16404d;
+  color: var(--primary);
 }
 
 .stat-item i {
-  color: #fca311;
+  color: var(--secondary);
+}
+
+/* Button styles */
+.contact-btn, .action-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
 }
 
 .contact-btn {
-  background: none;
-  border: none;
-  color: #16404d;
-  cursor: pointer;
+  color: var(--primary);
   padding: 0.5rem;
   border-radius: 50%;
-  transition: all 0.3s ease;
 }
 
 .contact-btn:hover {
-  color: #fca311;
-  background: #fca31110;
-}
-
-/* Weather Stats */
-.weather-stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-  margin-bottom: 2rem;
-}
-
-.weather-card {
-  background: white;
-  border-radius: 12px;
-  padding: 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  box-shadow: 0 4px 6px rgba(252, 163, 17, 0.1);
-  transition: transform 0.3s ease;
-}
-
-.weather-card:hover {
-  transform: translateY(-5px);
-}
-
-.weather-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-}
-
-.weather-card.temp .weather-icon {
+  color: var(--secondary);
   background: rgba(252, 163, 17, 0.1);
-  color: #fca311;
-}
-
-.weather-card.humidity .weather-icon {
-  background: rgba(22, 64, 77, 0.1);
-  color: #16404d;
-}
-
-.weather-info {
-  flex: 1;
-}
-
-.weather-info h3 {
-  color: #6b7280;
-  font-size: 0.875rem;
-  margin-bottom: 0.5rem;
-}
-
-.weather-value {
-  display: flex;
-  align-items: baseline;
-  gap: 0.25rem;
-  margin-bottom: 0.5rem;
-}
-
-.weather-value .value {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #16404d;
-}
-
-.weather-value .unit {
-  color: #6b7280;
-  font-size: 1rem;
-}
-
-.weather-time {
-  color: #6b7280;
-  font-size: 0.75rem;
-}
-
-.weather-card.total-beekeepers .weather-icon {
-  background: rgba(79, 70, 229, 0.1);
-  color: #4f46e5;
-}
-
-.weather-card.total-hives .weather-icon {
-  background: rgba(252, 163, 17, 0.1);
-  color: #fca311;
-}
-
-.weather-card.total-threats .weather-icon {
-  background: rgba(239, 68, 68, 0.1);
-  color: #ef4444;
-}
-
-.weather-card.hive-temp .weather-icon {
-  background: rgba(252, 163, 17, 0.1);
-  color: #fca311;
-}
-
-.weather-card.hive-humidity .weather-icon {
-  background: rgba(22, 64, 77, 0.1);
-  color: #16404d;
-}
-
-/* Adjust grid columns for 5 cards */
-@media (min-width: 1200px) {
-  .weather-stats {
-    grid-template-columns: repeat(5, 1fr);
-  }
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .beekeepers-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .beekeeper-card {
-    padding: 1rem;
-  }
-}
-
-/* Responsive Design */
-@media (max-width: 1200px) {
-  .charts-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 768px) {
-  .container {
-    grid-template-columns: 1fr;
-  }
-
-  .sidebar {
-    display: none;
-  }
-}
-
-/* Threats card styles */
-.threats-card {
-  background: white;
-  border-radius: 10px;
-  padding: 1.5rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  height: 400px;
-  overflow-y: auto;
-}
-
-.threats-title {
-  color: #16404d;
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.threats-title i {
-  color: #fca311;
-}
-
-.threats-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.threat-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  padding: 1rem;
-  border-radius: 8px;
-  background: #fbf5dd;
-  transition: transform 0.3s ease;
-}
-
-.threat-item:hover {
-  transform: translateX(5px);
-}
-
-.threat-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-}
-
-.threat-item.high .threat-icon {
-  background: rgba(239, 68, 68, 0.1);
-  color: #ef4444;
-}
-
-.threat-item.medium .threat-icon {
-  background: rgba(252, 163, 17, 0.1);
-  color: #fca311;
-}
-
-.threat-item.low .threat-icon {
-  background: rgba(22, 64, 77, 0.1);
-  color: #16404d;
-}
-
-.threat-info {
-  flex: 1;
-}
-
-.threat-info h4 {
-  color: #16404d;
-  font-size: 1rem;
-  margin-bottom: 0.25rem;
-}
-
-.threat-info p {
-  color: #6b7280;
-  font-size: 0.875rem;
-  margin-bottom: 0.25rem;
-}
-
-.timestamp {
-  color: #9ca3af;
-  font-size: 0.75rem;
-}
-
-.threat-severity {
-  font-size: 0.75rem;
-  font-weight: 600;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-}
-
-.threat-item.high .threat-severity {
-  background: #ef4444;
-  color: white;
-}
-
-.threat-item.medium .threat-severity {
-  background: #fca311;
-  color: white;
-}
-
-.threat-item.low .threat-severity {
-  background: #16404d;
-  color: white;
-}
-
-.nested-trigger,
-.dropdown-trigger {
-  cursor: pointer;
-  user-select: none;
-}
-
-/* Navbar title styles */
-.nav-divider {
-  width: 2px;
-  height: 30px;
-  background: rgba(22, 64, 77, 0.1); /* Changed back to semi-transparent blue */
-  margin: 0 1rem;
-}
-
-.nav-title  {
-  color: #16404d; /* Changed back to blue */
-  font-size: 1.2rem;
-  font-weight: 500;
-  position: relative;
-  padding-right: 1rem;
-}
-
-.dynamic-title .nav-title::after {
-  content: "";
-  position: absolute;
-  bottom: -50%;
-  left: -10%;
-  width: 100%;
-  height: 2px;
-  background: #fca311;
-  transform: scaleX(0);
-  transition: transform 0.3s ease;
-}
-
-.nav-title:hover::after {
-  transform: scaleX(1);
-}
-
-/* Update header-left to accommodate new title */
-.header-left {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-/* Dynamic Hive Title */
-.hive-title {
-  display: inline-block;
-  opacity: 0;
-  margin-left: 0.5rem;
-  color: #fca311;
-  transition: all 0.3s ease;
-}
-
-.hive-title.active {
-  opacity: 1;
-}
-
-.hive-title::before {
-  content: "- ";
-  color: #16404d;
-  margin-right: 0.25rem;
-}
-
-.weather-card.frames .weather-icon {
-  background: rgba(79, 70, 229, 0.1);
-  color: #4f46e5;
-}
-
-.weather-card.sensors .weather-icon {
-  background: rgba(16, 185, 129, 0.1);
-  color: #10b981;
-}
-
-.weather-card.hive-threats .weather-icon {
-  background: rgba(239, 68, 68, 0.1);
-  color: #ef4444;
-}
-
-.hive-dashboard {
-  animation: fadeIn 0.3s ease;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-/* Sensor Data Tables */
-.tables-section {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.5rem;
-  margin-top: 1.5rem;
-}
-
-.table-card {
-  background: white;
-  border-radius: 10px;
-  padding: 1.5rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.table-title {
-  color: #16404d;
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.table-title i {
-  color: #fca311;
-}
-
-.table-container {
-  overflow-x: auto;
-}
-
-.sensor-table {
-  width: 100%;
-  border-collapse: collapse;
-  min-width: 800px;
-}
-
-.sensor-table th,
-.sensor-table td {
-  padding: 0.75rem;
-  text-align: center;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.sensor-table th {
-  background: #f8f9fa;
-  font-weight: 600;
-  color: #16404d;
-}
-
-.sensor-table tr:hover {
-  background: #fbf5dd;
-}
-
-.sensor-table td:first-child {
-  font-weight: 500;
-  color: #16404d;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .table-container {
-    margin: 0 -1rem;
-    padding: 0 1rem;
-  }
-}
-
-/* Beekeeper Management Styles */
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
-}
-
-.add-beekeeper-btn {
-  background: #16404d;
-  color: white;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.add-beekeeper-btn:hover {
-  background: #fca311;
-  transform: translateY(-2px);
 }
 
 .beekeeper-actions {
@@ -977,29 +674,97 @@ canvas {
 
 .action-btn {
   background: white;
-  border: none;
   width: 32px;
   height: 32px;
-  border-radius: 6px;
+  border-radius: var(--border-radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
 }
 
 .action-btn.edit {
-  color: #4f46e5;
+  color: var(--purple);
 }
 
 .action-btn.delete {
-  color: #ef4444;
+  color: var(--danger);
 }
 
 .action-btn:hover {
   transform: translateY(-2px);
 }
 
+/* Call-to-action buttons */
+.add-beekeeper-btn, .purchase-upgrade-btn, .submit-btn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.add-beekeeper-btn {
+  padding: 0.75rem 1.5rem;
+}
+
+.purchase-upgrade-btn {
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+}
+
+.add-beekeeper-btn:hover, .purchase-upgrade-btn:hover, .submit-btn:hover {
+  background: var(--secondary);
+  transform: translateY(-2px);
+}
+
+/* Sensor Data Tables */
+.tables-section {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.table-card {
+  padding: 1.5rem;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.sensor-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px;
+}
+
+.sensor-table th, .sensor-table td {
+  padding: 0.75rem;
+  text-align: center;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.sensor-table th {
+  background: #f8f9fa;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.sensor-table tr:hover {
+  background: var(--bg-light);
+}
+
+.sensor-table td:first-child {
+  font-weight: 500;
+  color: var(--primary);
+}
+
+/* Modal styles */
 .modal {
   display: none;
   position: fixed;
@@ -1016,7 +781,7 @@ canvas {
   width: 90%;
   max-width: 500px;
   margin: 2rem auto;
-  border-radius: 12px;
+  border-radius: var(--border-radius-lg);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
 }
 
@@ -1025,7 +790,7 @@ canvas {
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--border-light);
 }
 
 .close-modal {
@@ -1033,9 +798,10 @@ canvas {
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
-  color: #6b7280;
+  color: var(--text-gray);
 }
 
+/* Form styles */
 .form-group {
   margin: 1.5rem;
 }
@@ -1043,17 +809,23 @@ canvas {
 .form-group label {
   display: block;
   margin-bottom: 0.5rem;
-  color: #16404d;
+  color: var(--primary);
   font-weight: 500;
 }
 
-.form-group input,
-.form-group select {
+.form-group input, .form-group select {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid #e5e7eb;
-  border-radius: 6px;
+  border: 1px solid var(--border-light);
+  border-radius: var(--border-radius-sm);
   font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--secondary);
+  box-shadow: 0 0 0 3px rgba(252, 163, 17, 0.1);
 }
 
 .form-actions {
@@ -1062,36 +834,28 @@ canvas {
   gap: 1rem;
   padding: 1.5rem;
   background: #f9fafb;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--border-light);
   border-radius: 0 0 12px 12px;
 }
 
 .cancel-btn {
   padding: 0.75rem 1.5rem;
-  border: 1px solid #e5e7eb;
-  border-radius: 6px;
+  border: 1px solid var(--border-light);
+  border-radius: var(--border-radius-sm);
   background: white;
   cursor: pointer;
 }
 
 .cancel-btn:hover {
-  background: #ef4444;
+  background: var(--danger);
   color: white;
 }
+
 .submit-btn {
   padding: 0.75rem 1.5rem;
-  background: #16404d;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
 }
 
-.submit-btn:hover {
-  background: #fca311;
-}
-
-/* Form Styles */
+/* Password Input Styles */
 .password-group {
   position: relative;
 }
@@ -1111,28 +875,13 @@ canvas {
   right: 0.75rem;
   background: none;
   border: none;
-  color: #6b7280;
+  color: var(--text-gray);
   cursor: pointer;
   padding: 0.25rem;
 }
 
 .toggle-password:hover {
-  color: #16404d;
-}
-
-.form-group input {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #e5e7eb;
-  border-radius: 6px;
-  font-size: 1rem;
-  transition: border-color 0.3s ease;
-}
-
-.form-group input:focus {
-  outline: none;
-  border-color: #fca311;
-  box-shadow: 0 0 0 3px rgba(252, 163, 17, 0.1);
+  color: var(--primary);
 }
 
 /* Purchased Kits Styles */
@@ -1141,40 +890,33 @@ canvas {
 }
 
 .kits-card {
-  background: white;
-  border-radius: 12px;
   padding: 1.5rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.kits-title {
-  color: #16404d;
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
+.kits-header {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 0.5rem;
+  margin-bottom: 1.5rem;
 }
 
-.kits-title i {
-  color: #fca311;
-}
-
-.kits-list {
+.kits-list, .upgrades-list {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-.kit-item {
+.kit-item, .upgrade-item {
   display: flex;
+  background: var(--bg-light);
+  border-radius: 8px;
+  transition: var(--transition);
+}
+
+.kit-item {
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  background: #fbf5dd;
-  border-radius: 8px;
-  transition: transform 0.3s ease;
 }
 
 .kit-item:hover {
@@ -1188,93 +930,56 @@ canvas {
 }
 
 .kit-info h4 {
-  color: #16404d;
+  color: var(--primary);
   font-size: 1rem;
   margin: 0;
 }
 
-.kit-status {
+.kit-status, .upgrade-status {
   font-size: 0.75rem;
   font-weight: 600;
   padding: 0.25rem 0.5rem;
   border-radius: 4px;
+}
+
+.kit-status {
   margin-left: 1rem;
 }
 
 .kit-status.active {
   background: rgba(16, 185, 129, 0.1);
-  color: #10b981;
+  color: var(--success);
 }
 
 .kit-action-btn {
   background: rgba(239, 68, 68, 0.1);
-  color: #ef4444;
+  color: var(--danger);
   border: none;
   padding: 0.5rem 1rem;
-  border-radius: 6px;
+  border-radius: var(--border-radius-sm);
   font-size: 0.875rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: var(--transition);
 }
 
 .kit-action-btn:hover {
-  background: #ef4444;
+  background: var(--danger);
   color: white;
 }
 
-.sidebar {
-  background: #16404d;
-  color: white;
-}
-.sidebar-nav .dropdown-trigger {
-  background: #f9f9f9;
-  color: #16404d;
-}
-
-.kits-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-}
-
-.purchase-upgrade-btn {
-  background: #16404d;
-  color: white;
-  border: none;
-  padding: 0.75rem 1rem;
-  border-radius: 6px;
-  font-size: 0.875rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.purchase-upgrade-btn:hover {
-  background: #fca311;
-  transform: translateY(-2px);
-}
-
+/* Upgrade Modal Styles */
 .upgrades-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
   max-height: 400px;
   overflow-y: auto;
 }
 
 .upgrade-item {
-  display: flex;
   align-items: center;
   gap: 1rem;
   padding: 1rem;
-  background: #fbf5dd;
-  border-radius: 8px;
 }
 
 .upgrade-item.installed {
@@ -1298,20 +1003,35 @@ canvas {
 
 .upgrade-name {
   font-weight: 600;
-  color: #16404d;
+  color: var(--primary);
 }
 
 .upgrade-status {
-  font-size: 0.75rem;
-  color: #10b981;
+  color: var(--success);
   margin-left: 0.5rem;
+}
+
+.upgrade-price {
+  color: var(--success);
+  font-weight: 600;
+  margin-left: 1rem;
+}
+
+.upgrade-description {
+  font-size: 0.875rem;
+  color: var(--text-gray);
+  margin-top: 0.5rem;
+}
+
+/* No data states */
+.no-data, .no-data-message p {
+  color: var(--text-gray);
+  text-align: center;
+  font-style: italic;
 }
 
 .no-data {
   padding: 1rem;
-  color: #6b7280;
-  text-align: center;
-  font-style: italic;
 }
 
 .no-data-message {
@@ -1320,56 +1040,98 @@ canvas {
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  background: #fbf5dd;
-  border-radius: 12px;
+  background: var(--bg-light);
+  border-radius: var(--border-radius-lg);
   width: 100%;
-  color: #6b7280;
 }
 
 .no-data-message i {
   font-size: 3rem;
-  color: #16404d;
+  color: var(--primary);
   margin-bottom: 1rem;
 }
 
 .no-data-message p {
   font-size: 1.1rem;
-  text-align: center;
-  font-style: italic;
 }
 
-.confirmation {
-background-color: white;
-position: absolute;
-z-index: 1000;
-width: 40%;
-top:0;
-margin-left:30% ;
-border-radius: 20px;
-justify-content: center;
-align-items: center;
-box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+/* Animation */
+.hive-dashboard {
+  animation: fadeIn 0.3s ease;
 }
-.confirmation h1{
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Notification Styles */
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 12px 24px;
+  border-radius: 6px;
+  color: white;
+  z-index: 1000;
+  animation: slideIn 0.3s ease;
+}
+
+.notification.success {
+  background-color: var(--success);
+}
+
+.notification.error {
+  background-color: var(--danger);
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Confirmation Dialog */
+.confirmation {
+  background-color: white;
+  position: absolute;
+  z-index: 1000;
+  width: 40%;
+  top: 0;
+  margin-left: 30%;
+  border-radius: 20px;
+  justify-content: center;
+  align-items: center;
+  box-shadow: var(--shadow);
+}
+
+.confirmation h1 {
   font-size: 1.2rem;
   margin-bottom: 1.5rem;
-  background-color: #16404d;
+  background-color: var(--primary);
   color: white;
   padding: 2%;
   padding-left: 3%;
 }
+
 .confirmation p {
   font-size: 0.8rem;
   margin-bottom: 1.5%;
   padding: 2%;
   padding-left: 4%;
-  color: #16404d;
+  color: var(--primary);
 }
+
 .confirmation button {
   padding: 0.5rem 1rem;
   align-items: center;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: var(--transition);
   float: right;
   margin-right: 3%;
   margin-bottom: 5%;
@@ -1381,18 +1143,55 @@ box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   float: right;
   width: 15%;
   text-decoration: none;
-  color: #16404d;
+  color: var(--primary);
   padding: 2%;
   padding-left: 3%;
   padding-right: 2%;
   border-radius: 5px;
   border: solid 2px transparent;
-  transition: all 0.3s ease;
+  transition: var(--transition);
 }
-.edit-sessioned i{
+
+.edit-sessioned i {
   margin-left: 3%;
 }
 
 .edit-sessioned:hover {
-  color: #fca311;
+  color: var(--secondary);
+}
+
+/* Responsive design */
+@media (min-width: 1200px) {
+  .weather-stats {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+@media (max-width: 1200px) {
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    display: none;
+  }
+  
+  .beekeepers-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .beekeeper-card {
+    padding: 1rem;
+  }
+  
+  .table-container {
+    margin: 0 -1rem;
+    padding: 0 1rem;
+  }
 }
