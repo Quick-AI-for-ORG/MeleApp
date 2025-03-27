@@ -27,6 +27,7 @@ pwm.start(0)
 def setServoAngle(angle):
     duty_cycle = (angle / 18) + 2
     pwm.ChangeDutyCycle(duty_cycle)
+    time.sleep(3)
 
 
 class insectClassifier:
@@ -170,16 +171,18 @@ class insectClassifier:
             print("DANGER: WASP DETECTED CLOSING DOOR !!")
             setServoAngle(180)
             self.doorClosed = True
+            time.sleep(60)
         else:
             print("DANGER: WASP DETECTED DOOR WILL REMAIN CLOSED")
+            time.sleep(10)
 
     def openDoor(self):
         if self.doorClosed == True:
-            print("MANUAL OVERRIDE TRIGGERED: OPENING DOOR")
+            print("NO WASPS DETECTED: OPENING DOOR")
             setServoAngle(0)
             self.doorClosed = False
         else:
-            print("DOOR IS ALREADY OPEN")
+            print("NO WASPS DETECTED: DOOR IS ALREADY OPEN")
 
     def processFrame(self, frame):
         self.frameCounter += 1
@@ -194,6 +197,7 @@ class insectClassifier:
                     self.waspCounter = 0
             else:
                 self.waspCounter = 0
+                self.openDoor()
         return frame
 
 
