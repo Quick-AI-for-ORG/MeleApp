@@ -1,48 +1,36 @@
-// Global variables to store delete information
+// Global variables
 let currentDeleteInfo = null;
 
-// Show confirmation modal
+// Confirmation modal functions
 function showConfirmModal(type, id, name) {
   const modal = document.getElementById("confirmationModal");
   const message = document.getElementById("confirmMessage");
-  const closeBtn = modal.querySelector(".close");
 
-  // Store the delete information
   currentDeleteInfo = { type, id };
 
-  // For apiaries, get the name from the span if not provided
+  // Get name from span if not provided for apiaries
   if (type === "apiary" && !name) {
     const row = document.querySelector(`[data-${type}-id="${id}"]`);
     if (row) {
       const nameSpan = row.querySelector("[data-name]");
-      if (nameSpan) {
-        name = nameSpan.dataset.name;
-      }
+      if (nameSpan) name = nameSpan.dataset.name;
     }
   }
 
-  // Set confirmation message
   message.textContent = `Are you sure you want to delete ${type} "${name}"?`;
+  modal.style.display = "flex";
 
-  // Show the modal
-  modal.style.display = "flex"; // Changed from 'block' to 'flex'
-
-  // Add event listeners
-  closeBtn.onclick = hideConfirmModal;
-
-  // Confirm delete button event
-  const confirmBtn = document.getElementById("confirmDeleteBtn");
-  confirmBtn.onclick = handleDelete;
+  // Set event handlers
+  modal.querySelector(".close").onclick = hideConfirmModal;
+  document.getElementById("confirmDeleteBtn").onclick = handleDelete;
 }
 
-// Hide confirmation modal
 function hideConfirmModal() {
-  const modal = document.getElementById("confirmationModal");
-  modal.style.display = "none";
+  document.getElementById("confirmationModal").style.display = "none";
   currentDeleteInfo = null;
 }
 
-// Handle the actual delete operation
+// Delete operation
 async function handleDelete() {
   if (!currentDeleteInfo) return;
 
@@ -51,22 +39,18 @@ async function handleDelete() {
   try {
     const response = await fetch(`/admin/${type}`, {
       method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ [`${type}Id`]: id }),
     });
 
     const result = await response.json();
 
     if (result.success) {
-      // Remove the element from the UI
+      // Remove element from UI
       const element = document.querySelector(`[data-${type}-id="${id}"]`);
-      if (element) {
-        element.remove();
-      }
+      if (element) element.remove();
 
-      // Update the stats counter
+      // Update stats counter
       const statsCounter = document.querySelector(
         `.stat-card.${type}s .stat-value`
       );
@@ -86,82 +70,66 @@ async function handleDelete() {
   hideConfirmModal();
 }
 
-// Show add modal
+// Modal management
 function showAddModal(type) {
-  const modal = document.getElementById(
-    `add${type.charAt(0).toUpperCase() + type.slice(1)}Modal`
-  );
-  modal.style.display = "flex";
+  const modalId = `add${type.charAt(0).toUpperCase() + type.slice(1)}Modal`;
+  document.getElementById(modalId).style.display = "flex";
 }
 
-// Show edit modal
 function showEditModal(type, id) {
-  const modal = document.getElementById(
-    `add${type.charAt(0).toUpperCase() + type.slice(1)}Modal`
-  );
-  const form = document.getElementById(
-    `add${type.charAt(0).toUpperCase() + type.slice(1)}Form`
-  );
+  const capType = type.charAt(0).toUpperCase() + type.slice(1);
+  const modal = document.getElementById(`add${capType}Modal`);
+  const form = document.getElementById(`add${capType}Form`);
   const title = modal.querySelector(".modal-header h3");
   const submitBtn = modal.querySelector(".submit-btn");
 
   // Update modal for edit mode
-  title.textContent = `Edit ${type.charAt(0).toUpperCase() + type.slice(1)}`;
+  title.textContent = `Edit ${capType}`;
   submitBtn.textContent = "Update";
 
   // Get current data
   const item = document.querySelector(`[data-${type}-id="${id}"]`);
-  if (item) {
-    if (type === "user") {
-      const name = item.querySelector("h4").textContent.trim().split(" ");
-      const email = item.querySelector("p").textContent.trim();
-      const role = item
-        .querySelector(".user-role")
-        .textContent.trim()
-        .toLowerCase();
+  if (item && type === "user") {
+    const name = item.querySelector("h4").textContent.trim().split(" ");
+    const email = item.querySelector("p").textContent.trim();
+    const role = item
+      .querySelector(".user-role")
+      .textContent.trim()
+      .toLowerCase();
 
-      form.firstName.value = name[0] || "";
-      form.lastName.value = name[1] || "";
-      form.email.value = email;
-      form.role.value = role;
-      form.password.style.display = "none";
-      form.dataset.mode = "edit";
-      form.dataset.id = id;
-    }
+    form.firstName.value = name[0] || "";
+    form.lastName.value = name[1] || "";
+    form.email.value = email;
+    form.role.value = role;
+    form.password.style.display = "none";
+    form.dataset.mode = "edit";
+    form.dataset.id = id;
   }
 
   modal.style.display = "flex";
 }
 
-// Close add modal
 function closeAddModal(type) {
-  const modal = document.getElementById(
-    `add${type.charAt(0).toUpperCase() + type.slice(1)}Modal`
-  );
+  const capType = type.charAt(0).toUpperCase() + type.slice(1);
+  const modal = document.getElementById(`add${capType}Modal`);
   modal.style.display = "none";
-  const form = document.getElementById(
-    `add${type.charAt(0).toUpperCase() + type.slice(1)}Form`
-  );
+
+  const form = document.getElementById(`add${capType}Form`);
   if (form) {
     form.reset();
     delete form.dataset.mode;
     delete form.dataset.id;
-    if (type === "user") {
-      form.password.style.display = "block";
-    }
+    if (type === "user") form.password.style.display = "block";
   }
 }
 
-// Add this new function for price validation
+// Form validation
 function validatePrice(input) {
-  if (input.value < 0) {
-    input.value = 0;
-  }
-  // Format to 2 decimal places
+  if (input.value < 0) input.value = 0;
   input.value = parseFloat(input.value).toFixed(2);
 }
 
-// Handle form submission
+// Form submission
 async function handleAdd(event, type) {
   event.preventDefault();
   const form = event.target;
@@ -179,29 +147,28 @@ async function handleAdd(event, type) {
   }
 
   const isEdit = form.dataset.mode === "edit";
-  const endpoint = isEdit
-    ? `/admin/update${type.charAt(0).toUpperCase() + type.slice(1)}`
-    : `/admin/add${type.charAt(0).toUpperCase() + type.slice(1)}`;
+  const capType = type.charAt(0).toUpperCase() + type.slice(1);
+  const endpoint = `/admin/${isEdit ? "update" : "add"}${capType}`;
 
-  if (isEdit) {
-    data.userId = form.dataset.id; // Add ID for update
-  }
+  if (isEdit) data.userId = form.dataset.id;
 
   try {
     const response = await fetch(endpoint, {
       method: isEdit ? "PUT" : "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: form.name.value,
-        price: parseFloat(form.price.value),
-        description: form.description.value,
-        subscription: form.subscription.value,
-        sensorTypes: Array.from(
-          form.querySelectorAll('input[name="sensorTypes"]:checked')
-        ).map((input) => input.value),
-      }),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(
+        type === "product"
+          ? {
+              name: form.name.value,
+              price: parseFloat(form.price.value),
+              description: form.description.value,
+              subscription: form.subscription?.value || "",
+              sensorTypes: Array.from(
+                form.querySelectorAll('input[name="sensorTypes"]:checked')
+              ).map((input) => input.value),
+            }
+          : data
+      ),
     });
 
     const result = await response.json();
@@ -211,8 +178,7 @@ async function handleAdd(event, type) {
         "success"
       );
       closeAddModal(type);
-      // Reload the page to show new data
-      location.reload();
+      location.reload(); // Reload to show new data
     } else {
       showNotification(
         `Error ${isEdit ? "updating" : "adding"} ${type}`,
@@ -228,16 +194,13 @@ async function handleAdd(event, type) {
   }
 }
 
-// Show notification
+// Notifications
 function showNotification(message, type) {
   const notification = document.createElement("div");
   notification.className = `notification ${type}`;
   notification.textContent = message;
   document.body.appendChild(notification);
-
-  setTimeout(() => {
-    notification.remove();
-  }, 3000);
+  setTimeout(() => notification.remove(), 3000);
 }
 
 // View All functionality
@@ -257,11 +220,8 @@ function showViewAllModal(type) {
     return;
   }
 
-  // Clear previous content
+  // Clear previous content and show loading
   tableHead.innerHTML = "";
-  tableBody.innerHTML = "";
-
-  // Show loading state
   tableBody.innerHTML = '<tr><td colspan="5">Loading...</td></tr>';
 
   // Update title and show modal
@@ -295,43 +255,30 @@ function showViewAllModal(type) {
 }
 
 function closeViewAllModal() {
-  const modal = document.getElementById("viewAllModal");
-  modal.style.display = "none";
+  document.getElementById("viewAllModal").style.display = "none";
 }
 
 function getHeadersForType(type) {
-  switch (type) {
-    case "user":
-      return ["Name", "Email", "Role", "Joined Date"];
-    case "product":
-      return ["Name", "Price", "Description", "Added Date"];
-    case "sensor":
-      return ["Type", "Model", "Status", "Description", "Hive"];
-    case "hive":
-      return ["Apiary", "Frames", "Dimensions", "Added Date"];
-    case "apiary":
-      return ["Name", "Location", "Hive Count", "Added Date"];
-    case "hiveupgrade":
-      return ["ID", "Operational Status", "Created Date"];
-    default:
-      return [];
-  }
+  const headers = {
+    user: ["Name", "Email", "Role", "Joined Date"],
+    product: ["Name", "Price", "Description", "Added Date"],
+    sensor: ["Type", "Model", "Status", "Description", "Hive"],
+    hive: ["Apiary", "Frames", "Dimensions", "Added Date"],
+    apiary: ["Name", "Location", "Hive Count", "Added Date"],
+    hiveupgrade: ["ID", "Operational Status", "Created Date"],
+  };
+
+  return headers[type] || [];
 }
 
 async function fetchAllItems(type) {
   try {
-    console.log(`Fetching all ${type}s...`);
     const response = await fetch(`/admin/getAll${type}s`);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
     const data = await response.json();
-    console.log(`Fetched ${type}s data:`, data);
-    if (data.success) {
-      return data.items || [];
-    } else {
-      throw new Error(data.error || "Failed to fetch items");
-    }
+    if (data.success) return data.items || [];
+    throw new Error(data.error || "Failed to fetch items");
   } catch (error) {
     console.error(`Error fetching ${type}s:`, error);
     showNotification(`Error fetching ${type}s: ${error.message}`, "error");
@@ -347,6 +294,7 @@ function displayItems(items, type) {
     const row = document.createElement("tr");
     const cells = getCellsForType(item, type);
 
+    // Add cells with data
     cells.forEach((cell) => {
       const td = document.createElement("td");
       td.innerHTML = cell;
@@ -357,10 +305,14 @@ function displayItems(items, type) {
     const actionsTd = document.createElement("td");
     actionsTd.innerHTML = `
       <div class="table-actions">
-        <button class="action-btn edit" onclick="showEditModal('${type}', '${item._id}')">
+        <button class="action-btn edit" onclick="showEditModal('${type}', '${
+      item._id
+    }')">
           <i class="fas fa-edit"></i>
         </button>
-        <button class="action-btn delete" onclick="showConfirmModal('${type}', '${item._id}', '${item.name}')">
+        <button class="action-btn delete" onclick="showConfirmModal('${type}', '${
+      item._id
+    }', '${item.name || item._id}')">
           <i class="fas fa-trash"></i>
         </button>
       </div>
@@ -381,14 +333,17 @@ function getCellsForType(item, type) {
         `<span class="user-role ${role}">${role}</span>`,
         new Date(item.createdAt).toLocaleDateString(),
       ];
+
     case "product":
       return [
         item.name,
-        `$${parseFloat(item.price).toFixed(2)}`,
-        `<span class="product-counter">${item.counter || 0} units</span>`,
-        item.description || "No description",
+        `${parseFloat(item.price).toFixed(2)}`,
+        `${
+          item.description || "No description"
+        } <span class="product-counter">${item.counter || 0} units</span>`,
         new Date(item.createdAt).toLocaleDateString(),
       ];
+
     case "sensor":
       return [
         item.sensorType,
@@ -399,6 +354,7 @@ function getCellsForType(item, type) {
         item.description || "No description",
         item.hiveName || "Unassigned",
       ];
+
     case "hive":
       return [
         item.apiaryName || "Unassigned",
@@ -408,6 +364,7 @@ function getCellsForType(item, type) {
           : "N/A",
         new Date(item.createdAt).toLocaleDateString(),
       ];
+
     case "apiary":
       return [
         `<span data-name="${item.name}">${
@@ -417,6 +374,7 @@ function getCellsForType(item, type) {
         item.hiveCount || "0",
         new Date(item.createdAt).toLocaleDateString(),
       ];
+
     case "hiveupgrade":
       return [
         item._id,
@@ -425,129 +383,8 @@ function getCellsForType(item, type) {
         }">${item.operational ? "Operational" : "Non-operational"}</span>`,
         new Date(item.createdAt).toLocaleDateString(),
       ];
+
     default:
       return [];
   }
 }
-
-async function deployHiveUpgrade(id) {
-  try {
-    const response = await fetch("/admin/deployHiveUpgrade", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ upgradeId: id }),
-    });
-
-    const result = await response.json();
-    if (result.success) {
-      showNotification("Hive upgrade deployed successfully", "success");
-      // Update the UI
-      const item = document.querySelector(`[data-hiveupgrade-id="${id}"]`);
-      if (item) {
-        const status = item.querySelector(".operational-status");
-        const deployBtn = item.querySelector(".action-btn.deploy");
-
-        if (status) {
-          status.classList.remove("inactive");
-          status.classList.add("active");
-          status.textContent = "Deployed";
-        }
-
-        if (deployBtn) {
-          deployBtn.remove();
-        }
-      }
-    } else {
-      showNotification(result.error || "Error deploying upgrade", "error");
-    }
-  } catch (error) {
-    console.error("Deploy error:", error);
-    showNotification("Error deploying upgrade", "error");
-  }
-}
-
-function filterItems() {
-  const input = document.getElementById("searchInput");
-  const filter = input.value.toLowerCase();
-  const tbody = document.getElementById("viewAllTableBody");
-  const rows = tbody.getElementsByTagName("tr");
-
-  for (let row of rows) {
-    const cells = row.getElementsByTagName("td");
-    let shouldShow = false;
-
-    for (let cell of cells) {
-      if (cell.textContent.toLowerCase().indexOf(filter) > -1) {
-        shouldShow = true;
-        break;
-      }
-    }
-
-    row.style.display = shouldShow ? "" : "none";
-  }
-}
-
-// Event Listeners
-document.addEventListener("DOMContentLoaded", () => {
-  // Update View All button listeners
-  document.querySelectorAll(".view-all").forEach((button) => {
-    button.addEventListener("click", function () {
-      // Get the type from the closest activity-card
-      const cardClass = this.closest(".activity-card").className;
-      console.log("Card class:", cardClass);
-
-      // Updated regex to include hiveupgrades
-      const match = cardClass.match(
-        /\b(users|products|sensors|hives|apiaries|hiveupgrades)-list\b/
-      );
-
-      if (match) {
-        const type = match[1].slice(0, -1); // Remove 's' from the end
-        console.log("Opening view all for:", type);
-        showViewAllModal(type);
-      } else {
-        console.error("Could not determine type from class:", cardClass);
-      }
-    });
-  });
-
-  // Update modal close handlers
-  document.querySelectorAll(".modal .close").forEach((button) => {
-    button.addEventListener("click", function () {
-      const modal = this.closest(".modal");
-      if (modal) {
-        if (modal.id === "viewAllModal") {
-          closeViewAllModal();
-        } else if (modal.id === "confirmationModal") {
-          hideConfirmModal();
-        } else {
-          const type = modal.id
-            .replace("add", "")
-            .replace("Modal", "")
-            .toLowerCase();
-          closeAddModal(type);
-        }
-      }
-    });
-  });
-
-  // Window click handler for modals
-  window.onclick = function (event) {
-    if (event.target.classList.contains("modal")) {
-      const modalId = event.target.id;
-      if (modalId === "viewAllModal") {
-        closeViewAllModal();
-      } else if (modalId === "confirmationModal") {
-        hideConfirmModal();
-      } else {
-        const type = modalId
-          .replace("add", "")
-          .replace("Modal", "")
-          .toLowerCase();
-        closeAddModal(type);
-      }
-    }
-  };
-});

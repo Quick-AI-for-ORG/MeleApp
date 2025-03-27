@@ -37,83 +37,23 @@
         <main class="main-content">
             <!-- Stats Grid -->
             <div class="stats-grid">
-                <div class="stat-card hives">
-                    <div class="stat-header">
-                        <div class="stat-icon">
-                            <i class="fas fa-archive"></i>
-                        </div>
-                        <h3>Total Hives</h3>
-                    </div>
-                    <div class="stat-content">
-                        <p class="stat-value">
-                            <%= stats.hives %>
-                        </p>
-                        <p class="stat-label">Active Hives</p>
-                    </div>
-                </div>
+                <%- include('./Components/statCard', { type: 'hives' , icon: 'fas fa-archive' , title: 'Total Hives' ,
+                    value: stats.hives, label: 'Active Hives' }) %>
 
-                <div class="stat-card apiaries">
-                    <div class="stat-header">
-                        <div class="stat-icon">
-                            <i class="fas fa-warehouse"></i>
-                        </div>
-                        <h3>Total Apiaries</h3>
-                    </div>
-                    <div class="stat-content">
-                        <p class="stat-value">
-                            <%= stats.apiaries %>
-                        </p>
-                        <p class="stat-label">Registered Apiaries</p>
-                    </div>
-                </div>
+                    <%- include('./Components/statCard', { type: 'apiaries' , icon: 'fas fa-warehouse' ,
+                        title: 'Total Apiaries' , value: stats.apiaries, label: 'Registered Apiaries' }) %>
 
-                <div class="stat-card users">
-                    <div class="stat-header">
-                        <div class="stat-icon">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <h3>Total Users</h3>
-                    </div>
-                    <div class="stat-content">
-                        <p class="stat-value">
-                            <%= stats.users %>
-                        </p>
-                        <p class="stat-label">Registered Users</p>
-                    </div>
-                </div>
+                        <%- include('./Components/statCard', { type: 'users' , icon: 'fas fa-users' ,
+                            title: 'Total Users' , value: stats.users, label: 'Registered Users' }) %>
 
-                <div class="stat-card sensors">
-                    <div class="stat-header">
-                        <div class="stat-icon">
-                            <i class="fas fa-microchip"></i>
-                        </div>
-                        <h3>Active Sensors</h3>
-                    </div>
-                    <div class="stat-content">
-                        <p class="stat-value">
-                            <%= stats.sensors %>
-                        </p>
-                        <p class="stat-label">Deployed Sensors</p>
-                    </div>
-                </div>
+                            <%- include('./Components/statCard', { type: 'sensors' , icon: 'fas fa-microchip' ,
+                                title: 'Active Sensors' , value: stats.sensors, label: 'Deployed Sensors' }) %>
 
-                <div class="stat-card products">
-                    <div class="stat-header">
-                        <div class="stat-icon">
-                            <i class="fas fa-box"></i>
-                        </div>
-                        <h3>Total Products</h3>
-                    </div>
-                    <div class="stat-content">
-                        <p class="stat-value">
-                            <%= stats.products %>
-                        </p>
-                        <p class="stat-label">Available Products</p>
-                    </div>
-                </div>
+                                <%- include('./Components/statCard', { type: 'products' , icon: 'fas fa-box' ,
+                                    title: 'Total Products' , value: stats.products, label: 'Available Products' }) %>
             </div>
 
-            <!-- Recent Activity Section -->
+            <!-- First Activity Row -->
             <div class="activity-section">
                 <!-- Recent Users -->
                 <div class="activity-card users-list">
@@ -126,7 +66,6 @@
                     </div>
                     <div class="card-content">
                         <% recentUsers.forEach(user=> { %>
-                            <!-- Update the user activity item -->
                             <div class="activity-item" data-user-id="<%= user._id %>">
                                 <div class="user-avatar">
                                     <i class="fas fa-user-circle"></i>
@@ -143,7 +82,7 @@
                                         <%= user.role || 'beekeeper' %>
                                     </p>
                                     <span class="timestamp">Joined <%= new Date(user.createdAt).toLocaleDateString() %>
-                                    </span>
+                                            </span>
                                 </div>
                                 <div class="activity-actions">
                                     <button class="action-btn edit" onclick='showEditModal("user", "<%= user._id %>")'>
@@ -159,7 +98,7 @@
                     </div>
                 </div>
 
-                <!-- Hive Upgrades List (Moved here) -->
+                <!-- Hive Upgrades List -->
                 <div class="activity-card hiveupgrades-list">
                     <div class="card-header">
                         <h3><i class="fas fa-tools"></i> Hive Upgrades</h3>
@@ -196,6 +135,7 @@
                 </div>
             </div>
 
+            <!-- Second Activity Row -->
             <div class="activity-section">
                 <!-- Hives List -->
                 <div class="activity-card hives-list">
@@ -210,14 +150,12 @@
                                     <i class="fas fa-archive"></i>
                                 </div>
                                 <div class="activity-info">
-
                                     <p>Apiary: <%= hive.apiaryName || 'Unknown Apiary' %>
                                     </p>
                                     <p class="hive-details">
                                         Dimensions: <%= hive.dimentions ?
                                             `${hive.dimentions.length}x${hive.dimentions.width}x${hive.dimentions.height}`
-                                            : '0x0x0' %> cm
-                                            | Frames: <%= hive.numberOfFrames || 0 %>
+                                            : '0x0x0' %> cm | Frames: <%= hive.numberOfFrames || 0 %>
                                     </p>
                                     <% if (hive.streamUrl) { %>
                                         <p class="stream-url">Stream: <%= hive.streamUrl %>
@@ -256,10 +194,9 @@
                                     <p>Location: <%= apiary.location %>
                                     </p>
                                     <span class="timestamp">Added <%= new Date(apiary.createdAt).toLocaleDateString() %>
-                                    </span>
+                                            </span>
                                 </div>
                                 <div class="activity-actions">
-
                                     <button class="action-btn delete"
                                         onclick="showConfirmModal('apiary', '<%= apiary._id %>', '<%= apiary.name %>')">
                                         <i class="fas fa-trash"></i>
@@ -271,6 +208,7 @@
                 </div>
             </div>
 
+            <!-- Third Activity Row -->
             <div class="activity-section">
                 <!-- Sensors List -->
                 <div class="activity-card sensors-list">
@@ -300,10 +238,9 @@
                                         <%= sensor.description %>
                                     </p>
                                     <span class="timestamp">Added <%= new Date(sensor.createdAt).toLocaleDateString() %>
-                                    </span>
+                                            </span>
                                 </div>
                                 <div class="activity-actions">
-
                                     <button class="action-btn delete"
                                         onclick="showConfirmModal('sensor', '<%= sensor._id %>', '<%= sensor.name %>')">
                                         <i class="fas fa-trash"></i>
@@ -336,12 +273,10 @@
                                     <p>$<%= product.price %> | <span class="product-counter">
                                                 <%= product.counter || 0 %> Purchases
                                             </span></p>
-                                    <span class="timestamp">
-                                        Added <%= new Date(product.createdAt).toLocaleDateString() %>
-                                    </span>
+                                    <span class="timestamp">Added <%= new Date(product.createdAt).toLocaleDateString()
+                                            %></span>
                                 </div>
                                 <div class="activity-actions">
-                                    </button>
                                     <button class="action-btn delete"
                                         onclick="showConfirmModal('product', '<%= product._id %>', '<%= product.name %>')">
                                         <i class="fas fa-trash"></i>
@@ -355,247 +290,14 @@
         </main>
     </div>
 
-    <!-- Update the Confirmation Modal -->
-    <div id="confirmationModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Confirm Deletion</h3>
-                <button class="close">&times;</button>
-            </div>
-            <div class="modal-body">
-                <p id="confirmMessage"></p>
-            </div>
-            <div class="modal-footer">
-                <button class="cancel-btn" onclick="hideConfirmModal()">Cancel</button>
-                <button class="delete-btn" id="confirmDeleteBtn">Delete</button>
-            </div>
-        </div>
-    </div>
+    <!-- Modals -->
+    <%- include('./Components/modals/confirmModal') %>
+        <%- include('./Components/modals/userModal') %>
+            <%- include('./Components/modals/sensorModal') %>
+                <%- include('./Components/modals/productModal', { recentSensors }) %>
+                    <%- include('./Components/modals/viewAllModal') %>
 
-    <!-- Add User Modal -->
-    <div id="addUserModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Add New User</h3>
-                <button class="close" onclick="closeAddModal('user')">&times;</button>
-            </div>
-            <form id="addUserForm" onsubmit="handleAdd(event, 'user')">
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="firstName">First Name</label>
-                        <input type="text" id="firstName" name="firstName" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="lastName">Last Name</label>
-                        <input type="text" id="lastName" name="lastName" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="role">Role</label>
-                        <select id="role" name="role" required>
-                            <option value="beekeeper">Beekeeper</option>
-                            <option value="owner">Owner</option>
-                            <option value="admin">Admin</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" id="password" name="password" required>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="cancel-btn" onclick="closeAddModal('user')">Cancel</button>
-                    <button type="submit" class="submit-btn">Add User</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Add Sensor Modal -->
-    <div id="addSensorModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Add New Sensor</h3>
-                <button class="close" onclick="closeAddModal('sensor')">&times;</button>
-            </div>
-            <form id="addSensorForm" onsubmit="handleAdd(event, 'sensor')">
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="sensorType">Type</label>
-                        <input type="text" id="sensorType" name="sensorType" required
-                            placeholder="Enter sensor type (e.g., Temperature, Humidity)">
-                    </div>
-                    <div class="form-group">
-                        <label for="modelName">Model Name</label>
-                        <input type="text" id="modelName" name="modelName" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="description">Description</label>
-                        <textarea id="description" name="description" rows="3"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="status">Status</label>
-                        <select id="status" name="status" required>
-                            <option value="on">On</option>
-                            <option value="off">Off</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="cancel-btn" onclick="closeAddModal('sensor')">Cancel</button>
-                    <button type="submit" class="submit-btn">Add Sensor</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Add Product Modal -->
-    <div id="addProductModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Add New Product</h3>
-                <button class="close" onclick="closeAddModal('product')">&times;</button>
-            </div>
-            <form id="addProductForm" onsubmit="handleAdd(event, 'product')">
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="productName">Product Name</label>
-                        <input type="text" id="productName" name="name" required placeholder="Enter product name">
-                    </div>
-                    <div class="form-group price-group">
-                        <label for="price">Price</label>
-                        <input type="number" id="price" name="price" min="0" step="0.01" required placeholder="0.00"
-                            oninput="validatePrice(this)">
-                    </div>
-                    <div class="form-group">
-                        <label for="subscription">Subscription Type (optional)</label>
-                        <input type="text" id="subscription" name="subscription"
-                            placeholder="e.g., Monthly, Yearly, One-time">
-                    </div>
-                    <div class="form-group">
-                        <label>Sensors</label>
-                        <div class="sensors-grid">
-                            <% recentSensors.forEach(sensor=> { %>
-                                <div class="sensor-checkbox">
-                                    <input type="checkbox" id="sensor-<%= sensor.sensorType %>" name="sensorTypes"
-                                        value="<%= sensor.sensorType %>">
-                                    <label for="sensor-<%= sensor.sensorType %>">
-                                        <%= sensor.sensorType %>
-                                    </label>
-                                </div>
-                                <% }); %>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="description">Description</label>
-                        <textarea id="productDescription" name="description" rows="3"
-                            placeholder="Enter product description"></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="cancel-btn" onclick="closeAddModal('product')">Cancel</button>
-                    <button type="submit" class="submit-btn">Add Product</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- View All Modal Template -->
-    <div id="viewAllModal" class="modal">
-        <div class="modal-content view-all-content">
-            <div class="modal-header">
-                <h3 id="viewAllTitle">All Items</h3>
-                <button class="close" onclick="closeViewAllModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="search-bar">
-                    <input type="text" id="searchInput" placeholder="Search..." onkeyup="filterItems()">
-                </div>
-                <div class="table-container">
-                    <table id="viewAllTable">
-                        <thead id="viewAllTableHead"></thead>
-                        <tbody id="viewAllTableBody"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="/JS/admin.js"></script>
-    <style>
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 10px 20px;
-            border-radius: 5px;
-            color: white;
-            z-index: 1000;
-            animation: slideIn 0.3s ease;
-        }
-
-        .notification.success {
-            background-color: #10b981;
-        }
-
-        .notification.error {
-            background-color: #ef4444;
-        }
-
-        .sensors-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 0.75rem;
-            margin-top: 0.5rem;
-            padding: 0.5rem;
-            background: #f9fafb;
-            border-radius: 8px;
-        }
-
-        .sensor-checkbox {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem;
-            border-radius: 6px;
-            background-color: white;
-            border: 1px solid #e5e7eb;
-            transition: all 0.2s ease;
-        }
-
-        .sensor-checkbox:hover {
-            border-color: #16404d;
-        }
-
-        .sensor-checkbox input[type="checkbox"] {
-            width: 1.125rem;
-            height: 1.125rem;
-            accent-color: #16404d;
-            cursor: pointer;
-        }
-
-        .sensor-checkbox label {
-            font-size: 0.875rem;
-            color: #374151;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-    </style>
+                        <script src="/JS/admin.js"></script>
 </body>
 
 </html>

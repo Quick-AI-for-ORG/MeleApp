@@ -16,6 +16,7 @@
   --border-radius: 10px;
   --border-radius-lg: 12px;
   --transition: all 0.3s ease;
+  --padding-card: 1.5rem;
 }
 
 /* Reset and base styles */
@@ -31,12 +32,168 @@ body {
   color: var(--text-dark);
 }
 
+/* Common card and component styles */
+.card, .weather-card, .chart-card, .threats-card, 
+.table-card, .beekeepers-section, .kits-card {
+  background: white;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-honey);
+  padding: var(--padding-card);
+}
+
+.card-title, .chart-title, .threats-title, 
+.table-title, .kits-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.card-title i, .chart-title i, .threats-title i, 
+.table-title i, .kits-title i {
+  color: var(--secondary);
+}
+
+.icon-container, .weather-icon, .threat-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+
+.icon-primary, .weather-card.humidity .weather-icon,
+.weather-card.hive-humidity .weather-icon,
+.threat-item.low .threat-icon {
+  background: rgba(22, 64, 77, 0.1);
+  color: var(--primary);
+}
+
+.icon-secondary, .weather-card.temp .weather-icon,
+.weather-card.total-hives .weather-icon,
+.weather-card.hive-temp .weather-icon,
+.threat-item.medium .threat-icon {
+  background: rgba(252, 163, 17, 0.1);
+  color: var(--secondary);
+}
+
+.icon-danger, .weather-card.total-threats .weather-icon,
+.weather-card.hive-threats .weather-icon,
+.threat-item.high .threat-icon {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--danger);
+}
+
+.icon-success, .weather-card.sensors .weather-icon {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--success);
+}
+
+.icon-purple, .weather-card.total-beekeepers .weather-icon,
+.weather-card.frames .weather-icon {
+  background: rgba(79, 70, 229, 0.1);
+  color: var(--purple);
+}
+
+/* Button base styles */
+.btn, .nav-btn, .action-btn, .contact-btn, 
+.add-beekeeper-btn, .purchase-upgrade-btn, 
+.submit-btn, .cancel-btn, .kit-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+  border: none;
+}
+
+.btn-primary, .add-beekeeper-btn, .purchase-upgrade-btn, .submit-btn {
+  background: var(--primary);
+  color: white;
+  padding: 0.75rem 1.5rem;
+}
+
+.btn-primary:hover, .add-beekeeper-btn:hover, 
+.purchase-upgrade-btn:hover, .submit-btn:hover {
+  background: var(--secondary);
+  transform: translateY(-2px);
+}
+
+.btn-outline, .nav-btn, .cancel-btn {
+  background: white;
+  border: 1px solid var(--border-light);
+  padding: 0.5rem 1rem;
+}
+
+.btn-icon, .action-btn, .contact-btn {
+  background: none;
+  padding: 0.5rem;
+}
+
+.btn-danger, .kit-action-btn {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--danger);
+}
+
+.btn-danger:hover, .kit-action-btn:hover {
+  background: var(--danger);
+  color: white;
+}
+
+/* Form control styles */
+.form-control, .form-group input, .form-group select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border-light);
+  border-radius: var(--border-radius-sm);
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.form-control:focus, .form-group input:focus {
+  outline: none;
+  border-color: var(--secondary);
+  box-shadow: 0 0 0 3px rgba(252, 163, 17, 0.1);
+}
+
+.form-label, .form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--primary);
+  font-weight: 500;
+}
+
+/* Animation keyframes */
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* Layout structure */
 .container {
   display: grid;
   grid-template-columns: 240px 1fr;
   grid-template-rows: 70px 1fr;
   min-height: 100vh;
   gap: 1rem;
+  padding: 1rem;
+}
+
+.main-content {
+  grid-column: 2;
   padding: 1rem;
 }
 
@@ -122,16 +279,11 @@ body {
   margin-right: 0.25rem;
 }
 
-/* Nav buttons - shared styles */
+/* Nav buttons */
 .nav-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
   padding: 0.5rem 1rem;
-  border-radius: var(--border-radius-sm);
   color: var(--primary);
   text-decoration: none;
-  transition: var(--transition);
   border: 1px solid rgba(22, 64, 77, 0.2);
 }
 
@@ -139,7 +291,6 @@ body {
   transform: translateY(-2px);
 }
 
-/* Specific button styles */
 .upgrade-btn {
   color: #b97a13;
 }
@@ -295,30 +446,6 @@ body {
   transform: rotate(180deg);
 }
 
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Main content styles */
-.main-content {
-  grid-column: 2;
-  padding: 1rem;
-}
-
-/* Card base styles */
-.weather-card, .chart-card, .threats-card, .table-card, .beekeepers-section, .kits-card {
-  background: white;
-  border-radius: var(--border-radius-lg);
-  box-shadow: var(--shadow-honey);
-}
-
 /* Weather/Stats cards */
 .weather-stats {
   display: grid;
@@ -328,7 +455,6 @@ body {
 }
 
 .weather-card {
-  padding: 1.5rem;
   display: flex;
   align-items: center;
   gap: 1.5rem;
@@ -343,41 +469,7 @@ body {
   width: 48px;
   height: 48px;
   border-radius: var(--border-radius-lg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   font-size: 1.5rem;
-}
-
-/* Weather icon colors */
-.weather-card.temp .weather-icon,
-.weather-card.total-hives .weather-icon,
-.weather-card.hive-temp .weather-icon {
-  background: rgba(252, 163, 17, 0.1);
-  color: var(--secondary);
-}
-
-.weather-card.humidity .weather-icon,
-.weather-card.hive-humidity .weather-icon {
-  background: rgba(22, 64, 77, 0.1);
-  color: var(--primary);
-}
-
-.weather-card.total-beekeepers .weather-icon,
-.weather-card.frames .weather-icon {
-  background: rgba(79, 70, 229, 0.1);
-  color: var(--purple);
-}
-
-.weather-card.total-threats .weather-icon,
-.weather-card.hive-threats .weather-icon {
-  background: rgba(239, 68, 68, 0.1);
-  color: var(--danger);
-}
-
-.weather-card.sensors .weather-icon {
-  background: rgba(16, 185, 129, 0.1);
-  color: var(--success);
 }
 
 .weather-info {
@@ -421,7 +513,6 @@ body {
 }
 
 .chart-card, .threats-card {
-  padding: 1.5rem;
   height: 400px;
 }
 
@@ -430,22 +521,8 @@ body {
   width: 100% !important;
 }
 
-.chart-title, .threats-title, .table-title, .kits-title {
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  color: var(--primary);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
 .chart-title, .threats-title {
   margin-bottom: 1.5rem;
-}
-
-.threats-title i, .table-title i, .kits-title i {
-  color: var(--secondary);
 }
 
 /* Threats styles */
@@ -477,26 +554,7 @@ body {
   width: 40px;
   height: 40px;
   border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   font-size: 1.2rem;
-}
-
-/* Threat colors */
-.threat-item.high .threat-icon {
-  background: rgba(239, 68, 68, 0.1);
-  color: var(--danger);
-}
-
-.threat-item.medium .threat-icon {
-  background: rgba(252, 163, 17, 0.1);
-  color: var(--secondary);
-}
-
-.threat-item.low .threat-icon {
-  background: rgba(22, 64, 77, 0.1);
-  color: var(--primary);
 }
 
 .threat-info {
@@ -639,17 +697,9 @@ body {
   color: var(--secondary);
 }
 
-/* Button styles */
-.contact-btn, .action-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  transition: var(--transition);
-}
-
+/* Contact and action buttons */
 .contact-btn {
   color: var(--primary);
-  padding: 0.5rem;
   border-radius: 50%;
 }
 
@@ -694,31 +744,16 @@ body {
   transform: translateY(-2px);
 }
 
-/* Call-to-action buttons */
-.add-beekeeper-btn, .purchase-upgrade-btn, .submit-btn {
-  background: var(--primary);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  transition: var(--transition);
-}
-
+/* Add/Purchase buttons */
 .add-beekeeper-btn {
   padding: 0.75rem 1.5rem;
+  border-radius: 8px;
 }
 
 .purchase-upgrade-btn {
   padding: 0.75rem 1rem;
   font-size: 0.875rem;
-}
-
-.add-beekeeper-btn:hover, .purchase-upgrade-btn:hover, .submit-btn:hover {
-  background: var(--secondary);
-  transform: translateY(-2px);
+  border-radius: 8px;
 }
 
 /* Sensor Data Tables */
@@ -727,10 +762,6 @@ body {
   grid-template-columns: 1fr;
   gap: 1.5rem;
   margin-top: 1.5rem;
-}
-
-.table-card {
-  padding: 1.5rem;
 }
 
 .table-container {
@@ -785,12 +816,19 @@ body {
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
 }
 
-.modal-header {
+.modal-header, .modal-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem;
   border-bottom: 1px solid var(--border-light);
+}
+
+.modal-footer {
+  background: #f9fafb;
+  border-top: 1px solid var(--border-light);
+  border-bottom: none;
+  border-radius: 0 0 12px 12px;
 }
 
 .close-modal {
@@ -806,28 +844,6 @@ body {
   margin: 1.5rem;
 }
 
-.form-group label {
-  display: block;
-  margin-bottom: 0.5rem;
-  color: var(--primary);
-  font-weight: 500;
-}
-
-.form-group input, .form-group select {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid var(--border-light);
-  border-radius: var(--border-radius-sm);
-  font-size: 1rem;
-  transition: border-color 0.3s ease;
-}
-
-.form-group input:focus {
-  outline: none;
-  border-color: var(--secondary);
-  box-shadow: 0 0 0 3px rgba(252, 163, 17, 0.1);
-}
-
 .form-actions {
   display: flex;
   justify-content: flex-end;
@@ -840,10 +856,7 @@ body {
 
 .cancel-btn {
   padding: 0.75rem 1.5rem;
-  border: 1px solid var(--border-light);
   border-radius: var(--border-radius-sm);
-  background: white;
-  cursor: pointer;
 }
 
 .cancel-btn:hover {
@@ -853,6 +866,7 @@ body {
 
 .submit-btn {
   padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius-sm);
 }
 
 /* Password Input Styles */
@@ -887,10 +901,6 @@ body {
 /* Purchased Kits Styles */
 .purchased-kits-section {
   margin-top: 2rem;
-}
-
-.kits-card {
-  padding: 1.5rem;
 }
 
 .kits-header {
@@ -952,22 +962,9 @@ body {
 }
 
 .kit-action-btn {
-  background: rgba(239, 68, 68, 0.1);
-  color: var(--danger);
-  border: none;
   padding: 0.5rem 1rem;
-  border-radius: var(--border-radius-sm);
   font-size: 0.875rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.kit-action-btn:hover {
-  background: var(--danger);
-  color: white;
+  border-radius: var(--border-radius-sm);
 }
 
 /* Upgrade Modal Styles */
@@ -1060,11 +1057,6 @@ body {
   animation: fadeIn 0.3s ease;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
 /* Notification Styles */
 .notification {
   position: fixed;
@@ -1083,17 +1075,6 @@ body {
 
 .notification.error {
   background-color: var(--danger);
-}
-
-@keyframes slideIn {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
 }
 
 /* Confirmation Dialog */
