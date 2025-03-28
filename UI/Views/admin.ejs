@@ -82,7 +82,7 @@
                                         <%= user.role || 'beekeeper' %>
                                     </p>
                                     <span class="timestamp">Joined <%= new Date(user.createdAt).toLocaleDateString() %>
-                                            </span>
+                                    </span>
                                 </div>
                                 <div class="activity-actions">
                                     <button class="action-btn edit" onclick='showEditModal("user", "<%= user._id %>")'>
@@ -194,7 +194,7 @@
                                     <p>Location: <%= apiary.location %>
                                     </p>
                                     <span class="timestamp">Added <%= new Date(apiary.createdAt).toLocaleDateString() %>
-                                            </span>
+                                    </span>
                                 </div>
                                 <div class="activity-actions">
                                     <button class="action-btn delete"
@@ -238,7 +238,7 @@
                                         <%= sensor.description %>
                                     </p>
                                     <span class="timestamp">Added <%= new Date(sensor.createdAt).toLocaleDateString() %>
-                                            </span>
+                                    </span>
                                 </div>
                                 <div class="activity-actions">
                                     <button class="action-btn delete"
@@ -297,6 +297,30 @@
                 <%- include('./Components/modals/productModal', { recentSensors }) %>
                     <%- include('./Components/modals/viewAllModal') %>
 
+                        <script src="/JS/charts.js"></script>
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function () {
+                                // Initialize admin overview chart
+                                const overviewChart = Charts.createAdminOverviewChart('adminOverviewChart');
+
+                                // Example of updating chart with data from server
+                                async function fetchAndUpdateAdminCharts() {
+                                    try {
+                                        const response = await fetch('/api/getAdminStats');
+                                        const data = await response.json();
+
+                                        if (data.success) {
+                                            Charts.updateChart(overviewChart, [data.hiveStats, data.userStats]);
+                                        }
+                                    } catch (error) {
+                                        console.error('Error fetching admin stats:', error);
+                                    }
+                                }
+
+                                // Update charts periodically
+                                setInterval(fetchAndUpdateAdminCharts, 300000); // Every 5 minutes
+                            });
+                        </script>
                         <script src="/JS/admin.js"></script>
 </body>
 

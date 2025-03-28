@@ -447,7 +447,7 @@
                     </div>
 
                     <div class="chart-card">
-                        <h3 class="chart-title">Vibration Over Time</h3>
+                        <h3 class="chart-title">Anamoly </h3>
                         <canvas id="vibrationChart"></canvas>
                     </div>
                 </div>
@@ -583,8 +583,35 @@
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="/JS/beekeeper.js"></script>
     <script src="/JS/charts.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initialize charts with empty state
+            const weightChart = Charts.createWeightChart('weightChart');
+            const vibrationChart = Charts.createVibrationChart('vibrationChart');
+            const hiveWeightChart = Charts.createWeightChart('hiveWeightChart');
+
+            // Example of updating charts with data from server
+            async function fetchAndUpdateCharts() {
+                try {
+                    const response = await fetch('/api/getHiveData');
+                    const data = await response.json();
+
+                    if (data.success) {
+                        Charts.updateChart(weightChart, [data.weightData]);
+                        Charts.updateChart(vibrationChart, [data.vibrationData]);
+                        Charts.updateChart(hiveWeightChart, [data.hiveWeightData]);
+                    }
+                } catch (error) {
+                    console.error('Error fetching chart data:', error);
+                }
+            }
+
+            // Update charts periodically
+            setInterval(fetchAndUpdateCharts, 300000); // Every 5 minutes
+        });
+    </script>
+    <script src="/JS/beekeeper.js"></script>
 </body>
 
 </html>
