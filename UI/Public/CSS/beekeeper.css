@@ -32,17 +32,32 @@ body {
   color: var(--text-dark);
 }
 
-/* Common card and component styles */
-.card, .weather-card, .chart-card, .threats-card, 
-.table-card, .beekeepers-section, .kits-card {
+/* Layout structure */
+.container {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  grid-template-rows: 70px 1fr;
+  min-height: 100vh;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.main-content {
+  grid-column: 2;
+  padding: 1rem;
+}
+
+/* Common card styles */
+.weather-card, .chart-card, .threats-card, .table-card, 
+.beekeepers-section, .kits-card {
   background: white;
   border-radius: var(--border-radius-lg);
   box-shadow: var(--shadow-honey);
   padding: var(--padding-card);
 }
 
-.card-title, .chart-title, .threats-title, 
-.table-title, .kits-title {
+/* Title styles */
+.chart-title, .threats-title, .table-title, .kits-title {
   font-size: 1.2rem;
   font-weight: 600;
   margin-bottom: 1rem;
@@ -52,26 +67,38 @@ body {
   gap: 0.5rem;
 }
 
-.card-title i, .chart-title i, .threats-title i, 
-.table-title i, .kits-title i {
+.chart-title i, .threats-title i, .table-title i, .kits-title i {
   color: var(--secondary);
 }
 
-.icon-container, .weather-icon, .threat-icon {
+.section-title {
+  color: var(--primary);
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid rgba(252, 163, 17, 0.2);
+}
+
+/* Icon styles */
+.weather-icon, .threat-icon {
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 8px;
+  width: 48px;
+  height: 48px;
+  font-size: 1.5rem;
 }
 
-.icon-primary, .weather-card.humidity .weather-icon,
+/* Icon background variations */
+.weather-card.humidity .weather-icon,
 .weather-card.hive-humidity .weather-icon,
 .threat-item.low .threat-icon {
   background: rgba(22, 64, 77, 0.1);
   color: var(--primary);
 }
 
-.icon-secondary, .weather-card.temp .weather-icon,
+.weather-card.temp .weather-icon,
 .weather-card.total-hives .weather-icon,
 .weather-card.hive-temp .weather-icon,
 .threat-item.medium .threat-icon {
@@ -79,28 +106,27 @@ body {
   color: var(--secondary);
 }
 
-.icon-danger, .weather-card.total-threats .weather-icon,
+.weather-card.total-threats .weather-icon,
 .weather-card.hive-threats .weather-icon,
 .threat-item.high .threat-icon {
   background: rgba(239, 68, 68, 0.1);
   color: var(--danger);
 }
 
-.icon-success, .weather-card.sensors .weather-icon {
+.weather-card.sensors .weather-icon {
   background: rgba(16, 185, 129, 0.1);
   color: var(--success);
 }
 
-.icon-purple, .weather-card.total-beekeepers .weather-icon,
+.weather-card.total-beekeepers .weather-icon,
 .weather-card.frames .weather-icon {
   background: rgba(79, 70, 229, 0.1);
   color: var(--purple);
 }
 
-/* Button base styles */
-.btn, .nav-btn, .action-btn, .contact-btn, 
-.add-beekeeper-btn, .purchase-upgrade-btn, 
-.submit-btn, .cancel-btn, .kit-action-btn {
+/* Button styles */
+.nav-btn, .action-btn, .contact-btn, .add-beekeeper-btn, 
+.purchase-upgrade-btn, .submit-btn, .cancel-btn, .kit-action-btn {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -110,41 +136,44 @@ body {
   border: none;
 }
 
-.btn-primary, .add-beekeeper-btn, .purchase-upgrade-btn, .submit-btn {
+/* Primary buttons */
+.add-beekeeper-btn, .purchase-upgrade-btn, .submit-btn {
   background: var(--primary);
   color: white;
   padding: 0.75rem 1.5rem;
 }
 
-.btn-primary:hover, .add-beekeeper-btn:hover, 
-.purchase-upgrade-btn:hover, .submit-btn:hover {
+.add-beekeeper-btn:hover, .purchase-upgrade-btn:hover, .submit-btn:hover {
   background: var(--secondary);
   transform: translateY(-2px);
 }
 
-.btn-outline, .nav-btn, .cancel-btn {
+/* Outline buttons */
+.nav-btn, .cancel-btn {
   background: white;
   border: 1px solid var(--border-light);
   padding: 0.5rem 1rem;
 }
 
-.btn-icon, .action-btn, .contact-btn {
+/* Icon buttons */
+.action-btn, .contact-btn {
   background: none;
   padding: 0.5rem;
 }
 
-.btn-danger, .kit-action-btn {
+/* Danger buttons */
+.kit-action-btn {
   background: rgba(239, 68, 68, 0.1);
   color: var(--danger);
 }
 
-.btn-danger:hover, .kit-action-btn:hover {
+.kit-action-btn:hover {
   background: var(--danger);
   color: white;
 }
 
-/* Form control styles */
-.form-control, .form-group input, .form-group select {
+/* Form controls */
+.form-group input, .form-group select {
   width: 100%;
   padding: 0.75rem;
   border: 1px solid var(--border-light);
@@ -153,17 +182,31 @@ body {
   transition: border-color 0.3s ease;
 }
 
-.form-control:focus, .form-group input:focus {
+.form-group input:focus, .form-group select:focus {
   outline: none;
   border-color: var(--secondary);
   box-shadow: 0 0 0 3px rgba(252, 163, 17, 0.1);
 }
 
-.form-label, .form-group label {
+.form-group label {
   display: block;
   margin-bottom: 0.5rem;
   color: var(--primary);
   font-weight: 500;
+}
+
+.form-group {
+  margin: 1.5rem;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: #f9fafb;
+  border-top: 1px solid var(--border-light);
+  border-radius: 0 0 12px 12px;
 }
 
 /* Animation keyframes */
@@ -180,21 +223,6 @@ body {
 @keyframes slideIn {
   from { transform: translateX(100%); opacity: 0; }
   to { transform: translateX(0); opacity: 1; }
-}
-
-/* Layout structure */
-.container {
-  display: grid;
-  grid-template-columns: 240px 1fr;
-  grid-template-rows: 70px 1fr;
-  min-height: 100vh;
-  gap: 1rem;
-  padding: 1rem;
-}
-
-.main-content {
-  grid-column: 2;
-  padding: 1rem;
 }
 
 /* Header styles */
@@ -279,7 +307,7 @@ body {
   margin-right: 0.25rem;
 }
 
-/* Nav buttons */
+/* Nav button variations */
 .nav-btn {
   padding: 0.5rem 1rem;
   color: var(--primary);
@@ -332,7 +360,7 @@ body {
   gap: 0.5rem;
 }
 
-/* Dropdown styles */
+/* Dropdown components */
 .dropdown-container {
   position: relative;
   width: 100%;
@@ -380,7 +408,6 @@ body {
   background: var(--bg-light);
   color: var(--primary);
   border-radius: 4px;
-  transition: all 0.2s ease;
 }
 
 .nested-trigger:hover {
@@ -465,13 +492,6 @@ body {
   transform: translateY(-5px);
 }
 
-.weather-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: var(--border-radius-lg);
-  font-size: 1.5rem;
-}
-
 .weather-info {
   flex: 1;
 }
@@ -521,10 +541,6 @@ body {
   width: 100% !important;
 }
 
-.chart-title, .threats-title {
-  margin-bottom: 1.5rem;
-}
-
 /* Threats styles */
 .threats-card {
   overflow-y: auto;
@@ -548,13 +564,6 @@ body {
 
 .threat-item:hover {
   transform: translateX(5px);
-}
-
-.threat-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
-  font-size: 1.2rem;
 }
 
 .threat-info {
@@ -611,14 +620,6 @@ body {
   margin-bottom: 2rem;
 }
 
-.section-title {
-  color: var(--primary);
-  font-size: 1.5rem;
-  margin-bottom: 1.5rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 2px solid rgba(252, 163, 17, 0.2);
-}
-
 .beekeepers-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -649,21 +650,6 @@ body {
   color: var(--primary);
 }
 
-.status-badge {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: var(--text-light);
-  border: 2px solid var(--bg-light);
-}
-
-.status-badge.active {
-  background: var(--success);
-}
-
 .beekeeper-info {
   flex: 1;
 }
@@ -680,24 +666,6 @@ body {
   margin-bottom: 0.75rem;
 }
 
-.stats {
-  display: flex;
-  gap: 1rem;
-}
-
-.stat-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.9rem;
-  color: var(--primary);
-}
-
-.stat-item i {
-  color: var(--secondary);
-}
-
-/* Contact and action buttons */
 .contact-btn {
   color: var(--primary);
   border-radius: 50%;
@@ -744,19 +712,7 @@ body {
   transform: translateY(-2px);
 }
 
-/* Add/Purchase buttons */
-.add-beekeeper-btn {
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-}
-
-.purchase-upgrade-btn {
-  padding: 0.75rem 1rem;
-  font-size: 0.875rem;
-  border-radius: 8px;
-}
-
-/* Sensor Data Tables */
+/* Table styles */
 .tables-section {
   display: grid;
   grid-template-columns: 1fr;
@@ -837,36 +793,6 @@ body {
   font-size: 1.5rem;
   cursor: pointer;
   color: var(--text-gray);
-}
-
-/* Form styles */
-.form-group {
-  margin: 1.5rem;
-}
-
-.form-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-  padding: 1.5rem;
-  background: #f9fafb;
-  border-top: 1px solid var(--border-light);
-  border-radius: 0 0 12px 12px;
-}
-
-.cancel-btn {
-  padding: 0.75rem 1.5rem;
-  border-radius: var(--border-radius-sm);
-}
-
-.cancel-btn:hover {
-  background: var(--danger);
-  color: white;
-}
-
-.submit-btn {
-  padding: 0.75rem 1.5rem;
-  border-radius: var(--border-radius-sm);
 }
 
 /* Password Input Styles */
@@ -961,12 +887,6 @@ body {
   color: var(--success);
 }
 
-.kit-action-btn {
-  padding: 0.5rem 1rem;
-  font-size: 0.875rem;
-  border-radius: var(--border-radius-sm);
-}
-
 /* Upgrade Modal Styles */
 .upgrades-list {
   max-height: 400px;
@@ -1021,16 +941,6 @@ body {
 }
 
 /* No data states */
-.no-data, .no-data-message p {
-  color: var(--text-gray);
-  text-align: center;
-  font-style: italic;
-}
-
-.no-data {
-  padding: 1rem;
-}
-
 .no-data-message {
   display: flex;
   flex-direction: column;
@@ -1042,14 +952,24 @@ body {
   width: 100%;
 }
 
-.no-data-message i {
-  font-size: 3rem;
-  color: var(--primary);
-  margin-bottom: 1rem;
+.no-data {
+  padding: 1rem;
+  color: var(--text-gray);
+  text-align: center;
+  font-style: italic;
 }
 
 .no-data-message p {
   font-size: 1.1rem;
+  color: var(--text-gray);
+  text-align: center;
+  font-style: italic;
+}
+
+.no-data-message i {
+  font-size: 3rem;
+  color: var(--primary);
+  margin-bottom: 1rem;
 }
 
 /* Animation */
@@ -1126,8 +1046,6 @@ body {
   text-decoration: none;
   color: var(--primary);
   padding: 2%;
-  padding-left: 3%;
-  padding-right: 2%;
   border-radius: 5px;
   border: solid 2px transparent;
   transition: var(--transition);

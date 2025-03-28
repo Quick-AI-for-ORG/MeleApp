@@ -11,51 +11,6 @@
     <script
         src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/2.1.0/chartjs-plugin-annotation.min.js"></script>
     <%- include('./Partials/head.ejs') %>
-
-        <style>
-            .upgrade-price {
-                color: #10b981;
-                font-weight: 600;
-                margin-left: 1rem;
-            }
-
-            .upgrade-description {
-                font-size: 0.875rem;
-                color: #6b7280;
-                margin-top: 0.5rem;
-            }
-
-            .notification {
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                padding: 12px 24px;
-                border-radius: 6px;
-                color: white;
-                z-index: 1000;
-                animation: slideIn 0.3s ease;
-            }
-
-            .notification.success {
-                background-color: #10b981;
-            }
-
-            .notification.error {
-                background-color: #ef4444;
-            }
-
-            @keyframes slideIn {
-                from {
-                    transform: translateX(100%);
-                    opacity: 0;
-                }
-
-                to {
-                    transform: translateX(0);
-                    opacity: 1;
-                }
-            }
-        </style>
 </head>
 
 <body>
@@ -70,36 +25,40 @@
                 </div>
 
                 <div class="nav-divider"></div>
+
                 <nav class="nav">
                     <span class="active">
-                        <% if(user.role=='Owner' ) {%> Owner <%} else{ %> Beekeeper <% } %> Dashboard:
+                        <%= user.role==='Owner' ? 'Owner' : 'Beekeeper' %> Dashboard: <%= user.name %>
                     </span>
-                    <%=user.name%>
                 </nav>
+
                 <div class="nav-divider"></div>
+
                 <div class="dynamic-title">
                     <h2 class="nav-title">
                         <span id="currentApiaryTitle"></span>
                         <span id="currentHiveTitle" class="hive-title"></span>
                     </h2>
                 </div>
-                <input type="hidden" id="sessionId" value='<%=user._id%>'' >
-                <input type="hidden" id="sessionRole" value= ' <%=user.role%>'' >
+
+                <!-- Hidden user data for JS -->
+                <input type="hidden" id="sessionId" value="<%= user._id %>">
+                <input type="hidden" id="sessionRole" value="<%= user.role %>">
             </div>
+
             <div class="header-right">
                 <a href="/keeper/profile" class="nav-btn profile-btn">
-                    <i class="fas fa-user"></i>
-                    Profile
+                    <i class="fas fa-user"></i> Profile
                 </a>
-                <% if(user.role=='Owner' ) { %>
+
+                <% if(user.role==='Owner' ) { %>
                     <a href="/keeper/upgrade" class="nav-btn upgrade-btn">
-                        <i class="fas fa-arrow-up-right-from-square"></i>
-                        Upgrade
+                        <i class="fas fa-arrow-up-right-from-square"></i> Upgrade
                     </a>
                     <% } %>
+
                         <a href="/keeper/logout" class="nav-btn logout-btn">
-                            <i class="fas fa-sign-out-alt"></i>
-                            Logout
+                            <i class="fas fa-sign-out-alt"></i> Logout
                         </a>
             </div>
         </header>
@@ -115,56 +74,65 @@
                         </div>
                         <i class="fas fa-chevron-down"></i>
                     </button>
+
                     <div class="dropdown-content">
+                        <!-- Hidden data for JS -->
                         <div style="visibility:hidden;" id="apiariesInjection"
                             data-apiaries='<%= JSON.stringify(apiaries) %>'></div>
-                        <% if (Array.isArray(apiaries) && apiaries.length> 0) {
-                            for (const apiary of apiaries) { %>
-                            <div class="nested-dropdown">
-                                <button class="nested-trigger" data-apiary-id="<%= apiary._id %>"
-                                    onclick="setSelectedApiary('<%= apiary._id %>')">
-                                    <span>
-                                        <%= apiary.name %> (<%= Array.isArray(apiary.hives) ? apiary.hives.length : 0 %>
-                                                hives)
-                                    </span>
-                                    <i class="fas fa-chevron-right"></i>
-                                </button>
-                                <div class="nested-content">
-                                    <% if (Array.isArray(apiary.hives) && apiary.hives.length> 0) { %>
-                                        <% for (let i=0; i < apiary.hives.length; i++) { const hive=apiary.hives[i]; %>
-                                            <div class="hive-item">
-                                                <button class="nested-trigger" data-hive-id="<%= hive._id %>"
-                                                    data-hive-name="Hive <%= i + 1 %>"
-                                                    data-apiary-id="<%= apiary._id %>">
-                                                    <span>Hive <%= i + 1 %></span>
-                                                    <i class="fas fa-chevron-right"></i>
-                                                </button>
-                                                <div class="nested-content">
-                                                    <a href="/keeper/test-stream" class="monitor-link" target="_blank">
-                                                        <i class="fas fa-video"></i> Door Camera
-                                                    </a>
-                                                    <a href="/keeper/test-stream" class="monitor-link" target="_blank">
-                                                        <i class="fas fa-eye"></i> Honey View
-                                                    </a>
-                                                    <a href="/keeper/test-stream" class="monitor-link" target="_blank">
-                                                        <i class="fas fa-temperature-high"></i> Internal
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <% } %>
-                                                <% } else { %>
-                                                    <p class="no-data">No hives in this apiary</p>
-                                                    <% } %>
-                                </div>
-                            </div>
-                            <% } %>
-                                <% } else { %>
-                                    <div class="nested-dropdown">
-                                        <p class="no-data">No apiaries available</p>
-                                    </div>
-                                    <% } %>
-                    </div>
 
+                        <!-- Apiaries list -->
+                        <% if (Array.isArray(apiaries) && apiaries.length> 0) { %>
+                            <% for (const apiary of apiaries) { %>
+                                <div class="nested-dropdown">
+                                    <button class="nested-trigger" data-apiary-id="<%= apiary._id %>">
+                                        <span>
+                                            <%= apiary.name %> (<%= Array.isArray(apiary.hives) ? apiary.hives.length :
+                                                    0 %> hives)
+                                        </span>
+                                        <i class="fas fa-chevron-right"></i>
+                                    </button>
+
+                                    <div class="nested-content">
+                                        <% if (Array.isArray(apiary.hives) && apiary.hives.length> 0) { %>
+                                            <% for (let i=0; i < apiary.hives.length; i++) { %>
+                                                <% const hive=apiary.hives[i]; %>
+                                                    <div class="hive-item">
+                                                        <button class="nested-trigger" data-hive-id="<%= hive._id %>"
+                                                            data-hive-name="Hive <%= i + 1 %>"
+                                                            data-apiary-id="<%= apiary._id %>">
+                                                            <span>Hive <%= i + 1 %></span>
+                                                            <i class="fas fa-chevron-right"></i>
+                                                        </button>
+
+                                                        <div class="nested-content">
+                                                            <a href="/keeper/test-stream" class="monitor-link"
+                                                                target="_blank">
+                                                                <i class="fas fa-video"></i> Door Camera
+                                                            </a>
+                                                            <a href="/keeper/test-stream" class="monitor-link"
+                                                                target="_blank">
+                                                                <i class="fas fa-eye"></i> Honey View
+                                                            </a>
+                                                            <a href="/keeper/test-stream" class="monitor-link"
+                                                                target="_blank">
+                                                                <i class="fas fa-temperature-high"></i> Internal
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                    <% } %>
+                                                        <% } else { %>
+                                                            <p class="no-data">No hives in this apiary</p>
+                                                            <% } %>
+                                    </div>
+                                </div>
+                                <% } %>
+                                    <% } else { %>
+                                        <div class="nested-dropdown">
+                                            <p class="no-data">No apiaries available</p>
+                                        </div>
+                                        <% } %>
+                    </div>
+                </div>
             </nav>
         </aside>
 
@@ -172,7 +140,7 @@
         <main class="main-content">
             <!-- Apiary Dashboard -->
             <div class="apiary-dashboard">
-                <!-- Weather Stats -->
+                <!-- Weather Stats Row -->
                 <div class="weather-stats">
                     <div class="weather-card temp">
                         <div class="weather-icon">
@@ -181,7 +149,7 @@
                         <div class="weather-info">
                             <h3>Temperature</h3>
                             <div class="weather-value">
-                                <span id="totalTemperature" class="value"></span>
+                                <span id="totalTemperature" class="value">0</span>
                                 <span class="unit">°C</span>
                             </div>
                             <p class="weather-time"></p>
@@ -195,7 +163,7 @@
                         <div class="weather-info">
                             <h3>Humidity</h3>
                             <div class="weather-value">
-                                <span id="totalHumidity" class="value"></span>
+                                <span id="totalHumidity" class="value">0</span>
                                 <span class="unit">%</span>
                             </div>
                             <p class="weather-time"></p>
@@ -209,7 +177,7 @@
                         <div class="weather-info">
                             <h3>Total Beekeepers</h3>
                             <div class="weather-value">
-                                <span id="totalBeekeepers" class="value"></span>
+                                <span id="totalBeekeepers" class="value">0</span>
                                 <span class="unit">Active</span>
                             </div>
                             <p class="weather-time"></p>
@@ -223,7 +191,7 @@
                         <div class="weather-info">
                             <h3>Total Hives</h3>
                             <div class="weather-value">
-                                <span id="totalHives" class="value"></span>
+                                <span id="totalHives" class="value">0</span>
                                 <span class="unit">Monitored</span>
                             </div>
                             <p class="weather-time"></p>
@@ -237,17 +205,12 @@
                         <div class="weather-info">
                             <h3>Active Threats</h3>
                             <div class="weather-value">
-                                <span id="totalThreats" class="value"></span>
+                                <span id="totalThreats" class="value">0</span>
                                 <span class="unit">Detected</span>
                             </div>
                             <p class="weather-time"></p>
                         </div>
                     </div>
-                </div>
-
-                <!-- Stats Grid -->
-                <div class="stats-grid">
-
                 </div>
 
                 <!-- Charts Grid -->
@@ -263,41 +226,7 @@
                             Detected Threats
                         </h3>
                         <div class="threats-list">
-                            <div class="threat-item high">
-                                <div class="threat-icon">
-                                    <i class="fas fa-bug"></i>
-                                </div>
-                                <div class="threat-info">
-                                    <h4></h4>
-                                    <p></p>
-                                    <span class="timestamp"></span>
-                                </div>
-                                <div class="threat-severity"></div>
-                            </div>
-
-                            <div class="threat-item medium">
-                                <div class="threat-icon">
-                                    <i class="fas fa-temperature-high"></i>
-                                </div>
-                                <div class="threat-info">
-                                    <h4></h4>
-                                    <p></p>
-                                    <span class="timestamp"></span>
-                                </div>
-                                <div class="threat-severity"></div>
-                            </div>
-
-                            <div class="threat-item low">
-                                <div class="threat-icon">
-                                    <i class="fas fa-tint"></i>
-                                </div>
-                                <div class="threat-info">
-                                    <h4></h4>
-                                    <p></p>
-                                    <span class="timestamp"></span>
-                                </div>
-                                <div class="threat-severity"></div>
-                            </div>
+                            <!-- Threat items will be populated dynamically -->
                         </div>
                     </div>
                 </div>
@@ -306,65 +235,19 @@
                 <div class="beekeepers-section">
                     <div class="section-header">
                         <h2 class="section-title">Beekeepers</h2>
-                        <% if(user.role=='Owner' ) { %>
+                        <% if(user.role==='Owner' ) { %>
                             <button class="add-beekeeper-btn" onclick="openModal('add')">
                                 <i class="fas fa-plus"></i> Add Beekeeper
                             </button>
                             <% } %>
                     </div>
                     <div class="beekeepers-grid">
-                        <div class="no-data-message">
-                            <i class="fas fa-user-slash"></i>
-                            <p>No beekeepers assigned to this apiary</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Beekeeper Modal -->
-                <div id="beekeeperModal" class="modal">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h3 id="modalTitle">Add New Beekeeper</h3>
-                            <button class="close-modal" onclick="closeModal('beekeeperModal')">&times;</button>
-                        </div>
-                        <form id="beekeeperForm" onsubmit="handleSubmit(event)">
-                            <div class="form-group">
-                                <label for="firstName">First Name</label>
-                                <input type="text" id="firstName" name="firstName" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="lastName">Last Name</label>
-                                <input type="text" id="lastName" name="lastName" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="email">Email Address</label>
-                                <input type="email" id="email" name="email" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="phone">Phone Number</label>
-                                <input type="tel" id="phone" name="phone" required>
-                                <input type="hidden" id="apiary" name="apiary">
-                            </div>
-                            <div class="form-group password-group">
-                                <label for="password">Password</label>
-                                <div class="password-input">
-                                    <input type="password" id="password" name="password" required>
-                                    <button type="button" class="toggle-password" onclick="togglePassword()">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="form-actions">
-                                <button type="button" class="cancel-btn"
-                                    onclick="closeModal('beekeeperModal')">Cancel</button>
-                                <button type="submit" class="submit-btn">Save</button>
-                            </div>
-                        </form>
+                        <!-- Beekeepers will be populated dynamically -->
                     </div>
                 </div>
             </div>
 
-            <!-- Hive Dashboard -->
+            <!-- Hive Dashboard (hidden by default) -->
             <div class="hive-dashboard" style="display: none;">
                 <!-- Hive Stats -->
                 <div class="weather-stats">
@@ -375,7 +258,7 @@
                         <div class="weather-info">
                             <h3>Total Frames</h3>
                             <div class="weather-value">
-                                <span class="value"></span>
+                                <span class="value">0</span>
                                 <span class="unit">Active</span>
                             </div>
                             <p class="weather-time"></p>
@@ -389,7 +272,7 @@
                         <div class="weather-info">
                             <h3>Total Sensors</h3>
                             <div class="weather-value">
-                                <span class="value"></span>
+                                <span class="value">0</span>
                                 <span class="unit">Online</span>
                             </div>
                             <p class="weather-time"></p>
@@ -403,7 +286,7 @@
                         <div class="weather-info">
                             <h3>Active Threats</h3>
                             <div class="weather-value">
-                                <span class="value"></span>
+                                <span class="value">0</span>
                                 <span class="unit">Detected</span>
                             </div>
                             <p class="weather-time"></p>
@@ -417,7 +300,7 @@
                         <div class="weather-info">
                             <h3>Average Temperature</h3>
                             <div class="weather-value">
-                                <span class="value"></span>
+                                <span class="value">0</span>
                                 <span class="unit">°C</span>
                             </div>
                             <p class="weather-time"></p>
@@ -431,7 +314,7 @@
                         <div class="weather-info">
                             <h3>Average Humidity</h3>
                             <div class="weather-value">
-                                <span class="value"></span>
+                                <span class="value">0</span>
                                 <span class="unit">%</span>
                             </div>
                             <p class="weather-time"></p>
@@ -439,7 +322,7 @@
                     </div>
                 </div>
 
-                <!-- Hive Charts Grid -->
+                <!-- Hive Charts -->
                 <div class="charts-grid">
                     <div class="chart-card">
                         <h3 class="chart-title">Weight Over Time</h3>
@@ -447,7 +330,7 @@
                     </div>
 
                     <div class="chart-card">
-                        <h3 class="chart-title">Anamoly </h3>
+                        <h3 class="chart-title">Anomaly Detection</h3>
                         <canvas id="vibrationChart"></canvas>
                     </div>
                 </div>
@@ -475,17 +358,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
+                                    <!-- Temperature data will be populated dynamically -->
                                 </tbody>
                             </table>
                         </div>
@@ -512,24 +385,14 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
+                                    <!-- Humidity data will be populated dynamically -->
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
 
-                <!-- Purchased Kits Section -->
+                <!-- Installed Kits Section -->
                 <div class="purchased-kits-section">
                     <div class="kits-card">
                         <div class="kits-header">
@@ -539,7 +402,7 @@
                             </h3>
                             <div style="visibility:hidden" id="injectedProducts"
                                 data-products='<%= JSON.stringify(products) %>'></div>
-                            <% if(user.role=='Owner' ) { %>
+                            <% if(user.role==='Owner' ) { %>
                                 <button class="purchase-upgrade-btn" onclick="openUpgradeModal()">
                                     <i class="fas fa-plus"></i>
                                     Purchase Upgrade
@@ -547,24 +410,58 @@
                                 <% } %>
                         </div>
                         <div class="kits-list">
-                            <div class="kit-item">
-                                <div class="kit-info">
-                                    <h4></h4>
-                                    <span class="kit-status active"></span>
-                                </div>
-                                <% if(user.role=='Owner' ) { %>
-                                    <button class="kit-action-btn" onclick="requestKitRemoval('rimba')">
-                                        <i class="fas fa-times"></i>
-                                        Request Removal
-                                    </button>
-                                    <% } %>
-                            </div>
+                            <!-- Kit items will be populated dynamically -->
                         </div>
                     </div>
                 </div>
             </div>
         </main>
     </div>
+
+    <!-- Modals -->
+    <!-- Beekeeper Modal -->
+    <div id="beekeeperModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Add New Beekeeper</h3>
+                <button class="close-modal" onclick="closeModal('beekeeperModal')">&times;</button>
+            </div>
+            <form id="beekeeperForm" onsubmit="handleSubmit(event)">
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input type="text" id="firstName" name="firstName" required>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" id="lastName" name="lastName" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" required>
+                    <input type="hidden" id="apiary" name="apiary">
+                </div>
+                <div class="form-group password-group">
+                    <label for="password">Password</label>
+                    <div class="password-input">
+                        <input type="password" id="password" name="password" required>
+                        <button type="button" class="toggle-password" onclick="togglePassword()">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="cancel-btn" onclick="closeModal('beekeeperModal')">Cancel</button>
+                    <button type="submit" class="submit-btn">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Upgrade Modal -->
     <div id="upgradeModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -573,26 +470,28 @@
             </div>
             <div class="modal-body">
                 <div class="upgrades-list" id="upgradesList">
-                    <!-- Upgrades will be populated here -->
+                    <!-- Upgrades will be populated dynamically -->
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="cancel-btn" onclick="closeUpgradeModal()">Cancel</button>
+                <button class="cancel-btn" onclick="closeModal('upgradeModal')">Cancel</button>
                 <button class="submit-btn" onclick="purchaseUpgrades()">Purchase Selected</button>
             </div>
         </div>
     </div>
+
+    <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="/JS/charts.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Initialize charts with empty state
+            // Initialize charts
             const weightChart = Charts.createWeightChart('weightChart');
             const vibrationChart = Charts.createVibrationChart('vibrationChart');
             const hiveWeightChart = Charts.createWeightChart('hiveWeightChart');
 
-            // Example of updating charts with data from server
-            async function fetchAndUpdateCharts() {
+            // Set up periodic chart updates
+            setInterval(async function () {
                 try {
                     const response = await fetch('/api/getHiveData');
                     const data = await response.json();
@@ -605,10 +504,7 @@
                 } catch (error) {
                     console.error('Error fetching chart data:', error);
                 }
-            }
-
-            // Update charts periodically
-            setInterval(fetchAndUpdateCharts, 300000); // Every 5 minutes
+            }, 300000); // Every 5 minutes
         });
     </script>
     <script src="/JS/beekeeper.js"></script>
