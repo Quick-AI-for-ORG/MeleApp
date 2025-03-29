@@ -124,8 +124,6 @@ const sendUpgradeConfirmation = async (userEmail, formData) => {
     };
 
     const result = await sgMail.send(msg);
-    console.log("Email sent successfully to:", userEmail);
-    console.log("SendGrid Response:", result);
     return true;
   } catch (error) {
     console.error("Error sending email:", error);
