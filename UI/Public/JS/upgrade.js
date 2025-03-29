@@ -187,21 +187,32 @@ document.addEventListener("click", function (e) {
 document
   .querySelector(".upgrade-form")
   .addEventListener("submit", function (event) {
+    const submitBtn = event.target.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `
+    <i class="fas fa-spinner fa-spin"></i>
+    Processing your purchase...
+  `;
+
+    // Existing form submission code
     const selectedId = document.getElementById("selectedApiaryId").value;
     const apiaryInput = document.getElementById("apiaryInput");
     const apiaryName = document.getElementById("apiaryName");
 
     if (selectedId === "new") {
-      // For new apiary, use the text from the input field
       if (!apiaryInput.value.trim()) {
         event.preventDefault();
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `
+        <i class="fas fa-shopping-cart"></i>
+        Complete Purchase
+      `;
         alert("Please enter an apiary name");
         apiaryInput.focus();
         return;
       }
       apiaryName.value = apiaryInput.value.trim();
     } else {
-      // For existing apiary, use the selected apiary name
       apiaryName.value = apiaryInput.value;
     }
   });

@@ -161,6 +161,16 @@ input[type="range"] {
   transform: translateY(-2px);
 }
 
+.purchase-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.purchase-btn .fa-spinner {
+  margin-right: 8px;
+}
+
 #mapContainer {
   margin-top: 1rem;
   border: 1px solid #e5e7eb;
