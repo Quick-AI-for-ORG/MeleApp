@@ -1,19 +1,16 @@
-const nodemailer = require("nodemailer");
-
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: "melerimba@gmail.com",
-    pass: process.env.EMAIL_PASSWORD,
-  },
-});
+const sgMail = require("@sendgrid/mail");
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const sendUpgradeConfirmation = async (userEmail, formData) => {
   try {
-    const mailOptions = {
-      from: "melerimba@gmail.com",
+    const msg = {
       to: userEmail,
-      subject: "🐝 Mele Keeper Upgrade Confirmation",
+      from: {
+        email: "melerimba@gmail.com", // Must exactly match a verified sender
+        name: "Mele Support", // Optional display name
+      },
+      replyTo: "melerimba@gmail.com",
+      subject: "Mele Keeper Upgrade Confirmation",
       html: `
                 <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; margin: 0 auto;">
                     <tr>
@@ -124,14 +121,20 @@ const sendUpgradeConfirmation = async (userEmail, formData) => {
                         </td>
                     </tr>
                 </table>`,
-      // Remove alternative and text version to reduce size
     };
 
-    const info = await transporter.sendMail(mailOptions);
-    console.log("Email sent: " + info.response);
+    const result = await sgMail.send(msg);
+    console.log("Email sent successfully to:", userEmail);
+    console.log("SendGrid Response:", result);
     return true;
   } catch (error) {
     console.error("Error sending email:", error);
+    if (error.response?.body?.errors) {
+      console.error(
+        "SendGrid Detailed Errors:",
+        JSON.stringify(error.response.body.errors, null, 2)
+      );
+    }
     return false;
   }
 };
