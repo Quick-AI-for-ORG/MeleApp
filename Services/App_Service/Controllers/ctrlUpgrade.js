@@ -7,8 +7,8 @@ const controllers = {
     product: require('./ctrlProduct'),
     hive: require('./ctrlHive'),
 }
-const { sendUpgradeConfirmation } = require("../../Utils/mailer");
-const weatherService = require("../../Utils/weatherService");
+const { sendUpgradeConfirmation } = require("../Utils/mailer");
+const weatherService = require("../Utils/weatherService");
 
 const upgrade = async (req, res) => {
     try {        
@@ -21,10 +21,17 @@ const upgrade = async (req, res) => {
             req.body.owner = user._id;
             const result = await controllers.apiary.addApiary(req, res);
             if (result.success.status) apiary = result.data;
-            else return res.json(result.toJSON());
+            else {
+                req.session.message = result.message;
+                return res.redirect("/keeper/upgrade");
+            }
         } else {
             apiary = apiaries.data.find(apiary => apiary.name === req.body.apiaryName);
-            if (!apiary) return res.json(new Result(-1, null, `Error fetching apiary: Apiary not found`).toJSON());
+            if (!apiary) { 
+                const error = new Result(-1, null, `Error fetching apiary: Apiary not found`)
+                req.session.message = error.message;
+                return res.redirect("/keeper/upgrade");
+            }
             else await controllers.apiary._jsonToObject(apiary).increment(req.body.numberOfHives);
         }
 
@@ -32,7 +39,10 @@ const upgrade = async (req, res) => {
         for (let i = 0; i < req.body.numberOfHives; i++) {
             req.body.apiaryRef = apiary._id;
             const result = await controllers.hive.addHive(req, res);
-            if (!result.success.status) return res.json(result.toJSON());
+            if (!result.success.status) {
+                req.session.message = result.message;
+                return res.redirect("/keeper/upgrade");
+            }
             else hives.push(controllers.hive._jsonToObject(result.data));
         }
 
@@ -42,11 +52,17 @@ const upgrade = async (req, res) => {
             req.body.name = productName;
             
             const productResult = await controllers.product.getProduct(req, res);
-            if (!productResult.success.status) return res.json(productResult.toJSON());
+            if (!productResult.success.status) {
+                req.session.message = productResult.message;
+                return res.redirect("/keeper/upgrade");
+            }
             
             let product = controllers.product._jsonToObject(productResult.data);
             const incrementResult = await product.increment();
-            if (!incrementResult.success.status) return res.json(incrementResult.toJSON());
+            if (!incrementResult.success.status) {
+                req.session.message = incrementResult.message;
+                return res.redirect("/keeper/upgrade");
+            }
             
             products.push(product);
             
@@ -56,17 +72,24 @@ const upgrade = async (req, res) => {
                 req.body.productRef = product._id;
                 
                 const upgradeResult = await addHiveUpgrade(req, res);
-                if (!upgradeResult.success.status) return res.json(upgradeResult.toJSON());
+                if (!upgradeResult.success.status) {
+                    req.session.message = upgradeResult.message;
+                    return res.redirect("/keeper/upgrade");
+                }
             }
         }
         
         const emailResult = await sendEmail(req, res);
-        if (!emailResult.success.status) return res.json(emailResult.toJSON());
+        if (!emailResult.success.status) {
+            req.session.message = emailResult.message;
+            return res.redirect("/keeper/upgrade");
+        }
         
         return res.redirect('/keeper');
     } catch (error) {
         console.error("Upgrade error:", error);
-        return res.json(new Result(-1, null, `Error upgrading user: ${error.message}`).toJSON());
+        req.session.message = "Error upgrading: "+error.message;
+        return res.redirect("/keeper/upgrade");
     }
 };
 
@@ -165,7 +188,7 @@ const sendEmail = async (req, res) => {
     try {
       const { apiaryName, latitude, longitude } = req.body;
   
-      const weatherData = await weatherService.logWeatherData(
+      const weatherData = weatherService.logWeatherData(
         apiaryName,
         latitude,
         longitude
@@ -181,12 +204,12 @@ const sendEmail = async (req, res) => {
       )
       if (!emailSent) {
         req.session.message = "Please try again";
-        return res.redirect("/keeper/upgrade");
+        return new Result(0, null, "Error sending upgrade email")
       }
-        return new Result(1, null, "Upgrade email sent successfully").toJSON()    
+        return new Result(1, null, "Upgrade email sent successfully")  
     } catch (error) {
       console.error("Upgrade email error:", error);
-      return new Result(-1, null, `Error sending upgrade email: ${error.message}`).toJSON();
+      return new Result(-1, null, `Error sending upgrade email: ${error.message}`)
     }
   };
 

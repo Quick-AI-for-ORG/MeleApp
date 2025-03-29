@@ -15,6 +15,7 @@ const localStreamService = require("../../Streaming/localStreamService");
 
 router.post("/register", controllers.user.register);
 router.post("/login", controllers.user.login);
+router.post("/localForecast", controllers.apiary.updateForecast)
 
 router.use((req, res, next) => {
   if (!req.session.user) res.redirect("/noLogin");
