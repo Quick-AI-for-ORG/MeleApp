@@ -3,14 +3,13 @@ import cv2
 import time
 import threading
 import numpy as np
-import gpiod  # Import gpiod instead of RPi.GPIO
+import gpiod  
 from ultralytics import YOLO
 from tensorflow import keras
 from picamera2 import Picamera2
 
 os.environ["QT_QPA_PLATFORM"] = "xcb"
 
-# Replace these with actual paths on Pi
 yoloPath = "Models/insect.pt"
 beePath = "Models/beeOrNot.keras"
 waspPath = "Models/waspOrNot.keras"
@@ -253,4 +252,3 @@ if __name__ == "__main__":
 
     picam2.stop()
     cv2.destroyAllWindows()
-    GPIO.cleanup()  
