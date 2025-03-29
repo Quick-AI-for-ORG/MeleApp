@@ -3,31 +3,42 @@ import cv2
 import time
 import threading
 import numpy as np
-import RPi.GPIO as GPIO
+import gpiod  
 from ultralytics import YOLO
 from tensorflow import keras
 from picamera2 import Picamera2
 
 os.environ["QT_QPA_PLATFORM"] = "xcb"
-from tensorflow.lite.python.interpreter import Interpreter
 
-# replace these with actual paths on pi
-yoloPath = "../Models/Insect.pt"
-beePath = "../Models/quantizedBee.tflite"
-waspPath = "../Models/quantizedWasp.tflite"
+yoloPath = "Models/insect.pt"
+beePath = "Models/beeOrNot.keras"
+waspPath = "Models/waspOrNot.keras"
 
-# make sure right pin is connected
-servoPin = 23
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(servoPin, GPIO.OUT)
-pwm = GPIO.PWM(servoPin, 50)
-pwm.start(0)
+# Servo settings
+CHIP = 0  # GPIO chip index (usually 0 for Raspberry Pi)
+SERVO_PIN = 23  # GPIO pin number
 
+chip = gpiod.Chip(f"/dev/gpiochip{CHIP}")
+line = chip.get_line(SERVO_PIN)
+
+line.request(consumer="servo_control", type=gpiod.LINE_REQ_DIR_OUT)
 
 def setServoAngle(angle):
-    duty_cycle = (angle / 18) + 2
-    pwm.ChangeDutyCycle(duty_cycle)
-    time.sleep(3)
+    """Set servo angle using software PWM"""
+    duty_cycle = (angle / 18) + 2  # Convert angle to duty cycle
+
+    # Generate PWM signal manually
+    period = 0.02  # 20ms period (50Hz)
+    high_time = duty_cycle / 100 * period  # Time the signal stays high
+
+    for _ in range(50):  # Run for ~1 second
+        line.set_value(1)
+        time.sleep(high_time)  # High phase
+        line.set_value(0)
+        time.sleep(period - high_time)  # Low phase
+
+    time.sleep(1)  # Let servo settle
+
 
 
 class insectClassifier:
@@ -44,10 +55,8 @@ class insectClassifier:
         threadNum=16,
     ):
         self.yoloModel = YOLO(yoloPath)
-        self.beeModel = Interpreter(beePath)
-        self.beeModel.allocate_tensors()
-        self.waspModel = Interpreter(waspPath)
-        self.waspModel.allocate_tensors()
+        self.beeModel = keras.models.load_model(beePath)
+        self.waspModel = keras.models.load_model(waspPath)
         self.yoloThreshold = yoloThreshold
         self.doorClosed = False
         self.classifierThreshold = classifierThreshold
@@ -65,10 +74,8 @@ class insectClassifier:
         self.lock = threading.Lock()
 
         for i in range(self.threadNum):
-            beeModel = Interpreter(beePath)
-            beeModel.allocate_tensors()
-            waspModel = Interpreter(waspPath)
-            waspModel.allocate_tensors()
+            beeModel = keras.models.load_model(beePath)
+            waspModel = keras.models.load_model(waspPath)
             beeLock = threading.Lock()
             waspLock = threading.Lock()
             self.beeModels.append(beeModel)
@@ -82,11 +89,12 @@ class insectClassifier:
         )
         return detections
 
-    def quantizedClassify(self, interpreter, inputData):
+    def quantizedClassify(self, model, inputData):
+        """ Now uses Keras instead of TensorFlow Lite """
         inputData = np.array(inputData, dtype=np.float32)
-        interpreter.set_tensor(interpreter.get_input_details()[0]["index"], inputData)
-        interpreter.invoke()
-        return interpreter.get_tensor((interpreter.get_output_details()[0]["index"]))
+        predictions = model.predict(inputData)
+        return predictions
+
 
     def classifyBox(self, frame, box, yolo_confidence, waspBool, i):
         try:
@@ -171,10 +179,8 @@ class insectClassifier:
             print("DANGER: WASP DETECTED CLOSING DOOR !!")
             setServoAngle(180)
             self.doorClosed = True
-            time.sleep(60)
         else:
             print("DANGER: WASP DETECTED DOOR WILL REMAIN CLOSED")
-            time.sleep(10)
 
     def openDoor(self):
         if self.doorClosed == True:
@@ -202,9 +208,16 @@ class insectClassifier:
 
 
 if __name__ == "__main__":
-
+    
+    
+# Example Usage
+    setServoAngle(0)   # Open position  
+    time.sleep(2)
+    setServoAngle(90)  # Halfway
+    time.sleep(2)
+    setServoAngle(180) # Close position
     classifier = insectClassifier(
-        beePath, waspPath, yoloPath, threadNum=4, skipFrames=1
+        beePath, waspPath, yoloPath, threadNum=1, skipFrames=1, waspThreshold = 2
     )
 
     picam2 = Picamera2()
@@ -231,7 +244,7 @@ if __name__ == "__main__":
             break
 
         inputFrame = np.array(inputFrame, dtype=np.uint8)
-        # frame = cv2.cvtColor(inputFrame, cv2.COLOR_BGRA2BGR)
+        inputFramerame = cv2.cvtColor(inputFrame, cv2.COLOR_BGRA2BGR)
         annotatedFrame = classifier.processFrame(inputFrame)
         cv2.imshow(windowName, np.array(annotatedFrame))
         if cv2.waitKey(1) & 0xFF == ord("q"):
@@ -239,5 +252,3 @@ if __name__ == "__main__":
 
     picam2.stop()
     cv2.destroyAllWindows()
-    pwm.stop()
-    GPIO.cleanup()
