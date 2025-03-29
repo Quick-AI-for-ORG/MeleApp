@@ -245,6 +245,23 @@ const addUpgrade = async (req, res) => {
     }
 }
 
+const removeUpgrade = async (req, res) => {
+    try{
+        let result = await hiveUpgrade.get(req.body.hiveRef, req.body.productRef);
+        if(!result.success.status) return res.json(result.toJSON());
+        const upgrade = new hiveUpgrade(result.data);
+         result = await upgrade.remove();
+        if(!result.success.status) return res.json(result.toJSON());
+        const product = controllers.product._jsonToObject(result.data.productRef);
+        result = await product.decrement();
+        if(!result.success.status) return res.json(result.toJSON());
+        return res.json(new Result(1, null, "Upgrade removed successfully").toJSON())
+    }
+    catch (error) {
+        return res.json(new Result(-1, null, `Error removing hive upgrade: ${error.message}`).toJSON());
+    }
+}
+
 
 module.exports = {
     upgrade,
@@ -254,4 +271,5 @@ module.exports = {
     sendEmail,
     getUpgradedHive,
     addUpgrade,
+    removeUpgrade
 }
