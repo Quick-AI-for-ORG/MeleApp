@@ -213,38 +213,23 @@
                     </div>
                 </div>
 
-                <!-- Charts Grid -->
-                <div class="charts-grid">
-                    <div class="chart-card">
-                        <h3 class="chart-title">Hive Weight Average</h3>
-                        <canvas id="weightChart"></canvas>
-                    </div>
+                <!-- Charts Section -->
+                <%- include('./Components/charts', { type: 'beekeeper-apiary' }) %>
 
-                    <div class="threats-card">
-                        <h3 class="threats-title">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            Detected Threats
-                        </h3>
-                        <div class="threats-list">
-                            <!-- Threat items will be populated dynamically -->
+                    <!-- Beekeepers Section -->
+                    <div class="beekeepers-section">
+                        <div class="section-header">
+                            <h2 class="section-title">Beekeepers</h2>
+                            <% if(user.role==='Owner' ) { %>
+                                <button class="add-beekeeper-btn" onclick="openModal('add')">
+                                    <i class="fas fa-plus"></i> Add Beekeeper
+                                </button>
+                                <% } %>
+                        </div>
+                        <div class="beekeepers-grid">
+                            <!-- Beekeepers will be populated dynamically -->
                         </div>
                     </div>
-                </div>
-
-                <!-- Beekeepers Section -->
-                <div class="beekeepers-section">
-                    <div class="section-header">
-                        <h2 class="section-title">Beekeepers</h2>
-                        <% if(user.role==='Owner' ) { %>
-                            <button class="add-beekeeper-btn" onclick="openModal('add')">
-                                <i class="fas fa-plus"></i> Add Beekeeper
-                            </button>
-                            <% } %>
-                    </div>
-                    <div class="beekeepers-grid">
-                        <!-- Beekeepers will be populated dynamically -->
-                    </div>
-                </div>
             </div>
 
             <!-- Hive Dashboard (hidden by default) -->
@@ -322,98 +307,88 @@
                     </div>
                 </div>
 
-                <!-- Hive Charts -->
-                <div class="charts-grid">
-                    <div class="chart-card">
-                        <h3 class="chart-title">Weight Over Time</h3>
-                        <canvas id="hiveWeightChart"></canvas>
-                    </div>
+                <!-- Charts Section -->
+                <%- include('./Components/charts', { type: 'beekeeper-hive' }) %>
 
-                    <div class="chart-card">
-                        <h3 class="chart-title">Anomaly Detection</h3>
-                        <canvas id="vibrationChart"></canvas>
-                    </div>
-                </div>
-
-                <!-- Sensor Data Tables -->
-                <div class="tables-section">
-                    <div class="table-card">
-                        <h3 class="table-title">
-                            <i class="fas fa-temperature-high"></i>
-                            Temperature Data (°C)
-                        </h3>
-                        <div class="table-container">
-                            <table class="sensor-table">
-                                <thead>
-                                    <tr>
-                                        <th>Time</th>
-                                        <th>Average</th>
-                                        <th>S1</th>
-                                        <th>S2</th>
-                                        <th>S3</th>
-                                        <th>S4</th>
-                                        <th>S5</th>
-                                        <th>S6</th>
-                                        <th>S7</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Temperature data will be populated dynamically -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="table-card">
-                        <h3 class="table-title">
-                            <i class="fas fa-tint"></i>
-                            Humidity Data (%)
-                        </h3>
-                        <div class="table-container">
-                            <table class="sensor-table">
-                                <thead>
-                                    <tr>
-                                        <th>Time</th>
-                                        <th>Average</th>
-                                        <th>S1</th>
-                                        <th>S2</th>
-                                        <th>S3</th>
-                                        <th>S4</th>
-                                        <th>S5</th>
-                                        <th>S6</th>
-                                        <th>S7</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Humidity data will be populated dynamically -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Installed Kits Section -->
-                <div class="purchased-kits-section">
-                    <div class="kits-card">
-                        <div class="kits-header">
-                            <h3 class="kits-title">
-                                <i class="fas fa-box-open"></i>
-                                Installed Hive Kits
+                    <!-- Sensor Data Tables -->
+                    <div class="tables-section">
+                        <div class="table-card">
+                            <h3 class="table-title">
+                                <i class="fas fa-temperature-high"></i>
+                                Temperature Data (°C)
                             </h3>
-                            <div style="visibility:hidden" id="injectedProducts"
-                                data-products='<%= JSON.stringify(products) %>'></div>
-                            <% if(user.role==='Owner' ) { %>
-                                <button class="purchase-upgrade-btn" onclick="openUpgradeModal()">
-                                    <i class="fas fa-plus"></i>
-                                    Purchase Upgrade
-                                </button>
-                                <% } %>
+                            <div class="table-container">
+                                <table class="sensor-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Time</th>
+                                            <th>Average</th>
+                                            <th>S1</th>
+                                            <th>S2</th>
+                                            <th>S3</th>
+                                            <th>S4</th>
+                                            <th>S5</th>
+                                            <th>S6</th>
+                                            <th>S7</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Temperature data will be populated dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                        <div class="kits-list">
-                            <!-- Kit items will be populated dynamically -->
+
+                        <div class="table-card">
+                            <h3 class="table-title">
+                                <i class="fas fa-tint"></i>
+                                Humidity Data (%)
+                            </h3>
+                            <div class="table-container">
+                                <table class="sensor-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Time</th>
+                                            <th>Average</th>
+                                            <th>S1</th>
+                                            <th>S2</th>
+                                            <th>S3</th>
+                                            <th>S4</th>
+                                            <th>S5</th>
+                                            <th>S6</th>
+                                            <th>S7</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Humidity data will be populated dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                </div>
+
+                    <!-- Installed Kits Section -->
+                    <div class="purchased-kits-section">
+                        <div class="kits-card">
+                            <div class="kits-header">
+                                <h3 class="kits-title">
+                                    <i class="fas fa-box-open"></i>
+                                    Installed Hive Kits
+                                </h3>
+                                <div style="visibility:hidden" id="injectedProducts"
+                                    data-products='<%= JSON.stringify(products) %>'></div>
+                                <% if(user.role==='Owner' ) { %>
+                                    <button class="purchase-upgrade-btn" onclick="openUpgradeModal()">
+                                        <i class="fas fa-plus"></i>
+                                        Purchase Upgrade
+                                    </button>
+                                    <% } %>
+                            </div>
+                            <div class="kits-list">
+                                <!-- Kit items will be populated dynamically -->
+                            </div>
+                        </div>
+                    </div>
             </div>
         </main>
     </div>

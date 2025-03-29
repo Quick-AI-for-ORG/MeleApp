@@ -89,5 +89,11 @@ class Apiary {
     if(result.success.status) this.assignment = result.data;
     return result;
   }
+
+  async updateForecast(temp,humidity){
+    this.temperature = temp;
+    this.humidity = humidity;
+    return await this.modify(this)
+  }
 }
 module.exports = Apiary;

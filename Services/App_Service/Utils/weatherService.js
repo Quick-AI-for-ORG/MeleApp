@@ -1,13 +1,13 @@
 const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
+const Result = require("../../Shared/Result");
 
 class WeatherService {
   constructor() {
     this.apiKey = process.env.OPENWEATHER_API_KEY;
     this.logsDir = path.join(__dirname, "../../Logs/weather");
 
-    // Create logs directory if it doesn't exist
     if (!fs.existsSync(this.logsDir)) {
       fs.mkdirSync(this.logsDir, { recursive: true });
     }
@@ -24,33 +24,23 @@ class WeatherService {
 
       if (response.data.cod === 200) {
         const weather = response.data;
-        return {
+        return new Result(1,{
           location: weather.name || "Unknown Location",
           temperature: weather.main.temp,
           humidity: weather.main.humidity,
           windSpeed: weather.wind.speed,
           description: weather.weather[0].description,
           timestamp: new Date().toISOString(),
-        };
+        }, "Weather data retrieved successfully");
       } else {
-        throw new Error(`Weather API returned code ${response.data.cod}`);
+        return new Result(0, null, `Error fetching weather data: ${response.data.message}`);
       }
     } catch (error) {
-      // Enhanced error logging
       console.error("Weather API Error Details:");
       console.error("Status:", error.response?.status);
       console.error("Status Text:", error.response?.statusText);
       console.error("Response Data:", error.response?.data);
-
-      // Return default weather data
-      return {
-        location: "Location Unavailable",
-        temperature: "N/A",
-        humidity: "N/A",
-        windSpeed: "N/A",
-        description: "Weather data temporarily unavailable",
-        timestamp: new Date().toISOString(),
-      };
+      return new Result(-1, null, `Error fetching weather data: ${error.message}`);
     }
   }
 

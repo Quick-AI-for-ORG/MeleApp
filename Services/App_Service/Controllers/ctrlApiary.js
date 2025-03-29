@@ -1,6 +1,8 @@
 const Apiary = require('../Models/Apiary');
 const Result = require("../../Shared/Result");
 
+const weatherService = require("../Utils/weatherService");
+
 const jsonToObject = (json) => {
     return new Apiary(json)
 }
@@ -8,7 +10,7 @@ const addApiary = async (req, res) => {
     try {
         const apiaryJSON = {
             name: req.body.apiaryName,
-            location: req.body.location || `${req.body.latitude} - ${req.body.longitude}`,
+            location: req.body.location ||{ latitude:req.body.latitude, longitude: req.body.longitude},
             numberOfHives: req.body.numberOfHives || 0,
             owner: req.body.owner || req.session.user._id
         };
@@ -74,8 +76,20 @@ const getApiaryHives = async (req, res) => {
         return new Result(-1, null, `Error fetching apiary hives: ${error.message}`).toJSON();
     }
 }
-const getApiaryTemperature = async (req, res) => {}
-const getApiaryHumidity = async (req, res) => {}
+
+const updateForecast = async (req, res) => {
+    try {
+        let result = await Apiary.get(req.body._id);
+        if(!result.success.status) return result
+        const apiary = jsonToObject(result.data);
+        result = await weatherService.getWeatherData(apiary.location.latitude, apiary.location.longitude);
+        if(!result.success.status) return res.json(result.toJSON())
+        result = await apiary.updateForecast(result.data.temperature, result.data.humidity);
+        return res.json(result.toJSON());
+    } catch (error) {
+       return res.json(new Result(-1, null, `Error updating forecast: ${error.message}`).toJSON())
+    }
+}
 
 module.exports = {
     _jsonToObject: jsonToObject,
@@ -85,4 +99,5 @@ module.exports = {
     getApiary,
     getApiaries,
     getApiaryHives,
+    updateForecast
 }
