@@ -565,7 +565,7 @@ async function purchaseUpgrades() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          hive: currentHive,
+          hive: selectedHiveId,
           productIds: selectedUpgrades,
         }),
       });
@@ -577,7 +577,7 @@ async function purchaseUpgrades() {
       if (result.success) {
         showNotification("Upgrades purchased successfully", "success");
         closeModal("upgradeModal");
-        location.reload();
+        fetchHiveData(selectedHiveId); 
       } else {
         throw new Error(result.message || "Error purchasing upgrades");
       }
@@ -607,6 +607,24 @@ async function requestKitRemoval(kitId) {
       `Removal request for ${kitNames[kitId]} has been sent to the administrator.`,
       "success"
     );
+
+    const response = await fetch("/keeper/removeUpgrade", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ hiveRef: selectedHiveId, productRef: kitId }),
+    });
+
+    if (!response.ok) {
+      showNotification("Failed to send removal request", "error");
+      return;
+    }
+    const result = await response.json();
+    if (result.success.status) {
+      showNotification(result.message, "success");
+      fetchHiveData(selectedHiveId);
+    } else {
+      showNotification(result.message, "error");
+    }
   }
 }
 
