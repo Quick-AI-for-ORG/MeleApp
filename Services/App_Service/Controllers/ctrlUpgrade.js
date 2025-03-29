@@ -79,6 +79,10 @@ const upgrade = async (req, res) => {
             }
         }
         
+        if(!newApiary) { 
+            req.body.latitude = apiary.location.latitude
+            req.body.longitude = apiary.location.longitude
+        }
         const emailResult = await sendEmail(req, res);
         if (!emailResult.success.status) {
             req.session.message = emailResult.message;
@@ -213,6 +217,34 @@ const sendEmail = async (req, res) => {
     }
   };
 
+const addUpgrade = async (req, res) => {
+    try {
+        req.body._id = req.body.hive
+        const hiveResult = await controllers.hive.getHive(req,res)
+        if(!hiveResult.success.status) return res.json(hiveResult.toJSON());
+        const hive = controllers.hive._jsonToObject(hiveResult.data);
+
+        let products = []
+        for(let i =0; i<req.body.productIds.length; i++){
+            req.body._id = req.body.productIds[i]
+            const productResult = await controllers.product.getProduct(req,res)
+            if(!productResult.success.status) return res.json(productResult.toJSON());
+            const product = controllers.product._jsonToObject(productResult.data);
+            const incrementResult = await product.increment();
+            if(!incrementResult.success.status) return res.json(incrementResult.toJSON());
+            products.push(product)
+            req.body.hiveRef = hive._id;
+            req.body.productRef = product._id;
+            const upgradeResult = await addHiveUpgrade(req, res);
+            if(!upgradeResult.success.status) return res.json(upgradeResult.toJSON());
+        }
+        return res.json(new Result(1, hive, "Upgrades added successfully").toJSON())
+
+    } catch (error) {
+        return res.json(new Result(-1, null, `Error creating hive upgrade: ${error.message}`).toJSON());
+    }
+}
+
 
 module.exports = {
     upgrade,
@@ -220,5 +252,6 @@ module.exports = {
     getUpgrades,
     makeOperational,
     sendEmail,
-    getUpgradedHive
+    getUpgradedHive,
+    addUpgrade,
 }

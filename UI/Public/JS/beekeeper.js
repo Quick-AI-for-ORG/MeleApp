@@ -10,6 +10,7 @@ const toggleDisplay = (el, show) =>
  *   STATE VARIABLES          *
  ******************************/
 let selectedApiaryId = null;
+let selectedHiveId = null;
 let beekeepers = [];
 
 /******************************
@@ -41,15 +42,14 @@ async function fetchHiveData(hiveId) {
   try {
     console.log("Fetching hive data for:", hiveId);
 
-    // Get current apiary data
     const apiaries = JSON.parse($("#apiariesInjection").dataset.apiaries);
     let currentHive = null;
 
-    // Find the hive in the apiaries data
     for (const apiary of apiaries) {
       const hive = apiary.hives.find((h) => h._id === hiveId);
       if (hive) {
         currentHive = hive;
+        selectedHiveId = hiveId;
         break;
       }
     }
@@ -543,10 +543,10 @@ async function purchaseUpgrades() {
   );
   if (confirmation) {
     try {
-      const response = await fetch("/api/purchaseProducts", {
+      const response = await fetch("/keeper/addHiveUpgrade", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ productIds: selectedUpgrades }),
+        body: JSON.stringify({ hive:currentHive ,productIds: selectedUpgrades }),
       });
 
       if (!response.ok)
