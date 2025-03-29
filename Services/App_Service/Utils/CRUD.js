@@ -170,6 +170,25 @@ const CRUDInterface = {
       return new Result(-1, null, `Error getting data: ${error}`);
     }
   },
+  getNested: async function (primaryKeys, model, compareKeys) {
+    try {
+      const compareClause = compareKeys.reduce((acc, key, index) => {
+        acc[key] = primaryKeys[index];
+        return acc;
+      }, {});
+      const record = await models[model].findOne(compareClause);
+      if (record) {
+        await Log.create({ log: `Found record with ${JSON.stringify(compareClause)}`, degree: 1 });
+        return new Result(1, record._doc, `Found record with ${JSON.stringify(compareClause)}`);
+      } else {
+        await Log.create({ log: `Record with ${JSON.stringify(compareClause)} not found.`, degree: 0 });
+        return new Result(0, null, `Record with ${JSON.stringify(compareClause)} not found.`);
+      }
+    } catch (error) {
+      await Log.create({ log: `Error getting nested data: ${error.message}`, degree: -1 });
+      return new Result(-1, null, `Error getting nested data: ${error.message}`);
+    }
+  },
   getAll: async function (model) {
     try {
       const records = await models[model].find();
