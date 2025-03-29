@@ -10,6 +10,7 @@ const toggleDisplay = (el, show) =>
  *   STATE VARIABLES          *
  ******************************/
 let selectedApiaryId = null;
+let selectedHiveId = null;
 let beekeepers = [];
 
 /******************************
@@ -41,15 +42,14 @@ async function fetchHiveData(hiveId) {
   try {
     console.log("Fetching hive data for:", hiveId);
 
-    // Get current apiary data
     const apiaries = JSON.parse($("#apiariesInjection").dataset.apiaries);
     let currentHive = null;
 
-    // Find the hive in the apiaries data
     for (const apiary of apiaries) {
       const hive = apiary.hives.find((h) => h._id === hiveId);
       if (hive) {
         currentHive = hive;
+        selectedHiveId = hiveId;
         break;
       }
     }
@@ -105,6 +105,46 @@ function updateHiveDashboard(hiveData) {
   $(".weather-card.hive-threats .weather-value .value").textContent =
     (data.threats && data.threats.length) || "0";
 
+  // Update installed kits list
+  const kitsList = $(".kits-list");
+  if (kitsList) {
+    if (
+      data.products &&
+      Array.isArray(data.products) &&
+      data.products.length > 0
+    ) {
+      kitsList.innerHTML = data.products
+        .map(
+          (product) => `
+        <div class="kit-item">
+          <div class="kit-info">
+            <h4>${product.name}</h4>
+            <span class="kit-status active">Installed</span>
+          </div>
+          ${
+            $("#sessionRole").value === "Owner"
+              ? `
+            <button class="kit-action-btn" onclick="requestKitRemoval('${product._id}')">
+              <i class="fas fa-times"></i>
+              Request Removal
+            </button>
+          `
+              : ""
+          }
+        </div>
+      `
+        )
+        .join("");
+    } else {
+      kitsList.innerHTML = `
+        <div class="no-data-message">
+          <i class="fas fa-box-open"></i>
+          <p>No kits installed in this hive</p>
+        </div>
+      `;
+    }
+  }
+
   // Handle sensor data tables
   if (data.sensors && data.sensors.length > 0) {
     const sensorData = {
@@ -129,11 +169,31 @@ function updateHiveDashboard(hiveData) {
     });
   }
 
+  // Handle threats display
+  const threatsList = $(".threats-list");
+  if (threatsList) {
+    if (
+      data.threats &&
+      Array.isArray(data.threats) &&
+      data.threats.length > 0
+    ) {
+    } else {
+      threatsList.innerHTML = `
+        <div class="no-data-message">
+          <i class="fas fa-shield-check"></i>
+          <p>No threats detected</p>
+        </div>
+      `;
+    }
+  }
+
   // Update timestamp if available
   const timeElements = document.querySelectorAll(".weather-time");
   const timestamp =
-    data.lastUpdated || data.timestamp
-      ? new Date(data.lastUpdated || data.timestamp).toLocaleTimeString()
+    data.updatedAt || data.lastUpdated || data.timestamp
+      ? new Date(
+          data.updatedAt || data.lastUpdated || data.timestamp
+        ).toLocaleTimeString()
       : "--:--:--";
   timeElements.forEach((el) => {
     el.textContent = `Last updated: ${timestamp}`;
@@ -501,10 +561,13 @@ async function purchaseUpgrades() {
   );
   if (confirmation) {
     try {
-      const response = await fetch("/api/purchaseProducts", {
+      const response = await fetch("/keeper/addHiveUpgrade", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ productIds: selectedUpgrades }),
+        body: JSON.stringify({
+          hive: currentHive,
+          productIds: selectedUpgrades,
+        }),
       });
 
       if (!response.ok)

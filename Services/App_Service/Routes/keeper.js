@@ -9,6 +9,7 @@ const controllers = {
   upgrade: require("../Controllers/ctrlUpgrade"),
   keeper: require("../Controllers/ctrlKeeper"),
   hive: require("../Controllers/ctrlHive"),
+  question: require("../Controllers/ctrlQuestion"),
 };
 
 const localStreamService = require("../../Streaming/localStreamService");
@@ -16,12 +17,12 @@ const localStreamService = require("../../Streaming/localStreamService");
 router.post("/register", controllers.user.register);
 router.post("/login", controllers.user.login);
 router.post("/localForecast", controllers.apiary.updateForecast)
+router.post("/askQuestion", controllers.question.addQuestion)
 
 router.use((req, res, next) => {
   if (!req.session.user) res.redirect("/noLogin");
   else next();
 });
-
 
 router.get("/", (req, res) => {
   res.redirect("/keeper/dashboard");
@@ -72,6 +73,7 @@ router.use((req, res, next) => {
 });
 
 router.post("/assignKeeper", controllers.keeper.assignKeeper)
+router.post("/addHiveUpgrade", controllers.upgrade.addUpgrade)
 router.delete("/removeKeeper", controllers.user.removeUser)
 
 
