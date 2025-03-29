@@ -1,5 +1,4 @@
 const ctrlApiary = require("../Controllers/ctrlApiary");
-const ctrlHive = require("../Controllers/ctrlHive");
 const ctrlSensor = require("../Controllers/ctrlSensor");
 const ctrlProduct = require("../Controllers/ctrlProduct");
 const ctrlUser = require("../Controllers/ctrlUser");
