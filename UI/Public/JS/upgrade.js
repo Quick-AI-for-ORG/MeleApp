@@ -17,8 +17,6 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     });
 
- 
-
   function handleApiarySelection(value) {
     const newApiaryGroup = document.getElementById("newApiaryGroup");
     const apiaryNameInput = document.getElementById("apiaryName");
@@ -141,25 +139,26 @@ function selectApiary(id, name, isNew) {
   const latitudeInput = document.getElementById("latitude");
   const longitudeInput = document.getElementById("longitude");
 
-  input.value = name;
-  idInput.value = id;
-
-  // Handle map requirement
   if (isNew) {
+    input.value = ""; // Clear the input field instead of setting it to "Create New Apiary"
+    input.placeholder = "Enter new apiary name";
+    input.focus();
     mapSection.classList.remove("disabled");
     mapRequiredMark.style.display = "inline";
     latitudeInput.required = true;
     longitudeInput.required = true;
   } else {
+    input.value = name;
+    input.placeholder = "Type or select apiary name";
     mapSection.classList.add("disabled");
     mapRequiredMark.style.display = "none";
     latitudeInput.required = false;
     longitudeInput.required = false;
-    // Clear map values when selecting existing apiary
     latitudeInput.value = "";
     longitudeInput.value = "";
   }
 
+  idInput.value = id;
   const dropdownList = document.getElementById("apiaryList");
   dropdownList.classList.remove("active");
 }
@@ -184,38 +183,25 @@ document.addEventListener("click", function (e) {
   }
 });
 
+// Update form submission handler
+document
+  .querySelector(".upgrade-form")
+  .addEventListener("submit", function (event) {
+    const selectedId = document.getElementById("selectedApiaryId").value;
+    const apiaryInput = document.getElementById("apiaryInput");
+    const apiaryName = document.getElementById("apiaryName");
 
-function selectApiary(id, name) {
-  document.getElementById('selectedApiaryId').value = id;
-  document.getElementById('apiaryInput').value = name;
-  document.getElementById('apiaryName').value = name;
-  
-  // Show/hide new apiary field
-  if (id === 'new') {
-      document.getElementById('newApiaryGroup').style.display = 'block';
-  } else {
-      document.getElementById('newApiaryGroup').style.display = 'none';
-  }
-  
-  // Hide dropdown
-  document.getElementById('apiaryList').style.display = 'none';
-}
-
-// Add this function to handle form submission
-document.querySelector('.upgrade-form').addEventListener('submit', function(event) {
-  // If "Create New Apiary" is selected, use the newApiaryName value
-  if (document.getElementById('selectedApiaryId').value === 'new') {
-      const newApiaryName = document.getElementById('newApiaryName').value;
-      if (newApiaryName.trim()) {
-          document.getElementById('apiaryName').value = newApiaryName;
-      } else {
-          // If no name is entered, use the value from the input field
-          document.getElementById('apiaryName').value = document.getElementById('apiaryInput').value;
+    if (selectedId === "new") {
+      // For new apiary, use the text from the input field
+      if (!apiaryInput.value.trim()) {
+        event.preventDefault();
+        alert("Please enter an apiary name");
+        apiaryInput.focus();
+        return;
       }
-  }
-  
-  // If nothing is selected but text is entered in the input field
-  if (!document.getElementById('apiaryName').value && document.getElementById('apiaryInput').value) {
-      document.getElementById('apiaryName').value = document.getElementById('apiaryInput').value;
-  }
-});
+      apiaryName.value = apiaryInput.value.trim();
+    } else {
+      // For existing apiary, use the selected apiary name
+      apiaryName.value = apiaryInput.value;
+    }
+  });

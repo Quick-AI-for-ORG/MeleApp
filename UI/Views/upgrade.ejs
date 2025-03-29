@@ -26,118 +26,111 @@
             </div>
 
             <form class="upgrade-form" action="/keeper/upgrade" method="POST" ">
-                <div class="form-group">
-                    <label for="apiaryInput">Select or Create Apiary</label>
-                    <div class="custom-dropdown">
-                        <input type="text" id="apiaryInput" placeholder="Type or select apiary name" autocomplete="off"
-                            oninput="filterApiaries(this.value)" onclick="toggleApiaryList()">
-                        <div id="apiaryList" class="dropdown-list">
-                            <div class="dropdown-item" onclick="selectApiary('new', 'Create New Apiary', true)">
-                                <i class="fas fa-plus"></i> Create New Apiary
-                            </div>
-                            <% if (apiaries && apiaries.length> 0) { %>
-                                <% apiaries.forEach(apiary=> { %>
-                                    <div class="dropdown-item"
-                                        onclick="selectApiary('<%= apiary._id %>', '<%= apiary.name %>', false)">
-                                        <i class="fas fa-warehouse"></i>
-                                        <%= apiary.name %>
-                                    </div>
-                                <% }); %>
-                            <% } %>
+                <div class=" form-group">
+                <label for="apiaryInput">Select or Create Apiary</label>
+                <div class="custom-dropdown">
+                    <input type="text" id="apiaryInput" placeholder="Type or select apiary name" autocomplete="off"
+                        oninput="filterApiaries(this.value)" onclick="toggleApiaryList()">
+                    <div id="apiaryList" class="dropdown-list">
+                        <div class="dropdown-item" onclick="selectApiary('new', 'Create New Apiary', true)">
+                            <i class="fas fa-plus"></i> Create New Apiary
                         </div>
-                        <input type="hidden" id="selectedApiaryId" name="apiaryId">
-                        <!-- Add this hidden input for apiaryName -->
-                        <input type="hidden" id="apiaryName" name="apiaryName">
-                    </div>
-                </div>
-            
-                <!-- Keep your original newApiaryGroup div -->
-                <div class="form-group" id="newApiaryGroup" style="display: none;">
-                    <label for="apiaryName">New Apiary Name</label>
-                    <input type="text" id="newApiaryNameInput" placeholder="Enter new apiary name">
-                </div>
-
-                <div class="form-group map-container" id="mapSection">
-                    <label>Apiary Location <span class="required-field" id="mapRequiredMark">*</span></label>
-                    <div id="mapContainer">
-                        <input type="text" id="searchLocation" readonly placeholder="Selected location will appear here"
-                            class="readonly-field">
-                        <div id="map"></div>
-                        <input type="hidden" id="latitude" name="latitude" required>
-                        <input type="hidden" id="longitude" name="longitude" required>
-                        <p id="selectedLocation" class="location-status">Click on the map or use the search control (🔍)
-                            to set location</p>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="hivesCount">Number of Hives to Upgrade</label>
-                    <input type="number" id="hivesCount" name="numberOfHives" min="1" required
-                        placeholder="How many hives do you want to upgrade?">
-                </div>
-
-                <div class="form-group">
-                    <label>Kit Selection</label>
-                    <div class="kit-options">
-                        <% if (kits && kits.length> 0) { %>
-                            <% kits.forEach((kit, index)=> { %>
-                                <div class="kit-option">
-                                    <input type="checkbox" id="kit<%= index %>" name="kitSelection[]"
-                                        value="<%= kit.name %>" <%=kit.name==='The Mele:RIMBA Kit' ? 'checked' : '' %>
-                                    <%= kit.name==='Internal Hive Monitoring Kit' ? 'checked readonly' : '' %>
-                                        >
-                                        <label for="kit<%= index %>">
-                                            <%= kit.name %>
-                                                <% if (kit.name==='Internal Hive Monitoring Kit' ) { %>
-                                                    <span class="required-kit">(Required)</span>
-                                                    <% } %>
-                                        </label>
+                        <% if (apiaries && apiaries.length> 0) { %>
+                            <% apiaries.forEach(apiary=> { %>
+                                <div class="dropdown-item"
+                                    onclick="selectApiary('<%= apiary._id %>', '<%= apiary.name %>', false)">
+                                    <i class="fas fa-warehouse"></i>
+                                    <%= apiary.name %>
                                 </div>
                                 <% }); %>
-                                    <% } else { %>
-                                        <p>No kits available at the moment.</p>
-                                        <% } %>
+                                    <% } %>
                     </div>
+                    <input type="hidden" id="selectedApiaryId" name="apiaryId">
+                    <!-- Add this hidden input for apiaryName -->
+                    <input type="hidden" id="apiaryName" name="apiaryName">
                 </div>
-
-                <div class="form-group">
-                    <label for="numberOfFrames">Number of Frames</label>
-                    <input type="range" id="numberOfFrames" name="numberOfFrames" min="1" max="10" value="5">
-                    <output for="numberOfFrames" id="framesOutput">5 frames</output>
-                </div>
-
-                <div class="form-group dimensions">
-                    <label>Hive Dimensions (cm)</label>
-                    <div class="dimensions-inputs">
-                        <div class="dimension">
-                            <input type="number" id="length" name="length" required min="0" step="0.1"
-                                placeholder="Length">
-                            <label for="length">Length</label>
-                        </div>
-                        <div class="dimension">
-                            <input type="number" id="width" name="width" required min="0" step="0.1"
-                                placeholder="Width">
-                            <label for="width">Width</label>
-                        </div>
-                        <div class="dimension">
-                            <input type="number" id="height" name="height" required min="0" step="0.1"
-                                placeholder="Height">
-                            <label for="height">Height</label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group agreement">
-                    <input type="checkbox" id="agreement" name="agreement" required>
-                    <label for="agreement">I agree to the terms and conditions</label>
-                </div>
-
-                <button type="submit" class="purchase-btn">
-                    <i class="fas fa-shopping-cart"></i>
-                    Complete Purchase
-                </button>
-            </form>
         </div>
+
+
+
+        <div class="form-group map-container" id="mapSection">
+            <label>Apiary Location <span class="required-field" id="mapRequiredMark">*</span></label>
+            <div id="mapContainer">
+                <input type="text" id="searchLocation" readonly placeholder="Selected location will appear here"
+                    class="readonly-field">
+                <div id="map"></div>
+                <input type="hidden" id="latitude" name="latitude" required>
+                <input type="hidden" id="longitude" name="longitude" required>
+                <p id="selectedLocation" class="location-status">Click on the map or use the search control (🔍)
+                    to set location</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="hivesCount">Number of Hives to Upgrade</label>
+            <input type="number" id="hivesCount" name="numberOfHives" min="1" required
+                placeholder="How many hives do you want to upgrade?">
+        </div>
+
+        <div class="form-group">
+            <label>Kit Selection</label>
+            <div class="kit-options">
+                <% if (kits && kits.length> 0) { %>
+                    <% kits.forEach((kit, index)=> { %>
+                        <div class="kit-option">
+                            <input type="checkbox" id="kit<%= index %>" name="kitSelection[]" value="<%= kit.name %>"
+                                <%=kit.name==='The Mele:RIMBA Kit' ? 'checked' : '' %>
+                            <%= kit.name==='Internal Hive Monitoring Kit' ? 'checked readonly' : '' %>
+                                >
+                                <label for="kit<%= index %>">
+                                    <%= kit.name %>
+                                        <% if (kit.name==='Internal Hive Monitoring Kit' ) { %>
+                                            <span class="required-kit">(Required)</span>
+                                            <% } %>
+                                </label>
+                        </div>
+                        <% }); %>
+                            <% } else { %>
+                                <p>No kits available at the moment.</p>
+                                <% } %>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="numberOfFrames">Number of Frames</label>
+            <input type="range" id="numberOfFrames" name="numberOfFrames" min="1" max="10" value="5">
+            <output for="numberOfFrames" id="framesOutput">5 frames</output>
+        </div>
+
+        <div class="form-group dimensions">
+            <label>Hive Dimensions (cm)</label>
+            <div class="dimensions-inputs">
+                <div class="dimension">
+                    <input type="number" id="length" name="length" required min="0" step="0.1" placeholder="Length">
+                    <label for="length">Length</label>
+                </div>
+                <div class="dimension">
+                    <input type="number" id="width" name="width" required min="0" step="0.1" placeholder="Width">
+                    <label for="width">Width</label>
+                </div>
+                <div class="dimension">
+                    <input type="number" id="height" name="height" required min="0" step="0.1" placeholder="Height">
+                    <label for="height">Height</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group agreement">
+            <input type="checkbox" id="agreement" name="agreement" required>
+            <label for="agreement">I agree to the terms and conditions</label>
+        </div>
+
+        <button type="submit" class="purchase-btn">
+            <i class="fas fa-shopping-cart"></i>
+            Complete Purchase
+        </button>
+        </form>
+    </div>
     </div>
 
     <!-- Add confirmation modal -->
