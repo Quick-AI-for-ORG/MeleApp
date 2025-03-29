@@ -74,6 +74,7 @@ router.use((req, res, next) => {
 
 router.post("/assignKeeper", controllers.keeper.assignKeeper)
 router.post("/addHiveUpgrade", controllers.upgrade.addUpgrade)
+router.post("/removeUpgrade", controllers.upgrade.removeUpgrade)
 router.delete("/removeKeeper", controllers.user.removeUser)
 
 

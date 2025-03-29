@@ -7,8 +7,7 @@ const models = {
   threatModel: require("../Schemas/Threat"),
   productModel: require("../Schemas/Product"),
   keeperAssignmentModel: require("../Schemas/KeeperAssignment"),
-  hiveUpgradeModel: require("../Schemas/HiveUpgrade"),
-  questionModel: require("../Schemas/Question"),
+  hiveUpgradeModel: require("../Schemas/HiveUpgrade")
 };
 const Log = require("../Schemas/Log");
 const Result = require("../../Shared/Result");
@@ -139,7 +138,7 @@ const CRUDInterface = {
       await Log.create({ log: `Error removing data: ${error}`, degree: -1 });
       return new Result(-1, null, `Error removing data: ${error}`);
     }
-  },
+  },  
   get: async function (primaryKey, model, compareKey) {
     try {
       const compareClause = { [compareKey]: primaryKey };
@@ -190,7 +189,7 @@ const CRUDInterface = {
   },
   getAllFiltered: async function (primaryKey, model, compareKey) {
     try {
-      const compareClause = { [compareKey]: primaryKey };
+      const compareClause = {[compareKey]: primaryKey};
       const records = await models[model].find(compareClause);
       const resultData = records.map((record) => record._doc) || [];
       await Log.create({
@@ -203,7 +202,7 @@ const CRUDInterface = {
         `Found ${records.length} records in ${model} with ${compareClause}.`
       );
     } catch (error) {
-      await Log.create({ log: `Error getting all data: ${error}`, degree: -1 });
+      await Log.create({log: `Error getting all data: ${error}`, degree: -1});
       return new Result(-1, null, `Error getting all data: ${error}`);
     }
   },

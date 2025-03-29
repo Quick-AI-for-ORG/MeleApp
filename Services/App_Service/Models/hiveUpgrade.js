@@ -28,6 +28,14 @@ class HiveUpgrade {
     return result;
   }
 
+  static async get(hive, product){
+    const result = await HiveUpgrade.crudInterface.getNested([hive, product], "hiveUpgradeModel", ["hiveRef", "productRef"]);
+    if (result.success.status) {
+      result.data = new HiveUpgrade(result.data);
+    }
+    return result;
+  }
+
   static async getAll() {
     const result = await HiveUpgrade.crudInterface.getAll("hiveUpgradeModel");
     if (result.success.status) {

@@ -75,6 +75,11 @@ class Product {
     this.counter += 1;
     return await this.modify(this);
   }
+
+  async decrement(){
+    this.counter -= 1;
+    return await this.modify(this);
+  }
 }
 
 module.exports = Product;
