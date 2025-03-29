@@ -172,8 +172,10 @@ function updateHiveDashboard(hiveData) {
   // Update timestamp if available
   const timeElements = document.querySelectorAll(".weather-time");
   const timestamp =
-    data.lastUpdated || data.timestamp
-      ? new Date(data.lastUpdated || data.timestamp).toLocaleTimeString()
+    data.updatedAt || data.lastUpdated || data.timestamp
+      ? new Date(
+          data.updatedAt || data.lastUpdated || data.timestamp
+        ).toLocaleTimeString()
       : "--:--:--";
   timeElements.forEach((el) => {
     el.textContent = `Last updated: ${timestamp}`;
