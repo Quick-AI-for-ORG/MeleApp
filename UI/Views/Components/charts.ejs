@@ -1,0 +1,41 @@
+<% if (type==='admin' ) { %>
+    <div class="charts-grid">
+        <div class="chart-card">
+            <h3 class="chart-title">System Overview</h3>
+            <canvas id="adminOverviewChart"></canvas>
+        </div>
+    </div>
+    <% } %>
+
+        <% if (type==='beekeeper-apiary' ) { %>
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h3 class="chart-title">Hive Weight Average</h3>
+                    <canvas id="weightChart"></canvas>  
+                </div>
+
+                <div class="threats-card">
+                    <h3 class="threats-title">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Detected Threats
+                    </h3>
+                    <div class="threats-list">
+                        <!-- Threat items will be populated dynamically -->
+                    </div>
+                </div>
+            </div>
+            <% } %>
+
+                <% if (type==='beekeeper-hive' ) { %>
+                    <div class="charts-grid">
+                        <div class="chart-card">
+                            <h3 class="chart-title">Weight Over Time</h3>
+                            <canvas id="hiveWeightChart"></canvas>
+                        </div>
+
+                        <div class="chart-card">
+                            <h3 class="chart-title">Anomaly Detection</h3>
+                            <canvas id="vibrationChart"></canvas>
+                        </div>
+                    </div>
+                    <% } %>
