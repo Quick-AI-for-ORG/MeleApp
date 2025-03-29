@@ -8,7 +8,6 @@ const captureSchema = new mongoose.Schema({
     },
     imagePath: {
         type: String,
-        required: true,
     },
     prediction: {
         type: String,
@@ -17,8 +16,8 @@ const captureSchema = new mongoose.Schema({
         type: Number,
     },
     image: {
-        type: [Number],
-        default: [],
+        type: Buffer,  
+        required: true,
     }
 }, { timestamps: true });
 module.exports = mongoose.model('Captures', captureSchema);
