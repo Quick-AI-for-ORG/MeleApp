@@ -169,11 +169,31 @@ function updateHiveDashboard(hiveData) {
     });
   }
 
+  // Handle threats display
+  const threatsList = $(".threats-list");
+  if (threatsList) {
+    if (
+      data.threats &&
+      Array.isArray(data.threats) &&
+      data.threats.length > 0
+    ) {
+    } else {
+      threatsList.innerHTML = `
+        <div class="no-data-message">
+          <i class="fas fa-shield-check"></i>
+          <p>No threats detected</p>
+        </div>
+      `;
+    }
+  }
+
   // Update timestamp if available
   const timeElements = document.querySelectorAll(".weather-time");
   const timestamp =
-    data.lastUpdated || data.timestamp
-      ? new Date(data.lastUpdated || data.timestamp).toLocaleTimeString()
+    data.updatedAt || data.lastUpdated || data.timestamp
+      ? new Date(
+          data.updatedAt || data.lastUpdated || data.timestamp
+        ).toLocaleTimeString()
       : "--:--:--";
   timeElements.forEach((el) => {
     el.textContent = `Last updated: ${timestamp}`;
@@ -544,7 +564,10 @@ async function purchaseUpgrades() {
       const response = await fetch("/keeper/addHiveUpgrade", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ hive:currentHive ,productIds: selectedUpgrades }),
+        body: JSON.stringify({
+          hive: currentHive,
+          productIds: selectedUpgrades,
+        }),
       });
 
       if (!response.ok)
