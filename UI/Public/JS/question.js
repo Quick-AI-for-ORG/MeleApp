@@ -6,10 +6,10 @@ document.getElementById("QuestionForm").addEventListener("submit", async functio
     try {
         const response = await fetch("/keeper/askQuestion", {
             method: "POST",
-            body: {
+            body: JSON.stringify({
                 email: formData.get("email"),
                 message: formData.get("message")
-            },
+            }),
             headers: {
                 "Content-Type": "application/json"
             }
