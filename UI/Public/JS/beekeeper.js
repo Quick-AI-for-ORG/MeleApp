@@ -105,6 +105,46 @@ function updateHiveDashboard(hiveData) {
   $(".weather-card.hive-threats .weather-value .value").textContent =
     (data.threats && data.threats.length) || "0";
 
+  // Update installed kits list
+  const kitsList = $(".kits-list");
+  if (kitsList) {
+    if (
+      data.products &&
+      Array.isArray(data.products) &&
+      data.products.length > 0
+    ) {
+      kitsList.innerHTML = data.products
+        .map(
+          (product) => `
+        <div class="kit-item">
+          <div class="kit-info">
+            <h4>${product.name}</h4>
+            <span class="kit-status active">Installed</span>
+          </div>
+          ${
+            $("#sessionRole").value === "Owner"
+              ? `
+            <button class="kit-action-btn" onclick="requestKitRemoval('${product._id}')">
+              <i class="fas fa-times"></i>
+              Request Removal
+            </button>
+          `
+              : ""
+          }
+        </div>
+      `
+        )
+        .join("");
+    } else {
+      kitsList.innerHTML = `
+        <div class="no-data-message">
+          <i class="fas fa-box-open"></i>
+          <p>No kits installed in this hive</p>
+        </div>
+      `;
+    }
+  }
+
   // Handle sensor data tables
   if (data.sensors && data.sensors.length > 0) {
     const sensorData = {
