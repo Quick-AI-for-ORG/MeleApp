@@ -7,7 +7,7 @@ class Threat {
   static crudInterface = crudInterface;
   static jsonToObject = jsonToObject;
   static dependency = dependency;
-  static attributes = ['threatType', 'hiveRef', 'action'];
+  static attributes = ['threatType', 'hiveRef', 'action', 'severity', 'description'];
 
   constructor(threatJSON) {
     Threat.jsonToObject(this, threatJSON);
@@ -26,8 +26,10 @@ class Threat {
     return result;
   }
 
-  static async getAll() {
-    const result = await Threat.crudInterface.getAll("threatModel");
+  static async getAll(sortBy = null, limit = null) {
+    let result = null;
+    if (sortBy || limit) result = await Threat.crudInterface.getAllSorted("threatModel", sortBy, limit);
+    else result = await Threat.crudInterface.getAll("threatModel");
     if (result.success.status) {
       result.data = result.data.map(threat => new Threat(threat));
     }
@@ -36,6 +38,11 @@ class Threat {
 
   static async remove(id) {
     return await Threat.crudInterface.remove(id, "threatModel", "_id");
+  }
+
+  static async count() {
+    const result = await Threat.crudInterface.getCount("threatModel");
+    return result;
   }
 
   async create() {

@@ -24,7 +24,8 @@ const addProduct = async (req, res) => {
 
 const removeProduct = async (req, res) => {
     try {
-        const result = await Product.remove(req.body.name);
+        const name = req.body.name || req.query.name;
+        const result = await Product.remove(name);
         return res.json(result.toJSON());
     } catch (error) {
         return res.json(new Result(-1, null, `Error deleting product: ${error.message}`).toJSON());
@@ -67,6 +68,27 @@ const getProducts = async (req, res) => {
     }
 }
 
+const getSortedProducts = async (req, res) => {
+    try {
+        const sortBy = req.body.sortBy || { createdAt: -1 };
+        const limit = req.body.limit || 10;
+        const result = await Product.getAll(sortBy, limit);
+        req.session.products = result.data || [];
+        return result.toJSON()
+    } catch (error) {
+        return new Result(-1, null, `Error fetching products: ${error.message}`).toJSON();
+    }
+}
+
+const getProductsCount = async (req, res) => {
+    try {
+        const result = await Product.count();
+        req.session.stats.products = result.data || 0
+        return result.toJSON();
+    } catch (error) {
+        return new Result(-1, null, `Error fetching product count: ${error.message}`).toJSON();
+    }
+}
 
 
 module.exports = {
@@ -76,4 +98,6 @@ module.exports = {
     updateProduct,
     getProduct,
     getProducts,
+    getSortedProducts,
+    getProductsCount
 }

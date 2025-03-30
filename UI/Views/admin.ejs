@@ -36,22 +36,7 @@
         <!-- Main Content -->
         <main class="main-content">
             <!-- Stats Grid -->
-            <div class="stats-grid">
-                <%- include('./Components/statCard', { type: 'hives' , icon: 'fas fa-archive' , title: 'Total Hives' ,
-                    value: stats.hives, label: 'Active Hives' }) %>
-
-                    <%- include('./Components/statCard', { type: 'apiaries' , icon: 'fas fa-warehouse' ,
-                        title: 'Total Apiaries' , value: stats.apiaries, label: 'Registered Apiaries' }) %>
-
-                        <%- include('./Components/statCard', { type: 'users' , icon: 'fas fa-users' ,
-                            title: 'Total Users' , value: stats.users, label: 'Registered Users' }) %>
-
-                            <%- include('./Components/statCard', { type: 'sensors' , icon: 'fas fa-microchip' ,
-                                title: 'Active Sensors' , value: stats.sensors, label: 'Deployed Sensors' }) %>
-
-                                <%- include('./Components/statCard', { type: 'products' , icon: 'fas fa-box' ,
-                                    title: 'Total Products' , value: stats.products, label: 'Available Products' }) %>
-            </div>
+         
 
             <!-- Charts Section -->
             <%- include('./Components/charts', { type: 'admin' }) %>
@@ -68,7 +53,7 @@
                             </div>
                         </div>
                         <div class="card-content">
-                            <% recentUsers.forEach(user=> { %>
+                            <% users.forEach(user=> { %>
                                 <div class="activity-item" data-user-id="<%= user._id %>">
                                     <div class="user-avatar">
                                         <i class="fas fa-user-circle"></i>
@@ -110,7 +95,7 @@
                             <button class="view-all">View All</button>
                         </div>
                         <div class="card-content">
-                            <% recentHiveUpgrades.forEach(upgrade=> { %>
+                            <% upgrades.forEach(upgrade=> { %>
                                 <div class="activity-item" data-hiveupgrade-id="<%= upgrade._id %>">
                                     <div class="hiveupgrade-icon">
                                         <i class="fas fa-tools"></i>
@@ -150,7 +135,7 @@
                             <button class="view-all">View All</button>
                         </div>
                         <div class="card-content">
-                            <% recentHives.forEach(hive=> { %>
+                            <% hives.forEach(hive=> { %>
                                 <div class="activity-item" data-hive-id="<%= hive._id %>">
                                     <div class="hive-icon">
                                         <i class="fas fa-archive"></i>
@@ -188,7 +173,7 @@
                             <button class="view-all">View All</button>
                         </div>
                         <div class="card-content">
-                            <% recentApiaries.forEach(apiary=> { %>
+                            <% apiaries.forEach(apiary=> { %>
                                 <div class="activity-item" data-apiary-id="<%= apiary._id %>">
                                     <div class="apiary-icon">
                                         <i class="fas fa-warehouse"></i>
@@ -227,7 +212,7 @@
                             </div>
                         </div>
                         <div class="card-content">
-                            <% recentSensors.forEach(sensor=> { %>
+                            <% sensors.forEach(sensor=> { %>
                                 <div class="activity-item" data-sensor-id="<%= sensor._id %>">
                                     <div class="sensor-icon">
                                         <i class="fas fa-microchip"></i>
@@ -269,7 +254,7 @@
                             </div>
                         </div>
                         <div class="card-content">
-                            <% recentProducts.forEach(product=> { %>
+                            <% products.forEach(product=> { %>
                                 <div class="activity-item" data-product-id="<%= product._id %>">
                                     <div class="product-icon">
                                         <i class="fas fa-box"></i>
@@ -298,37 +283,7 @@
         </main>
     </div>
 
-    <!-- Modals -->
-    <%- include('./Components/modals/confirmModal') %>
-        <%- include('./Components/modals/userModal') %>
-            <%- include('./Components/modals/sensorModal') %>
-                <%- include('./Components/modals/productModal', { recentSensors }) %>
-                    <%- include('./Components/modals/viewAllModal') %>
-
                         <script src="/JS/charts.js"></script>
-                        <script>
-                            document.addEventListener('DOMContentLoaded', function () {
-                                // Initialize admin overview chart
-                                const overviewChart = Charts.createAdminOverviewChart('adminOverviewChart');
-
-                                // Example of updating chart with data from server
-                                async function fetchAndUpdateAdminCharts() {
-                                    try {
-                                        const response = await fetch('/api/getAdminStats');
-                                        const data = await response.json();
-
-                                        if (data.success) {
-                                            Charts.updateChart(overviewChart, [data.hiveStats, data.userStats]);
-                                        }
-                                    } catch (error) {
-                                        console.error('Error fetching admin stats:', error);
-                                    }
-                                }
-
-                                // Update charts periodically
-                                setInterval(fetchAndUpdateAdminCharts, 300000); // Every 5 minutes
-                            });
-                        </script>
                         <script src="/JS/admin.js"></script>
 </body>
 

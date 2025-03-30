@@ -29,8 +29,10 @@ class Apiary {
     return result;
   }
 
-  static async getAll() {
-    const result = await Apiary.crudInterface.getAll("apiaryModel");
+  static async getAll(sortBy = null, limit = null) {
+    let result = null;
+    if (sortBy || limit) result = await Apiary.crudInterface.getAllSorted("apiaryModel", sortBy, limit);
+    else result = await Apiary.crudInterface.getAll("apiaryModel");
     if (result.success.status) {
       result.data = result.data.map(apiary => new Apiary(apiary));
     }
@@ -48,6 +50,11 @@ class Apiary {
     const cascade = await Apiary.dependency.cascade(apiary.references.sub, this, 'apiaryRef');
     if (!cascade.success.status) return cascade;
     return await Apiary.crudInterface.remove(id, "apiaryModel", "_id");
+  }
+
+  static async count(){
+    const result = await Apiary.crudInterface.getCount("apiaryModel");
+    return result;
   }
 
   async create() {

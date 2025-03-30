@@ -1,5 +1,5 @@
 const Result = require("../../Shared/Result");
-const hiveUpgrade = require("../Models/HiveUpgrade");
+const HiveUpgrade = require("../Models/HiveUpgrade");
 const controllers = {
     user: require('./ctrlUser'),
     apiary: require('./ctrlApiary'),
@@ -106,7 +106,7 @@ const addHiveUpgrade = async (req, res) => {
             userRef: req.session.user._id,
             operational: false,
         }
-        const upgrade = new hiveUpgrade(upgradeJSON);
+        const upgrade = new HiveUpgrade(upgradeJSON);
         const result = await upgrade.create();
         return result;
     } catch (error) {
@@ -116,7 +116,7 @@ const addHiveUpgrade = async (req, res) => {
 
 const getUpgrade = async (req, res) => {
     try {
-        const result = await hiveUpgrade.get(req.body._id);
+        const result = await HiveUpgrade.get(req.body._id);
         return res.json(result.toJSON());
     } catch (error) {
         return res.json(new Result(-1, null, `Error fetching hive upgrade: ${error.message}`).toJSON());
@@ -125,7 +125,7 @@ const getUpgrade = async (req, res) => {
 
 const getUpgrades = async (req, res) => {
     try {
-        const result = await hiveUpgrade.getAll();
+        const result = await HiveUpgrade.getAll();
         req.session.upgrades = result.data || [];
         return res.json(result.toJSON());
     } catch (error) {
@@ -133,9 +133,31 @@ const getUpgrades = async (req, res) => {
     }
 }
 
+const getSortedUpgrades = async (req, res) => {
+    try {
+        const sortBy = req.body.sortBy || { createdAt: -1 };
+        const limit = req.body.limit || 10;
+        const result = await HiveUpgrade.getAll(sortBy, limit);
+        req.session.upgrades = result.data || [];
+        return result.toJSON();
+    } catch (error) {
+        return new Result(-1, null, `Error getting all threats: ${error.message}`).toJSON()
+    }
+}
+
+const getUpgradesCount = async (req, res) => {
+    try {
+        const result = await HiveUpgrade.count()
+        req.session.stats.upgrades = result.data || 0
+        return result.toJSON()
+    } catch (error) {
+        return new Result(-1, null, `Error fetching upgrade count: ${error.message}`).toJSON()
+    }
+}
+
 const makeOperational = async (req, res) => {
     try {
-        const upgrade = await hiveUpgrade.get(req.body._id);
+        const upgrade = await HiveUpgrade.get(req.body._id);
         const result = await upgrade.makeOperational();
         return res.json(result.toJSON());
     } catch (error) {
@@ -187,33 +209,27 @@ const getUpgradedHive = async (req, res) => {
     }
 }
 
-
 const sendEmail = async (req, res) => {
     try {
-      const { apiaryName, latitude, longitude } = req.body;
-  
-      const weatherData = weatherService.logWeatherData(
-        apiaryName,
-        latitude,
-        longitude
-      );
-  
       const formDataWithWeather = {
         ...req.body,
-        weather: weatherData,
-      }
+      };
       const emailSent = await sendUpgradeConfirmation(
         req.session.user.email,
         formDataWithWeather
-      )
+      );
       if (!emailSent) {
         req.session.message = "Please try again";
-        return new Result(0, null, "Error sending upgrade email")
+        return new Result(0, null, "Error sending upgrade email");
       }
-        return new Result(1, null, "Upgrade email sent successfully")  
+      return new Result(1, null, "Upgrade email sent successfully");
     } catch (error) {
       console.error("Upgrade email error:", error);
-      return new Result(-1, null, `Error sending upgrade email: ${error.message}`)
+      return new Result(
+        -1,
+        null,
+        `Error sending upgrade email: ${error.message}`
+      );
     }
   };
 
@@ -247,9 +263,11 @@ const addUpgrade = async (req, res) => {
 
 const removeUpgrade = async (req, res) => {
     try{
-        let result = await hiveUpgrade.get(req.body.hiveRef, req.body.productRef);
+        let result = null
+        if(req.query._id) result = await HiveUpgrade.get(req.query._id);
+        else result = await HiveUpgrade.get(req.body.hiveRef, req.body.productRef);
         if(!result.success.status) return res.json(result.toJSON());
-        const upgrade = new hiveUpgrade(result.data);
+        const upgrade = new HiveUpgrade(result.data);
          result = await upgrade.remove();
         if(!result.success.status) return res.json(result.toJSON());
         const product = controllers.product._jsonToObject(result.data.productRef);
@@ -267,6 +285,8 @@ module.exports = {
     upgrade,
     getUpgrade,
     getUpgrades,
+    getSortedUpgrades,
+    getUpgradesCount,
     makeOperational,
     sendEmail,
     getUpgradedHive,

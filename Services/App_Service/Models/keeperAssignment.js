@@ -27,8 +27,10 @@ class KeeperAssignment {
     return result;
   }
 
-  static async getAll() {
-    const result = await KeeperAssignment.crudInterface.getAll("keeperAssignmentModel");
+  static async getAll(sortBy = null, limit = null) {
+    let result = null;
+    if (sortBy || limit) result = await KeeperAssignment.crudInterface.getAllSorted("keeperAssignmentModel", sortBy, limit);
+    else result = await KeeperAssignment.crudInterface.getAll("keeperAssignmentModel");
     if (result.success.status) {
       result.data = result.data.map(assignment => new KeeperAssignment(assignment));
     }
@@ -37,6 +39,11 @@ class KeeperAssignment {
 
   static async remove(id) {
     return await KeeperAssignment.crudInterface.remove(id, "keeperAssignmentModel", "_id");
+  }
+
+  static async count(){
+    const result = await KeeperAssignment.crudInterface.getCount("keeperAssignmentModel");
+    return result;
   }
   async create() {
     const valid = await KeeperAssignment.dependency.validate(this.references.parent, this);

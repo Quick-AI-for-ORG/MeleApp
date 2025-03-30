@@ -36,8 +36,10 @@ class HiveUpgrade {
     return result;
   }
 
-  static async getAll() {
-    const result = await HiveUpgrade.crudInterface.getAll("hiveUpgradeModel");
+  static async getAll(sortBy = null, limit = null) {
+    let result = null;
+    if (sortBy || limit) result = await HiveUpgrade.crudInterface.getAllSorted("hiveUpgradeModel", sortBy, limit);
+    else result = await HiveUpgrade.crudInterface.getAll("hiveUpgradeModel");
     if (result.success.status) {
       result.data = result.data.map(upgrade => new HiveUpgrade(upgrade));
     }
@@ -45,6 +47,11 @@ class HiveUpgrade {
   }
   static async remove(id) {
     return await HiveUpgrade.crudInterface.remove(id, "hiveUpgradeModel", "_id");
+  }
+
+  static async count(){
+    const result = await HiveUpgrade.crudInterface.getCount("hiveUpgradeModel");
+    return result;
   }
   async create() {
     const valid = await HiveUpgrade.dependency.validate(this.references.parent, this);

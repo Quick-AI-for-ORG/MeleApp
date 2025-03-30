@@ -26,7 +26,8 @@ const addHive = async (req, res) => {
 
 const removeHive = async (req, res) => {
     try {
-        const result = await Hive.remove(req.body._id);
+        const id = req.query._id || req.body._id;
+        const result = await Hive.remove(id);
         return res.json(result.toJSON());
     } catch (error) {
         return res.json(new Result(-1, null, `Error deleting hive: ${error.message}`).toJSON());
@@ -67,8 +68,27 @@ const getHives = async (req, res) => {
     }
 }
 
+const getSortedHives = async (req, res) => {
+    try {
+        const sortBy = req.body.sortBy || {createdAt: -1};
+        const limit = req.body.limit || 10;
+        const result = await Hive.getAll(sortBy, limit);
+        req.session.hives = result.data || [];
+        return result.toJSON();
+    } catch (error) {
+        return new Result(-1, null, `Error fetching sorted hives: ${error.message}`).toJSON();
+    }
+}
 
-
+const getHivesCount = async (req, res) => {
+    try {
+        const result = await Hive.count();
+        req.session.stats.hives = result.data || 0
+        return result.toJSON();
+    } catch (error) {
+        return new Result(-1, null, `Error fetching hive count: ${error.message}`).toJSON();
+    }
+}
 
 
 module.exports = {
@@ -78,4 +98,6 @@ module.exports = {
     updateHive,
     getHive,
     getHives,
+    getSortedHives,
+    getHivesCount
 }

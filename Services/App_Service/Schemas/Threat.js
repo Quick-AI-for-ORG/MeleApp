@@ -4,6 +4,13 @@ const threatsSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    severity: {
+        type: Number,
+        default: 0,
+    },
+    description:{
+        type: String,
+    },
     hiveRef: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Hives',

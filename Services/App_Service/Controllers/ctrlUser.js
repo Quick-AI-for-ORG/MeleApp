@@ -27,7 +27,8 @@ const addUser = async (req, res) => {
 
 const removeUser = async (req, res) => {
     try {
-        const result = await User.remove(req.query.email);
+        const email = req.body.email || req.query.email
+        const result = await User.remove(email);
         return res.json(result.toJSON());
     }
     catch (error) {
@@ -53,6 +54,28 @@ const getUsers = async (req, res) => {
     }
     catch (error) {
         return res.json(new Result(-1, null, `Error fetching users: ${error.message}`).toJSON())
+    }
+}
+
+const getSortedUsers = async (req, res) => {
+    try {
+        const sortBy = req.body.sortBy || { createdAt: -1 };
+        const limit = req.body.limit || 10;
+        const result = await User.getAll(sortBy, limit);
+        req.session.users = result.data || [];
+        return result.toJSON();
+    } catch (error) {
+        return new Result(-1, null, `Error getting all threats: ${error.message}`).toJSON()
+    }
+}
+
+const getUsersCount = async (req, res) => {
+    try {
+        const result = await User.count()
+        req.session.stats.users = result.data || 0
+        return result.toJSON()
+    } catch (error) {
+        return new Result(-1, null, `Error fetching users count: ${error.message}`).toJSON()
     }
 }
 
@@ -194,6 +217,8 @@ module.exports = {
     updateUser,
     getUser,
     getUsers,
+    getSortedUsers,
+    getUsersCount,
     register,
     login,
     logout,

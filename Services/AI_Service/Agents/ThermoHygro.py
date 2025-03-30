@@ -1,27 +1,27 @@
 import os
 import sys
-from mesa import Model, Agent
+from dotenv import load_dotenv
 sys.path.append(os.path.join(os.path.dirname('../Utils')))
 from Utils.dbHandler import DBHandler
+load_dotenv(dotenv_path="../../../.env")
+APIARY_ID = os.getenv('APIARY_ID')
+HIVE_ID = os.getenv('HIVE_ID')
 
-class HiveEnvironment(Model):
+class HiveEnvironment():
     def __init__(self):
         self.db = DBHandler()
         self.agent = ThermoHygro(1, self)
-        self.schedule.add(self.agent)
      
-    def inject(self, apiary_id):  
-        self.apiary = self.db.get(apiary_id, "apiaries", "_id").data 
-        self.hives = self.db.getAllFiltered(apiary_id, "hives", 'apiaryRef').data
+    def inject(self):  
+        self.apiary = self.db.get(APIARY_ID, "apiaries", "_id").data 
+        self.hive = self.db.get(HIVE_ID, "hives", '_id').data
         self.sensors = {
             'temperature': self.db.get('Temperature', 'sensors', 'sensorType').data,
             'humidity': self.db.get('Humidity', 'sensors', 'sensorType').data
         }
-        
-        for hive in self.hives:
-            hive["cooler"] = False
-            hive["fan"] = False
-            hive["vent"] = False
+        self.hive["cooler"] = False
+        self.hive["fan"] = False
+        self.hive["vent"] = False
 
         
     def getSensorReadings(self, sensor, hive):
@@ -33,18 +33,23 @@ class HiveEnvironment(Model):
             "Temperature": self.apiary["temperature"],
             "Humidity": self.apiary["humidity"]
         }
-
         
-    def step(self):
-        self.schedule.step()
+    def toggle(self, hardware, command):
+        self.hive[hardware] = command
         
-        
-class ThermoHygro(Agent):
-    def __init__(self, unique_id, model):
-        super().__init__(unique_id, model)
+    def getAverage(self, readings):
+        total = sum(reading.value for reading in readings)
+        return total / len(readings) if readings else 0
+       
+class ThermoHygro():
+    def __init__(self):
         self.optimal = {
             "temperature": (32.00, 36.00),
             "humidity": (50.00, 60.00)
+        }
+        
+        self.rules = {
+          
         }
         
     def whereInRange(self, sensor, value):
@@ -52,7 +57,5 @@ class ThermoHygro(Agent):
         elif value > self.optimal[sensor][1]: return 1   
         return 0   
     
-       
-    def step(self):
-        pass
-  
+    
+    

@@ -1,5 +1,5 @@
 const Result = require("../../Shared/Result");
-const keeperAssignment = require("../Models/KeeperAssignment");
+const KeeperAssignment = require("../Models/KeeperAssignment");
 const controllers = {
     user: require('./ctrlUser'),
     apiary: require('./ctrlApiary'),
@@ -36,7 +36,7 @@ const assignKeeper = async (req, res) => {
             apiaryRef: apiary._id,
             beekeeperRef: keeper._id,
         }
-        const assignment = new keeperAssignment(assignmentJSON);
+        const assignment = new KeeperAssignment(assignmentJSON);
         result = await assignment.create();
         return res.json(result.toJSON());
     } catch (error) {
@@ -47,7 +47,8 @@ const assignKeeper = async (req, res) => {
 
 const removeKeeper = async (req, res) => {
     try {
-        const result = await keeperAssignment.remove(req.body._id);
+        const id = req.query._id || req.body._id;
+        const result = await KeeperAssignment.remove(id);
         return res.json(result.toJSON());
     } catch (error) {
         return res.json(new Result(-1, null, `Error deleting keeper: ${error.message}`).toJSON());
@@ -56,21 +57,45 @@ const removeKeeper = async (req, res) => {
 
 const getKeepers = async (req, res) => {
     try {
-        const result = await keeperAssignment.getAll();
+        const result = await KeeperAssignment.getAll();
         if(result.success.success) {
             const keepers = []
             for (let i = 0; i < result.data.length; i++) {
                 let keeper = await controllers.user.getUser(result.data[i].beekeeperRef);
-                if (!keeper.success.status) return keeper.toJSON();
-                keeper = controllers.user._jsonToObject(userResult.data);
-                keepers.append(keeper);
+                if (keeper.success.status) {
+                    keeper = controllers.user._jsonToObject(userResult.data);
+                    keepers.append(keeper);
+                }
             }
-            req.session.keepers = keepers;
+            req.session.keepers = keepers || [];
             return new Result(1, keepers, 'Fetched keepers successfully').toJSON();
         }
         else return result.toJSON();
     } catch (error) {
         return new Result(-1, null, `Error fetching keepers: ${error.message}`).toJSON()
+    }
+}
+
+const getSortedKeepers = async (req, res) => {
+    try {
+        const sortBy = req.body.sortBy || { createdAt: -1 };
+        const limit = req.body.limit || 10;
+        const result = await KeeperAssignment.getAll(sortBy, limit);
+        if (result.success.status) {
+            const keepers = []
+            for (let i = 0; i < result.data.length; i++) {
+                let keeper = await controllers.user.getUser(result.data[i].beekeeperRef);
+                if (keeper.success.status) {
+                keeper = controllers.user._jsonToObject(userResult.data);
+                keepers.append(keeper);
+                }
+            }
+            req.session.keepers = keepers || [];
+            return new Result(1, keepers, 'Fetched keepers successfully').toJSON();
+        }
+        else return result.toJSON();
+    } catch (error) {
+        return new Result(-1, null, `Error fetching sorted keepers: ${error.message}`).toJSON()
     }
 }
 
@@ -117,6 +142,16 @@ const getKeeperApiaries = async (req, res) => {
     }
 }
 
+const getKeepersCount = async (req, res) => {
+    try {
+        const result = await KeeperAssignment.count();
+        req.session.stats.keepers = result.data || 0
+        return result.toJSON();
+    } catch (error) {
+        return new Result(-1, null, `Error fetching keeper count: ${error.message}`).toJSON();
+    }
+}
+
 
 
 module.exports = {
@@ -125,4 +160,6 @@ module.exports = {
     getKeepers,
     getApiaryKeepers,
     getKeeperApiaries,
+    getSortedKeepers,
+    getKeepersCount,
 }
