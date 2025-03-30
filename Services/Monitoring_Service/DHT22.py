@@ -8,7 +8,7 @@ import dht
 SSID = 'Ashraf'
 PASSWORD = 'ashdan2024'
 HIVE_REF = '67b5e801ac6cbca604b8ac42'
-SERVER_URL = "http://192.168.1.44:3000/admin/addSensorReading"  
+SERVER_URL = "http://192.168.1.44:3000/hardware/addSensorReading"  
 
 DHT22 = dht.DHT22(Pin(27))
 
@@ -84,6 +84,7 @@ def main():
                 print("Humidity data sent successfully")
             else:
                 print("Failed to send humidity data")
+                
             
         except OSError as e:
             print("Sensor reading failed:", e)

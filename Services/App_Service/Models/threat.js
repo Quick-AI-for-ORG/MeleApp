@@ -7,7 +7,7 @@ class Threat {
   static crudInterface = crudInterface;
   static jsonToObject = jsonToObject;
   static dependency = dependency;
-  static attributes = ['threatType', 'hiveRef', 'action'];
+  static attributes = ['threatType', 'hiveRef', 'action', 'severity', 'description'];
 
   constructor(threatJSON) {
     Threat.jsonToObject(this, threatJSON);

@@ -12,6 +12,7 @@ const app = express();
 const rootRouter = require("./Routes/root");
 const keeperRouter = require("./Routes/keeper");
 const adminRouter = require("./Routes/admin");
+const hardwareRouter = require("./Routes/hardware");
 const ctrlPages = require("./Controllers/ctrlPages");
 
 app.use(express.json());
@@ -33,6 +34,7 @@ app.use((req, res, next) => {
 app.use("/", rootRouter);
 app.use("/keeper", keeperRouter);
 app.use("/admin", adminRouter);
+app.use("/hardware", hardwareRouter);
 app.get("*", ctrlPages._PUBLIC.notFound);
 
 app.set("layout", "Layouts/layout");
