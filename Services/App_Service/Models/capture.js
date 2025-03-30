@@ -24,8 +24,10 @@ class Capture {
         }
         return result;
     }
-    static async getAll() {
-        const result = await Capture.crudInterface.getAll("captureModel");
+    static async getAll(sortBy = null, limit = null) {
+        let result = null;
+        if (sortBy || limit) result = await Capture.crudInterface.getAllSorted("captureModel", sortBy, limit);
+        else result = await Capture.crudInterface.getAll("captureModel");
         if (result.success.status) {
             result.data = result.data.map(capture => new Capture(capture));
         }
@@ -34,6 +36,12 @@ class Capture {
     static async remove(id) {
         return await Capture.crudInterface.remove(id, "captureModel", "_id");
     }
+
+    static async count() {
+        const result = await Capture.crudInterface.getCount("captureModel");
+        return result;
+    }
+
     async create() {
         const valid = await Capture.dependency.validate(this.references.parent, this);
         if (!valid.success.status) return valid;
