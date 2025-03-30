@@ -25,8 +25,10 @@ class Product {
     return result;
   }
 
-  static async getAll() {
-    const result = await Product.crudInterface.getAll("productModel");
+  static async getAll(sortBy = null, limit = null) {
+    let result = null;
+    if (sortBy || limit) result = await Product.crudInterface.getAllSorted("productModel", sortBy, limit);
+    else result = await Product.crudInterface.getAll("productModel");
     if (result.success.status) result.data = result.data.map(product => new Product(product));
     return result;
   }
@@ -42,6 +44,11 @@ class Product {
     if (result.success.status) {
       result.data = Product.jsonToObject(newProduct, result.data);
     }
+    return result;
+  }
+
+  static async count() {
+    const result = await Product.crudInterface.getCount("productModel");
     return result;
   }
   async create() {

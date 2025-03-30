@@ -32,8 +32,10 @@ class Hive {
     return result;
   }
 
-  static async getAll() {
-    const result = await Hive.crudInterface.getAll("hiveModel");
+  static async getAll(sortBy = null, limit = null) {
+    let result = null;
+    if (sortBy || limit) result = await Hive.crudInterface.getAllSorted("hiveModel", sortBy, limit);
+    else result = await Hive.crudInterface.getAll("hiveModel");
     if (result.success.status) {
       result.data = result.data.map(hive => new Hive(hive));
     }
@@ -51,6 +53,11 @@ class Hive {
     if (result.success.status) {
       result.data = Hive.jsonToObject(newHive, result.data);
     }
+    return result;
+  }
+
+  static async count() {
+    const result = await Hive.crudInterface.getCount("hiveModel");
     return result;
   }
   async create() {

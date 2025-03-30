@@ -226,6 +226,37 @@ const CRUDInterface = {
       return new Result(-1, null, `Error getting all data: ${error}`);
     }
   },
+  getAllSorted: async function (model, sortBy={createdAt:-1}, limit=0) {
+    try {
+      const records = await models[model].find().sort(sortBy).limit(limit);
+      const resultData = records.map((record) => record._doc) || [];
+      await Log.create({
+        log: `Found ${records.length} records in ${model} sorted by ${JSON.stringify(sortBy)}.`,
+        degree: 1,
+      });
+      return new Result(
+        1,
+        resultData,
+        `Found ${records.length} records in ${model} sorted by ${JSON.stringify(sortBy)}.`
+      );
+    } catch (error) {
+      await Log.create({ log: `Error getting all data: ${error}`, degree: -1 });
+      return new Result(-1, null, `Error getting all data: ${error}`);
+    }
+  },
+  getCount: async function(model){
+    try {
+      const count = await models[model].countDocuments();
+      await Log.create({
+        log: `Counted ${count} records in ${model}.`,
+        degree: 1,
+      });
+      return new Result(1, count, `Counted ${count} records in ${model}.`);
+    } catch (error) {
+      await Log.create({ log: `Error counting data: ${error}`, degree: -1 });
+      return new Result(-1, null, `Error counting data: ${error}`);
+    }
+  }
 };
 
 module.exports = CRUDInterface;

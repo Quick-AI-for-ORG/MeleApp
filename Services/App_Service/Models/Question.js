@@ -25,8 +25,10 @@ class Question {
     return result;
   }
 
-  static async getAll() {
-    const result = await Question.crudInterface.getAll("questionModel");
+  static async getAll(sortBy = null, limit = null) {
+    let result = null;
+    if (sortBy || limit) result = await Question.crudInterface.getAllSorted("questionModel", sortBy, limit);
+    else result = await Question.crudInterface.getAll("questionModel");
     if (result.success.status) {
       result.data = result.data.map((question) => new Question(question));
     }
@@ -37,19 +39,17 @@ class Question {
     return await Question.crudInterface.remove(id, "questionModel", "_id");
   }
 
+  static async count() {
+    const result = await Question.crudInterface.getCount("questionModel");
+    return result;
+  }
+
   async create() {
     if (this.userRef) {
-      const valid = await Question.dependency.validate(
-        this.references.parent,
-        this
-      );
+      const valid = await Question.dependency.validate(this.references.parent, this);
       if (!valid.success.status) return valid;
     }
-    const result = await Question.crudInterface.create(
-      this,
-      "questionModel",
-      "_id"
-    );
+    const result = await Question.crudInterface.create(this, "questionModel", "_id");
     if (result.success.status) {
       result.data = Question.jsonToObject(this, result.data);
     }
@@ -57,12 +57,7 @@ class Question {
   }
 
   async modify(newQuestion) {
-    const result = await Question.crudInterface.modify(
-      this._id,
-      newQuestion,
-      "questionModel",
-      "_id"
-    );
+    const result = await Question.crudInterface.modify(this._id, newQuestion, "questionModel", "_id");
     if (result.success.status) {
       result.data = Question.jsonToObject(this, result.data);
     }
@@ -70,11 +65,7 @@ class Question {
   }
 
   async remove() {
-    return await Question.crudInterface.remove(
-      this._id,
-      "questionModel",
-      "_id"
-    );
+    return await Question.crudInterface.remove( this._id, "questionModel", "_id");
   }
 
   async reply(answer) {

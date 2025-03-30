@@ -1,15 +1,21 @@
-const ctrlApiary = require("../Controllers/ctrlApiary");
-const ctrlSensor = require("../Controllers/ctrlSensor");
-const ctrlProduct = require("../Controllers/ctrlProduct");
-const ctrlUser = require("../Controllers/ctrlUser");
-const ctrlKeeper = require("../Controllers/ctrlKeeper");
+const controllers = {
+  user: require("../Controllers/ctrlUser"),
+  apiary: require("../Controllers/ctrlApiary"),
+  product: require("../Controllers/ctrlProduct"),
+  hiveUpgrade: require("../Controllers/ctrlUpgrade"),
+  keeper: require("../Controllers/ctrlKeeper"),
+  hive: require("../Controllers/ctrlHive"),
+  question: require("../Controllers/ctrlQuestion"),
+  sensor: require("../Controllers/ctrlSensor"),
+  threat: require("../Controllers/ctrlThreat"),
+}
 
 const home = async (req, res) => {
   res.render("mele", { user: req.session.user || "" });
 };
 
 const about = async (req, res) => {
-  await ctrlSensor.getSensors(req, res);
+  await controllers.sensor.getSensors(req, res);
   res.render("aboutUs", {
     user: req.session.user || "",
     sensors: req.session.sensors || [],
@@ -33,7 +39,7 @@ const noLogin = (req, res) => {
 };
 const products = async (req, res) => {
   req.session.productDetails = undefined;
-  await ctrlProduct.getProducts(req, res);
+  await controllers.product.getProducts(req, res);
   res.render("products", {
     user: req.session.user || "",
     products: req.session.products || [],
@@ -41,7 +47,7 @@ const products = async (req, res) => {
 };
 
 const product = async (req, res) => {
-  if (req.body.name) await ctrlProduct.getProduct(req, res);
+  if (req.body.name) await controllers.product.getProduct(req, res);
   if (!req.session.productDetails) res.redirect("/products");
   res.render("product", {
     user: req.session.user || "",
@@ -51,7 +57,7 @@ const product = async (req, res) => {
 
 const dashboard = async (req, res) => {
   let keepers, hives = await _inject(req, res);
-  await ctrlProduct.getProducts(req, res);
+  await controllers.product.getProducts(req, res);
   let message = req.session.message === undefined ? null : req.session.message;
   req.session.message = undefined;
   res.render("beekeeper", {
@@ -83,8 +89,8 @@ const upgrade = async (req, res) => {
   let message = req.session.message === undefined ? null : req.session.message;
 
   req.session.message = undefined;
-  await ctrlProduct.getProducts(req, res);
-  await ctrlUser.getApiaries(req, res);
+  await controllers.product.getProducts(req, res);
+  await controllers.user.getApiaries(req, res);
   res.render("upgrade", {
     user: req.session.user || "",
     layout: false,
@@ -100,12 +106,12 @@ const postUpgrade = (req, res) => {
 };
 
 const _inject = async (req, res) => {
-  if(req.session.user.role == "Owner") await ctrlUser.getApiaries(req, res);
-  else await ctrlKeeper.getKeeperApiaries(req, res); 
+  if(req.session.user.role == "Owner") await controllers.user.getApiaries(req, res);
+  else await controllers.keeper.getKeeperApiaries(req, res); 
   let hives = [],  keepers = []
   for (let [i, apiary] of req.session.user.apiaries.entries()) {
     req.body._id = apiary._id;
-    let result = await ctrlApiary.getApiaryHives(req, res);
+    let result = await controllers.apiary.getApiaryHives(req, res);
     if (result.success.status) {
       apiary.hives = result.data || [];
       req.session.user.apiaries[i] = apiary;
@@ -113,7 +119,7 @@ const _inject = async (req, res) => {
       hives.push(apiary.hives);
     }
     else req.session.message = result.message;
-    result = await ctrlKeeper.getApiaryKeepers(req, res);
+    result = await controllers.keeper.getApiaryKeepers(req, res);
     if (result.success.status)  {
       req.session.user.apiaries[i].keepers = result.data || [];
       keepers.push(result.data);
@@ -123,9 +129,57 @@ const _inject = async (req, res) => {
   return keepers, hives
 }
 
+const adminDashboard = async (req, res) => {
+  let message = req.session.message === undefined ? null : req.session.message;
+  req.session.message = undefined;
+  await _injectCount(req, res);
+  await _injectRecent(req, res);
+
+  res.render("admin", {
+    layout: false,
+    message: message,
+    user: req.session.user || "",
+    stats: req.session.stats || {},
+    users: req.session.users || [],
+    apiaries: req.session.apiaries || [],
+    keepers: req.session.keepers || [],
+    hives: req.session.hives || [],
+    sensors: req.session.sensors || [],
+    products: req.session.products || [],
+    questions: req.session.questions || [],
+    threats: req.session.threats || [],
+  });
+}
+
+
+const _injectCount = async (req, res) => {
+  await controllers.user.getUsersCount(req, res);
+  await controllers.apiary.getApiariesCount(req, res);
+  await controllers.keeper.getKeepersCount(req, res);
+  await controllers.hive.getHivesCount(req, res);
+  await controllers.sensor.getSensorsCount(req, res);
+  await controllers.product.getProductsCount(req, res);
+  await controllers.question.getQuestionsCount(req, res);
+  await controllers.threat.getThreatsCount(req, res);
+  await controllers.hiveUpgrade.getUpgradesCount(req, res);
+}
+
+const _injectRecent = async (req, res) => {
+  req.body.sortBy = { createdAt: -1 };
+  req.body.limit = 10;
+  await controllers.user.getSortedUsers(req, res);
+  await controllers.apiary.getSortedApiaries(req, res);
+  await controllers.hive.getSortedHives(req, res);
+  await controllers.sensor.getSortedSensors(req, res);
+  await controllers.product.getSortedProducts(req, res);
+  await controllers.question.getSortedQuestions(req, res);
+  await controllers.threat.getSortedThreats(req, res);
+  await controllers.hiveUpgrade.getSortedUpgrades(req, res);
+  await controllers.keeper.getSortedKeepers(req, res);
+}
 
 module.exports = {
   _PUBLIC: { home, about, products, product, noLogin, notFound },
   _KEEPER: { login, signup, profile, dashboard, upgrade, postUpgrade },
-  _ADMIN: {},
+  _ADMIN: { adminDashboard },
 };

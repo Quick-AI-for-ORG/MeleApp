@@ -24,7 +24,8 @@ const addApiary = async (req, res) => {
 
 const removeApiary = async (req, res) => {
     try {
-        const result = await Apiary.remove(req.body._id);
+        const id = req.query._id || req.body._id;
+        const result = await Apiary.remove(id);
         return res.json(result.toJSON());
     } catch (error) {
         return res.json(new Result(-1, null, `Error deleting apiary: ${error.message}`).toJSON());
@@ -77,6 +78,18 @@ const getApiaryHives = async (req, res) => {
     }
 }
 
+const getSortedApiaries = async (req, res) => {
+    try {
+        const sortBy = req.body.sortBy || {createdAt: -1};
+        const limit = req.body.limit || 10;
+        const result = await Apiary.getAll(sortBy, limit);
+        req.session.apiaries = result.data || [];
+        return result.toJSON();
+    } catch (error) {
+        return new Result(-1, null, `Error fetching sorted apiaries: ${error.message}`).toJSON();
+    }
+}
+
 const updateForecast = async (req, res) => {
     try {
         let result = await Apiary.get(req.body._id);
@@ -91,6 +104,16 @@ const updateForecast = async (req, res) => {
     }
 }
 
+const getApiariesCount = async (req, res) => {
+    try {
+        const result = await Apiary.count();
+        req.session.stats.apiaries = result.data || 0
+        return result.toJSON()
+    } catch (error) {
+        return new Result(-1, null, `Error fetching apiary count: ${error.message}`).toJSON()
+    }
+}
+
 module.exports = {
     _jsonToObject: jsonToObject,
     addApiary,
@@ -99,5 +122,7 @@ module.exports = {
     getApiary,
     getApiaries,
     getApiaryHives,
-    updateForecast
+    getSortedApiaries,
+    updateForecast,
+    getApiariesCount
 }

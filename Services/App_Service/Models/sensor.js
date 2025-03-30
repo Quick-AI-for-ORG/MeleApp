@@ -24,8 +24,10 @@ class Sensor {
     return result;
   }
 
-  static async getAll() {
-    const result = await Sensor.crudInterface.getAll("sensorModel");
+  static async getAll(sortBy = null, limit = null) {
+    let result = null;
+    if (sortBy || limit) result = await Sensor.crudInterface.getAllSorted("sensorModel", sortBy, limit);
+    else result = await Sensor.crudInterface.getAll("sensorModel");
     if (result.success.status) {
       result.data = result.data.map(sensor => new Sensor(sensor));
     }
@@ -47,6 +49,10 @@ class Sensor {
     return result;
   }
 
+  static async count() {
+    const result = await Sensor.crudInterface.getCount("sensorModel");
+    return result;
+  }
   async create() {
     const result = await Sensor.crudInterface.create(this, "sensorModel", "sensorType");
     if (result.success.status) {
@@ -67,6 +73,12 @@ class Sensor {
     const cascade = await Sensor.dependency.cascade(this.references.sub, this, 'sensorRef');
     if (!cascade.success.status) return cascade;
     return await Sensor.crudInterface.remove(this.sensorType, "sensorModel", "sensorType");
+  }
+
+  async getReadings() {
+    const result = await Sensor.crudInterface.getAllSorted("readingModel", "sensorRef", this.sensorType);
+    if (result.success.status) this.readings = result.data
+    return result;
   }
 }
 

@@ -35,8 +35,10 @@ class User {
     if (result.success.status) result.data =  new User(result.data, result.data.role);
     return result
   }
-  static async getAll() {
-    const result = await User.crudInterface.getAll("userModel");
+  static async getAll(sortBy=null, limit=null) {
+    let result = null
+    if(sortBy || limit) result = await User.crudInterface.getAllSorted("userModel", sortBy, limit);
+    else result = await User.crudInterface.getAll("userModel");
     if (result.success.status) result.data =  result.data.map(user => new User(user, user.role));
     return result
   }
@@ -58,6 +60,10 @@ class User {
     return result
   }
 
+  static async count() {
+    const result = await User.crudInterface.getCount("userModel");
+    return result;
+  }
   async create() {
     this.password = await User.hashPassword(this.password);
     const result = await User.crudInterface.create(this, "userModel", "email");

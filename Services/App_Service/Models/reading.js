@@ -28,8 +28,10 @@ class Reading {
     return result;
   }
 
-  static async getAll() {
-    const result = await Reading.crudInterface.getAll("readingModel");
+  static async getAll(sortBy = null, limit = null) {
+    let result = null;
+    if (sortBy || limit) result = await Reading.crudInterface.getAllSorted("readingModel", sortBy, limit);
+    else result = await Reading.crudInterface.getAll("readingModel");
     if (result.success.status) {
       result.data = result.data.map(reading => new Reading(reading));
     }
@@ -38,6 +40,11 @@ class Reading {
 
   static async remove(id) {
     return await Reading.crudInterface.remove(id, "readingModel", "_id");
+  }
+
+  static async count() {
+    const result = await Reading.crudInterface.getCount("readingModel");
+    return result;
   }
 
   async create() {

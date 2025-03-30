@@ -26,7 +26,8 @@ const addSensor = async (req, res) => {
 
 const removeSensor = async (req, res) => {
     try {
-        const result = await Sensor.remove(req.body.sensorType)
+        const sensorType = req.body.sensorType || req.query.sensorType;
+        const result = await Sensor.remove(sensorType)
         return res.json(result.toJSON());
     } catch (error) {
         return res.json(new Result(-1, null, `Error deleting sensor: ${error.message}`).toJSON());
@@ -68,7 +69,43 @@ const getSensors = async (req, res) => {
     }
 }
 
-const getSensorReading = async (req, res) => {}
+const getSortedSensors = async (req, res) => {
+    try {
+        const sortBy = req.body.sortBy || {createdAt: -1};
+        const limit = req.body.limit || 10;
+        const result = await Sensor.getAll(sortBy, limit);
+        req.session.sensors = result.data || [];
+        return result.toJSON();
+    } catch (error) {
+        return new Result(-1, null, `Error fetching sensors: ${error.message}`).toJSON();
+    }
+}
+
+const getSensorsCount = async (req, res) => {
+    try {
+        const result = await Sensor.count();
+        req.session.stats.sensors = result.data || 0
+        return result.toJSON();
+    } catch (error) {
+        return new Result(-1, null, `Error fetching sensor count: ${error.message}`).toJSON();
+    }
+}
+
+const getSensorReading = async (req, res) => {
+    try {
+        let result = await Sensor.get(req.body.sensorType);
+        if (!result.success.status) return res.json(result.toJSON());
+        const sensor = jsonToObject(result.data);
+        result = await sensor.getReadings();
+        if(result.success.status) {
+            sensor.readings = sensor.readings.map(reading => new Reading(reading))
+            result.data = sensor
+        }
+        return res.json(result.toJSON())
+    } catch (error) {
+        return res.json(new Result(-1, null, `Error fetching sensor readings: ${error.message}`).toJSON());
+    }
+}
 
 const addSensorReading = async (req, res) => {
     try {
@@ -88,6 +125,38 @@ const addSensorReading = async (req, res) => {
     }
 }
 
+const getReadings = async (req, res) => {
+    try {
+        const result = await Reading.getAll();
+        req.session.readings = result.data || [];
+        return res.json(result.toJSON())
+    } catch (error) {
+        return res.json(new Result(-1, null, `Error fetching readings: ${error.message}`).toJSON())
+    }
+}
+
+const getSortedReadings = async (req, res) => {
+    try {
+        const sortBy = req.body.sortBy || { createdAt: -1 };
+        const limit = req.body.limit || 10;
+        const result = await Reading.getAll(sortBy, limit);
+        req.session.readings = result.data || [];
+        return result.toJSON()
+    } catch (error) {
+        return new Result(-1, null, `Error fetching sorted readings: ${error.message}`).toJSON()
+    }
+}
+
+const getReadingsCount = async (req, res) => {
+    try {
+        const result = await Reading.count();
+        req.session.stats.readings = result.data || 0
+        return result.toJSON()
+    } catch (error) {
+        return new Result(-1, null, `Error fetching reading count: ${error.message}`).toJSON()
+    }
+}
+
 module.exports = {
     _jsonToObject: jsonToObject,
     addSensor,
@@ -95,6 +164,11 @@ module.exports = {
     updateSensor,
     getSensor,
     getSensors,
+    getSensorsCount,
+    getSortedSensors,
     getSensorReading,
-    addSensorReading
+    addSensorReading,
+    getReadings,
+    getSortedReadings,
+    getReadingsCount
 }
