@@ -266,6 +266,8 @@ function getHeadersForType(type) {
     hive: ["Apiary", "Frames", "Dimensions", "Added Date"],
     apiary: ["Name", "Location", "Hive Count", "Added Date"],
     hiveupgrade: ["ID", "Operational Status", "Created Date"],
+    question: ["Email", "Message", "Date"],
+    threat: ["Type", "Action", "Severity", "Date"],
   };
 
   return headers[type] || [];
@@ -381,6 +383,23 @@ function getCellsForType(item, type) {
         `<span class="operational-status ${
           item.operational ? "active" : "inactive"
         }">${item.operational ? "Operational" : "Non-operational"}</span>`,
+        new Date(item.createdAt).toLocaleDateString(),
+      ];
+
+    case "question":
+      return [
+        item.email,
+        item.message,
+        new Date(item.createdAt).toLocaleDateString(),
+      ];
+
+    case "threat":
+      return [
+        item.threatType,
+        item.action,
+        `<span class="severity-level ${
+          item.severity?.toLowerCase() || "unknown"
+        }">${item.severity || "Unknown"}</span>`,
         new Date(item.createdAt).toLocaleDateString(),
       ];
 

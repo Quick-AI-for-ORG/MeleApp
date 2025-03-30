@@ -36,7 +36,105 @@
         <!-- Main Content -->
         <main class="main-content">
             <!-- Stats Grid -->
-         
+            <div class="stats-grid">
+                <div class="stat-card users">
+                    <i class="fas fa-users"></i>
+                    <div class="stat-info">
+                        <h4>Total Users</h4>
+                        <p class="stat-value">
+                            <%= stats.users || 0 %>
+                        </p>
+                    </div>
+                </div>
+                <div class="stat-card readings">
+                    <i class="fas fa-chart-line"></i>
+                    <div class="stat-info">
+                        <h4>Total Readings</h4>
+                        <p class="stat-value">
+                            <%= stats.readings || 0 %>
+                        </p>
+                    </div>
+                </div>
+                <div class="stat-card hives">
+                    <i class="fas fa-archive"></i>
+                    <div class="stat-info">
+                        <h4>Total Hives</h4>
+                        <p class="stat-value">
+                            <%= stats.hives || 0 %>
+                        </p>
+                    </div>
+                </div>
+                <div class="stat-card apiaries">
+                    <i class="fas fa-warehouse"></i>
+                    <div class="stat-info">
+                        <h4>Total Apiaries</h4>
+                        <p class="stat-value">
+                            <%= stats.apiaries || 0 %>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Questions and Threats Row -->
+            <div class="activity-section">
+                <!-- Recent Questions -->
+                <div class="activity-card questions-list">
+                    <div class="card-header">
+                        <h3><i class="fas fa-question-circle"></i> Recent Questions</h3>
+
+                    </div>
+                    <div class="card-content">
+                        <% questions.forEach(question=> { %>
+                            <div class="activity-item" data-question-id="<%= question._id %>">
+                                <div class="question-icon">
+                                    <i class="fas fa-question-circle"></i>
+                                </div>
+                                <div class="activity-info">
+                                    <h4>
+                                        <%= question.email %>
+                                    </h4>
+                                    <p>
+                                        <%= question.message %>
+                                    </p>
+                                    <span class="timestamp">
+                                        <%= new Date(question.createdAt).toLocaleDateString() %>
+                                    </span>
+                                </div>
+
+                            </div>
+                            <% }); %>
+                    </div>
+                </div>
+
+                <!-- Recent Threats -->
+                <div class="activity-card threats-list">
+                    <div class="card-header">
+                        <h3><i class="fas fa-exclamation-triangle"></i> Recent Threats</h3>
+
+                    </div>
+                    <div class="card-content">
+                        <% threats.forEach(threat=> { %>
+                            <div class="activity-item" data-threat-id="<%= threat._id %>">
+                                <div class="threat-icon">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                                <div class="activity-info">
+                                    <h4>
+                                        <%= threat.threatType %>
+                                    </h4>
+                                    <p class="threat-action">
+                                        <%= threat.action %>
+                                    </p>
+
+                                    <span class="timestamp">Reported <%= new Date(threat.createdAt).toLocaleDateString()
+                                            %></span>
+                                </div>
+
+                            </div>
+                            <% }); %>
+                    </div>
+                </div>
+            </div>
 
             <!-- Charts Section -->
             <%- include('./Components/charts', { type: 'admin' }) %>
@@ -283,8 +381,8 @@
         </main>
     </div>
 
-                        <script src="/JS/charts.js"></script>
-                        <script src="/JS/admin.js"></script>
+    <script src="/JS/charts.js"></script>
+    <script src="/JS/admin.js"></script>
 </body>
 
 </html>

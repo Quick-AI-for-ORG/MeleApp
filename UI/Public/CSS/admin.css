@@ -114,7 +114,7 @@ body {
   padding: 1rem 2rem;
   border-radius: var(--border-radius);
   margin-bottom: 2rem;
-  color: var(--bg-light);
+  color: var (--bg-light);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -196,43 +196,46 @@ body {
 /* Stats grid */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 1.5rem;
-  margin: 0 auto 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
 }
 
 .stat-card {
-  padding: 1.5rem;
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
 }
 
 .stat-card:hover {
   transform: translateY(-5px);
 }
 
-.stat-header {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
+.stat-card i {
+  font-size: 2.5rem;
+  margin-right: 15px;
+  color: #007bff;
 }
 
-.stat-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: var(--border-radius-lg);
+.stat-info {
+  flex: 1;
+}
+
+.stat-info h4 {
+  margin: 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.stat-info .stat-value {
+  margin: 5px 0 0;
   font-size: 1.5rem;
-}
-
-.stat-value {
-  font-size: 2rem;
   font-weight: bold;
-  color: var(--primary);
-  margin-bottom: 0.5rem;
-}
-
-.stat-label {
-  color: var(--text-gray);
-  font-size: 0.875rem;
+  color: #333;
 }
 
 /* Card color variations */
@@ -257,13 +260,29 @@ body {
 .stat-card.sensors .stat-icon,
 .sensor-icon {
   background: rgba(16, 185, 129, 0.1);
-  color: var(--success);
+  color: var (--success);
 }
 
 .stat-card.products .stat-icon,
 .product-icon {
   background: rgba(239, 68, 68, 0.1);
   color: var(--danger);
+}
+
+.stat-card.users i {
+  color: #007bff;
+}
+.stat-card.readings i {
+  color: #10b981;
+}
+.stat-card.upgrades i {
+  color: #28a745;
+}
+.stat-card.apiaries i {
+  color: #ffc107;
+}
+.stat-card.hives i {
+  color: #17a2b8;
 }
 
 .hiveupgrade-icon {
@@ -399,7 +418,7 @@ body {
 .sensor-status.off,
 .operational-status.inactive {
   background: rgba(239, 68, 68, 0.1);
-  color: var(--danger);
+  color: var (--danger);
   border: 1px solid rgba(239, 68, 68, 0.2);
 }
 
@@ -751,6 +770,51 @@ body {
   color: #374151;
   cursor: pointer;
   user-select: none;
+}
+
+/* Question and Threat specific styles */
+.question-icon,
+.threat-icon {
+  background: rgba(79, 70, 229, 0.1);
+  color: var(--purple);
+}
+
+.threat-icon {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--danger);
+}
+
+.severity-level {
+  display: inline-block;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--border-radius-sm);
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin: 0.25rem 0;
+}
+
+.severity-level.high {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--danger);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.severity-level.medium {
+  background: rgba(252, 163, 17, 0.1);
+  color: var(--secondary);
+  border: 1px solid rgba(252, 163, 17, 0.2);
+}
+
+.severity-level.low {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--success);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.severity-level.unknown {
+  background: rgba(107, 114, 128, 0.1);
+  color: var(--text-gray);
+  border: 1px solid rgba(107, 114, 128, 0.2);
 }
 
 /* Responsive Design */
