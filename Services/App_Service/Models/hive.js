@@ -2,7 +2,6 @@ const crudInterface = require("../Utils/CRUD");
 const jsonToObject = require("../Utils/Mapper");
 const dependency = require("../Utils/Dependency");
 
-const Product = require("./Product");
 class Hive {
 
   static crudInterface = crudInterface;
@@ -14,7 +13,7 @@ class Hive {
   constructor(hiveJSON) {
     Hive.jsonToObject(this, hiveJSON);
     this.references = {
-      sub: ['threatModel', 'keeperAssignmentModel', 'hiveUpgradeModel', 'readingModel'],
+      sub: ['threatModel', 'keeperAssignmentModel', 'hiveUpgradeModel', 'readingModel', 'captureModel'],
       parent:{
         "apiaryModel": this.apiaryRef,
       }
@@ -22,6 +21,7 @@ class Hive {
     this.products = []
     this.threats = []
     this.readings = []
+    this.captures = []
   }
 
   static async get(id) {
@@ -99,6 +99,11 @@ class Hive {
   async getThreats(){
     const result = await Hive.dependency.populate('threatModel', this, 'hiveRef')
     if(result.success.status) this.threats = result.data;
+    return result;
+  }
+  async getCaptures(){
+    const result = await Hive.dependency.populate('captureModel', this, 'hiveRef')
+    if(result.success.status) this.captures = result.data;
     return result;
   }
 }

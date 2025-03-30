@@ -1,5 +1,5 @@
-const Capture = require("../Models/capture");
-
+const Capture = require('../Models/Capture');
+const Result = require("../../Shared/Result");
 const jsonToObject = (json) => {
     return new Capture(json);
     }
