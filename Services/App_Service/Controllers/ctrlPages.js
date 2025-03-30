@@ -2,12 +2,13 @@ const controllers = {
   user: require("../Controllers/ctrlUser"),
   apiary: require("../Controllers/ctrlApiary"),
   product: require("../Controllers/ctrlProduct"),
-  hiveUpgrade: require("../Controllers/ctrlUpgrade"),
+  upgrades: require("../Controllers/ctrlUpgrade"),
   keeper: require("../Controllers/ctrlKeeper"),
   hive: require("../Controllers/ctrlHive"),
   question: require("../Controllers/ctrlQuestion"),
   sensor: require("../Controllers/ctrlSensor"),
   threat: require("../Controllers/ctrlThreat"),
+  hiveUpgrade: require("../Controllers/ctrlUpgrade"),
 }
 
 const home = async (req, res) => {
@@ -148,6 +149,7 @@ const adminDashboard = async (req, res) => {
     products: req.session.products || [],
     questions: req.session.questions || [],
     threats: req.session.threats || [],
+    upgrades: req.session.upgrades || [],
   });
 }
 
