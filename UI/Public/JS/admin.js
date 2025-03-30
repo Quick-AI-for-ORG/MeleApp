@@ -205,11 +205,6 @@ function showNotification(message, type) {
 
 // View All functionality
 function showViewAllModal(type) {
-  if (!type) {
-    console.error("No type provided to showViewAllModal");
-    return;
-  }
-
   const modal = document.getElementById("viewAllModal");
   const title = document.getElementById("viewAllTitle");
   const tableHead = document.getElementById("viewAllTableHead");
@@ -220,38 +215,30 @@ function showViewAllModal(type) {
     return;
   }
 
-  // Clear previous content and show loading
+  // Get existing items from the page
+  const items = Array.from(document.querySelectorAll(`[data-${type}-id]`));
+
+  // Clear previous content
   tableHead.innerHTML = "";
-  tableBody.innerHTML = '<tr><td colspan="5">Loading...</td></tr>';
+  tableBody.innerHTML = "";
 
   // Update title and show modal
   title.textContent = `All ${type.charAt(0).toUpperCase() + type.slice(1)}s`;
   modal.style.display = "flex";
 
-  // Define headers and fetch data
+  // Define headers and create table header
   const headers = getHeadersForType(type);
   tableHead.innerHTML = `<tr>${headers
     .map((h) => `<th>${h}</th>`)
-    .join("")}<th>Actions</th></tr>`;
+    .join("")}</tr>`;
 
-  // Fetch and display data
-  fetchAllItems(type)
-    .then((items) => {
-      if (items && items.length > 0) {
-        displayItems(items, type);
-      } else {
-        tableBody.innerHTML = `<tr><td colspan="${
-          headers.length + 1
-        }">No items found</td></tr>`;
-      }
-    })
-    .catch((error) => {
-      console.error("Error in showViewAllModal:", error);
-      tableBody.innerHTML = `<tr><td colspan="${
-        headers.length + 1
-      }">Error loading data</td></tr>`;
-      showNotification("Error loading data", "error");
-    });
+  // Display items
+  items.forEach((item) => {
+    const row = document.createElement("tr");
+    const cells = getTableCellsFromItem(item, type);
+    row.innerHTML = cells;
+    tableBody.appendChild(row);
+  });
 }
 
 function closeViewAllModal() {
@@ -271,6 +258,39 @@ function getHeadersForType(type) {
   };
 
   return headers[type] || [];
+}
+
+function getTableCellsFromItem(item, type) {
+  const info = item.querySelector(".activity-info");
+
+  switch (type) {
+    case "user":
+      return `
+        <td>${info.querySelector("h4").textContent.trim()}</td>
+        <td>${info.querySelector("p").textContent.trim()}</td>
+        <td>${info.querySelector(".user-role").textContent.trim()}</td>
+        <td>${info
+          .querySelector(".timestamp")
+          .textContent.replace("Joined ", "")}</td>
+      `;
+    case "question":
+      return `
+        <td>${info.querySelector("h4").textContent.trim()}</td>
+        <td>${info.querySelector("p").textContent.trim()}</td>
+        <td>${info.querySelector(".timestamp").textContent.trim()}</td>
+      `;
+    case "threat":
+      return `
+        <td>${info.querySelector("h4").textContent.trim()}</td>
+        <td>${info.querySelector(".threat-action").textContent.trim()}</td>
+        <td>${info
+          .querySelector(".timestamp")
+          .textContent.replace("Reported ", "")}</td>
+      `;
+    // Add other cases as needed
+    default:
+      return "";
+  }
 }
 
 async function fetchAllItems(type) {

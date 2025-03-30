@@ -154,7 +154,7 @@
                             <h3><i class="fas fa-user-plus"></i> Recent Users</h3>
                             <div class="header-actions">
                                 <button class="add-btn" onclick="showAddModal('user')">Add New</button>
-                                <button class="view-all">View All
+                                <button class="view-all" onclick="showViewAllModal('user')">View All</button>
                             </div>
                         </div>
                         <div class="card-content">
@@ -388,79 +388,77 @@
         </main>
     </div>
 
-    <script src="/JS/charts.js"></script>
-    <script src="/JS/admin.js"></script>>
-</body>
-<div class="modal-content view-all-content">
-    <div class="modal-header">
-
-</html>
-<h3 id="viewAllTitle">All Items</h3>
-<button class="close" onclick="closeViewAllModal()">&times;</button>
-</div>
-<div class="modal-body">
-    <div class="search-bar">
-        <input type="text" placeholder="Search..." id="searchInput">
-    </div>
-    <div class="table-container">
-        <table id="viewAllTable">
-            <thead id="viewAllTableHead"></thead>
-            <tbody id="viewAllTableBody"></tbody>
-        </table>
-    </div>
-</div>
-</div>
-</div>
-
-<!-- Confirmation Modal -->
-<div id="confirmationModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3>Confirm Delete</h3>
-            <button class="close">&times;</button>
-        </div>
-        <div class="modal-body">
-            <p id="confirmMessage"></p>
-        </div>
-        <div class="modal-footer">
-            <button class="cancel-btn" onclick="hideConfirmModal()">Cancel</button>
-            <button class="delete-btn" id="confirmDeleteBtn">Delete</button>
+    <!-- View All Modal -->
+    <div id="viewAllModal" class="modal">
+        <div class="modal-content view-all-content">
+            <div class="modal-header">
+                <h3 id="viewAllTitle">All Items</h3>
+                <button class="close" onclick="closeViewAllModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="search-bar">
+                    <input type="text" placeholder="Search..." id="searchInput">
+                </div>
+                <div class="table-container">
+                    <table id="viewAllTable">
+                        <thead id="viewAllTableHead"></thead>
+                        <tbody id="viewAllTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
-</div>
 
-<!-- Add/Edit User Modal -->
-<div id="addUserModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3>Add New User</h3>
-            <button class="close" onclick="closeAddModal('user')">&times;</button>
+    <!-- Confirmation Modal -->
+    <div id="confirmationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Confirm Delete</h3>
+                <button class="close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="confirmMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button class="cancel-btn" onclick="hideConfirmModal()">Cancel</button>
+                <button class="delete-btn" id="confirmDeleteBtn">Delete</button>
+            </div>
         </div>
-        <div class="modal-body">
+    </div>
+
+    <!-- Add/Edit User Modal -->
+    <div id="addUserModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New User</h3>
+                <button class="close" onclick="closeAddModal('user')">&times;</button>
+            </div>
             <form id="addUserForm" onsubmit="handleAdd(event, 'user')">
-                <div class="form-group">
-                    <label for="firstName">First Name</label>
-                    <input type="text" id="firstName" name="firstName" required>
-                </div>
-                <div class="form-group">
-                    <label for="lastName">Last Name</label>
-                    <input type="text" id="lastName" name="lastName" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
-                <div class="form-group">
-                    <label for="role">Role</label>
-                    <select id="role" name="role" required>
-                        <option value="beekeeper">Beekeeper</option>
-                        <option value="admin">Admin</option>
-                        <option value="owner">Owner</option>
-                    </select>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" id="firstName" name="firstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" id="lastName" name="lastName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="role">Role</label>
+                        <select id="role" name="role" required>
+                            <option value="beekeeper">Beekeeper</option>
+                            <option value="admin">Admin</option>
+                            <option value="owner">Owner</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="cancel-btn" onclick="closeAddModal('user')">Cancel</button>
@@ -469,36 +467,36 @@
             </form>
         </div>
     </div>
-</div>
 
-<!-- Add/Edit Sensor Modal -->
-<div id="addSensorModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3>Add New Sensor</h3>
-            <button class="close" onclick="closeAddModal('sensor')">&times;</button>
-        </div>
-        <div class="modal-body">
+    <!-- Add/Edit Sensor Modal -->
+    <div id="addSensorModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Sensor</h3>
+                <button class="close" onclick="closeAddModal('sensor')">&times;</button>
+            </div>
             <form id="addSensorForm" onsubmit="handleAdd(event, 'sensor')">
-                <div class="form-group">
-                    <label for="sensorName">Name</label>
-                    <input type="text" id="sensorName" name="name" required>
-                </div>
-                <div class="form-group">
-                    <label for="sensorType">Type</label>
-                    <select id="sensorType" name="sensorType" required>
-                        <option value="temperature">Temperature</option>
-                        <option value="humidity">Humidity</option>
-                        <option value="weight">Weight</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="modelName">Model</label>
-                    <input type="text" id="modelName" name="modelName" required>
-                </div>
-                <div class="form-group">
-                    <label for="description">Description</label>
-                    <textarea id="description" name="description"></textarea>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="sensorName">Name</label>
+                        <input type="text" id="sensorName" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="sensorType">Type</label>
+                        <select id="sensorType" name="sensorType" required>
+                            <option value="temperature">Temperature</option>
+                            <option value="humidity">Humidity</option>
+                            <option value="weight">Weight</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="modelName">Model</label>
+                        <input type="text" id="modelName" name="modelName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description"></textarea>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="cancel-btn" onclick="closeAddModal('sensor')">Cancel</button>
@@ -507,58 +505,57 @@
             </form>
         </div>
     </div>
-</div>
 
-<!-- Add/Edit Product Modal -->
-<div id="addProductModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3>Add New Product</h3>
-            <button class="close" onclick="closeAddModal('product')">&times;</button>
-        </div>
-        <div class="modal-body">
-            <form id="addProductForm" onsubmit="handleAdd(event, 'product')">
-                <div class="form-group">
-                    <label for="productName">Name</label>
-                    <input type="text" id="productName" name="name" required>
-                </div>
-                <div class="form-group price-group">
-                    <label for="price">Price</label>
-                    <input type="number" id="price" name="price" step="0.01" min="0" required
-                        onchange="validatePrice(this)">
-                </div>
-                <div class="form-group">
-                    <label for="productDescription">Description</label>
-                    <textarea id="productDescription" name="description"></textarea>
-                </div>
-                <div class="form-group">
-                    <label>Compatible Sensor Types</label>
-                    <div class="sensors-grid">
-                        <div class="sensor-checkbox">
-                            <input type="checkbox" id="temperature" name="sensorTypes" value="temperature">
-                            <label for="temperature">Temperature</label>
-                        </div>
-                        <div class="sensor-checkbox">
-                            <input type="checkbox" id="humidity" name="sensorTypes" value="humidity">
-                            <label for="humidity">Humidity</label>
-                        </div>
-                        <div class="sensor-checkbox">
-                            <input type="checkbox" id="weight" name="sensorTypes" value="weight">
-                            <label for="weight">Weight</label>
+    <!-- Add/Edit Product Modal -->
+    <div id="addProductModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Product</h3>
+                <button class="close" onclick="closeAddModal('product')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="addProductForm" onsubmit="handleAdd(event, 'product')">
+                    <div class="form-group">
+                        <label for="productName">Name</label>
+                        <input type="text" id="productName" name="name" required>
+                    </div>
+                    <div class="form-group price-group">
+                        <label for="price">Price</label>
+                        <input type="number" id="price" name="price" step="0.01" min="0" required
+                            onchange="validatePrice(this)">
+                    </div>
+                    <div class="form-group">
+                        <label for="productDescription">Description</label>
+                        <textarea id="productDescription" name="description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Compatible Sensor Types</label>
+                        <div class="sensors-grid">
+                            <div class="sensor-checkbox">
+                                <input type="checkbox" id="temperature" name="sensorTypes" value="temperature">
+                                <label for="temperature">Temperature</label>
+                            </div>
+                            <div class="sensor-checkbox">
+                                <input type="checkbox" id="humidity" name="sensorTypes" value="humidity">
+                                <label for="humidity">Humidity</label>
+                            </div>
+                            <div class="sensor-checkbox">
+                                <input type="checkbox" id="weight" name="sensorTypes" value="weight">
+                                <label for="weight">Weight</label>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="cancel-btn" onclick="closeAddModal('product')">Cancel</button>
-                    <button type="submit" class="submit-btn">Add Product</button>
-                </div>
-            </form>
+                    <div class="modal-footer">
+                        <button type="button" class="cancel-btn" onclick="closeAddModal('product')">Cancel</button>
+                        <button type="submit" class="submit-btn">Add Product</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 
-<script src="/JS/charts.js"></script>
-<script src="/JS/admin.js"></script>
+    <script src="/JS/charts.js"></script>
+    <script src="/JS/admin.js"></script>
 </body>
 
 </html>
