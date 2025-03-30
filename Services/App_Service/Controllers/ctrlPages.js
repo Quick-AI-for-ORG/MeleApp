@@ -155,6 +155,7 @@ const adminDashboard = async (req, res) => {
 
 
 const _injectCount = async (req, res) => {
+  req.session.stats = {}
   await controllers.user.getUsersCount(req, res);
   await controllers.apiary.getApiariesCount(req, res);
   await controllers.keeper.getKeepersCount(req, res);
