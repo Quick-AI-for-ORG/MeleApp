@@ -1042,6 +1042,33 @@ body {
   animation: fadeIn 0.3s ease;
 }
 
+/* Loading indicator */
+body.loading-hive .hive-dashboard {
+  position: relative;
+}
+
+body.loading-hive .hive-dashboard::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.7);
+  z-index: 1000;
+}
+
+body.loading-hive .hive-dashboard::after {
+  content: "Loading...";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.2em;
+  color: #333;
+  z-index: 1001;
+}
+
 /* Notification Styles */
 .notification {
   position: fixed;

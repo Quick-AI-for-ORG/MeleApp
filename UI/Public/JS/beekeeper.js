@@ -12,6 +12,7 @@ const toggleDisplay = (el, show) =>
 let selectedApiaryId = null;
 let selectedHiveId = null;
 let beekeepers = [];
+let hiveDataCache = {};
 
 /******************************
  *  APIARY MANAGEMENT FUNCTIONS *
@@ -42,6 +43,14 @@ async function fetchHiveData(hiveId) {
   try {
     console.log("Fetching hive data for:", hiveId);
 
+    // Show loading state
+    document.body.classList.add("loading-hive");
+
+    // Check cache first
+    if (hiveDataCache[hiveId]) {
+      updateHiveDashboard(hiveDataCache[hiveId]);
+    }
+
     const apiaries = JSON.parse($("#apiariesInjection").dataset.apiaries);
     let currentHive = null;
 
@@ -58,26 +67,36 @@ async function fetchHiveData(hiveId) {
       throw new Error("Hive not found in current data");
     }
 
-    // Update hive dashboard with found data
-    updateHiveDashboard(currentHive);
+    // Only fetch from server if no cache exists
+    if (!hiveDataCache[hiveId]) {
+      updateHiveDashboard(currentHive);
+    }
 
-    // Optional: Fetch additional real-time data from server
+    // Fetch latest data from server
     const response = await fetch("/keeper/getHive", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ _id: hiveId }),
     });
+
     const result = await response.json();
-    console.log(result);
     if (result.success.status) {
-      updateHiveDashboard({
+      const newData = {
         ...currentHive,
         ...result.data,
-      });
+      };
+
+      // Only update if data has changed
+      if (JSON.stringify(hiveDataCache[hiveId]) !== JSON.stringify(newData)) {
+        hiveDataCache[hiveId] = newData;
+        updateHiveDashboard(newData);
+      }
     }
   } catch (error) {
     console.error("Error fetching hive data:", error);
     showNotification("Error loading hive data: " + error.message, "error");
+  } finally {
+    document.body.classList.remove("loading-hive");
   }
 }
 
@@ -93,34 +112,32 @@ function updateHiveDashboard(hiveData) {
   $(".weather-card.sensors .weather-value .value").textContent =
     (data.sensors && data.sensors.length) || "0";
 
-  
-  let temp = 0.00, humid = 0.00
-  let countTemp = 0, countHumid = 0
-  if(data.readings && data.readings.length > 0) {
-    for(let i = 0; i < data.readings.length; i++) {
-      if(data.readings[i].sensorType == "Temperature"){
-        countTemp++
-        temp += Number(data.readings[i].sensorValue)
-      } 
-      if(data.readings[i].sensorType == "Humidity") {
-        countHumid++
-        humid += Number(data.readings[i].sensorValue)
+  let temp = 0.0,
+    humid = 0.0;
+  let countTemp = 0,
+    countHumid = 0;
+  if (data.readings && data.readings.length > 0) {
+    for (let i = 0; i < data.readings.length; i++) {
+      if (data.readings[i].sensorType == "Temperature") {
+        countTemp++;
+        temp += Number(data.readings[i].sensorValue);
+      }
+      if (data.readings[i].sensorType == "Humidity") {
+        countHumid++;
+        humid += Number(data.readings[i].sensorValue);
       }
     }
-    if(countTemp > 0)  temp = (temp / countTemp).toFixed(2)
-    else temp = "0.0"
+    if (countTemp > 0) temp = (temp / countTemp).toFixed(2);
+    else temp = "0.0";
 
-    if(countHumid > 0) humid = (humid / countHumid).toFixed(2)
-    else humid = "0.0"
-
+    if (countHumid > 0) humid = (humid / countHumid).toFixed(2);
+    else humid = "0.0";
   }
   // Update temperature with one decimal place
-  $(".weather-card.hive-temp .weather-value .value").textContent =
-    temp;
+  $(".weather-card.hive-temp .weather-value .value").textContent = temp;
 
   // Update humidity as whole number
-  $(".weather-card.hive-humidity .weather-value .value").textContent =
-    humid;
+  $(".weather-card.hive-humidity .weather-value .value").textContent = humid;
 
   // Update threats count (using length of threats array)
   $(".weather-card.hive-threats .weather-value .value").textContent =
@@ -268,11 +285,7 @@ function toggleDashboards(showHive = false, hiveId = null) {
   if (showHive && hiveId) {
     console.log("Switching to hive view for hive:", hiveId);
     fetchHiveData(hiveId);
-    // Set up periodic refresh of hive data
-    if (window.hiveDataInterval) clearInterval(window.hiveDataInterval);
-    window.hiveDataInterval = setInterval(() => fetchHiveData(hiveId), 30000); // Refresh every 30 seconds
-  } else {
-    // Clear the interval when switching back to apiary view
+    // Remove the automatic refresh interval
     if (window.hiveDataInterval) {
       clearInterval(window.hiveDataInterval);
       window.hiveDataInterval = null;
@@ -598,7 +611,7 @@ async function purchaseUpgrades() {
       if (result.success) {
         showNotification("Upgrades purchased successfully", "success");
         closeModal("upgradeModal");
-        fetchHiveData(selectedHiveId); 
+        fetchHiveData(selectedHiveId);
       } else {
         throw new Error(result.message || "Error purchasing upgrades");
       }
