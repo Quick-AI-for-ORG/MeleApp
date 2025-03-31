@@ -22,18 +22,10 @@ class HiveUpgrade {
   }
 
   static async get(id) {
-    const result = await HiveUpgrade.crudInterface.get(id, "hiveUpgradeModel", "_id");
-    if (result.success.status) {
-      result.data = new HiveUpgrade(result.data);
-    }
-    return result;
-  }
-
-  static async get(hive, product){
-    const result = await HiveUpgrade.crudInterface.getNested([hive, product], "hiveUpgradeModel", ["hiveRef", "productRef"]);
-    if (result.success.status) {
-      result.data = new HiveUpgrade(result.data);
-    }
+    let result = null;
+    if(arguments.length == 1) result = await HiveUpgrade.crudInterface.get(id, "hiveUpgradeModel", "_id");
+    else result = await HiveUpgrade.crudInterface.getNested([hive, product], "hiveUpgradeModel", ["hiveRef", "productRef"]);
+    if (result.success.status) result.data = new HiveUpgrade(result.data);
     return result;
   }
 

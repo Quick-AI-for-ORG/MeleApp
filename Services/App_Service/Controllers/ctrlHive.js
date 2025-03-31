@@ -66,6 +66,14 @@ const getHive = async (req, res) => {
 const getHives = async (req, res) => {
     try {
         const result = await Hive.getAll();
+        if(result.success.status){
+            for(let i = 0; i < result.data.length; i++){
+                const hive = jsonToObject(result.data[i]);
+                const apiary = await hive.getApiaryName();
+                hive.apiaryName = apiary.data;
+                result.data[i] = hive;
+            }
+        }
         req.session.hives = result.data || [];
         return res.json(result.toJSON());
     } catch (error) {
@@ -78,6 +86,14 @@ const getSortedHives = async (req, res) => {
         const sortBy = req.body.sortBy || {createdAt: -1};
         const limit = req.body.limit || 10;
         const result = await Hive.getAll(sortBy, limit);
+        if(result.success.status){
+            for(let i = 0; i < result.data.length; i++){
+                const hive = jsonToObject(result.data[i]);
+                const apiary = await hive.getApiaryName();
+                hive.apiaryName = apiary.data;
+                result.data[i] = hive;
+            }
+        }
         req.session.hives = result.data || [];
         return result.toJSON();
     } catch (error) {

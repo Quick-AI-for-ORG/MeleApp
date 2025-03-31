@@ -37,20 +37,17 @@ async function handleDelete() {
   const { type, id } = currentDeleteInfo;
 
   try {
-    const response = await fetch(`/admin/${type}`, {
+    const response = await fetch(`/admin/${type}?_id=${id}`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ [`${type}Id`]: id }),
     });
 
     const result = await response.json();
 
     if (result.success) {
-      // Remove element from UI
       const element = document.querySelector(`[data-${type}-id="${id}"]`);
       if (element) element.remove();
 
-      // Update stats counter
       const statsCounter = document.querySelector(
         `.stat-card.${type}s .stat-value`
       );
@@ -70,7 +67,6 @@ async function handleDelete() {
   hideConfirmModal();
 }
 
-// Modal management
 function showAddModal(type) {
   const modalId = `add${type.charAt(0).toUpperCase() + type.slice(1)}Modal`;
   document.getElementById(modalId).style.display = "flex";
@@ -307,6 +303,26 @@ async function fetchAllItems(type) {
     return [];
   }
 }
+
+async function deployHiveUpgrade(id) {
+  try {
+    const response = await fetch('/admin/makeOperational', {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ _id: id }),
+    });
+    const data = await response.json();
+    if (data.success.status) {
+      showNotification(data.message, "success");
+      location.reload();
+    }
+    else showNotification(data.message, "error");
+  } catch (error) {
+    showNotification(`Error making upgrade operational: ${error.message}`, "error");
+    return [];
+  }
+}
+
 
 function displayItems(items, type) {
   const tableBody = document.getElementById("viewAllTableBody");

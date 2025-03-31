@@ -1,6 +1,9 @@
 const Question = require("../Models/Question");
 const Result = require("../../Shared/Result");
-const ctrlUser = require("./ctrlUser");
+
+const controllers = {
+  user: require("./ctrlUser")
+}
 
 const jsonToObject = (json) => {
   return new Question(json);
@@ -11,9 +14,14 @@ const addQuestion = async (req, res) => {
     let userRef = null;
     let email = req.body.email;
 
-    if (req.session && req.session.user) {
+    if (req.session.user) {
       userRef = req.session.user._id;
       email = req.session.user.email;
+    }
+
+    else  {
+      const result = await controllers.user.getUser(req,res);
+      if (result.success.status) userRef = result.data._id;
     }
 
     const questionJSON = {

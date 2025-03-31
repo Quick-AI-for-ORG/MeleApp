@@ -12,6 +12,11 @@ const controllers = {
 }
 const { sendUpgradeConfirmation } = require("../Utils/mailer");
 
+
+const _jsonToObject = (json) => {
+    return new HiveUpgrade(json)
+}
+
 const upgrade = async (req, res) => {
     try {        
         const user = controllers.user._jsonToObject(req.session.user);
@@ -114,7 +119,7 @@ const addHiveUpgrade = async (req, res) => {
             userRef: req.session.user._id,
             operational: false,
         }
-        const upgrade = new HiveUpgrade(upgradeJSON);
+        const upgrade = _jsonToObject(upgradeJSON);
         const result = await upgrade.create();
         return result;
     } catch (error) {
@@ -166,7 +171,9 @@ const getUpgradesCount = async (req, res) => {
 const makeOperational = async (req, res) => {
     try {
         const upgrade = await HiveUpgrade.get(req.body._id);
-        const result = await upgrade.makeOperational();
+        if (!upgrade.success.status) return res.json(upgrade.toJSON());
+        const hiveUpgrade = _jsonToObject(upgrade.data);
+        const result = await hiveUpgrade.makeOperational();
         return res.json(result.toJSON());
     } catch (error) {
         return res.json(new Result(-1, null, `Error updating hive upgrade: ${error.message}`).toJSON());
@@ -198,7 +205,7 @@ const getUpgradedHive = async (req, res) => {
             result = await hive.getUpgrades();
             if(!result.success.status) return res.json(result);
             for(let i = 0; i < result.data.length; i++){
-                hive.upgrades[i] = new HiveUpgrade(result.data[i])
+                hive.upgrades[i] = _jsonToObject(result.data[i])
                 const productName = await hive.upgrades[i].getProductName()
                 if(!productName.success.status) return res.json(result);
                 hive.upgrades[i].productNames = productName.data
@@ -275,7 +282,7 @@ const removeUpgrade = async (req, res) => {
         if(req.query._id) result = await HiveUpgrade.get(req.query._id);
         else result = await HiveUpgrade.get(req.body.hiveRef, req.body.productRef);
         if(!result.success.status) return res.json(result.toJSON());
-        const upgrade = new HiveUpgrade(result.data);
+        const upgrade = _jsonToObject(result.data);
          result = await upgrade.remove();
         if(!result.success.status) return res.json(result.toJSON());
         const product = controllers.product._jsonToObject(result.data.productRef);

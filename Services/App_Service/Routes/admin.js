@@ -25,6 +25,9 @@ router.delete("/user", controllers.user.removeUser);
 router.delete("/sensor", controllers.sensor.removeSensor);
 router.delete("/product", controllers.product.removeProduct);
 router.delete("/upgrade", controllers.hiveUpgrade.removeUpgrade);
+router.delete("/question", controllers.question.removeQuestion);
+router.delete("/threat", controllers.threat.removeThreat);
+
 
 router.post("/addUser", controllers.user.addUser);
 router.post("/addSensor", controllers.sensor.addSensor);
@@ -32,31 +35,16 @@ router.post("/addProduct", controllers.product.addProduct);
 
 router.post("/updateUser", controllers.user.updateUser);
 
-router.get("/getAllUsers", async (req, res) => {
-  const result = await controllers.user.getUsers(req, res);
-  const data = result.data || [];
-  res.json({ success: true, items: data });
-});
-
+router.get("/getAllUsers", controllers.user.getUsers);
 router.get("/getAllProducts", controllers.product.getProducts);
 router.get("/getAllSensors", controllers.sensor.getSensors);
 router.get("/getAllHives", controllers.hive.getHives);
 router.get("/getAllApiaries", controllers.apiary.getApiaries);
 router.get("/getAllHiveUpgrades", controllers.hiveUpgrade.getUpgrades);
+router.get("/getAllQuestions", controllers.question.getQuestions);
+router.get("/getAllThreats", controllers.threat.getThreats);
 
-router.get("/getAllQuestions", async (req, res) => {
-  const result = await controllers.question.getQuestions(req, res);
-  const data = result.data || [];
-  res.json({ success: true, items: data });
-});
-
-router.get("/getAllThreats", async (req, res) => {
-  const result = await controllers.threat.getThreats(req, res);
-  const data = result.data || [];
-  res.json({ success: true, items: data });
-});
-
-router.post("/deployHiveUpgrade", controllers.hiveUpgrade.makeOperational);
+router.post("/makeOperational", controllers.hiveUpgrade.makeOperational);
 
 router.get("/test-stream", (req, res) => {
   res.render("test-stream", { layout: false });
