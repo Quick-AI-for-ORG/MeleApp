@@ -36,7 +36,112 @@
         <!-- Main Content -->
         <main class="main-content">
             <!-- Stats Grid -->
-         
+            <div class="stats-grid">
+                <div class="stat-card users">
+                    <i class="fas fa-users"></i>
+                    <div class="stat-info">
+                        <h4>Total Users</h4>
+                        <p class="stat-value">
+                            <%= stats.users || 0 %>
+                        </p>
+                    </div>
+                </div>
+                <div class="stat-card readings">
+                    <i class="fas fa-chart-line"></i>
+                    <div class="stat-info">
+                        <h4>Total Readings</h4>
+                        <p class="stat-value">
+                            <%= stats.readings || 0 %>
+                        </p>
+                    </div>
+                </div>
+                <div class="stat-card hives">
+                    <i class="fas fa-archive"></i>
+                    <div class="stat-info">
+                        <h4>Total Hives</h4>
+                        <p class="stat-value">
+                            <%= stats.hives || 0 %>
+                        </p>
+                    </div>
+                </div>
+                <div class="stat-card apiaries">
+                    <i class="fas fa-warehouse"></i>
+                    <div class="stat-info">
+                        <h4>Total Apiaries</h4>
+                        <p class="stat-value">
+                            <%= stats.apiaries || 0 %>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Questions and Threats Row -->
+            <div class="activity-section">
+                <!-- Recent Questions -->
+                <div class="activity-card questions-list">
+                    <div class="card-header">
+                        <h3><i class="fas fa-question-circle"></i> Recent Questions</h3>
+                    </div>
+                    <div class="card-content">
+                        <% questions.forEach(question=> { %>
+                            <div class="activity-item" data-question-id="<%= question._id %>">
+                                <div class="question-icon">
+                                    <i class="fas fa-question-circle"></i>
+                                </div>
+                                <div class="activity-info">
+                                    <h4>
+                                        <%= question.email %>
+                                    </h4>
+                                    <p>
+                                        <%= question.message %>
+                                    </p>
+                                    <span class="timestamp">
+                                        <%= new Date(question.createdAt).toLocaleDateString() %>
+                                    </span>
+                                </div>
+                                <div class="activity-actions">
+                                    <button class="action-btn delete"
+                                        onclick="showConfirmModal('question', '<%= question._id %>', 'this question')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <% }); %>
+                    </div>
+                </div>
+
+                <!-- Recent Threats -->
+                <div class="activity-card threats-list">
+                    <div class="card-header">
+                        <h3><i class="fas fa-exclamation-triangle"></i> Recent Threats</h3>
+                    </div>
+                    <div class="card-content">
+                        <% threats.forEach(threat=> { %>
+                            <div class="activity-item" data-threat-id="<%= threat._id %>">
+                                <div class="threat-icon">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                                <div class="activity-info">
+                                    <h4>
+                                        <%= threat.threatType %>
+                                    </h4>
+                                    <p class="threat-action">
+                                        <%= threat.action %>
+                                    </p>
+                                    <span class="timestamp">Reported <%= new Date(threat.createdAt).toLocaleDateString()
+                                            %></span>
+                                </div>
+                                <div class="activity-actions">
+                                    <button class="action-btn delete"
+                                        onclick="showConfirmModal('threat', '<%= threat._id %>', '<%= threat.threatType %>')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <% }); %>
+                    </div>
+                </div>
+            </div>
 
             <!-- Charts Section -->
             <%- include('./Components/charts', { type: 'admin' }) %>
@@ -49,7 +154,7 @@
                             <h3><i class="fas fa-user-plus"></i> Recent Users</h3>
                             <div class="header-actions">
                                 <button class="add-btn" onclick="showAddModal('user')">Add New</button>
-                                <button class="view-all">View All</button>
+                                <button class="view-all" onclick="showViewAllModal('user')">View All</button>
                             </div>
                         </div>
                         <div class="card-content">
@@ -92,7 +197,7 @@
                     <div class="activity-card hiveupgrades-list">
                         <div class="card-header">
                             <h3><i class="fas fa-tools"></i> Hive Upgrades</h3>
-                            <button class="view-all">View All</button>
+                            <button class="view-all" onclick="showViewAllModal('hiveupgrade')">View All</button>
                         </div>
                         <div class="card-content">
                             <% upgrades.forEach(upgrade=> { %>
@@ -132,7 +237,7 @@
                     <div class="activity-card hives-list">
                         <div class="card-header">
                             <h3><i class="fas fa-archive"></i> Recent Hives</h3>
-                            <button class="view-all">View All</button>
+                            <button class="view-all" onclick="showViewAllModal('hive')">View All</button>
                         </div>
                         <div class="card-content">
                             <% hives.forEach(hive=> { %>
@@ -170,7 +275,7 @@
                     <div class="activity-card apiaries-list">
                         <div class="card-header">
                             <h3><i class="fas fa-warehouse"></i> Recent Apiaries</h3>
-                            <button class="view-all">View All</button>
+                            <button class="view-all" onclick="showViewAllModal('apiary')">View All</button>
                         </div>
                         <div class="card-content">
                             <% apiaries.forEach(apiary=> { %>
@@ -208,7 +313,7 @@
                             <h3><i class="fas fa-microchip"></i> Recent Sensors</h3>
                             <div class="header-actions">
                                 <button class="add-btn" onclick="showAddModal('sensor')">Add New</button>
-                                <button class="view-all">View All</button>
+                                <button class="view-all" onclick="showViewAllModal('sensor')">View All</button>
                             </div>
                         </div>
                         <div class="card-content">
@@ -250,7 +355,7 @@
                             <h3><i class="fas fa-box"></i> Recent Products</h3>
                             <div class="header-actions">
                                 <button class="add-btn" onclick="showAddModal('product')">Add New</button>
-                                <button class="view-all">View All</button>
+                                <button class="view-all" onclick="showViewAllModal('product')">View All</button>
                             </div>
                         </div>
                         <div class="card-content">
@@ -283,8 +388,174 @@
         </main>
     </div>
 
-                        <script src="/JS/charts.js"></script>
-                        <script src="/JS/admin.js"></script>
+    <!-- View All Modal -->
+    <div id="viewAllModal" class="modal">
+        <div class="modal-content view-all-content">
+            <div class="modal-header">
+                <h3 id="viewAllTitle">All Items</h3>
+                <button class="close" onclick="closeViewAllModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="search-bar">
+                    <input type="text" placeholder="Search..." id="searchInput">
+                </div>
+                <div class="table-container">
+                    <table id="viewAllTable">
+                        <thead id="viewAllTableHead"></thead>
+                        <tbody id="viewAllTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Confirm Delete</h3>
+                <button class="close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="confirmMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button class="cancel-btn" onclick="hideConfirmModal()">Cancel</button>
+                <button class="delete-btn" id="confirmDeleteBtn">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit User Modal -->
+    <div id="addUserModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New User</h3>
+                <button class="close" onclick="closeAddModal('user')">&times;</button>
+            </div>
+            <form id="addUserForm" onsubmit="handleAdd(event, 'user')">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" id="firstName" name="firstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" id="lastName" name="lastName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="role">Role</label>
+                        <select id="role" name="role" required>
+                            <option value="beekeeper">Beekeeper</option>
+                            <option value="admin">Admin</option>
+                            <option value="owner">Owner</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="cancel-btn" onclick="closeAddModal('user')">Cancel</button>
+                    <button type="submit" class="submit-btn">Add User</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add/Edit Sensor Modal -->
+    <div id="addSensorModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Sensor</h3>
+                <button class="close" onclick="closeAddModal('sensor')">&times;</button>
+            </div>
+            <form id="addSensorForm" onsubmit="handleAdd(event, 'sensor')">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="sensorName">Name</label>
+                        <input type="text" id="sensorName" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="sensorType">Type</label>
+                        <select id="sensorType" name="sensorType" required>
+                            <option value="temperature">Temperature</option>
+                            <option value="humidity">Humidity</option>
+                            <option value="weight">Weight</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="modelName">Model</label>
+                        <input type="text" id="modelName" name="modelName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="cancel-btn" onclick="closeAddModal('sensor')">Cancel</button>
+                    <button type="submit" class="submit-btn">Add Sensor</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add/Edit Product Modal -->
+    <div id="addProductModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Product</h3>
+                <button class="close" onclick="closeAddModal('product')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="addProductForm" onsubmit="handleAdd(event, 'product')">
+                    <div class="form-group">
+                        <label for="productName">Name</label>
+                        <input type="text" id="productName" name="name" required>
+                    </div>
+                    <div class="form-group price-group">
+                        <label for="price">Price</label>
+                        <input type="number" id="price" name="price" step="0.01" min="0" required
+                            onchange="validatePrice(this)">
+                    </div>
+                    <div class="form-group">
+                        <label for="productDescription">Description</label>
+                        <textarea id="productDescription" name="description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Compatible Sensor Types</label>
+                        <div class="sensors-grid">
+                            <div class="sensor-checkbox">
+                                <input type="checkbox" id="temperature" name="sensorTypes" value="temperature">
+                                <label for="temperature">Temperature</label>
+                            </div>
+                            <div class="sensor-checkbox">
+                                <input type="checkbox" id="humidity" name="sensorTypes" value="humidity">
+                                <label for="humidity">Humidity</label>
+                            </div>
+                            <div class="sensor-checkbox">
+                                <input type="checkbox" id="weight" name="sensorTypes" value="weight">
+                                <label for="weight">Weight</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="cancel-btn" onclick="closeAddModal('product')">Cancel</button>
+                        <button type="submit" class="submit-btn">Add Product</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="/JS/charts.js"></script>
+    <script src="/JS/admin.js"></script>
 </body>
 
 </html>
