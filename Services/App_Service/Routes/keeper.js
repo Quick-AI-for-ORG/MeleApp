@@ -47,7 +47,7 @@ router.get("/test-stream", (req, res) => {
 router.post("/getApiaryHives", controllers.apiary.getApiaryHives)
 router.post("/getApiaryKeepers", controllers.keeper.getApiaryKeepers)
 router.post("/getHive", controllers.upgrade.getUpgradedHive)
-
+router.post("/getHiveReadings", controllers.hive.getReadings)
 
 router.post("/start-stream", async (req, res) => {
   const { hiveId } = req.body;

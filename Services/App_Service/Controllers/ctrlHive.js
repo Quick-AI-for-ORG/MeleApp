@@ -1,6 +1,10 @@
 const Hive = require('../Models/Hive');
 const Result = require("../../Shared/Result");
 
+const controllers = {
+    reading: require("./ctrlReading"),
+}
+
 const jsonToObject = (json) => {
     return new Hive(json)
 }
@@ -51,7 +55,8 @@ const updateHive = async (req, res) => {
 
 const getHive = async (req, res) => {
     try {
-        const result = await Hive.get(req.body._id);
+        const id = req.query._id || req.body._id;
+        const result = await Hive.get(id);
         return result;
     } catch (error) {
         return new Result(-1, null, `Error fetching hive: ${error.message}`);
@@ -90,6 +95,27 @@ const getHivesCount = async (req, res) => {
     }
 }
 
+const getReadings = async (req, res) => {
+    try {
+        let result = await getHive(req, res);
+        if (!result.success.status) return res.json(result.toJSON());
+        const hive = jsonToObject(result.data);
+        result = await hive.getReadings();
+        if (!result.success.status) return res.json(result.toJSON());
+        hive.readings = result.data
+        for (let i = 0; i < result.data.length; i++) {
+            const reading = controllers.reading._jsonToObject(result.data[i]);
+            const sensorType = await reading.getSensorType();
+            reading.sensorType = sensorType.data
+            hive.readings[i] = reading;
+        }
+        return res.json(new Result(1, hive, "Readings fetched successfully").toJSON())
+
+    } catch (error) {
+        return res.json(new Result(-1, null, `Error fetching readings: ${error.message}`).toJSON())
+    }
+}
+
 
 module.exports = {
     _jsonToObject: jsonToObject,
@@ -99,5 +125,6 @@ module.exports = {
     getHive,
     getHives,
     getSortedHives,
-    getHivesCount
+    getHivesCount,
+    getReadings,
 }
