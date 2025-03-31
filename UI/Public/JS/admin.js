@@ -206,14 +206,6 @@ function showViewAllModal(type) {
   const tableHead = document.getElementById("viewAllTableHead");
   const tableBody = document.getElementById("viewAllTableBody");
 
-  if (!modal || !title || !tableHead || !tableBody) {
-    console.error("Required modal elements not found");
-    return;
-  }
-
-  // Get existing items from the page
-  const items = Array.from(document.querySelectorAll(`[data-${type}-id]`));
-
   // Clear previous content
   tableHead.innerHTML = "";
   tableBody.innerHTML = "";
@@ -228,11 +220,43 @@ function showViewAllModal(type) {
     .map((h) => `<th>${h}</th>`)
     .join("")}</tr>`;
 
-  // Display items
+  // Get items from the cards
+  const items = Array.from(document.querySelectorAll(`[data-${type}-id]`));
   items.forEach((item) => {
     const row = document.createElement("tr");
+    const itemId = item.dataset[`${type}Id`];
     const cells = getTableCellsFromItem(item, type);
-    row.innerHTML = cells;
+
+    row.innerHTML = `
+      ${cells}
+      <td>
+        <div class="table-actions">
+          ${
+            type === "user"
+              ? `
+            <button class="action-btn edit" onclick="showEditModal('${type}', '${itemId}')">
+              <i class="fas fa-edit"></i>
+            </button>
+          `
+              : ""
+          }
+          <button class="action-btn delete" onclick="showConfirmModal('${type}', '${itemId}')">
+            <i class="fas fa-trash"></i>
+          </button>
+          ${
+            type === "hiveupgrade" &&
+            !item.querySelector(".operational-status.active")
+              ? `
+            <button class="action-btn deploy" onclick="deployHiveUpgrade('${itemId}')">
+              <i class="fas fa-rocket"></i>
+            </button>
+          `
+              : ""
+          }
+        </div>
+      </td>
+    `;
+
     tableBody.appendChild(row);
   });
 }
@@ -242,18 +266,26 @@ function closeViewAllModal() {
 }
 
 function getHeadersForType(type) {
-  const headers = {
-    user: ["Name", "Email", "Role", "Joined Date"],
-    product: ["Name", "Price", "Description", "Added Date"],
-    sensor: ["Type", "Model", "Status", "Description", "Hive"],
-    hive: ["Apiary", "Frames", "Dimensions", "Added Date"],
-    apiary: ["Name", "Location", "Hive Count", "Added Date"],
-    hiveupgrade: ["ID", "Operational Status", "Created Date"],
-    question: ["Email", "Message", "Date"],
-    threat: ["Type", "Action", "Severity", "Date"],
-  };
-
-  return headers[type] || [];
+  switch (type) {
+    case "user":
+      return ["Name", "Email", "Role", "Joined Date", "Actions"];
+    case "product":
+      return ["Name", "Price", "Description", "Added Date", "Actions"];
+    case "sensor":
+      return ["Name", "Type", "Model", "Status", "Description", "Actions"];
+    case "hive":
+      return ["Apiary", "Frames", "Dimensions", "Added Date", "Actions"];
+    case "apiary":
+      return ["Name", "Location", "Hive Count", "Added Date", "Actions"];
+    case "hiveupgrade":
+      return ["ID", "Status", "Added Date", "Actions"];
+    case "question":
+      return ["Email", "Message", "Date", "Actions"];
+    case "threat":
+      return ["Type", "Action", "Severity", "Date", "Actions"];
+    default:
+      return [];
+  }
 }
 
 function getTableCellsFromItem(item, type) {
@@ -269,21 +301,105 @@ function getTableCellsFromItem(item, type) {
           .querySelector(".timestamp")
           .textContent.replace("Joined ", "")}</td>
       `;
+
+    case "product":
+      return `
+        <td>${info.querySelector("h4").textContent.trim()}</td>
+        <td>$${info.querySelector("p").textContent.split("|")[0].trim()}</td>
+        <td>${info.querySelector(".product-counter").textContent.trim()}</td>
+        <td>${info
+          .querySelector(".timestamp")
+          .textContent.replace("Added ", "")}</td>
+      `;
+
+    case "sensor":
+      return `
+        <td>${info.querySelector("h4").textContent.trim()}</td>
+        <td>${info
+          .querySelector("p")
+          .textContent.split("|")[0]
+          .replace("Type:", "")
+          .trim()}</td>
+        <td>${info
+          .querySelector("p")
+          .textContent.split("|")[1]
+          .replace("Model:", "")
+          .trim()}</td>
+        <td>${info
+          .querySelector(".sensor-status")
+          .textContent.replace("Status:", "")
+          .trim()}</td>
+        <td>${
+          info.querySelector(".sensor-description")?.textContent.trim() || ""
+        }</td>
+      `;
+
+    case "hive":
+      const dimensions = info
+        .querySelector(".hive-details")
+        .textContent.split("|")[0]
+        .trim();
+      const frames = info
+        .querySelector(".hive-details")
+        .textContent.split("|")[1]
+        .trim();
+      return `
+        <td>${info
+          .querySelector("p")
+          .textContent.replace("Apiary:", "")
+          .trim()}</td>
+        <td>${frames.replace("Frames:", "").trim()}</td>
+        <td>${dimensions.replace("Dimensions:", "").trim()}</td>
+        <td>${info
+          .querySelector(".timestamp")
+          .textContent.replace("Added ", "")}</td>
+      `;
+
+    case "apiary":
+      return `
+        <td>${info.querySelector("h4").textContent.trim()}</td>
+        <td>${info
+          .querySelector("p")
+          .textContent.replace("Location:", "")
+          .trim()}</td>
+        <td>${item.querySelectorAll(".hive-item")?.length || "0"}</td>
+        <td>${info
+          .querySelector(".timestamp")
+          .textContent.replace("Added ", "")}</td>
+      `;
+
+    case "hiveupgrade":
+      return `
+        <td>${info
+          .querySelector("h4")
+          .textContent.replace("ID:", "")
+          .trim()}</td>
+        <td>${info.querySelector(".operational-status").textContent.trim()}</td>
+        <td>${
+          info.querySelector(".timestamp")?.textContent.trim() ||
+          new Date().toLocaleDateString()
+        }</td>
+      `;
+
     case "question":
       return `
         <td>${info.querySelector("h4").textContent.trim()}</td>
         <td>${info.querySelector("p").textContent.trim()}</td>
         <td>${info.querySelector(".timestamp").textContent.trim()}</td>
       `;
+
     case "threat":
       return `
         <td>${info.querySelector("h4").textContent.trim()}</td>
         <td>${info.querySelector(".threat-action").textContent.trim()}</td>
+        <td>${
+          info.querySelector(".severity-level")?.textContent.trim() || "Unknown"
+        }</td>
         <td>${info
           .querySelector(".timestamp")
           .textContent.replace("Reported ", "")}</td>
       `;
-    // Add other cases as needed
+
     default:
       return "";
   }
@@ -306,7 +422,7 @@ async function fetchAllItems(type) {
 
 async function deployHiveUpgrade(id) {
   try {
-    const response = await fetch('/admin/makeOperational', {
+    const response = await fetch("/admin/makeOperational", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ _id: id }),
@@ -315,14 +431,15 @@ async function deployHiveUpgrade(id) {
     if (data.success.status) {
       showNotification(data.message, "success");
       location.reload();
-    }
-    else showNotification(data.message, "error");
+    } else showNotification(data.message, "error");
   } catch (error) {
-    showNotification(`Error making upgrade operational: ${error.message}`, "error");
+    showNotification(
+      `Error making upgrade operational: ${error.message}`,
+      "error"
+    );
     return [];
   }
 }
-
 
 function displayItems(items, type) {
   const tableBody = document.getElementById("viewAllTableBody");
