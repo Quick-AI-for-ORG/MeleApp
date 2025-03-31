@@ -19,6 +19,7 @@ class Apiary {
     }
     this.hives = []
     this.assignment = [];
+    this.ownerName = ""
   }
 
   static async get(id) {
@@ -101,6 +102,12 @@ class Apiary {
     this.temperature = temp;
     this.humidity = humidity;
     return await this.modify(this)
+  }
+
+  async getOwnerName(){
+    const result = await Apiary.dependency.inverse('userModel', this.owner, 'name')
+    if(result.success.status) this.ownerName = result.data
+    return result
   }
 }
 module.exports = Apiary;

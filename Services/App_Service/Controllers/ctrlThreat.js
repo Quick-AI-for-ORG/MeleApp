@@ -50,9 +50,9 @@ const updateThreat = async (req, res) => {
 const getThreat = async (req, res) => {
     try {
         const result = await Threat.get(req.body._id)
-        return res.json(result.toJSON())
+        return result.toJSON()
     } catch (error) {
-        return res.json(new Result(-1, null, `Error getting threat: ${error.message}`).toJSON())
+        return new Result(-1, null, `Error getting threat: ${error.message}`).toJSON()
     }
 }
 

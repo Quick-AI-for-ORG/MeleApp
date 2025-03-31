@@ -18,6 +18,7 @@ class HiveUpgrade {
         "userModel": this.userRef
       }
     }
+    this.productName = ""
   }
 
   static async get(id) {
@@ -78,6 +79,12 @@ class HiveUpgrade {
   async makeOperational(){
     this.operational = true;
     return await this.modify(this);
+  }
+
+  async getProductName(){
+    const result = await HiveUpgrade.dependency.inverse('productModel', this.productRef, 'name');
+    if (result.success.status) this.productName = result.data
+    return result;
   }
 }
 

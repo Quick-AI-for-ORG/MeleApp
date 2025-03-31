@@ -14,7 +14,7 @@ ROUTE = "hardware"
 
 '''DB Configuration'''
 APIARY_ID = '67e7c0691c9f5ffd18cac0ec'
-HIVE_ID = '67e7dd307f9ab3c7d2e92571'
+HIVE_ID = '67e9da6a78f6f3ff0a43625d'
 SENSORTYPES = {
     'temp': 'Temperature',
     'humid': 'Humidity',

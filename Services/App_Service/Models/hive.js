@@ -18,10 +18,14 @@ class Hive {
         "apiaryModel": this.apiaryRef,
       }
     }
-    this.products = []
     this.threats = []
     this.readings = []
     this.captures = []
+    this.upgrades = []
+    
+    this.apiaryName = ""
+    this.products = []
+    this.sensors = []
   }
 
   static async get(id) {
@@ -86,7 +90,7 @@ class Hive {
 
   async getUpgrades(){
     const result = await Hive.dependency.populate('hiveUpgradeModel', this, 'hiveRef')
-    if(result.success.status) this.products = result.data;
+    if(result.success.status) this.upgrades = result.data;
     return result;
   }
 
@@ -104,6 +108,12 @@ class Hive {
   async getCaptures(){
     const result = await Hive.dependency.populate('captureModel', this, 'hiveRef')
     if(result.success.status) this.captures = result.data;
+    return result;
+  }
+
+  async getApiaryName(){
+    const result = await Hive.dependency.inverse('apiaryModel', this.apiaryRef , 'name')
+    if(result.success.status) this.apiaryName = result.data
     return result;
   }
 }

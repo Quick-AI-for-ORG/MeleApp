@@ -19,8 +19,6 @@ router.get("/dashboard", controllers.pages._ADMIN.adminDashboard);
 router.post("/addHive", controllers.hive.addHive);
 router.post("/removeHive", controllers.hive.removeHive);
 
-router.post("/addSensorReading", controllers.sensor.addSensorReading);
-
 router.delete("/hive", controllers.hive.removeHive);
 router.delete("/apiary", controllers.apiary.removeApiary);
 router.delete("/user", controllers.user.removeUser);

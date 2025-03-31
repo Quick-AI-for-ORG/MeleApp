@@ -18,6 +18,7 @@ class Reading {
         "sensorModel": this.sensorRef
       }
     }
+     this.sensorType = ""
   }
 
   static async get(id) {
@@ -67,6 +68,12 @@ class Reading {
 
   async remove() {
     return await Reading.crudInterface.remove(this._id, "readingModel", "_id");
+  }
+
+  async getSensorType(){
+    const result = await Reading.dependency.inverse('sensorModel', this.sensorRef, 'sensorType');
+    if (result.success.status) this.sensorType = result.data
+    return result;
   }
 }
 

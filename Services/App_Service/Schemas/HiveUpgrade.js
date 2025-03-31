@@ -5,11 +5,11 @@ const upgradeSchema = new mongoose.Schema({
         ref: 'Hives',
         required: true,
     },
-    productRef: [{
+    productRef: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Products',
         required: true,
-    }],
+    },
     userRef: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Users',

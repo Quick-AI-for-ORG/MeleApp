@@ -6,9 +6,11 @@ const controllers = {
     sensor: require('./ctrlSensor'),
     product: require('./ctrlProduct'),
     hive: require('./ctrlHive'),
+    keeper: require('./ctrlKeeper'),
+    threat: require('./ctrlThreat'),
+    reading: require('./ctrlReading'),
 }
 const { sendUpgradeConfirmation } = require("../Utils/mailer");
-const weatherService = require("../Utils/weatherService");
 
 const upgrade = async (req, res) => {
     try {        
@@ -23,6 +25,12 @@ const upgrade = async (req, res) => {
             if (result.success.status) apiary = result.data;
             else {
                 req.session.message = result.message;
+                return res.redirect("/keeper/upgrade");
+            }
+            req.body._id = apiary._id;
+            const forecast = await controllers.apiary.updateForecast(req, res);
+            if(!forecast.success.status) {
+                req.session.message = forecast.message;
                 return res.redirect("/keeper/upgrade");
             }
         } else {
@@ -117,9 +125,9 @@ const addHiveUpgrade = async (req, res) => {
 const getUpgrade = async (req, res) => {
     try {
         const result = await HiveUpgrade.get(req.body._id);
-        return res.json(result.toJSON());
+        return result.toJSON();
     } catch (error) {
-        return res.json(new Result(-1, null, `Error fetching hive upgrade: ${error.message}`).toJSON());
+        return new Result(-1, null, `Error fetching hive upgrade: ${error.message}`).toJSON();
     }
 }
 
@@ -173,37 +181,37 @@ const getUpgradedHive = async (req, res) => {
             let hive = controllers.hive._jsonToObject(result.data);
 
             result = await hive.getThreats();
-            if(!result.success.status) return res.json(result.toJSON());
-            hive.threats = result.data || [];
-
-            result = await hive.getReadings();
-            if(!result.success.status) return res.json(result.toJSON());
-            hive.readings = result.data || [];
-
-            result = await hive.getUpgrades();
-            if(!result.success.status) return res.json(result.toJSON());
-            hive.upgrades = result.data || [];
-
-            hive.products = [], hive.sensors = []
-            for (let i = 0; i < hive.upgrades.length; i++) {
-                req.body._id = hive.upgrades[i].productRef;
-                result = await controllers.product.getProduct(req,res)
-                if(!result.success.status) return res.json(result.toJSON());
-                let product = controllers.product._jsonToObject(result.data)
-                for (let j = 0; j < product.sensors; j++) {
-                    req.body._id = product.sensors[j];
-                    result = await controllers.sensor.getSensor(req,res)
-                    if(!result.success.status) return res.json(result.toJSON());
-                    const sensor = controllers.sensor._jsonToObject(result.data);
-                    product.sensors[j] = sensor;
-                    hive.sensors.some(s => s._id === sensor._id) || hive.sensors.push(sensor);
-                }
-                hive.products.push(product);
+            if(!result.success.status) return res.json(result);
+            for(let i = 0; i < result.data.length; i++){
+                hive.threats[i] = controllers.threat._jsonToObject(result.data[i]);
             }
 
+            result = await hive.getReadings();
+            if(!result.success.status) return res.json(result);
+            for(let i = 0; i < result.data.length; i++){
+               hive.readings[i] = controllers.reading._jsonToObject(result.data[i]);
+               const sensorType = await hive.readings[i].getSensorType()
+               if(!sensorType.success.status) return res.json(sensorType);
+               hive.readings[i].sensorType = sensorType.data
+               if(!hive.sensors.includes(sensorType.data)) hive.sensors.push(sensorType.data)
+            }
+            result = await hive.getUpgrades();
+            if(!result.success.status) return res.json(result);
+            for(let i = 0; i < result.data.length; i++){
+                hive.upgrades[i] = new HiveUpgrade(result.data[i])
+                const productName = await hive.upgrades[i].getProductName()
+                if(!productName.success.status) return res.json(result);
+                hive.upgrades[i].productNames = productName.data
+
+                req.body.name = productName.data
+                const productResult = await controllers.product.getProduct(req,res)
+                if(!productResult.success.status) return res.json(productResult);
+                const product = controllers.product._jsonToObject(productResult.data);
+                hive.products.push(product)
+            }
             return res.json(new Result(1, hive, "Hive Fetched and Injected with data").toJSON());
         }
-        else return res.json(result.toJSON());
+        else return res.json(result);
     } catch (error) {
         return res.json(new Result(-1, null, `Error fetching hive: ${error.message}`).toJSON());
     }

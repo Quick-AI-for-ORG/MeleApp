@@ -17,6 +17,7 @@ class Product {
       },
       sub: ['hiveUpgradeModel'],
     }
+    this.sensorTypes = []
   }
 
   static async get(key, by="name") {
@@ -87,6 +88,13 @@ class Product {
     this.counter -= 1;
     return await this.modify(this);
   }
+
+  async getSensorTypes(){
+    const result = await Product.dependency.inverseAll('sensorModel', this.sensors, 'sensorType');
+    if (result.success.status) this.sensorTypes = result.data
+    return result;
+  }
+
 }
 
 module.exports = Product;

@@ -9,6 +9,7 @@ const controllers = {
   sensor: require("../Controllers/ctrlSensor"),
   threat: require("../Controllers/ctrlThreat"),
   hiveUpgrade: require("../Controllers/ctrlUpgrade"),
+  reading: require("../Controllers/ctrlReading")
 }
 
 const home = async (req, res) => {
@@ -165,6 +166,7 @@ const _injectCount = async (req, res) => {
   await controllers.question.getQuestionsCount(req, res);
   await controllers.threat.getThreatsCount(req, res);
   await controllers.hiveUpgrade.getUpgradesCount(req, res);
+  await controllers.reading.getReadingsCount(req, res);
 }
 
 const _injectRecent = async (req, res) => {

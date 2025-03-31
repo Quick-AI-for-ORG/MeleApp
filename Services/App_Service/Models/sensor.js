@@ -14,6 +14,7 @@ class Sensor {
      this.references = {
       sub: ['readingModel'],
     }
+    this.readings = []
   }
 
   static async get(key, by="sensorType") {
@@ -76,7 +77,7 @@ class Sensor {
   }
 
   async getReadings() {
-    const result = await Sensor.crudInterface.getAllSorted("readingModel", "sensorRef", this.sensorType);
+    const result = await Hive.dependency.populate('readingModel', this, 'sensorRef')
     if (result.success.status) this.readings = result.data
     return result;
   }
