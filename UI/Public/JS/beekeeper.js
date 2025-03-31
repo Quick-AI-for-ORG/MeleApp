@@ -43,8 +43,14 @@ async function fetchHiveData(hiveId) {
   try {
     console.log("Fetching hive data for:", hiveId);
 
-    // Show loading state
+    // Show loading state with cute animation
     document.body.classList.add("loading-hive");
+    const loadingElements = `
+      <div class="loading-wings"></div>
+      <div class="loading-text"></div>
+    `;
+    const dashboard = $(".hive-dashboard");
+    dashboard.insertAdjacentHTML("beforeend", loadingElements);
 
     // Check cache first
     if (hiveDataCache[hiveId]) {
@@ -96,7 +102,12 @@ async function fetchHiveData(hiveId) {
     console.error("Error fetching hive data:", error);
     showNotification("Error loading hive data: " + error.message, "error");
   } finally {
+    // Remove loading state and elements
     document.body.classList.remove("loading-hive");
+    const wings = $(".loading-wings");
+    const text = $(".loading-text");
+    if (wings) wings.remove();
+    if (text) text.remove();
   }
 }
 
