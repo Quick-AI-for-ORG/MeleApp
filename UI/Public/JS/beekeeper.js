@@ -78,7 +78,36 @@ async function fetchHiveData(hiveId) {
       updateHiveDashboard(currentHive);
     }
 
-    // Fetch latest data from server
+    // Fetch readings data first
+    const readingsResponse = await fetch("/keeper/getHiveReadings", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ _id: hiveId }),
+    });
+
+    const readingsResult = await readingsResponse.json();
+    console.log("Raw readings data:", readingsResult);
+
+    if (readingsResult.success.status) {
+      // Process readings
+      const readings = readingsResult.data.readings;
+      const processedData = processSensorReadings(readings);
+      updateSensorTables(processedData);
+
+      // Update dashboard stats with latest readings
+      const latestTemps = processedData.temperature[0]?.sensors || [];
+      const latestHumids = processedData.humidity[0]?.sensors || [];
+      
+      const avgTemp = latestTemps.length ? 
+        (latestTemps.reduce((a, b) => a + b, 0) / latestTemps.length).toFixed(1) : "0.0";
+      const avgHumid = latestHumids.length ? 
+        (latestHumids.reduce((a, b) => a + b, 0) / latestHumids.length).toFixed(1) : "0.0";
+
+      $(".weather-card.hive-temp .weather-value .value").textContent = avgTemp;
+      $(".weather-card.hive-humidity .weather-value .value").textContent = avgHumid;
+    }
+
+    // Continue with existing hive data fetch...
     const response = await fetch("/keeper/getHive", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -98,6 +127,7 @@ async function fetchHiveData(hiveId) {
         updateHiveDashboard(newData);
       }
     }
+
   } catch (error) {
     console.error("Error fetching hive data:", error);
     showNotification("Error loading hive data: " + error.message, "error");
@@ -251,42 +281,97 @@ function updateHiveDashboard(hiveData) {
   console.log("Updated hive dashboard with data:", data);
 }
 
-function updateSensorTables(sensorData) {
-  // Update temperature table
-  const tempTable = $(".table-card:first-child tbody");
-  if (tempTable && sensorData.temperature) {
-    tempTable.innerHTML = sensorData.temperature
-      .map(
-        (reading) => `
-      <tr>
-        <td>${new Date(reading.timestamp).toLocaleTimeString()}</td>
-        <td>${reading.average.toFixed(1)}</td>
-        ${reading.sensors
-          .map((value) => `<td>${value.toFixed(1)}</td>`)
-          .join("")}
-      </tr>
-    `
-      )
-      .join("");
+function processSensorReadings(readings) {
+  if (!Array.isArray(readings)) {
+    console.error('No readings data available');
+    return { temperature: [], humidity: [] };
   }
 
-  // Update humidity table
+  // Group readings by timestamp
+  const groupedByTime = {};
+  
+  readings.forEach(reading => {
+    const timestamp = new Date(reading.createdAt).getTime();
+    if (!groupedByTime[timestamp]) {
+      groupedByTime[timestamp] = {
+        Temperature: [],
+        Humidity: []
+      };
+    }
+    
+    if (reading.sensorType === 'Temperature' || reading.sensorType === 'Humidity') {
+      groupedByTime[timestamp][reading.sensorType].push(Number(reading.sensorValue));
+    }
+  });
+
+  // Convert grouped data to final format
+  const processedData = {
+    temperature: [],
+    humidity: []
+  };
+
+  Object.entries(groupedByTime).forEach(([timestamp, data]) => {
+    if (data.Temperature.length > 0) {
+      processedData.temperature.push({
+        timestamp: Number(timestamp),
+        average: data.Temperature.reduce((a, b) => a + b, 0) / data.Temperature.length,
+        sensors: data.Temperature
+      });
+    }
+    
+    if (data.Humidity.length > 0) {
+      processedData.humidity.push({
+        timestamp: Number(timestamp),
+        average: data.Humidity.reduce((a, b) => a + b, 0) / data.Humidity.length,
+        sensors: data.Humidity
+      });
+    }
+  });
+
+  // Sort by timestamp (newest first)
+  processedData.temperature.sort((a, b) => b.timestamp - a.timestamp);
+  processedData.humidity.sort((a, b) => b.timestamp - a.timestamp);
+
+  console.log('Processed sensor data:', processedData);
+  return processedData;
+}
+
+function updateSensorTables(sensorData) {
+  const tempTable = $(".table-card:first-child tbody");
   const humidityTable = $(".table-card:last-child tbody");
-  if (humidityTable && sensorData.humidity) {
-    humidityTable.innerHTML = sensorData.humidity
-      .map(
-        (reading) => `
-      <tr>
-        <td>${new Date(reading.timestamp).toLocaleTimeString()}</td>
-        <td>${reading.average.toFixed(1)}</td>
-        ${reading.sensors
-          .map((value) => `<td>${value.toFixed(1)}</td>`)
-          .join("")}
-      </tr>
-    `
-      )
-      .join("");
-  }
+
+  if (!tempTable || !humidityTable) return;
+
+  const formatTableRows = (readings) => {
+    if (!Array.isArray(readings) || readings.length === 0) {
+      return "<tr>" + "<td>--</td>".repeat(9) + "</tr>";
+    }
+
+    return readings
+      .slice(0, 10) // Show only last 10 readings
+      .map(reading => {
+        const sensorValues = reading.sensors.slice(0, 7);
+        while (sensorValues.length < 7) {
+          sensorValues.push(null);
+        }
+
+        const sensorCells = sensorValues
+          .map(val => val !== null ? val.toFixed(1) : '--')
+          .join('</td><td>');
+
+        return `
+          <tr>
+            <td>${new Date(reading.timestamp).toLocaleTimeString()}</td>
+            <td>${reading.average.toFixed(1)}</td>
+            <td>${sensorCells}</td>
+          </tr>
+        `;
+      })
+      .join('') || "<tr>" + "<td>--</td>".repeat(9) + "</tr>";
+  };
+
+  tempTable.innerHTML = formatTableRows(sensorData.temperature);
+  humidityTable.innerHTML = formatTableRows(sensorData.humidity);
 }
 
 function toggleDashboards(showHive = false, hiveId = null) {
