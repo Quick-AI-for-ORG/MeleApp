@@ -9,15 +9,16 @@ sys.path.append(os.path.join(os.path.dirname('Utils')))
 sys.path.append(os.path.join(os.path.dirname('../Shared')))
 from Shared.Result import Result
 from Utils.insectClassifier import insectClassifier
-from Utils.tempForecast import tempForecast
+from Utils.weatherForecast import WeatherForecast
 from Utils.vibrationAnomaly import vibrationAnomalyDetector
 from Utils.honeyInspector import honeyInspector
 
+from dotenv import load_dotenv
+load_dotenv(dotenv_path="../../.env")
 
-forecastPath = "Models/arimaModel.joblib"
 inspectorPath = "Models/Honeycomb.pt"
 
-forecaster = tempForecast(forecastPath)
+forecaster = WeatherForecast()
 honeyInspector = honeyInspector(inspectorPath,0.3)
 anomalyDetector = vibrationAnomalyDetector()
 
@@ -28,21 +29,28 @@ app = Flask(__name__)
 def forecast():
         try:
             data = request.get_json()
-            if not data or 'dates' not in data or 'temps' not in data:
-                return jsonify({"error": "Invalid input format."}), 400
+            if not data: return jsonify(Result(0, None, "No data provided").to_json()), 400
             
-            dates = data['dates']
-            temps = data['temps']
-            data = forecaster.loadAndPreprocessData(dates, temps,'D')
-            model = forecaster.trainArimaModel(data)
-            forecasted = forecaster.generateForecast(model,10)
-            forecasted = forecasted.tolist()
-            return jsonify({
+            proccessed = forecaster.loadAndPreprocessData(data["sensorType"] ,data["readings"], data["freq"], data["append"])
+            forecaster.trainArimaModel(data["sensorType"], proccessed, data["append"], data["checkPerformance"])
+            forecasted = forecaster.generateForecast(data["sensorType"], data["steps"])
+            toReturn = {
+                "sensorType": data["sensorType"],
                 "forecast": forecasted
-            })
+            }
+            
+            if data["checkPerformance"]: toReturn["metrics"] =  forecaster.metrics
+            if data["getImage"]: toReturn["image"] = forecaster.plotForecastsVsActual(proccessed.index, proccessed.values, forecasted, data["sensorType"]).tolist()
+            
+            return jsonify(
+                Result(1, toReturn, f"Forecasted Data Successfully for {len(data["readings"])} {data["sensorType"]} Readings").to_json()
+            )
         
+        except ValueError as ve: 
+            return jsonify(Result(-1, None, str(ve)).to_json()), 400
+    
         except Exception as e:
-            return jsonify({"error": str(e),"data":f"{dates},{temps}"}), 500
+            return jsonify(Result(-1,None, str(e))), 500
 
 @app.route('/honeyInspect',methods=['POST'])
 def honeyInspect():
@@ -89,3 +97,8 @@ def plot():
     return jsonify({"status":"Plotted"})
 if __name__ == '__main__':
     app.run(debug=True)
+
+
+
+if __name__ == '__main__':
+    app.run(host=os.getenv('IP') or '0.0.0.0', port=os.getenv("FLASK_PORT"), debug=True)

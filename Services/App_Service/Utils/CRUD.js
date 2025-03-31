@@ -149,6 +149,21 @@ const CRUDInterface = {
       return new Result(-1, null, `Error getting all data: ${error.message}.`);
     }
   },
+  getAllNestedFilteredSorted: async function (primaryKeys, model, compareKeys, sortBy={createdAt:-1}, limit=7){
+    try {
+      const compareClause = compareKeys.reduce((acc, key, index) => {
+        acc[key] = primaryKeys[index];
+        return acc;
+      }, {});
+      const records = await models[model].find(compareClause).sort(sortBy).limit(limit);
+      const resultData = records.map((record) => record._doc) || [];
+      await Log.create({ log: `Found ${records.length} records in ${model} with ${JSON.stringify(compareClause)} sorted by ${JSON.stringify(sortBy)}.`, degree: 1,});
+      return new Result(1, resultData, `Found ${records.length} records in ${model} with ${JSON.stringify(compareClause)} sorted by ${JSON.stringify(sortBy)}.`);
+    } catch (error) {
+      await Log.create({ log: `Error getting all data: ${error.message}.`, degree: -1 });
+      return new Result(-1, null, `Error getting all data: ${error.message}.`);
+    }
+  },
   getCount: async function(model){
     try {
       const count = await models[model].countDocuments();

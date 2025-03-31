@@ -133,6 +133,26 @@ const getReadings = async (req, res) => {
 }
 
 
+const getSortedReadings = async (req,res) => {
+    try {
+        let result = await getHive(req, res);
+        if (!result.success.status) return res.json(result.toJSON());
+        const hive = jsonToObject(result.data);
+        result = await hive.getReadings(limit=7, type=req.body.sensor);
+        if (!result.success.status) return res.json(result.toJSON());
+        hive.readings = result.data
+        for (let i = 0; i < result.data.length; i++) {
+            const reading = controllers.reading._jsonToObject(result.data[i]);
+            const sensorType = await reading.getSensorType();
+            reading.sensorType = sensorType.data
+            hive.readings[i] = reading;
+        }
+        return res.json(new Result(1, hive, "Readings fetched successfully").toJSON())
+    } catch (error) {
+        return res.json(new Result(-1, null, `Error fetching readings: ${error.message}`).toJSON())
+    }
+}
+
 module.exports = {
     _jsonToObject: jsonToObject,
     addHive,
@@ -143,4 +163,5 @@ module.exports = {
     getSortedHives,
     getHivesCount,
     getReadings,
+    getSortedReadings,
 }

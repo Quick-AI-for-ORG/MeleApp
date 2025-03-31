@@ -10,8 +10,17 @@ const controllers = {
     reading: require("../Controllers/ctrlReading")
   };
 
-router.post("/addSensorReading", controllers.reading.addReading);
-router.post("/localForecast", controllers.apiary.updateForecast)
+router.post("/addReading", controllers.reading.addReading)
 router.post("/addThreat", controllers.threat.addThreat)
 router.post("/addCapture", controllers.capture.addCapture)
+
+router.post("/getApiary", controllers.apiary.getApiary)
+router.post("/getHive", controllers.hive.getHive)
+router.post("/getSensor", controllers.sensor.getSensor)
+router.post("/getHiveReadings", controllers.hive.getSortedReadings)
+
+router.post("/localForecast", controllers.apiary.updateForecast)
+
+
+
 module.exports = router;
