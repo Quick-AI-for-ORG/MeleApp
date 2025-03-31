@@ -93,13 +93,34 @@ function updateHiveDashboard(hiveData) {
   $(".weather-card.sensors .weather-value .value").textContent =
     (data.sensors && data.sensors.length) || "0";
 
+  
+  let temp = 0.00, humid = 0.00
+  let countTemp = 0, countHumid = 0
+  if(data.readings && data.readings.length > 0) {
+    for(let i = 0; i < data.readings.length; i++) {
+      if(data.readings[i].sensorType == "Temperature"){
+        countTemp++
+        temp += Number(data.readings[i].sensorValue)
+      } 
+      if(data.readings[i].sensorType == "Humidity") {
+        countHumid++
+        humid += Number(data.readings[i].sensorValue)
+      }
+    }
+    if(countTemp > 0)  temp = (temp / countTemp).toFixed(2)
+    else temp = "0.0"
+
+    if(countHumid > 0) humid = (humid / countHumid).toFixed(2)
+    else humid = "0.0"
+
+  }
   // Update temperature with one decimal place
   $(".weather-card.hive-temp .weather-value .value").textContent =
-    data.temperature ? Number(data.temperature).toFixed(1) : "0.0";
+    temp;
 
   // Update humidity as whole number
   $(".weather-card.hive-humidity .weather-value .value").textContent =
-    data.humidity ? Math.round(data.humidity) : "0";
+    humid;
 
   // Update threats count (using length of threats array)
   $(".weather-card.hive-threats .weather-value .value").textContent =
