@@ -114,6 +114,18 @@ class KnowledgeBase:
         return self.currentState[of][sensor]
     
     
+    def getTrend(self, readings, step=7):        
+        if len(readings) < (step * 3): return "STABLE"
+        
+        avg1 = sum(readings[-step:]) / step
+        avg2 = sum(readings[-(step*2):-step]) / step
+        avg3 = sum(readings[-(step*3):-(step*2)]) / step
+        
+        if avg1 > avg2 > avg3: return "RISING"
+        elif avg1 < avg2 < avg3: return "DROPPING"
+        return "STABLE"
+    
+    
     def clearLogs(self):
         self.actions = []
         self.forecasts = []

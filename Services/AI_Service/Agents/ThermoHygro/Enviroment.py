@@ -27,7 +27,7 @@ class Hardware():
             
         
 
-class HiveEnvironment():
+class Enviroment():
     APIARY_ID = os.getenv('APIARY_ID')
     HIVE_ID = os.getenv('HIVE_ID')
 
