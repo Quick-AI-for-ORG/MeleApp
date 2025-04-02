@@ -81,7 +81,7 @@ class Agent:
         
         if tempState == -3: 
             self.actions["vent"] = apiary['temperature'] > hiveTemp[1]
-            reason = "Critically low temperature detected, vent opened based on apiary temperature."
+            reason = f"Critically low temperature detected, vent {"opened" if apiary['temperature'] > hiveTemp[1] else "closed"} based on apiary temperature."
         
         elif tempState == 3: 
             self.actions["cooler"] = True
@@ -123,17 +123,18 @@ class Agent:
         if tempState in [-2, 2] or humidState in [-2, 2]:
             if tempState == 2: 
                 self.actions["vent"] = apiary['temperature'] < hiveTemp[1]
-                reason = "Slightly high temperature detected, vent opened to cool."
+                self.actions["cooler"] = True
+                reason = f"High temperature detected, cooler turned on{", vent opened to cool." if apiary['temperature'] < hiveTemp[1] else '.'}"
             elif tempState == -2: 
                 self.actions["vent"] = apiary["temperature"] > hiveTemp[1]
-                reason = "Slightly low temperature detected, vent opened to warm."
+                reason = "Low temperature detected, vent opened to warm."
             if humidState == 2: 
                 self.actions["vent"] = apiary["humidity"] < hiveHumid[1]
-                reason = "Slightly high humidity detected, vent opened to reduce humidity."
+                reason = "High humidity detected, vent opened to reduce humidity."
             if humidState == -2:
                 self.actions["cooler"] = True
                 self.actions["vent"] = apiary['temperature'] > hiveTemp[1]
-                reason = "Slightly low humidity detected, cooler turned on, vent opened to adjust temperature."
+                reason = f"Low humidity detected, cooler turned on{", vent opened to adjust temperature." if apiary['temperature'] > hiveTemp[1] else '.'}"
 
         return {
             "toggleVent": previous["vent"] != self.actions['vent'],
