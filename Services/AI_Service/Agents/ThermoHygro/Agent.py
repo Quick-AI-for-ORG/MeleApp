@@ -25,7 +25,7 @@ class Agent:
 
     async def forecast(self, sensorType, evaluate=False, append=False, plot=False):
         try:
-            result = await self.aiClient.post("/forecast", body={
+            result = await self.aiClient.post("forecast", body={
                 "sensorType": sensorType,
                 "readings": self.enviroment.readings[sensorType],
                 "freq": 'T',
