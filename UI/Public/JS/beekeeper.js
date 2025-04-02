@@ -97,14 +97,21 @@ async function fetchHiveData(hiveId) {
       // Update dashboard stats with latest readings
       const latestTemps = processedData.temperature[0]?.sensors || [];
       const latestHumids = processedData.humidity[0]?.sensors || [];
-      
-      const avgTemp = latestTemps.length ? 
-        (latestTemps.reduce((a, b) => a + b, 0) / latestTemps.length).toFixed(1) : "0.0";
-      const avgHumid = latestHumids.length ? 
-        (latestHumids.reduce((a, b) => a + b, 0) / latestHumids.length).toFixed(1) : "0.0";
+
+      const avgTemp = latestTemps.length
+        ? (latestTemps.reduce((a, b) => a + b, 0) / latestTemps.length).toFixed(
+            1
+          )
+        : "0.0";
+      const avgHumid = latestHumids.length
+        ? (
+            latestHumids.reduce((a, b) => a + b, 0) / latestHumids.length
+          ).toFixed(1)
+        : "0.0";
 
       $(".weather-card.hive-temp .weather-value .value").textContent = avgTemp;
-      $(".weather-card.hive-humidity .weather-value .value").textContent = avgHumid;
+      $(".weather-card.hive-humidity .weather-value .value").textContent =
+        avgHumid;
     }
 
     // Continue with existing hive data fetch...
@@ -127,7 +134,6 @@ async function fetchHiveData(hiveId) {
         updateHiveDashboard(newData);
       }
     }
-
   } catch (error) {
     console.error("Error fetching hive data:", error);
     showNotification("Error loading hive data: " + error.message, "error");
@@ -283,95 +289,104 @@ function updateHiveDashboard(hiveData) {
 
 function processSensorReadings(readings) {
   if (!Array.isArray(readings)) {
-    console.error('No readings data available');
+    console.error("No readings data available");
     return { temperature: [], humidity: [] };
   }
 
-  // Group readings by timestamp
-  const groupedByTime = {};
-  
-  readings.forEach(reading => {
-    const timestamp = new Date(reading.createdAt).getTime();
-    if (!groupedByTime[timestamp]) {
-      groupedByTime[timestamp] = {
-        Temperature: [],
-        Humidity: []
-      };
-    }
-    
-    if (reading.sensorType === 'Temperature' || reading.sensorType === 'Humidity') {
-      groupedByTime[timestamp][reading.sensorType].push(Number(reading.sensorValue));
-    }
-  });
-
-  // Convert grouped data to final format
-  const processedData = {
-    temperature: [],
-    humidity: []
+  // Initialize three rows for each type
+  const groupedReadings = {
+    temperature: [
+      new Array(7).fill(null),
+      new Array(7).fill(null),
+      new Array(7).fill(null),
+    ],
+    humidity: [
+      new Array(7).fill(null),
+      new Array(7).fill(null),
+      new Array(7).fill(null),
+    ],
   };
 
-  Object.entries(groupedByTime).forEach(([timestamp, data]) => {
-    if (data.Temperature.length > 0) {
-      processedData.temperature.push({
-        timestamp: Number(timestamp),
-        average: data.Temperature.reduce((a, b) => a + b, 0) / data.Temperature.length,
-        sensors: data.Temperature
-      });
-    }
-    
-    if (data.Humidity.length > 0) {
-      processedData.humidity.push({
-        timestamp: Number(timestamp),
-        average: data.Humidity.reduce((a, b) => a + b, 0) / data.Humidity.length,
-        sensors: data.Humidity
-      });
+  readings.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+  const counts = { temperature: 0, humidity: 0 };
+  const timestamps = { temperature: [], humidity: [] };
+
+  // Process readings for 21 sensors (3 rows × 7 sensors)
+  readings.forEach((reading) => {
+    const type = reading.sensorType.toLowerCase();
+    if (type !== "temperature" && type !== "humidity") return;
+
+    if (counts[type] < 21) {
+      // Increased to handle 21 readings
+      const rowIndex = Math.floor(counts[type] / 7);
+      const sensorIndex = counts[type] % 7;
+
+      groupedReadings[type][rowIndex][sensorIndex] = Number(
+        reading.sensorValue
+      );
+
+      // Store timestamp for first reading of each row
+      if (sensorIndex === 0) {
+        timestamps[type][rowIndex] = new Date(
+          reading.createdAt
+        ).toLocaleTimeString();
+      }
+
+      counts[type]++;
     }
   });
 
-  // Sort by timestamp (newest first)
-  processedData.temperature.sort((a, b) => b.timestamp - a.timestamp);
-  processedData.humidity.sort((a, b) => b.timestamp - a.timestamp);
+  const calculateRowAverage = (values) => {
+    const validValues = values.filter((v) => v !== null);
+    return validValues.length
+      ? validValues.reduce((a, b) => a + b, 0) / validValues.length
+      : 0;
+  };
 
-  console.log('Processed sensor data:', processedData);
-  return processedData;
+  return {
+    temperature: groupedReadings.temperature.map((row, i) => ({
+      timestamp: timestamps.temperature[i] || "--:--:--",
+      average: calculateRowAverage(row),
+      sensors: row,
+    })),
+    humidity: groupedReadings.humidity.map((row, i) => ({
+      timestamp: timestamps.humidity[i] || "--:--:--",
+      average: calculateRowAverage(row),
+      sensors: row,
+    })),
+  };
 }
 
 function updateSensorTables(sensorData) {
-  const tempTable = $(".table-card:first-child tbody");
-  const humidityTable = $(".table-card:last-child tbody");
-
-  if (!tempTable || !humidityTable) return;
-
   const formatTableRows = (readings) => {
     if (!Array.isArray(readings) || readings.length === 0) {
       return "<tr>" + "<td>--</td>".repeat(9) + "</tr>";
     }
 
     return readings
-      .slice(0, 10) // Show only last 10 readings
-      .map(reading => {
-        const sensorValues = reading.sensors.slice(0, 7);
-        while (sensorValues.length < 7) {
-          sensorValues.push(null);
-        }
-
-        const sensorCells = sensorValues
-          .map(val => val !== null ? val.toFixed(1) : '--')
-          .join('</td><td>');
+      .map((reading) => {
+        const sensorValues = reading.sensors
+          .map((val) => (val !== null ? val.toFixed(1) : "--"))
+          .join("</td><td>");
 
         return `
-          <tr>
-            <td>${new Date(reading.timestamp).toLocaleTimeString()}</td>
-            <td>${reading.average.toFixed(1)}</td>
-            <td>${sensorCells}</td>
-          </tr>
-        `;
+        <tr>
+          <td>${reading.timestamp}</td>
+          <td>${reading.average.toFixed(1)}</td>
+          <td>${sensorValues}</td>
+        </tr>
+      `;
       })
-      .join('') || "<tr>" + "<td>--</td>".repeat(9) + "</tr>";
+      .join("");
   };
 
-  tempTable.innerHTML = formatTableRows(sensorData.temperature);
-  humidityTable.innerHTML = formatTableRows(sensorData.humidity);
+  const tempTable = $(".table-card:first-child tbody");
+  const humidityTable = $(".table-card:last-child tbody");
+
+  if (tempTable) tempTable.innerHTML = formatTableRows(sensorData.temperature);
+  if (humidityTable)
+    humidityTable.innerHTML = formatTableRows(sensorData.humidity);
 }
 
 function toggleDashboards(showHive = false, hiveId = null) {
