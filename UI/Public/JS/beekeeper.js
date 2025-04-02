@@ -293,10 +293,18 @@ function processSensorReadings(readings) {
     return { temperature: [], humidity: [] };
   }
 
-  // Group readings by sensor type and create two sets of readings
+  // Initialize three rows for each type
   const groupedReadings = {
-    temperature: [new Array(7).fill(null), new Array(7).fill(null)],
-    humidity: [new Array(7).fill(null), new Array(7).fill(null)],
+    temperature: [
+      new Array(7).fill(null),
+      new Array(7).fill(null),
+      new Array(7).fill(null),
+    ],
+    humidity: [
+      new Array(7).fill(null),
+      new Array(7).fill(null),
+      new Array(7).fill(null),
+    ],
   };
 
   readings.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
@@ -304,11 +312,13 @@ function processSensorReadings(readings) {
   const counts = { temperature: 0, humidity: 0 };
   const timestamps = { temperature: [], humidity: [] };
 
+  // Process readings for 21 sensors (3 rows × 7 sensors)
   readings.forEach((reading) => {
     const type = reading.sensorType.toLowerCase();
     if (type !== "temperature" && type !== "humidity") return;
 
-    if (counts[type] < 14) {
+    if (counts[type] < 21) {
+      // Increased to handle 21 readings
       const rowIndex = Math.floor(counts[type] / 7);
       const sensorIndex = counts[type] % 7;
 
