@@ -299,19 +299,15 @@ function processSensorReadings(readings) {
     humidity: [new Array(7).fill(null), new Array(7).fill(null)],
   };
 
-  // Sort readings by timestamp (newest first)
   readings.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-  // Track how many readings we've processed for each type
   const counts = { temperature: 0, humidity: 0 };
-  const timestamps = { temperature: null, humidity: null };
+  const timestamps = { temperature: [], humidity: [] };
 
-  // Process the readings
   readings.forEach((reading) => {
     const type = reading.sensorType.toLowerCase();
     if (type !== "temperature" && type !== "humidity") return;
 
-    // Only process if we haven't filled both rows yet
     if (counts[type] < 14) {
       const rowIndex = Math.floor(counts[type] / 7);
       const sensorIndex = counts[type] % 7;
@@ -319,14 +315,18 @@ function processSensorReadings(readings) {
       groupedReadings[type][rowIndex][sensorIndex] = Number(
         reading.sensorValue
       );
-      if (counts[type] === 0) {
-        timestamps[type] = new Date(reading.createdAt).toLocaleTimeString();
+
+      // Store timestamp for first reading of each row
+      if (sensorIndex === 0) {
+        timestamps[type][rowIndex] = new Date(
+          reading.createdAt
+        ).toLocaleTimeString();
       }
+
       counts[type]++;
     }
   });
 
-  // Calculate averages for each row
   const calculateRowAverage = (values) => {
     const validValues = values.filter((v) => v !== null);
     return validValues.length
@@ -336,12 +336,12 @@ function processSensorReadings(readings) {
 
   return {
     temperature: groupedReadings.temperature.map((row, i) => ({
-      timestamp: i === 0 ? timestamps.temperature : "--:--:--",
+      timestamp: timestamps.temperature[i] || "--:--:--",
       average: calculateRowAverage(row),
       sensors: row,
     })),
     humidity: groupedReadings.humidity.map((row, i) => ({
-      timestamp: i === 0 ? timestamps.humidity : "--:--:--",
+      timestamp: timestamps.humidity[i] || "--:--:--",
       average: calculateRowAverage(row),
       sensors: row,
     })),
