@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beekeeper Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/CSS/beekeeper.css">
+    <link rel="stylesheet" href="/CSS/capture.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/2.1.0/chartjs-plugin-annotation.min.js"></script>
+    <%- include('./Partials/head.ejs') %>
+</head>
+
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-left">
+                <div class="logo">
+                    <a class="navbar-brand" href="/">
+                        <img id="logo" src="/IMAGES/Logo.png" alt="Mele Logo" draggable="false" height="50" />
+                    </a>
+                </div>
+
+                <div class="nav-divider"></div>
+
+                <nav class="nav">
+                    <span class="active">
+                        <%= user.role==='Owner' ? 'Owner' : 'Beekeeper' %> Dashboard: <%= user.name %>
+                    </span>
+                </nav>
+
+                <div class="nav-divider"></div>
+
+                <div class="dynamic-title">
+                    <h2 class="nav-title">
+                        <span id="currentApiaryTitle"><%=apiaryName%></span>
+                        <span id="currentHiveTitle" class="hive-title"><%=index%></span>
+                    </h2>
+                </div>
+
+                <!-- Hidden user data for JS -->
+                <input type="hidden" id="sessionId" value="<%= user._id %>">
+                <input type="hidden" id="sessionRole" value="<%= user.role %>">
+            </div>
+
+            <div class="header-right">
+                <a href="/keeper" class="nav-btn dashboard-btn">
+                    <i class="fa-solid fa-chart-line"></i>Dashboard
+                </a>
+                <a href="/keeper/profile" class="nav-btn profile-btn">
+                    <i class="fas fa-user"></i> Profile
+                </a>
+
+                <% if(user.role==='Owner' ) { %>
+                    <a href="/keeper/upgrade" class="nav-btn upgrade-btn">
+                        <i class="fas fa-arrow-up-right-from-square"></i> Upgrade
+                    </a>
+                    <% } %>
+
+                        <a href="/keeper/logout" class="nav-btn logout-btn">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+            </div>
+        </header>
+    </div>
+            <div class="gallery">
+            <% for(let i = 0; i < 3; i++) { %>
+                <div class="weather-stats">
+                    <div class="weather-card temp">
+                        <div class="weather-icon">
+                            <i class="fa-solid fa-camera-retro"></i>
+                        </div>
+                        <div class="weather-info">
+                            <h3>Image Name</h3>
+                            <div class="weather-value">
+                                <img id="image" src="/IMAGES/Logo.png" alt="Image" draggable="false" height="100" />
+                            </div>
+                            <p class="weather-time"></p>
+                        </div>
+                    </div>
+                    </div>
+                <% } %>
+            </div>
+    <script src="/JS/capture.js"></script>
+</body>
+
+</html>

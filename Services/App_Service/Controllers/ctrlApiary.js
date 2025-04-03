@@ -98,9 +98,9 @@ const updateForecast = async (req, res) => {
         result = await weatherService.getWeatherData(apiary.location.latitude, apiary.location.longitude);
         if(!result.success.status) return res.json(result.toJSON())
         result = await apiary.updateForecast(result.data.temperature, result.data.humidity);
-        return res.json(result.toJSON());
+        return result.toJSON();
     } catch (error) {
-       return res.json(new Result(-1, null, `Error updating forecast: ${error.message}`).toJSON())
+       return new Result(-1, null, `Error updating forecast: ${error.message}`).toJSON()
     }
 }
 

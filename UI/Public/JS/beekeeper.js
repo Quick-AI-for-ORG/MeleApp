@@ -77,7 +77,8 @@ async function fetchHiveData(hiveId) {
     const response = await fetch("/keeper/getHive", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ _id: hiveId }),
+      credentials: "include",
+      body: JSON.stringify({ _id: hiveId, index:$("#currentHiveTitle") }),
     });
 
     const result = await response.json();
