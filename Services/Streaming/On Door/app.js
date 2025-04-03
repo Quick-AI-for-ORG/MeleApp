@@ -4,6 +4,8 @@ const socketIo = require("socket.io");
 const net = require("net");
 const dotenv = require("dotenv")
 const path = require("path")
+const bodyParser = require('body-parser');
+
 
 dotenv.config({ path: "../../../.env" });
 
@@ -18,12 +20,14 @@ const streamRoutes = require("./routes/streamRoutes");
 const PORT = process.env.STREAMINGWEB||10000;
 const STREAMPORT = process.env.STREAMINGPORT||30000;
 const IP = process.env.IP;
+app.locals.IP = IP
 
 app.use(express.static(path.join(__dirname, "UI/Public")));
 app.set("views", "../../../UI/Views");
 app.set("view engine", "ejs");
 
-
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/", streamRoutes);
 
 io.on("connection", (socket) => {
