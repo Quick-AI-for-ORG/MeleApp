@@ -89,24 +89,29 @@ async function fetchHiveData(hiveId) {
     console.log("Raw readings data:", readingsResult);
 
     if (readingsResult.success.status) {
-      // Process readings
       const readings = readingsResult.data.readings;
+      console.log("All sensor readings:", readings);
+
+      // Process readings for all sensor types
       const processedData = processSensorReadings(readings);
       updateSensorTables(processedData);
 
-      // Update dashboard stats with latest readings
+      // Update charts with their respective data
+      const weightChart = Chart.getChart("weightChart");
+      if (weightChart) {
+        console.log("Updating weight chart with readings:", readings);
+        Charts.updateChart(weightChart, [readings]);
+      }
+
+      // Update dashboard stats
       const latestTemps = processedData.temperature[0]?.sensors || [];
       const latestHumids = processedData.humidity[0]?.sensors || [];
 
       const avgTemp = latestTemps.length
-        ? (latestTemps.reduce((a, b) => a + b, 0) / latestTemps.length).toFixed(
-            1
-          )
+        ? latestTemps.reduce((a, b) => a + b, 0) / latestTemps.length
         : "0.0";
       const avgHumid = latestHumids.length
-        ? (
-            latestHumids.reduce((a, b) => a + b, 0) / latestHumids.length
-          ).toFixed(1)
+        ? latestHumids.reduce((a, b) => a + b, 0) / latestHumids.length
         : "0.0";
 
       $(".weather-card.hive-temp .weather-value .value").textContent = avgTemp;
@@ -135,7 +140,7 @@ async function fetchHiveData(hiveId) {
       }
     }
   } catch (error) {
-    console.error("Error fetching hive data:", error);
+    console.error("Error in fetchHiveData:", error);
     showNotification("Error loading hive data: " + error.message, "error");
   } finally {
     // Remove loading state and elements
@@ -892,25 +897,47 @@ function setupEventListeners() {
 document.addEventListener("DOMContentLoaded", function () {
   setupEventListeners();
 
-  setTimeout(() => {
-    const firstApiaryTrigger = $(".nested-dropdown > .nested-trigger");
-    if (firstApiaryTrigger) {
-      const apiaryId = firstApiaryTrigger.dataset.apiaryId;
-      setSelectedApiary(apiaryId);
-      firstApiaryTrigger.click();
+  // Initialize chart instances as global variables
+  let weightChart = null;
+  let vibrationChart = null;
+  let hiveWeightChart = null;
 
-      const dropdownContent = $(".dropdown-content");
-      if (dropdownContent) {
-        dropdownContent.style.display = "block";
-        dropdownContent.classList.add("active");
+  // Function to safely create/update charts
+  function initializeCharts() {
+    console.log("Initializing charts...");
 
-        const mainDropdownIcon = $("#apiaryDropdown .fa-chevron-down");
-        if (mainDropdownIcon)
-          mainDropdownIcon.style.transform = "rotate(180deg)";
-      }
+    // Destroy existing charts if they exist
+    if (weightChart) {
+      console.log("Destroying existing weight chart");
+      weightChart.destroy();
     }
-  }, 100);
 
-  refreshBeekeepersList();
-  updateBeekeepersCount();
+    // Create new chart instances
+    console.log("Creating new weight chart");
+    weightChart = Charts.createFrameWeightChart("weightChart");
+    console.log("Weight chart initialized:", weightChart);
+
+    // Initialize other charts...
+    vibrationChart = Charts.createVibrationChart("vibrationChart");
+    hiveWeightChart = Charts.createWeightChart("hiveWeightChart");
+  }
+
+  // Initialize charts
+  initializeCharts();
+
+  // Set up periodic chart updates
+  setInterval(async function () {
+    try {
+      const response = await fetch("/api/getHiveData");
+      const data = await response.json();
+
+      if (data.success) {
+        Charts.updateChart(weightChart, [data.weightData]);
+        Charts.updateChart(vibrationChart, [data.vibrationData]);
+        Charts.updateChart(hiveWeightChart, [data.hiveWeightData]);
+      }
+    } catch (error) {
+      console.error("Error fetching chart data:", error);
+    }
+  }, 300000); // Every 5 minutes
 });
