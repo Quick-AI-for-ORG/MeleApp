@@ -173,7 +173,8 @@ const login = async (req, res) => {
       req.session.message = result.message;
       return res.redirect("/login");
     }
-    res.redirect("/keeper");
+    if (req.session.user.role == "Owner") res.redirect("/keeper");
+    else if (req.session.user.role == "Admin") res.redirect("/admin")
   } catch (error) {
     return res.json(
       new Result(-1, null, `Error fetching user: ${error.message}`).toJSON()

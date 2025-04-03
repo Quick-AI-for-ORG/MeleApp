@@ -14,6 +14,16 @@ const controllers = {
   threat: require("../Controllers/ctrlThreat"),
 };
 
+
+router.use((req, res, next) => {
+  if (!req.session.user) res.redirect("/noLogin");
+  else if (req.session.user.role !== "Admin") res.redirect("/noAccess");
+  else next();
+});
+router.get("/", (req, res) => {
+  res.redirect("/admin/dashboard");
+});
+
 router.get("/dashboard", controllers.pages._ADMIN.adminDashboard);
 
 router.post("/addHive", controllers.hive.addHive);
@@ -48,6 +58,11 @@ router.post("/makeOperational", controllers.hiveUpgrade.makeOperational);
 
 router.get("/test-stream", (req, res) => {
   res.render("test-stream", { layout: false });
+});
+
+
+router.get("*", (req, res) => {
+  res.redirect("/admin");
 });
 
 module.exports = router;
