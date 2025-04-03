@@ -477,26 +477,6 @@
                 }
             }, 300000); // Every 5 minutes
         });
-
-        function openStream(hiveId) {
-            fetch('/keeper/streaming', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    hiveId: hiveId,
-                    user: document.getElementById('sessionId').value
-                })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        window.open(data.streamUrl, '_blank');
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-        }
     </script>
     <script src="/JS/beekeeper.js"></script>
 </body>
