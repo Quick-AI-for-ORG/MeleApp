@@ -138,7 +138,7 @@ const getSortedReadings = async (req,res) => {
         let result = await getHive(req, res);
         if (!result.success.status) return res.json(result.toJSON());
         const hive = jsonToObject(result.data);
-        result = await hive.getReadings(limit=7, type=req.body.sensor);
+        result = await hive.getReadings(limit=req.body.limit ? req.body.limit : 7, type=req.body.sensor);
         if (!result.success.status) return res.json(result.toJSON());
         hive.readings = result.data
         for (let i = 0; i < result.data.length; i++) {
