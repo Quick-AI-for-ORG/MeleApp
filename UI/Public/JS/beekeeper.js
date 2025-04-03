@@ -109,7 +109,8 @@ async function fetchHiveData(hiveId) {
 
         const avgTemp = latestTemps.length
           ? (
-              latestTemps.reduce((a, b) => a + b, 0) / latestTemps.length).toFixed(1)
+              latestTemps.reduce((a, b) => a + b, 0) / latestTemps.length
+            ).toFixed(1)
           : "0.0";
         const avgHumid = latestHumids.length
           ? (
@@ -366,7 +367,7 @@ function updateSensorTables(sensorData) {
         return `
         <tr>
           <td>${reading.timestamp}</td>
-          <td>${reading.average.toFixed(1)}</td>
+          <td>${parseFloat(reading.average.toFixed(1))}</td>
           <td>${sensorValues}</td>
         </tr>
       `;
