@@ -45,17 +45,7 @@ router.get("/test-stream", (req, res) => {
   res.render("test-stream", { user: req.session.user || null, layout: false });
 });
 
-router.get("/stream", (req, res) => {
-  const { hiveId } = req.query;
-  if (!hiveId) {
-    return res.redirect("/keeper/dashboard");
-  }
-  res.render("streaming", {
-    user: req.session.user._id,
-    hiveId: hiveId,
-    IP: process.env.IP,
-  });
-});
+router.get("/stream", controllers.hive.openDoorStream);
 
 router.post("/getApiaryHives", controllers.apiary.getApiaryHives);
 router.post("/getApiaryKeepers", controllers.keeper.getApiaryKeepers);
