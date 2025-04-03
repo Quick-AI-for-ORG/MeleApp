@@ -59,6 +59,15 @@ const product = async (req, res) => {
 
 const dashboard = async (req, res) => {
   if(req.query.user == req.session.user._id) res.redirect(req.baseUrl)
+  else if(req.query.user) {
+    req.body._id = req.query.user
+    let result = await controllers.user.getUser(req, res);
+    if (!result.success.status) {
+      req.session.message = result.message;
+      res.redirect("/keeper/dashboard");
+    }
+    req.session.user = result.data || null;
+  }
   let keepers, hives = await _inject(req, res);
   let message = req.session.message === undefined ? null : req.session.message;
   req.session.message = undefined;
