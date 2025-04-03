@@ -4,36 +4,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>On Door Stream</title>
+    <title>Live Stream</title>
     <script src="/socket.io/socket.io.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    
     <style>
-        .container {
+        .stream-container {
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
             padding-top: 100px;
         }
 
-        .video-container {
+        .stream-video-container {
             margin-top: 20px;
         }
 
-        video,
-        img {
+        .stream-img {
             width: 100%;
             border: 1px solid #ccc;
             border-radius: 8px;
         }
 
-        .controls {
+        .stream-controls {
             margin-top: 20px;
             display: flex;
             gap: 10px;
         }
 
-        button {
+        .stream-button {
             padding: 10px 20px;
             background: #16404d;
             color: white;
@@ -42,27 +40,27 @@
             cursor: pointer;
         }
 
-        button:hover {
+        .stream-button:hover {
             background: #fca311;
         }
 
-        #status {
+        .stream-status {
             margin-top: 10px;
             padding: 10px;
             border-radius: 4px;
         }
 
-        .success {
+        .stream-success {
             background: #d4edda;
             color: #155724;
         }
 
-        .error {
+        .stream-error {
             background: #f8d7da;
             color: #721c24;
         }
 
-        .back-btn {
+        .stream-back-btn {
             position: fixed;
             top: 20px;
             left: 20px;
@@ -79,61 +77,32 @@
             z-index: 1000;
         }
 
-        .back-btn:hover {
+        .stream-back-btn:hover {
             background: #fca311;
         }
     </style>
 </head>
 
 <body>
-    <a href="/keeper/dashboard" class="back-btn">
+    <a href="http://<%= IP %>:3000/keeper/dashboard?user=<%= user %>" class="stream-back-btn">
         <i class="fas fa-arrow-left"></i> Back to Dashboard
     </a>
-    <div class="container">
-        <h1>Live Stream</h1>
-        <div class="video-container">
-            <img id="stream" src="" alt="Live Stream">
+    <div class="stream-container">
+        <h1>Screen Streaming</h1>
+        <div class="stream-video-container">
+            <img id="stream" class="stream-img" src="" width="640" height="480">
         </div>
-        <div class="controls">
-            <button onclick="startStream()">Start Stream</button>
-            <button onclick="stopStream()">Stop Stream</button>
-        </div>
-        <div id="status"></div>
+        <div id="status" class="stream-status"></div>
     </div>
 
     <script>
         const socket = io();
         const img = document.getElementById("stream");
         let lastFrameTime = 0;
-        let isStreaming = false;
-
-        function startStream() {
-            if (!isStreaming) {
-                isStreaming = true;
-                updateStatus('Starting stream...', 'success');
-                socket.emit('start-stream', { hiveId: '<%= hiveId %>' });
-            }
-        }
-
-        function stopStream() {
-            if (isStreaming) {
-                isStreaming = false;
-                img.src = '';
-                updateStatus('Stream stopped', 'info');
-                socket.emit('stop-stream', { hiveId: '<%= hiveId %>' });
-            }
-        }
-
-        function updateStatus(message, type) {
-            const status = document.getElementById('status');
-            status.textContent = message;
-            status.className = type;
-        }
 
         socket.on("image", (data) => {
-            if (!isStreaming) return;
-
             const now = performance.now();
+
             if (now - lastFrameTime > 33) {
                 requestAnimationFrame(() => {
                     img.src = "data:image/jpeg;base64," + data;
