@@ -43,7 +43,7 @@ async function fetchHiveData(hiveId) {
   try {
     console.log("Fetching hive data for:", hiveId);
 
-    // Show loading state with cute animation
+    // Show loading state
     document.body.classList.add("loading-hive");
     const loadingElements = `
       <div class="loading-wings"></div>
@@ -73,53 +73,7 @@ async function fetchHiveData(hiveId) {
       throw new Error("Hive not found in current data");
     }
 
-    // Only fetch from server if no cache exists
-    if (!hiveDataCache[hiveId]) {
-      updateHiveDashboard(currentHive);
-    }
-
-    // Fetch readings data first
-    const readingsResponse = await fetch("/keeper/getHiveReadings", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ _id: hiveId }),
-    });
-
-    const readingsResult = await readingsResponse.json();
-    console.log("Raw readings data:", readingsResult);
-
-    if (readingsResult.success.status) {
-      const readings = readingsResult.data.readings;
-      console.log("All sensor readings:", readings);
-
-      // Process readings for all sensor types
-      const processedData = processSensorReadings(readings);
-      updateSensorTables(processedData);
-
-      // Update charts with their respective data
-      const weightChart = Chart.getChart("weightChart");
-      if (weightChart) {
-        console.log("Updating weight chart with readings:", readings);
-        Charts.updateChart(weightChart, [readings]);
-      }
-
-      // Update dashboard stats
-      const latestTemps = processedData.temperature[0]?.sensors || [];
-      const latestHumids = processedData.humidity[0]?.sensors || [];
-
-      const avgTemp = latestTemps.length
-        ? latestTemps.reduce((a, b) => a + b, 0) / latestTemps.length
-        : "0.0";
-      const avgHumid = latestHumids.length
-        ? latestHumids.reduce((a, b) => a + b, 0) / latestHumids.length
-        : "0.0";
-
-      $(".weather-card.hive-temp .weather-value .value").textContent = avgTemp;
-      $(".weather-card.hive-humidity .weather-value .value").textContent =
-        avgHumid;
-    }
-
-    // Continue with existing hive data fetch...
+    // Fetch all hive data in one call
     const response = await fetch("/keeper/getHive", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -127,23 +81,57 @@ async function fetchHiveData(hiveId) {
     });
 
     const result = await response.json();
+    console.log("Hive data response:", result);
+
     if (result.success.status) {
       const newData = {
         ...currentHive,
         ...result.data,
       };
 
-      // Only update if data has changed
-      if (JSON.stringify(hiveDataCache[hiveId]) !== JSON.stringify(newData)) {
-        hiveDataCache[hiveId] = newData;
-        updateHiveDashboard(newData);
+      if (result.data.readings && result.data.readings.length > 0) {
+        console.log("Processing readings:", result.data.readings);
+
+        const processedData = processSensorReadings(result.data.readings);
+        updateSensorTables(processedData);
+
+        const weightChart = Chart.getChart("weightChart");
+        if (weightChart) {
+          console.log(
+            "Updating weight chart with readings:",
+            result.data.readings
+          );
+          Charts.updateChart(weightChart, [result.data.readings]);
+        }
+
+        const latestTemps = processedData.temperature[0]?.sensors || [];
+        const latestHumids = processedData.humidity[0]?.sensors || [];
+
+        const avgTemp = latestTemps.length
+          ? (
+              latestTemps.reduce((a, b) => a + b, 0) / latestTemps.length).toFixed(1)
+          : "0.0";
+        const avgHumid = latestHumids.length
+          ? (
+              latestHumids.reduce((a, b) => a + b, 0) / latestHumids.length
+            ).toFixed(1)
+          : "0.0";
+
+        $(".weather-card.hive-temp .weather-value .value").textContent =
+          avgTemp;
+        $(".weather-card.hive-humidity .weather-value .value").textContent =
+          avgHumid;
       }
+
+      // Update cache and dashboard
+      hiveDataCache[hiveId] = newData;
+      updateHiveDashboard(newData);
     }
   } catch (error) {
     console.error("Error in fetchHiveData:", error);
     showNotification("Error loading hive data: " + error.message, "error");
   } finally {
-    // Remove loading state and elements
+    // Remove loading state
     document.body.classList.remove("loading-hive");
     const wings = $(".loading-wings");
     const text = $(".loading-text");
