@@ -78,7 +78,10 @@ async function fetchHiveData(hiveId) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
-      body: JSON.stringify({ _id: hiveId, index:$("#currentHiveTitle").innerText }),
+      body: JSON.stringify({
+        _id: hiveId,
+        index: $("#currentHiveTitle").innerText,
+      }),
       body: JSON.stringify({ _id: hiveId, index: $("#currentHiveTitle") }),
     });
 
@@ -968,21 +971,5 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function openStream(hiveId) {
-  fetch("/keeper/streaming", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      hiveId: hiveId,
-      user: document.getElementById("sessionId").value,
-    }),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.success) {
-        window.open(data.streamUrl, "_blank");
-      }
-    })
-    .catch((error) => console.error("Error:", error));
+  window.location.href = `/keeper/stream?hiveId=${hiveId}`;
 }

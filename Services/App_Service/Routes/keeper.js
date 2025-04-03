@@ -16,8 +16,8 @@ const localStreamService = require("../../Streaming/localStreamService");
 
 router.post("/register", controllers.user.register);
 router.post("/login", controllers.user.login);
-router.post("/localForecast", controllers.apiary.updateForecast)
-router.post("/askQuestion", controllers.question.addQuestion)
+router.post("/localForecast", controllers.apiary.updateForecast);
+router.post("/askQuestion", controllers.question.addQuestion);
 
 router.use((req, res, next) => {
   if (!req.session.user) res.redirect("/noLogin");
@@ -45,11 +45,22 @@ router.get("/test-stream", (req, res) => {
   res.render("test-stream", { user: req.session.user || null, layout: false });
 });
 
+router.get("/stream", (req, res) => {
+  const { hiveId } = req.query;
+  if (!hiveId) {
+    return res.redirect("/keeper/dashboard");
+  }
+  res.render("streaming", {
+    user: req.session.user._id,
+    hiveId: hiveId,
+    IP: process.env.IP,
+  });
+});
 
-router.post("/getApiaryHives", controllers.apiary.getApiaryHives)
-router.post("/getApiaryKeepers", controllers.keeper.getApiaryKeepers)
-router.post("/getHive", controllers.upgrade.getUpgradedHive)
-router.post("/getHiveReadings", controllers.hive.getReadings)
+router.post("/getApiaryHives", controllers.apiary.getApiaryHives);
+router.post("/getApiaryKeepers", controllers.keeper.getApiaryKeepers);
+router.post("/getHive", controllers.upgrade.getUpgradedHive);
+router.post("/getHiveReadings", controllers.hive.getReadings);
 
 router.post("/start-stream", async (req, res) => {
   const { hiveId } = req.body;
@@ -70,15 +81,18 @@ router.post("/add-ice-candidate", async (req, res) => {
 });
 
 router.use((req, res, next) => {
-  if (req.session.user.role != "Owner") res.json({ success: {status: false}, message: "Unauthorized - Must be Apiary Owner to Continue" });
+  if (req.session.user.role != "Owner")
+    res.json({
+      success: { status: false },
+      message: "Unauthorized - Must be Apiary Owner to Continue",
+    });
   else next();
 });
 
-router.post("/assignKeeper", controllers.keeper.assignKeeper)
-router.post("/addHiveUpgrade", controllers.upgrade.addUpgrade)
-router.post("/removeUpgrade", controllers.upgrade.removeUpgrade)
-router.delete("/removeKeeper", controllers.user.removeUser)
-
+router.post("/assignKeeper", controllers.keeper.assignKeeper);
+router.post("/addHiveUpgrade", controllers.upgrade.addUpgrade);
+router.post("/removeUpgrade", controllers.upgrade.removeUpgrade);
+router.delete("/removeKeeper", controllers.user.removeUser);
 
 router.get("*", (req, res) => {
   res.redirect("/keeper");
