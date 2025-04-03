@@ -6,10 +6,15 @@ const jsonToObject = (json) => {
 
 const addCapture = async (req, res) => {
     try{
+        const buffer = Buffer.from(req.body.image, 'base64');
         const captureJSON = {
-            hiveRef: req.body.hiveRef,
-            image: req.body.image
+        hiveRef: req.body.hiveRef,
+        image: buffer,
         };
+    
+
+
+
         const capture = jsonToObject(captureJSON);
         const result = await capture.create();
         return res.json(result.toJSON());
