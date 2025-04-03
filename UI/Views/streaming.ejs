@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Stream</title>
+    <title>On Door Stream</title>
     <script src="/socket.io/socket.io.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -19,6 +19,7 @@
             margin-top: 20px;
         }
 
+        video,
         img {
             width: 100%;
             border: 1px solid #ccc;
@@ -84,13 +85,17 @@
 </head>
 
 <body>
-    <a href="http://<%= IP %>:3000/keeper/dashboard?user=<%= user %>" class="back-btn">
+    <a href="/keeper/dashboard" class="back-btn">
         <i class="fas fa-arrow-left"></i> Back to Dashboard
     </a>
     <div class="container">
-        <h1>Screen Streaming</h1>
+        <h1>Live Stream</h1>
         <div class="video-container">
-            <img id="stream" src="" width="640" height="480">
+            <img id="stream" src="" alt="Live Stream">
+        </div>
+        <div class="controls">
+            <button onclick="startStream()">Start Stream</button>
+            <button onclick="stopStream()">Stop Stream</button>
         </div>
         <div id="status"></div>
     </div>
@@ -99,11 +104,36 @@
         const socket = io();
         const img = document.getElementById("stream");
         let lastFrameTime = 0;
-    
+        let isStreaming = false;
+
+        function startStream() {
+            if (!isStreaming) {
+                isStreaming = true;
+                updateStatus('Starting stream...', 'success');
+                socket.emit('start-stream', { hiveId: '<%= hiveId %>' });
+            }
+        }
+
+        function stopStream() {
+            if (isStreaming) {
+                isStreaming = false;
+                img.src = '';
+                updateStatus('Stream stopped', 'info');
+                socket.emit('stop-stream', { hiveId: '<%= hiveId %>' });
+            }
+        }
+
+        function updateStatus(message, type) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = type;
+        }
+
         socket.on("image", (data) => {
+            if (!isStreaming) return;
+
             const now = performance.now();
-            
-            if (now - lastFrameTime > 33) { 
+            if (now - lastFrameTime > 33) {
                 requestAnimationFrame(() => {
                     img.src = "data:image/jpeg;base64," + data;
                 });
