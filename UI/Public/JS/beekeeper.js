@@ -104,6 +104,11 @@ async function fetchHiveData(hiveId) {
           Charts.updateChart(weightChart, [result.data.readings]);
         }
 
+        const frameComparisonChart = Chart.getChart("frameComparisonChart");
+        if (frameComparisonChart) {
+          Charts.updateChart(frameComparisonChart, [result.data.readings]);
+        }
+
         const latestTemps = processedData.temperature[0]?.sensors || [];
         const latestHumids = processedData.humidity[0]?.sensors || [];
 
@@ -909,6 +914,10 @@ document.addEventListener("DOMContentLoaded", function () {
     // Initialize other charts...
     vibrationChart = Charts.createVibrationChart("vibrationChart");
     hiveWeightChart = Charts.createWeightChart("hiveWeightChart");
+    frameComparisonChart = Charts.createFrameComparisonChart(
+      "frameComparisonChart"
+    );
+    console.log("Charts initialized");
   }
 
   // Initialize charts
