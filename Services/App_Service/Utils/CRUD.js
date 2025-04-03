@@ -9,6 +9,7 @@ const models = {
   keeperAssignmentModel: require("../Schemas/KeeperAssignment"),
   hiveUpgradeModel: require("../Schemas/HiveUpgrade"),
   questionModel: require("../Schemas/Question"),
+  captureModel: require("../Schemas/Capture"),
 };
 const Log = require("../Schemas/Log");
 const Result = require("../../Shared/Result");

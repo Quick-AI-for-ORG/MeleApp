@@ -43,7 +43,7 @@ const dependencyInterface = {
     },
     populateSorted: async function (reference, primaryKeys, compareKeys, limit=7) {
         try {
-            const result = await CRUDInterface.getAllNestedFilteredSorted(primaryKeys, reference, compareKeys, limit=7);
+            const result = await CRUDInterface.getAllNestedFilteredSorted(primaryKeys, reference, compareKeys, limit=limit);
             if (!result.success.status) return result;
             await Log.create({ log: `Population for ${object} is successfull.`, degree: 1 });
             return new Result(1, result.data, `Population for ${object} from ${reference} is successfull.`);

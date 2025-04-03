@@ -72,9 +72,7 @@ class Agent:
         tempState = hiveTemp[1]
         humidState = hiveHumid[1]
         
-        self.actions["vent"] = previous["vent"]
-        self.actions["fan"] = False
-        self.actions["cooler"] = False
+        self.actions = previous
         
         reason = ""
         

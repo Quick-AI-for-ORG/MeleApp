@@ -56,7 +56,6 @@ const getUsers = async (req, res) => {
     if (!result.success.status) {
       return new Result(-1, [], result.message);
     }
-    // Transform the data to match the expected format
     const users = result.data.map((user) => {
       const nameParts = user.name ? user.name.split(" ") : ["", ""];
       return {
