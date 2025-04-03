@@ -105,6 +105,11 @@ async function fetchHiveData(hiveId) {
           Charts.updateChart(weightChart, [result.data.readings]);
         }
 
+        const frameComparisonChart = Chart.getChart("frameComparisonChart");
+        if (frameComparisonChart) {
+          Charts.updateChart(frameComparisonChart, [result.data.readings]);
+        }
+
         const latestTemps = processedData.temperature[0]?.sensors || [];
         const latestHumids = processedData.humidity[0]?.sensors || [];
 
@@ -884,8 +889,33 @@ function setupEventListeners() {
   });
 }
 
+function selectDefaultApiary() {
+  const apiaries = JSON.parse($("#apiariesInjection").dataset.apiaries);
+  if (apiaries && apiaries.length > 0) {
+    const firstApiary = apiaries[0];
+    setSelectedApiary(firstApiary._id);
+    updateTitles(firstApiary.name);
+
+    // Show the apiary content visually
+    const firstApiaryTrigger = $(
+      ".nested-trigger[data-apiary-id='" + firstApiary._id + "']"
+    );
+    const dropdownContent = firstApiaryTrigger?.nextElementSibling;
+    if (dropdownContent) {
+      dropdownContent.classList.add("show");
+      dropdownContent.style.display = "block";
+
+      const chevron = firstApiaryTrigger.querySelector(".fa-chevron-right");
+      if (chevron) {
+        chevron.style.transform = "rotate(90deg)";
+      }
+    }
+  }
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   setupEventListeners();
+  selectDefaultApiary(); // Add this line to select first apiary by default
 
   // Initialize chart instances as global variables
   let weightChart = null;
@@ -910,6 +940,10 @@ document.addEventListener("DOMContentLoaded", function () {
     // Initialize other charts...
     vibrationChart = Charts.createVibrationChart("vibrationChart");
     hiveWeightChart = Charts.createWeightChart("hiveWeightChart");
+    frameComparisonChart = Charts.createFrameComparisonChart(
+      "frameComparisonChart"
+    );
+    console.log("Charts initialized");
   }
 
   // Initialize charts

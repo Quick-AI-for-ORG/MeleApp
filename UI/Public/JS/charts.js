@@ -268,6 +268,63 @@ function createFrameWeightChart(canvasId, data = null) {
   });
 }
 
+function createFrameComparisonChart(canvasId, data = null) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return null;
+
+  const existingChart = Chart.getChart(canvas);
+  if (existingChart) {
+    existingChart.destroy();
+  }
+
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return null;
+
+  const processedData = processFrameComparisonData(data);
+
+  return new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: processedData.labels,
+      datasets: [
+        {
+          label: "Frame 1",
+          data: [processedData.frame1Average],
+          backgroundColor: "rgba(252, 163, 17, 0.8)",
+          barPercentage: 0.4,
+        },
+        {
+          label: "Frame 2",
+          data: [processedData.frame2Average],
+          backgroundColor: "rgba(22, 64, 77, 0.8)",
+          barPercentage: 0.4,
+        },
+      ],
+    },
+    options: {
+      ...chartOptions,
+      scales: {
+        y: {
+          beginAtZero: true,
+          min: processedData.minWeight,
+          max: processedData.maxWeight,
+          title: {
+            display: true,
+            text: "Weight (kg)",
+          },
+        },
+        x: {
+          title: {
+            display: true,
+            text: `Latest Reading: ${processedData.timestamp}`,
+          },
+        },
+      },
+    },
+    plugins: [emptyStatePlugin],
+  });
+}
+
 function processFrameWeightData(readings) {
   console.log("Processing frame weight data, raw readings:", readings);
 
@@ -311,6 +368,53 @@ function processFrameWeightData(readings) {
   };
 }
 
+function processFrameComparisonData(readings) {
+  if (!Array.isArray(readings)) {
+    return {
+      labels: ["Current"],
+      frame1Average: 0,
+      frame2Average: 0,
+      minWeight: 0,
+      maxWeight: 1,
+      timestamp: "--:--:--",
+    };
+  }
+
+  const frame1Readings = readings.filter(
+    (r) => r.sensorType === "Weight" && r.frameNum === 1
+  );
+  const frame2Readings = readings.filter(
+    (r) => r.sensorType === "Weight" && r.frameNum === 2
+  );
+
+  const frame1Values = frame1Readings.map((r) => Number(r.sensorValue));
+  const frame2Values = frame2Readings.map((r) => Number(r.sensorValue));
+
+  const frame1Average = frame1Values.length
+    ? frame1Values.reduce((a, b) => a + b, 0) / frame1Values.length
+    : 0;
+  const frame2Average = frame2Values.length
+    ? frame2Values.reduce((a, b) => a + b, 0) / frame2Values.length
+    : 0;
+
+  const allValues = [...frame1Values, ...frame2Values];
+  const minWeight = Math.min(...allValues, 0);
+  const maxWeight = Math.max(...allValues, 1);
+
+  const timestamp = frame1Readings.length
+    ? new Date(frame1Readings[0].createdAt).toLocaleTimeString()
+    : "--:--:--";
+
+  return {
+    labels: ["Current"],
+    frame1Average,
+    frame2Average,
+    minWeight,
+    maxWeight,
+    timestamp,
+  };
+}
+
 // Update functions
 function updateChart(chart, newData) {
   if (!chart) return;
@@ -322,6 +426,13 @@ function updateChart(chart, newData) {
     chart.data.labels = processedData.labels;
     chart.data.datasets[0].data = processedData.values;
     console.log("Updated chart data:", chart.data);
+  } else if (chart.canvas.id === "frameComparisonChart") {
+    const processedData = processFrameComparisonData(newData[0]);
+    chart.data.datasets[0].data = [processedData.frame1Average];
+    chart.data.datasets[1].data = [processedData.frame2Average];
+    chart.options.scales.y.min = processedData.minWeight;
+    chart.options.scales.y.max = processedData.maxWeight;
+    chart.options.scales.x.title.text = `Latest Reading: ${processedData.timestamp}`;
   } else {
     // Handle other charts as before
     chart.data.datasets.forEach((dataset, index) => {
@@ -338,5 +449,6 @@ window.Charts = {
   createVibrationChart,
   createAdminOverviewChart,
   createFrameWeightChart,
+  createFrameComparisonChart,
   updateChart,
 };
