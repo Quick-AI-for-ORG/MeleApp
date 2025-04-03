@@ -170,6 +170,19 @@ const getCaptures = async (req,res) => {
     }
 }
 
+
+const openDoorStream = async (req, res) => {
+    try {
+        req.body._id = req.query.hiveId
+        let result = await getHive(req, res);
+        if (!result.success.status) return res.json(result.toJSON());
+        const hive = jsonToObject(result.data);
+        res.redirect(`http://${process.env.IP}:${hive.streamUrl}?user=${req.session.user._id}`);
+    } catch (error) {
+        return res.json(new Result(-1, null, `Error opening door stream: ${error.message}`).toJSON())
+    }
+}
+
 module.exports = {
     _jsonToObject: jsonToObject,
     addHive,
@@ -182,4 +195,5 @@ module.exports = {
     getReadings,
     getSortedReadings,
     getCaptures,
+    openDoorStream,
 }
