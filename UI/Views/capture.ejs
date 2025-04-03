@@ -68,18 +68,18 @@
         </header>
     </div>
             <div class="gallery">
-            <% for(let i = 0; i < 3; i++) { %>
+            <% for(let i = 0; i < captures.length; i++) {%>
                 <div class="weather-stats">
                     <div class="weather-card temp">
                         <div class="weather-icon">
                             <i class="fa-solid fa-camera-retro"></i>
                         </div>
                         <div class="weather-info">
-                            <h3>Image Name</h3>
+                            <h3>Capture <%=i+1%></h3>
                             <div class="weather-value">
-                                <img id="image" src="/IMAGES/Logo.png" alt="Image" draggable="false" height="100" />
+                                <img id="image" src="data:image/jpg;base64,<%= captures[i].image.toString('base64') %>" alt="Image" draggable="false" height="100" />
                             </div>
-                            <p class="weather-time"></p>
+                            <p class="weather-time"><%=captures[i].createdAt.toString().split(" ").slice(0, 5).join(" ")%></p>
                         </div>
                     </div>
                     </div>

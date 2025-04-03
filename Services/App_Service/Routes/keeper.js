@@ -29,6 +29,8 @@ router.get("/", (req, res) => {
 });
 
 router.get("/dashboard", controllers.pages._KEEPER.dashboard);
+router.get("/capture", controllers.pages._KEEPER.yield);
+
 router.get("/profile", controllers.pages._KEEPER.profile);
 
 router.get("/logout", controllers.user.logout);
