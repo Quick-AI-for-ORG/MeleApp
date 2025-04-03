@@ -62,9 +62,9 @@ const getSensors = async (req, res) => {
     try {
         const result = await Sensor.getAll();
         req.session.sensors = result.data || [];
-        return res.json(result.toJSON());
+        return result.toJSON();
     } catch (error) {
-        return res.json(new Result(-1, null, `Error fetching sensors: ${error.message}`).toJSON());
+        return new Result(-1, null, `Error fetching sensors: ${error.message}`).toJSON();
     }
 }
 
