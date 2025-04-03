@@ -6,8 +6,8 @@ const sendUpgradeConfirmation = async (userEmail, formData) => {
     const msg = {
       to: userEmail,
       from: {
-        email: "melerimba@gmail.com", 
-        name: "Mele Support", 
+        email: "melerimba@gmail.com",
+        name: "Mele Support",
       },
       replyTo: "melerimba@gmail.com",
       subject: "Mele Keeper Upgrade Confirmation",
@@ -35,7 +35,7 @@ const sendUpgradeConfirmation = async (userEmail, formData) => {
                                                           formData.apiaryName
                                                         }</p>
                                                         <p style="margin: 5px 0;">🔢 <strong>Number of Hives:</strong> ${
-                                                          formData.hivesCount
+                                                          formData.numberOfHives
                                                         }</p>
                                                         <p style="margin: 5px 0;">📏 <strong>Dimensions:</strong> ${
                                                           formData.length
@@ -43,7 +43,7 @@ const sendUpgradeConfirmation = async (userEmail, formData) => {
         formData.width
       }cm x ${formData.height}cm</p>
                                                         <p style="margin: 5px 0;">🎯 <strong>Number of Frames:</strong> ${
-                                                          formData.framesCount
+                                                          formData.numberOfFrames
                                                         }</p>
                                                         <p style="margin: 5px 0;">📦 <strong>Selected Kits:</strong> ${formData.kitSelection.join(
                                                           ", "

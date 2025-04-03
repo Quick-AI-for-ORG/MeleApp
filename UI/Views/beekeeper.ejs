@@ -105,12 +105,11 @@
                                                         </button>
 
                                                         <div class="nested-content">
-                                                            <a href="/keeper/test-stream" class="monitor-link"
-                                                                target="_blank">
+                                                            <button onclick="openStream('<%= hive._id %>')"
+                                                                class="monitor-link">
                                                                 <i class="fas fa-video"></i> Door Camera
-                                                            </a>
-                                                            <a href="/keeper/capture" class="monitor-link"
-                                                                >
+                                                            </button>
+                                                            <a href="/keeper/capture" class="monitor-link">
                                                                 <i class="fas fa-eye"></i> Honey View
                                                             </a>
                                                             <a href="/keeper/test-stream" class="monitor-link"
@@ -478,6 +477,26 @@
                 }
             }, 300000); // Every 5 minutes
         });
+
+        function openStream(hiveId) {
+            fetch('/keeper/streaming', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    hiveId: hiveId,
+                    user: document.getElementById('sessionId').value
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.open(data.streamUrl, '_blank');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
     </script>
     <script src="/JS/beekeeper.js"></script>
 </body>
