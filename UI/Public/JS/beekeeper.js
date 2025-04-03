@@ -78,7 +78,7 @@ async function fetchHiveData(hiveId) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
-      body: JSON.stringify({ _id: hiveId, index:$("#currentHiveTitle") }),
+      body: JSON.stringify({ _id: hiveId, index:$("#currentHiveTitle").innerText }),
     });
 
     const result = await response.json();

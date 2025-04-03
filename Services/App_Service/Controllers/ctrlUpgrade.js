@@ -186,6 +186,9 @@ const getUpgradedHive = async (req, res) => {
         let result = await controllers.hive.getHive(req,res);
         if(result.success.status) {
             let hive = controllers.hive._jsonToObject(result.data);
+            req.session.currentHive = result.data._id;
+            req.session.currentHiveIndex = req.body.index || 0;
+            req.session.save()
 
             result = await hive.getThreats();
             if(!result.success.status) return res.json(result);

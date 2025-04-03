@@ -33,4 +33,7 @@
 .gallery .weather-stats{
     display: inline-flex;
 }
+.hive-title{
+    opacity:1
+}
 

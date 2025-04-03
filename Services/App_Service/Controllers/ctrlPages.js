@@ -59,7 +59,6 @@ const product = async (req, res) => {
 
 const dashboard = async (req, res) => {
   let keepers, hives = await _inject(req, res);
-  await controllers.product.getProducts(req, res);
   let message = req.session.message === undefined ? null : req.session.message;
   req.session.message = undefined;
   res.render("beekeeper", {
@@ -69,9 +68,39 @@ const dashboard = async (req, res) => {
     apiaries: req.session.user.apiaries || [],
     keepers: keepers || [],
     hives: hives || [],
-    products: req.session.products || [],
   });
 };
+
+const yield = async (req, res) => {
+  req.body._id = req.session.currentHive
+  let hive = await controllers.hive.getHive(req, res);
+  if (!hive.success.status) {
+    req.session.message = hive.message;
+    res.redirect("/keeper/dashboard");
+  }
+  const apiaryName = await (controllers.hive._jsonToObject(hive.data)).getApiaryName();
+  if (!apiaryName.success.status) {
+    req.session.message = apiaryName.message;
+    res.redirect("/keeper/dashboard");
+  }
+  const captures = await controllers.hive.getCaptures(req, res);
+  if (!captures.success.status) {
+    req.session.message = captures.message;
+    res.redirect("/keeper/dashboard");
+  }
+  let message = req.session.message === undefined ? null : req.session.message;
+  req.session.message = undefined;
+  res.render("capture", {
+    layout: false,
+    message: message,
+    user: req.session.user || "",
+    hive: hive || null,
+    apiaryName: apiaryName.data || null,
+    captures: captures.data.captures || [],
+    index: req.session.currentHiveIndex || 0,
+  });
+};
+
 
 const profile = (req, res) => {
   let message = req.session.message === undefined ? null : req.session.message;
@@ -185,6 +214,6 @@ const _injectRecent = async (req, res) => {
 
 module.exports = {
   _PUBLIC: { home, about, products, product, noLogin, notFound },
-  _KEEPER: { login, signup, profile, dashboard, upgrade, postUpgrade },
+  _KEEPER: { login, signup, profile, dashboard, yield, upgrade, postUpgrade },
   _ADMIN: { adminDashboard },
 };

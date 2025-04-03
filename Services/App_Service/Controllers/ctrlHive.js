@@ -153,6 +153,23 @@ const getSortedReadings = async (req,res) => {
     }
 }
 
+
+
+const getCaptures = async (req,res) => {
+    try {
+        let result = await getHive(req, res);
+        if (!result.success.status) result.toJSON();
+        const hive = jsonToObject(result.data);
+        result = await hive.getCaptures();
+        if (!result.success.status) result.toJSON();
+        hive.captures = result.data
+        req.session.captures = result.data || []
+        return new Result(1, hive, "Captures fetched successfully").toJSON()
+    } catch (error) {
+        return new Result(-1, null, `Error fetching captures: ${error.message}`).toJSON()
+    }
+}
+
 module.exports = {
     _jsonToObject: jsonToObject,
     addHive,
@@ -164,4 +181,5 @@ module.exports = {
     getHivesCount,
     getReadings,
     getSortedReadings,
+    getCaptures,
 }
