@@ -241,7 +241,7 @@ function createFrameWeightChart(canvasId, data = null) {
         label: "Weight per Frame (kg)",
         data: processedData.values,
         borderColor: "#fca311",
-        backgroundColor: "rgba(252, 163, 17, 0.1)",
+        backgroundColor: "rgba(207, 131, 9, 0.9)",
         fill: true,
         tension: 0.4,
       },
@@ -249,7 +249,7 @@ function createFrameWeightChart(canvasId, data = null) {
   };
 
   return new Chart(ctx, {
-    type: "bar", // Changed to bar chart for better frame weight visualization
+    type: "bar",
     data: chartData,
     options: {
       ...frameWeightChartOptions,
