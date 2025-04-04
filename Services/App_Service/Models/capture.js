@@ -8,6 +8,8 @@ class Capture {
     static jsonToObject = jsonToObject;
     static dependency = dependency;
     static attributes = ['hiveRef', 'imagePath', 'prediction', 'frameNum'];
+
+    static honeyInspectPath = `${process.env.IP}:${process.env.FLASK_PORT}/honeyInspect`;
     
     constructor(captureJSON) {
         Capture.jsonToObject(this, captureJSON);
@@ -16,6 +18,7 @@ class Capture {
             "hiveModel": this.hiveRef,
           }
         }
+        this.predictions = []
     }
     static async get(id) {
         const result = await Capture.crudInterface.get(id, "captureModel", "_id");

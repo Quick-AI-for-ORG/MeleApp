@@ -80,6 +80,8 @@
                                 <img id="image" src="data:image/jpg;base64,<%= captures[i].image.toString('base64') %>" alt="Image" draggable="false" height="100" />
                             </div>
                             <p class="weather-time"><%=captures[i].createdAt.toString().split(" ").slice(0, 5).join(" ")%></p>
+                            <button class="get-prediction" type="button" id="get-prediction" onclick="getPrediction('<%=captures[i]._id%>')">Inspect Super</button>
+
                         </div>
                     </div>
                     </div>
