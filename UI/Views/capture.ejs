@@ -37,8 +37,12 @@
 
                 <div class="dynamic-title">
                     <h2 class="nav-title">
-                        <span id="currentApiaryTitle"><%=apiaryName%></span>
-                        <span id="currentHiveTitle" class="hive-title"><%=index%></span>
+                        <span id="currentApiaryTitle">
+                            <%=apiaryName%>
+                        </span>
+                        <span id="currentHiveTitle" class="hive-title">
+                            <%=index%>
+                        </span>
                     </h2>
                 </div>
 
@@ -67,26 +71,32 @@
             </div>
         </header>
     </div>
-            <div class="gallery">
-            <% for(let i = 0; i < captures.length; i++) {%>
-                <div class="weather-stats">
-                    <div class="weather-card temp">
-                        <div class="weather-icon">
-                            <i class="fa-solid fa-camera-retro"></i>
+    <div class="gallery">
+        <% for(let i=0; i < captures.length; i++) {%>
+            <div class="weather-stats">
+                <div class="weather-card temp">
+                    <div class="weather-icon">
+                        <i class="fa-solid fa-camera-retro"></i>
+                    </div>
+                    <div class="weather-info">
+                        <h3>Capture <%=i+1%>
+                        </h3>
+                        <div class="weather-value">
+                            <img id="image" src="data:image/jpg;base64,<%= captures[i].image.toString('base64') %>"
+                                alt="Image" draggable="false" height="100" />
                         </div>
-                        <div class="weather-info">
-                            <h3>Capture <%=i+1%></h3>
-                            <div class="weather-value">
-                                <img id="image" src="data:image/jpg;base64,<%= captures[i].image.toString('base64') %>" alt="Image" draggable="false" height="100" />
-                            </div>
-                            <p class="weather-time"><%=captures[i].createdAt.toString().split(" ").slice(0, 5).join(" ")%></p>
-                            <button class="get-prediction" type="button" id="get-prediction" onclick="getPrediction('<%=captures[i]._id%>')">Inspect Super</button>
+                        <p class="weather-time">
+                            <%=captures[i].createdAt.toString().split(" ").slice(0, 5).join(" ")%></p>
+                            <button class=" get-prediction" type="button"
+                                onclick="getPrediction('<%=captures[i]._id%>')">
+                                Inspect Super
+                                </button>
 
-                        </div>
                     </div>
-                    </div>
-                <% } %>
+                </div>
             </div>
+            <% } %>
+    </div>
     <script src="/JS/capture.js"></script>
 </body>
 
