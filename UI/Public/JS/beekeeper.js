@@ -556,26 +556,88 @@ function togglePassword() {
  *  BEEKEEPER FORM HANDLING FUNCTIONS   *
  ******************************/
 function validateForm(data) {
-  if (
-    !/^[a-zA-Z\s]{2,}$/.test(data.firstName) ||
-    !/^[a-zA-Z\s]{2,}$/.test(data.lastName)
-  ) {
-    showNotification("Please enter valid first and last names", "error");
-    return false;
-  }
-
-  if (!/^\+?[\d\s-]{10,}$/.test(data.phone)) {
-    showNotification("Please enter a valid phone number", "error");
-    return false;
-  }
-
+  // Email validation (must match signup rules)
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
     showNotification("Please enter a valid email address", "error");
     return false;
   }
 
+  // Name validation (at least 2 letters)
+  if (
+    !/^[a-zA-Z\s]{2,}$/.test(data.firstName) ||
+    !/^[a-zA-Z\s]{2,}$/.test(data.lastName)
+  ) {
+    showNotification("Names must contain at least 2 letters", "error");
+    return false;
+  }
+
+  // Phone validation (must start with +20)
+  if (!/^\+20[\d\s-]{9,}$/.test(data.phone)) {
+    showNotification(
+      "Phone number must start with +20 followed by 9+ digits",
+      "error"
+    );
+    return false;
+  }
+
+  // Password validation (8+ chars, 1 uppercase, 1 number) - only for new beekeepers
+  if (data.password && !/^(?=.*[A-Z])(?=.*\d).{8,}$/.test(data.password)) {
+    showNotification(
+      "Password must have 8+ characters, 1 uppercase & 1 number",
+      "error"
+    );
+    return false;
+  }
+
   return true;
 }
+
+// Add input validation feedback
+function setupFormValidation() {
+  const form = $("#beekeeperForm");
+  if (!form) return;
+
+  const inputs = {
+    firstName: form.querySelector("[name='firstName']"),
+    lastName: form.querySelector("[name='lastName']"),
+    email: form.querySelector("[name='email']"),
+    phone: form.querySelector("[name='phone']"),
+    password: form.querySelector("[name='password']"),
+  };
+
+  // Add real-time validation
+  if (inputs.email) {
+    inputs.email.addEventListener("input", function () {
+      const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.value);
+      this.style.borderColor = isValid ? "#ccc" : "#ef4444";
+    });
+  }
+
+  if (inputs.phone) {
+    inputs.phone.addEventListener("input", function () {
+      const isValid = /^\+20[\d\s-]{9,}$/.test(this.value);
+      this.style.borderColor = isValid ? "#ccc" : "#ef4444";
+    });
+  }
+
+  if (inputs.password) {
+    inputs.password.addEventListener("input", function () {
+      const isValid = /^(?=.*[A-Z])(?=.*\d).{8,}$/.test(this.value);
+      this.style.borderColor = isValid ? "#ccc" : "#ef4444";
+    });
+  }
+
+  // Add validation hints
+  if (inputs.phone) {
+    inputs.phone.placeholder = "+20 Phone Number";
+  }
+}
+
+// Add this to your DOMContentLoaded event listener
+document.addEventListener("DOMContentLoaded", function () {
+  // ...existing code...
+  setupFormValidation();
+});
 
 async function handleSubmit(event) {
   event.preventDefault();
