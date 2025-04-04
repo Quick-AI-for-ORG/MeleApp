@@ -1,4 +1,30 @@
 /* Background Styles */
+.toasts-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+}
+
+/* Single definition of slideIn and slideOut animations */
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOut {
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
 .background-radial-gradient {
   background-color: #fca311;
   background-image: radial-gradient(
@@ -170,57 +196,12 @@ body
   color: #df951d;
 }
 
-/* Toast Styles */
+/* Consolidated Toast Styles */
 .toast-container {
   position: fixed;
   top: 20px;
   right: 20px;
   z-index: 1000;
-}
-
-.toast {
-  background: white;
-  color: #ef4444;
-  padding: 1rem 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin-bottom: 0.5rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  animation: slideIn 0.3s ease, fadeOut 0.3s ease 2.7s;
-  opacity: 0;
-}
-
-.toast i {
-  font-size: 1.2rem;
-}
-
-@keyframes slideIn {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-@keyframes fadeOut {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
-
-.toasts-container {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 9999;
 }
 
 .toast-notification {
@@ -247,13 +228,11 @@ body
   font-size: 0.9rem;
 }
 
-@keyframes slideOut {
+@keyframes fadeOut {
   from {
-    transform: translateX(0);
     opacity: 1;
   }
   to {
-    transform: translateX(100%);
     opacity: 0;
   }
 }
