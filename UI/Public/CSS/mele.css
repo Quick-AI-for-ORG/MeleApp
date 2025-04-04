@@ -1,5 +1,3 @@
-/* Removed unused classes: .mySlides, .prev, .next, .slideshow-container, .ViewBtn */
-
 /* First SlideShow */
 .container {
   position: relative;
@@ -346,7 +344,7 @@ body *:not(nav, nav *, footer, footer *, .slideContainer, .slideContainer *) {
   animation: fadeIn 1.5s ease-in-out;
 }
 
-/* Responsive Adjustments remain unchanged */
+/* Responsive Adjustments */
 @media (max-width: 768px) {
   .container {
     max-width: 100%;
@@ -432,7 +430,6 @@ body *:not(nav, nav *, footer, footer *, .slideContainer, .slideContainer *) {
     visibility: hidden;
   }
 
-  /* Make sure the slide container fits smaller screens */
   .slideContainer {
     background-size: 75%;
   }

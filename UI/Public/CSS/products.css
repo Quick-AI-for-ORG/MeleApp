@@ -1,5 +1,4 @@
-/* start allrooms */
-/* Room Cards */
+/* Products Cards */
 body {
   background-size: cover;
   background-position: center;
@@ -11,173 +10,6 @@ body {
   color: #16404d;
 }
 
-header {
-  text-align: center;
-  margin-bottom: 30px;
-}
-
-header h1 {
-  margin-top: 7%;
-  font-size: 36px;
-  background-image: linear-gradient(to right, #133cc2, #8213c2);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  position: relative;
-  z-index: 1;
-}
-
-header h1::after {
-  content: "";
-  display: block;
-  width: 400px;
-  height: 4px;
-  background-color: #600396aa;
-  margin: 15px auto;
-}
-.room-card-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: stretch; /* Make all items stretch to the same height */
-}
-
-.room-row {
-  display: flex;
-  margin: 20px 30px;
-  width: 100%;
-  justify-content: center;
-  align-items: flex-start; /* Align items to the start of the container */
-}
-
-.room-card {
-  width: 100%;
-  max-width: 400px;
-  margin: 10px;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  background-color: #fbf5dd;
-  cursor: pointer;
-  transition: transform 0.2s;
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-}
-
-.room-card:hover {
-  transform: scale(1.05);
-}
-
-.room-card img {
-  max-width: 100%;
-  height: auto;
-  margin: 0 auto 10px;
-  display: block;
-}
-
-.room-card h2 {
-  font-size: 24px;
-  margin: 10px 0;
-}
-
-.room-card p {
-  font-size: 16px;
-  margin-bottom: 10px;
-  flex-grow: 1;
-}
-
-.room-card-container {
-  border-bottom: 1px solid #ddd;
-  border-radius: 10px;
-  overflow: hidden;
-}
-/* End all rooms */
-/* Pagination styling */
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-}
-
-.pagination button {
-  background-color: #3c0266;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 20px;
-  margin: 10px 10px;
-  font-size: 18px;
-  cursor: pointer;
-}
-
-.pagination button:hover {
-  background-color: #8213c2;
-  transition: background-color 0.5s;
-}
-
-.pagination span {
-  font-size: 18px;
-  margin: 0 10px;
-}
-
-a {
-  color: #8213c2;
-  text-decoration: none;
-}
-
-#currentPage {
-  font-size: 20px;
-  background-color: #8213c2;
-  color: #fff;
-  padding: 5px 10px;
-  border-radius: 5px;
-}
-/* end pagination   */
-/* make all cards the same size */
-::-webkit-scrollbar {
-  display: none;
-}
-.centered-text {
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-top: 7%;
-  position: relative;
-}
-
-.centered-text h2 {
-  font-size: 36px;
-  background-image: linear-gradient(to right, #133cc2, #8213c2);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  position: relative;
-  z-index: 1;
-  color: #333333ac;
-}
-
-centered-text h2::after {
-  content: "";
-  display: block;
-  width: 400px;
-  height: 4px;
-  background-color: #600396aa;
-  margin: 15px auto;
-}
-
-.room-card-container .equal-height {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.room-card-container .equal-height .room-card {
-  display: flex;
-  flex-direction: column;
-}
 ::-webkit-scrollbar {
   display: none;
 }
@@ -192,7 +24,7 @@ centered-text h2::after {
   }
 }
 body *:not(nav, nav *, footer, footer *) {
-  animation: fadeIn 1.5s ease-in-out; /* Adjust duration as needed */
+  animation: fadeIn 1.5s ease-in-out;
 }
 
 /* Hero Section */
@@ -293,22 +125,6 @@ body *:not(nav, nav *, footer, footer *) {
   margin-bottom: 0.5rem;
 }
 
-
-
-.add-to-cart {
-  width: 100%;
-  background: #16404d;
-  color: #fbf5dd;
-  border: none;
-  padding: 0.8rem;
-  border-radius: 5px;
-  transition: background 0.3s ease;
-}
-
-.add-to-cart:hover {
-  background: #fca311;
-}
-
 .view-btn {
   background: #16404d;
   color: #fff;
@@ -322,7 +138,7 @@ body *:not(nav, nav *, footer, footer *) {
   box-shadow: 0 4px 15px rgba(252, 163, 17, 0.3);
   display: inline-block;
 }
-.view-btn *{
+.view-btn * {
   margin-top: 15%;
 }
 
@@ -339,9 +155,15 @@ body *:not(nav, nav *, footer, footer *) {
 }
 
 @keyframes buttonPop {
-  0% { transform: scale(0.8); }
-  50% { transform: scale(1.1); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(0.8);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 /* Responsive Design */
