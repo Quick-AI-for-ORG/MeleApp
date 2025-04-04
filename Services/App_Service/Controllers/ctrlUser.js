@@ -174,7 +174,7 @@ const login = async (req, res) => {
       req.session.message = result.message;
       return res.redirect("/login");
     }
-    if (req.session.user.role == "Owner") res.redirect("/keeper");
+    if (req.session.user.role == "Owner" || req.session.user.role == "Keeper") res.redirect("/keeper");
     else if (req.session.user.role == "Admin") res.redirect("/admin");
   } catch (error) {
     return res.json(
