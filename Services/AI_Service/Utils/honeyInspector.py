@@ -9,8 +9,6 @@ class honeyInspector:
         self.model = YOLO(path)
         self.threshold = threshold
     def  inspect(self,frame):
-        print("Frame shape:", frame.shape)
-        print("Frame dtype:", frame.dtype)
         try:
             results = self.model.predict(source=frame, conf=self.threshold,verbose = False)
         except Exception as e:

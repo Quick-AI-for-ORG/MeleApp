@@ -86,9 +86,10 @@ const yield = async (req, res) => {
   let hive = await controllers.hive.getHive(req, res);
   if (!hive.success.status) {
     req.session.message = hive.message;
-    res.redirect("/keeper/dashboard");
+    return res.redirect("/keeper/dashboard");
   }
-  const apiaryName = await (controllers.hive._jsonToObject(hive.data)).getApiaryName();
+  hive = controllers.hive._jsonToObject(hive.data)
+  const apiaryName = await hive.getApiaryName();
   if (!apiaryName.success.status) {
     req.session.message = apiaryName.message;
     res.redirect("/keeper/dashboard");
