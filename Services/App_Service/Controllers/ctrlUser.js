@@ -106,9 +106,10 @@ const getUsersCount = async (req, res) => {
 const updateUser = async (req, res) => {
   try {
     let update = {};
-    Object.keys(User.attributes).forEach((attr) => {
+     User.attributes.forEach(async (attr) => {
       if (req.body.hasOwnProperty(attr)) {
-        update[attr] = req.body[attr];
+        if (attr == "password") update.password = await User.hashPassword(req.body[attr]);
+        else update[attr] = req.body[attr];
       }
     });
     update.name = req.body.firstName + " " + req.body.lastName;
@@ -159,6 +160,7 @@ const login = async (req, res) => {
     const result = await User.login(req.body.email, req.body.password);
     if (result.success.status) {
       const user = result.data;
+
       const nameParts = user.name ? user.name.split(" ") : ["", ""];
       req.session.user = {
         _id: user._id,

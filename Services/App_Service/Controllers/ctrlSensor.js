@@ -36,7 +36,7 @@ const removeSensor = async (req, res) => {
 const updateSensor = async (req, res) => {
     try {
         let update = {}
-        Object.keys(Sensor.attributes).forEach(attr => {
+        Sensor.attributes.forEach(attr => {
             if (req.body.hasOwnProperty(attr)) {
                 update[attr] = req.body[attr];
             }
