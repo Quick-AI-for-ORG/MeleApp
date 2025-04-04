@@ -376,7 +376,7 @@ function updateSensorTables(sensorData) {
         return `
         <tr>
           <td>${reading.timestamp}</td>
-          <td>${parseFloat(reading.average.toFixed(1))}</td>
+          <td>${parseFloat(reading.average).toFixed(1)}</td>
           <td>${sensorValues}</td>
         </tr>
       `;
