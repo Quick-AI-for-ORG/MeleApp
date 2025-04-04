@@ -738,41 +738,40 @@ async function purchaseUpgrades() {
 }
 
 async function requestKitRemoval(kitId) {
-  const kitNames = {
-    rimba: "The Mele-RIMBA Kit",
-    monitoring: "Internal Hive Monitoring Kit",
-    thermohygro: "ThermoHygro-Regulators Kit",
-    scanner: "Yield Scanner Kit",
-    intrusion: "On Door Intrusion Prevention Kit",
-  };
+  // Find the product name from the DOM
+  const kitElement = document
+    .querySelector(`[onclick*="${kitId}"]`)
+    .closest(".kit-item")
+    .querySelector("h4");
+  const kitName = kitElement ? kitElement.textContent : "Kit";
 
   const confirmation = await askToConfirm(
-    `Are you sure you want to request removal of ${kitNames[kitId]}?`,
-    `${kitNames[kitId]}`,
+    `Are you sure you want to request removal of ${kitName}?`,
+    `Remove ${kitName}`,
     "Remove"
   );
+
   if (confirmation) {
-    showNotification(
-      `Removal request for ${kitNames[kitId]} has been sent to the administrator.`,
-      "success"
-    );
+    try {
+      const response = await fetch("/keeper/removeUpgrade", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ hiveRef: selectedHiveId, productRef: kitId }),
+      });
 
-    const response = await fetch("/keeper/removeUpgrade", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ hiveRef: selectedHiveId, productRef: kitId }),
-    });
+      if (!response.ok) {
+        throw new Error("Failed to send removal request");
+      }
 
-    if (!response.ok) {
+      const result = await response.json();
+      if (result.success.status) {
+        showNotification(result.message, "success");
+        fetchHiveData(selectedHiveId);
+      } else {
+        showNotification(result.message, "error");
+      }
+    } catch (error) {
       showNotification("Failed to send removal request", "error");
-      return;
-    }
-    const result = await response.json();
-    if (result.success.status) {
-      showNotification(result.message, "success");
-      fetchHiveData(selectedHiveId);
-    } else {
-      showNotification(result.message, "error");
     }
   }
 }
