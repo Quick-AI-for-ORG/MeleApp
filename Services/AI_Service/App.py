@@ -8,7 +8,6 @@ import base64
 sys.path.append(os.path.join(os.path.dirname('Utils')))
 sys.path.append(os.path.join(os.path.dirname('../Shared')))
 from Shared.Result import Result
-from Utils.insectClassifier import insectClassifier
 from Utils.weatherForecast import WeatherForecast
 from Utils.vibrationAnomaly import vibrationAnomalyDetector
 from Utils.honeyInspector import honeyInspector
@@ -59,18 +58,20 @@ def forecast():
 @app.route('/honeyInspect',methods=['POST'])
 def honeyInspect():
     try:
-        file = request.files['image']
-        image = np.frombuffer(file.read(), np.uint8)
-        image = cv2.imdecode(image,cv2.IMREAD_COLOR)
+        data = request.get_json()
+        image = data.get('image')
+        binary = bytes(image['data'])   
+        image = np.frombuffer(binary, np.uint8)        
+        image = cv2.imdecode(image, cv2.IMREAD_COLOR)
         labels, frame = honeyInspector.inspect(image)
         _, buffer = cv2.imencode('.jpg', frame)
         encodedImage = base64.b64encode(buffer).decode('utf-8')
-        return jsonify({
+        return jsonify(Result(1,{
             "labels":labels,
             "frame":encodedImage
-                        })
+                        }, "Predictions fetched sucessfully").to_json())
     except Exception as e:
-        return jsonify({"error":str(e)})
+        return jsonify(Result(-1, None, f"Error predicting:  {str(e)}").to_json())
 
 @app.route('/normal', methods=['POST'])
 def fitNormal():
@@ -101,6 +102,11 @@ def plot():
     return jsonify({"status":"Plotted"})
 
 
-
 if __name__ == '__main__':
-    app.run(host=os.getenv('IP') or '0.0.0.0', port=os.getenv("FLASK_PORT"), debug=True)
+    try:
+        print("Starting Flask server...")
+        app.run(host=os.getenv('IP') or '0.0.0.0', port=os.getenv("FLASK_PORT"), debug=True)
+        
+    except KeyboardInterrupt:
+        print("\n[INFO] Keyboard interrupt received. Shutting down server gracefully...")
+        sys.exit(0)

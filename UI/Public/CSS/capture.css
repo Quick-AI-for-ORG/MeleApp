@@ -29,8 +29,13 @@
   border-radius: 15px;
   max-width: 68%;
 }
-.gallery .weather-stats {
+.gallery .weather-stats, .gallery .title * {
   display: inline-flex;
+}
+.weather-stats {
+  min-width:max-content;
+  width:max-content;
+  max-width: max-content;
 }
 .hive-title {
   opacity: 1;
@@ -150,6 +155,10 @@
 .prediction-text strong {
   color: #16404d;
   margin-right: 8px;
+}
+
+.refresh {
+  display: None;
 }
 
 @media (max-width: 768px) {

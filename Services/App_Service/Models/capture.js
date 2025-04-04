@@ -9,7 +9,7 @@ class Capture {
     static dependency = dependency;
     static attributes = ['hiveRef', 'imagePath', 'prediction', 'frameNum'];
 
-    static honeyInspectPath = `${process.env.IP}:${process.env.FLASK_PORT}/honeyInspect`;
+    static honeyInspectPath = 'honeyInspect';
     
     constructor(captureJSON) {
         Capture.jsonToObject(this, captureJSON);

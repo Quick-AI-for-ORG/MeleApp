@@ -10,9 +10,9 @@ const controllers = {
   keeper: require("../Controllers/ctrlKeeper"),
   hive: require("../Controllers/ctrlHive"),
   question: require("../Controllers/ctrlQuestion"),
+  capture: require("../Controllers/ctrlCapture")
 };
 
-const localStreamService = require("../../Streaming/localStreamService");
 
 router.post("/register", controllers.user.register);
 router.post("/login", controllers.user.login);
@@ -41,34 +41,17 @@ router.post("/upgrade", controllers.upgrade.upgrade);
 
 router.get("/getProducts", controllers.product.getProducts);
 
-router.get("/test-stream", (req, res) => {
-  res.render("test-stream", { user: req.session.user || null, layout: false });
-});
-
 router.get("/stream", controllers.hive.openDoorStream);
+router.post("/inspectYield", controllers.capture.getHoneyInspection)
+
 
 router.post("/getApiaryHives", controllers.apiary.getApiaryHives);
 router.post("/getApiaryKeepers", controllers.keeper.getApiaryKeepers);
 router.post("/getHive", controllers.upgrade.getUpgradedHive);
 router.post("/getHiveReadings", controllers.hive.getReadings);
 
-router.post("/start-stream", async (req, res) => {
-  const { hiveId } = req.body;
-  const result = await localStreamService.startStream(hiveId);
-  res.json(result);
-});
 
-router.post("/handle-answer", async (req, res) => {
-  const { hiveId, answer } = req.body;
-  const result = await localStreamService.handleAnswer(hiveId, answer);
-  res.json(result);
-});
 
-router.post("/add-ice-candidate", async (req, res) => {
-  const { hiveId, candidate } = req.body;
-  const result = await localStreamService.addIceCandidate(hiveId, candidate);
-  res.json(result);
-});
 
 router.use((req, res, next) => {
   if (req.session.user.role != "Owner")

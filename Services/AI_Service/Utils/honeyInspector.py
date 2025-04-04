@@ -9,8 +9,14 @@ class honeyInspector:
         self.model = YOLO(path)
         self.threshold = threshold
     def  inspect(self,frame):
-        frame = np.array(frame)
-        results = self.model.predict(source=frame, conf=self.threshold,verbose = False)
+        print("Frame shape:", frame.shape)
+        print("Frame dtype:", frame.dtype)
+        try:
+            results = self.model.predict(source=frame, conf=self.threshold,verbose = False)
+        except Exception as e:
+            print("Error during prediction:", e)
+            return [], frame
+        print(results)
         detections = results[0].boxes.data.cpu().numpy()
         classCounts = {}
         for detection in detections:
