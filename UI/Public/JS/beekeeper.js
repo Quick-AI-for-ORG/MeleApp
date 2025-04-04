@@ -73,69 +73,42 @@ async function fetchHiveData(hiveId) {
       throw new Error("Hive not found in current data");
     }
 
-    // Fetch all hive data in one call
+    // Fixed duplicate body issue in fetch request
     const response = await fetch("/keeper/getHive", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
       body: JSON.stringify({
         _id: hiveId,
-        index: $("#currentHiveTitle").innerText,
-      }),
+        index: $("#currentHiveTitle").innerText || "Default Index" // Added fallback
+      })
     });
 
     const result = await response.json();
     console.log("Hive data response:", result);
 
-    if (result.success.status) {
+    if (result.success.status && result.data) {
+      // Ensure readings are properly structured
+      const readings = result.data.readings || [];
       const newData = {
         ...currentHive,
         ...result.data,
+        readings: readings.map(reading => ({
+          ...reading,
+          sensorValue: parseFloat(reading.sensorValue),
+          timestamp: new Date(reading.createdAt).toLocaleTimeString()
+        }))
       };
-
-      if (result.data.readings && result.data.readings.length > 0) {
-        console.log("Processing readings:", result.data.readings);
-
-        const processedData = processSensorReadings(result.data.readings);
-        updateSensorTables(processedData);
-
-        const weightChart = Chart.getChart("weightChart");
-        if (weightChart) {
-          console.log(
-            "Updating weight chart with readings:",
-            result.data.readings
-          );
-          Charts.updateChart(weightChart, [result.data.readings]);
-        }
-
-        const frameComparisonChart = Chart.getChart("frameComparisonChart");
-        if (frameComparisonChart) {
-          Charts.updateChart(frameComparisonChart, [result.data.readings]);
-        }
-
-        const latestTemps = processedData.temperature[0]?.sensors || [];
-        const latestHumids = processedData.humidity[0]?.sensors || [];
-
-        const avgTemp = latestTemps.length
-          ? (
-              latestTemps.reduce((a, b) => a + b, 0) / latestTemps.length
-            ).toFixed(1)
-          : "0.0";
-        const avgHumid = latestHumids.length
-          ? (
-              latestHumids.reduce((a, b) => a + b, 0) / latestHumids.length
-            ).toFixed(1)
-          : "0.0";
-
-        $(".weather-card.hive-temp .weather-value .value").textContent =
-          avgTemp;
-        $(".weather-card.hive-humidity .weather-value .value").textContent =
-          avgHumid;
-      }
 
       // Update cache and dashboard
       hiveDataCache[hiveId] = newData;
       updateHiveDashboard(newData);
+
+      // Update sensor tables if readings exist
+      if (readings.length > 0) {
+        const processedData = processSensorReadings(readings);
+        updateSensorTables(processedData);
+      }
     }
   } catch (error) {
     console.error("Error in fetchHiveData:", error);
