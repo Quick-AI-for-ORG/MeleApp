@@ -166,60 +166,6 @@ function createVibrationChart(canvasId, data = null) {
   });
 }
 
-function createAdminOverviewChart(canvasId, data = null) {
-  const ctx = document.getElementById(canvasId)?.getContext("2d");
-  if (!ctx) return null;
-
-  const defaultData = {
-    labels: [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ],
-    datasets: [
-      {
-        label: "Active Hives",
-        data: data?.hives || Array(12).fill(0),
-        borderColor: "#fca311",
-        backgroundColor: "rgba(252, 163, 17, 0.1)",
-        fill: true,
-      },
-      {
-        label: "Active Users",
-        data: data?.users || Array(12).fill(0),
-        borderColor: "#16404d",
-        backgroundColor: "rgba(22, 64, 77, 0.1)",
-        fill: true,
-      },
-    ],
-  };
-
-  return new Chart(ctx, {
-    type: "line",
-    data: defaultData,
-    options: {
-      ...chartOptions,
-      plugins: {
-        ...chartOptions.plugins,
-        title: {
-          display: true,
-          text: "System Overview",
-        },
-      },
-    },
-    plugins: [emptyStatePlugin],
-  });
-}
-
 function createFrameWeightChart(canvasId, data = null) {
   const canvas = document.getElementById(canvasId);
   if (!canvas) return null;
@@ -447,7 +393,6 @@ function updateChart(chart, newData) {
 window.Charts = {
   createWeightChart,
   createVibrationChart,
-  createAdminOverviewChart,
   createFrameWeightChart,
   createFrameComparisonChart,
   updateChart,
