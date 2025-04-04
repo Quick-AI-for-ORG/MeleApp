@@ -9,46 +9,7 @@
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <link rel="stylesheet" href="/CSS/signUp.css">
-    <style>
-        .toasts-container {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 9999;
-        }
 
-        .toast-notification {
-            background: white;
-            padding: 1rem;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            min-width: 300px;
-            animation: slideIn 0.3s ease forwards;
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        @keyframes slideOut {
-            to {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-        }
-    </style>
     <%- include('./Partials/head.ejs') %>
 </head>
 
@@ -58,7 +19,6 @@
 
         <!-- Section: Design Block -->
         <section class="text-center text-lg-start">
-
 
             <!-- Jumbotron -->
             <div class="container py-4">
@@ -155,22 +115,7 @@
 
                                     <!-- Register buttons -->
                                     <div class="text-center">
-                                        <!-- <p>or sign up with:</p>
-                                        <button type="button" class="btn btn-link btn-floating mx-1">
-                                            <i class="fab fa-facebook-f"></i>
-                                        </button>
 
-                                        <button type="button" class="btn btn-link btn-floating mx-1">
-                                            <i class="fab fa-google"></i>
-                                        </button>
-
-                                        <button type="button" class="btn btn-link btn-floating mx-1">
-                                            <i class="fab fa-twitter"></i>
-                                        </button>
-
-                                        <button type="button" class="btn btn-link btn-floating mx-1">
-                                            <i class="fab fa-instagram" style=" font-size: larger;"></i>
-                                        </button> -->
                                         <div class="member">
                                             <span>Already a member? <a class="login" href="/login">Log
                                                     In</a></span>
