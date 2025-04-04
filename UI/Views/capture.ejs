@@ -79,25 +79,26 @@
                         <i class="fa-solid fa-camera-retro"></i>
                     </div>
                     <div class="weather-info">
-                        <h3>Capture <%=i+1%>
-                        </h3>
+                        <div class="title">
+                        <h3>Capture <%=i+1%></h3>
+                        <p class="weather-time">
+                            <%=captures[i].createdAt.toString().split(" ").slice(0, 5).join(" ")%>
+                        </p></div>
                         <div class="capture-content">
+                            <div class="refresh" id="refresh-<%=captures[i]._id%>"><%=captures[i].image.toString('base64')%></div>
                             <div class="image-section">
-                                <img id="image" src="data:image/jpg;base64,<%= captures[i].image.toString('base64') %>"
+                                <img  id="image-<%=captures[i]._id%>" src="data:image/jpg;base64,<%= captures[i].image.toString('base64') %>"
                                     alt="Image" draggable="false" height="100" />
-                                <button class="get-prediction" type="button"
+                                <button id="button-<%=captures[i]._id%>" class="get-prediction" type="button"
                                     onclick="getPrediction('<%=captures[i]._id%>')">
                                     Inspect
                                 </button>
                             </div>
                             <div class="prediction-text">
                                 <strong>Predictions:</strong>
-                                <span>Click inspect to analyze image</span>
+                                <pre id="predictions-<%=captures[i]._id%>">Click inspect to analyze image</pre>
                             </div>
                         </div>
-                        <p class="weather-time">
-                            <%=captures[i].createdAt.toString().split(" ").slice(0, 5).join(" ")%>
-                        </p>
                     </div>
                 </div>
             </div>

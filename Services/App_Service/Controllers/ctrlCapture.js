@@ -1,5 +1,7 @@
 const Capture = require('../Models/Capture');
 const Result = require("../../Shared/Result");
+
+const axios = require("axios")
 const jsonToObject = (json) => {
     return new Capture(json);
     }
@@ -94,6 +96,25 @@ const getCapturesCount = async (req, res) => {
 }
 
 
+const getHoneyInspection = async (req,res) => {
+    try{
+        let result = await getCapture(req,res)
+        if (!result.success.status) return res.json(result.toJSON())
+        const capture = jsonToObject(result.data)
+        const response = await axios.post(`http://${process.env.IP}:${process.env.FLASK_PORT}/${Capture.honeyInspectPath}`, 
+            { image: capture.image }, 
+            { headers: {'Content-Type': 'application/json'},}
+        );
+        result = response.data
+        if (!result.success.status) return res.json(new Result(0, null, result.message).toJSON())
+        return res.json(new Result(1, result.data, result.message).toJSON())
+        
+    }
+    catch(error){
+        return res.json(new Result(-1, null, `Error fetching predictions: ${error.message}`).toJSON())
+    }
+}
+
 module.exports = {
     addCapture,
     removeCapture,
@@ -101,5 +122,6 @@ module.exports = {
     getCapture,
     getCaptures,
     getSortedCaptures,
-    getCapturesCount
+    getCapturesCount,
+    getHoneyInspection
 };
