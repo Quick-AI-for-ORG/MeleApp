@@ -46,43 +46,43 @@
                                     <input type="text" id="firstName" name="firstName"
                                         value="<%= user.name ? user.name.split(' ')[0] : '' %>" pattern="[A-Za-z\s]{2,}"
                                         title="Name must contain at least 2 letters" readonly required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="lastName">Last Name</label>
-                                    <input type="text" id="lastName" name="lastName"
-                                        value="<%= user.name ? user.name.split(' ').slice(1).join(' ') : '' %>"
-                                        pattern="[A-Za-z\s]{2,}" title="Name must contain at least 2 letters" readonly
-                                        required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="email">Email</label>
-                                    <input type="email" id="email" name="email" value="<%= user.email %>" readonly
-                                        required>
-                                    <div class="invalid-feedback">
-                                        Please enter a valid email address
+                                    <input type="hidden" name="_id" value="<%=user._id%>" </div>
+                                    <div class="form-group">
+                                        <label for="lastName">Last Name</label>
+                                        <input type="text" id="lastName" name="lastName"
+                                            value="<%= user.name ? user.name.split(' ').slice(1).join(' ') : '' %>"
+                                            pattern="[A-Za-z\s]{2,}" title="Name must contain at least 2 letters"
+                                            readonly required>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <label>Role</label>
-                                    <input type="text" value="<%= user.role || 'Beekeeper' %>" readonly disabled>
-                                </div>
-                                <div class="form-group password-group" style="display: none;">
-                                    <label for="password">New Password</label>
-                                    <div class="password-wrapper">
-                                        <input type="password" id="password" name="password" minlength="6"
-                                            placeholder="Leave blank to keep current password">
-                                        <button type="button" class="toggle-password" onclick="togglePassword()">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
+                                    <div class="form-group">
+                                        <label for="email">Email</label>
+                                        <input type="email" id="email" name="email" value="<%= user.email %>" readonly
+                                            required>
+                                        <div class="invalid-feedback">
+                                            Please enter a valid email address
+                                        </div>
                                     </div>
-                                    <div class="password-requirements">
-                                        Password must be at least 6 characters long
+                                    <div class="form-group">
+                                        <label>Role</label>
+                                        <input type="text" value="<%= user.role || 'Beekeeper' %>" readonly disabled>
                                     </div>
-                                </div>
-                                <div class="form-actions" style="display: none;">
-                                    <button type="button" class="cancel-btn" onclick="cancelEdit()">Cancel</button>
-                                    <button type="submit" class="save-btn">Save Changes</button>
-                                </div>
+                                    <div class="form-group password-group" style="display: none;">
+                                        <label for="password">New Password</label>
+                                        <div class="password-wrapper">
+                                            <input type="password" id="password" name="password" minlength="6"
+                                                placeholder="Leave blank to keep current password">
+                                            <button type="button" class="toggle-password" onclick="togglePassword()">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
+                                        <div class="password-requirements">
+                                            Password must be at least 6 characters long
+                                        </div>
+                                    </div>
+                                    <div class="form-actions" style="display: none;">
+                                        <button type="button" class="cancel-btn" onclick="cancelEdit()">Cancel</button>
+                                        <button type="submit" class="save-btn">Save Changes</button>
+                                    </div>
                             </form>
                 </div>
             </div>

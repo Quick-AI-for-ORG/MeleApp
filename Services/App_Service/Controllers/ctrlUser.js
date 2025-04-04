@@ -112,9 +112,8 @@ const updateUser = async (req, res) => {
       }
     });
     update.name = req.body.firstName + " " + req.body.lastName;
-    if (req.body.email == req.session.user.email) {
+    if (req.body._id == req.session.user._id) {
       const user = jsonToObject(req.session.user);
-      update.email = user.email;
       const result = await user.modify(update);
       if (result.success.status) req.session.user = result.data;
       else req.session.message = result.message;
@@ -174,7 +173,7 @@ const login = async (req, res) => {
       return res.redirect("/login");
     }
     if (req.session.user.role == "Owner") res.redirect("/keeper");
-    else if (req.session.user.role == "Admin") res.redirect("/admin")
+    else if (req.session.user.role == "Admin") res.redirect("/admin");
   } catch (error) {
     return res.json(
       new Result(-1, null, `Error fetching user: ${error.message}`).toJSON()
