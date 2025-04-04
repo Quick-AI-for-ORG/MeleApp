@@ -81,19 +81,24 @@
                     <div class="weather-info">
                         <h3>Capture <%=i+1%>
                         </h3>
-                        <div class="weather-value">
-                            <img id="image" src="data:image/jpg;base64,<%= captures[i].image.toString('base64') %>"
-                                alt="Image" draggable="false" height="100" />
-                        </div>
-                        <p class="weather-time">
-                            <%=captures[i].createdAt.toString().split(" ").slice(0, 5).join(" ")%>
-                        </p>
-                        <button class=" get-prediction" type="button" onclick="getPrediction('<%=captures[i]._id%>')">
-                            Inspect Super
-                        </button>
-                        <div id="prediction-<%=captures[i]._id%>" class="prediction-result">
-                            <strong>Predictions: </strong>
-                            <span class="prediction-placeholder">Click Inspect to analyze image</span>
+                        <div class="capture-content">
+                            <div class="image-container">
+                                <img id="image" src="data:image/jpg;base64,<%= captures[i].image.toString('base64') %>"
+                                    alt="Image" draggable="false" height="100" />
+                                <p class="weather-time">
+                                    <%=captures[i].createdAt.toString().split(" ").slice(0, 5).join(" ")%>
+                                </p>
+                            </div>
+                            <div class=" capture-actions">
+                                        <button class="get-prediction" type="button"
+                                            onclick="getPrediction('<%=captures[i]._id%>')">
+                                            Inspect Super
+                                        </button>
+                                        <div id="prediction-<%=captures[i]._id%>" class="prediction-result">
+                                            <strong>Predictions: </strong>
+                                            <span class="prediction-placeholder">Click Inspect to analyze image</span>
+                                        </div>
+                            </div>
                         </div>
                     </div>
                 </div>

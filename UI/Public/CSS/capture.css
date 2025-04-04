@@ -51,6 +51,8 @@
   margin-top: 10px;
   width: 100%;
   justify-content: center;
+  min-width: 120px;
+  margin-top: 0;
 }
 
 .get-prediction:hover {
@@ -81,6 +83,9 @@
   justify-content: center;
   color: #16404d;
   font-size: 0.9rem;
+  margin-top: 0;
+  min-height: 40px;
+  font-size: 0.8rem;
 }
 
 .prediction-result strong {
@@ -100,4 +105,36 @@
 .prediction-result.has-result {
   background: rgba(22, 64, 77, 0.1);
   font-weight: 500;
+}
+
+.capture-content {
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+  margin-top: 10px;
+}
+
+.image-container {
+  flex: 0 0 auto;
+}
+
+.capture-actions {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.weather-card {
+  min-width: 400px;
+}
+
+@media (max-width: 768px) {
+  .capture-content {
+    flex-direction: column;
+  }
+
+  .weather-card {
+    min-width: 300px;
+  }
 }
