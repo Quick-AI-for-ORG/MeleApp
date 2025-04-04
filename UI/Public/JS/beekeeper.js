@@ -80,8 +80,8 @@ async function fetchHiveData(hiveId) {
       credentials: "include",
       body: JSON.stringify({
         _id: hiveId,
-        index: $("#currentHiveTitle").innerText || "Default Index" // Added fallback
-      })
+        index: $("#currentHiveTitle").innerText || "Default Index", // Added fallback
+      }),
     });
 
     const result = await response.json();
@@ -93,11 +93,11 @@ async function fetchHiveData(hiveId) {
       const newData = {
         ...currentHive,
         ...result.data,
-        readings: readings.map(reading => ({
+        readings: readings.map((reading) => ({
           ...reading,
           sensorValue: parseFloat(reading.sensorValue),
-          timestamp: new Date(reading.createdAt).toLocaleTimeString()
-        }))
+          timestamp: new Date(reading.createdAt).toLocaleTimeString(),
+        })),
       };
 
       // Update cache and dashboard
@@ -261,12 +261,41 @@ function updateHiveDashboard(hiveData) {
   });
 
   console.log("Updated hive dashboard with data:", data);
+
+  if (data.readings && data.readings.length > 0) {
+    // Process readings for charts
+    const processedData = processSensorReadings(data.readings);
+    updateSensorTables(processedData);
+
+    // Update frame weight chart
+    const weightChart = Chart.getChart("weightChart");
+    if (weightChart) {
+      const weightReadings = data.readings.filter(
+        (r) => r.sensorType === "Weight"
+      );
+      if (weightReadings.length > 0) {
+        console.log("Found weight readings:", weightReadings);
+        Charts.updateChart(weightChart, [weightReadings]);
+      }
+    }
+
+    // Update frame comparison chart if exists
+    const frameComparisonChart = Chart.getChart("frameComparisonChart");
+    if (frameComparisonChart) {
+      Charts.updateChart(frameComparisonChart, [data.readings]);
+    }
+
+    // Process temperature and humidity as before
+    const latestTemps = processedData.temperature[0]?.sensors || [];
+    const latestHumids = processedData.humidity[0]?.sensors || [];
+    // ...rest of existing temperature/humidity processing...
+  }
 }
 
 function processSensorReadings(readings) {
   if (!Array.isArray(readings)) {
     console.error("No readings data available");
-    return { temperature: [], humidity: [] };
+    return { temperature: [], humidity: [], weight: [] };
   }
 
   // Initialize three rows for each type
@@ -320,6 +349,18 @@ function processSensorReadings(readings) {
       : 0;
   };
 
+  const weightReadings = readings
+    .filter((r) => r.sensorType === "Weight")
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    .slice(0, 7)
+    .map((r) => ({
+      timestamp: new Date(r.createdAt).toLocaleTimeString(),
+      value: Number(r.sensorValue),
+      frameNum: r.frameNum || 1,
+    }));
+
+  console.log("Processed weight readings:", weightReadings);
+
   return {
     temperature: groupedReadings.temperature.map((row, i) => ({
       timestamp: timestamps.temperature[i] || "--:--:--",
@@ -331,6 +372,7 @@ function processSensorReadings(readings) {
       average: calculateRowAverage(row),
       sensors: row,
     })),
+    weight: weightReadings,
   };
 }
 
