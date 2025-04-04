@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, Response
+from flask import Flask, request, jsonify, Response, render_template
 import cv2
 import numpy as np
 import tensorflow as tf
@@ -24,7 +24,11 @@ anomalyDetector = vibrationAnomalyDetector()
 
 app = Flask(__name__)
 
-    
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+        
 @app.route('/forecast', methods=['POST'])
 def forecast():
         try:
@@ -95,8 +99,6 @@ def plot():
     anomalyDetector.plotErrors()
     anomalyDetector.plotReconstructedData()
     return jsonify({"status":"Plotted"})
-if __name__ == '__main__':
-    app.run(debug=True)
 
 
 
