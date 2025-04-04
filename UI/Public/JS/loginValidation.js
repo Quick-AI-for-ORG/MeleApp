@@ -43,8 +43,8 @@ window.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
-      if (!password || password.length < 8) {
-        showToast("Password must be at least 8 characters");
+      if (!password || !/^(?=.*[A-Z])(?=.*\d).{8,}$/.test(password)) {
+        showToast("Password must have 8+ characters, 1 uppercase & 1 number");
         return;
       }
 
