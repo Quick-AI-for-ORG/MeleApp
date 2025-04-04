@@ -2,7 +2,7 @@
   max-width: 800px;
   margin: 2rem auto;
   padding: 0 1rem;
-  background-color: #fff8e1; /* Light yellow background */
+  background-color: #fff8e1;
   border-radius: 15px;
   padding: 2rem;
   box-shadow: 0 4px 12px rgba(252, 163, 17, 0.1);
@@ -13,10 +13,9 @@
   border-radius: 12px;
   padding: 2rem;
   box-shadow: 0 4px 6px rgba(22, 64, 77, 0.1);
-  border: 1px solid rgba(252, 163, 17, 0.2); /* Subtle honey-colored border */
+  border: 1px solid rgba(252, 163, 17, 0.2);
 }
 
-/* Add a nice hover effect on the card */
 .profile-card:hover {
   box-shadow: 0 6px 12px rgba(252, 163, 17, 0.15);
   transform: translateY(-2px);
