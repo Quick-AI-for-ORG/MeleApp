@@ -82,7 +82,6 @@ async function fetchHiveData(hiveId) {
         _id: hiveId,
         index: $("#currentHiveTitle").innerText,
       }),
-      body: JSON.stringify({ _id: hiveId, index: $("#currentHiveTitle") }),
     });
 
     const result = await response.json();
