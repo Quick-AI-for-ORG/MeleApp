@@ -14,15 +14,14 @@
 
 <body class="background-radial-gradient">
 
-        <div class="product-container">
-            <div class="product-form">
-                <div class="product-image-section">
-                    <div class="slideshow-container">
-                        <div class="main-image">
-                            <img id="mainImage" src="/Images/Products/<%= product.images[0] %>"
-                                alt="<%= product.name %>">
-                            <button class="slide-btn prev" onclick="changeSlide(-1)">❮</button>
-                            <button class="slide-btn next" onclick="changeSlide(1)">❯</button>
+    <div class="product-container">
+        <div class="product-form">
+            <div class="product-image-section">
+                <div class="slideshow-container">
+                    <div class="main-image">
+                        <img id="mainImage" src="/Images/Products/<%= product.images[0] %>" alt="<%= product.name %>">
+                        <button class="slide-btn prev" onclick="changeSlide(-1)">❮</button>
+                        <button class="slide-btn next" onclick="changeSlide(1)">❯</button>
                     </div>
                     <div class="thumbnail-container">
                         <% product.images.forEach((image, index)=> { %>
