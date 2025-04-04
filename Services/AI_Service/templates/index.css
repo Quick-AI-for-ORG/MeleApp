@@ -1,0 +1,93 @@
+:root {
+  --primary: #16404d;
+  --secondary: #fca311;
+  --bg-light: #fbf5dd;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: var(--primary);
+  background-image: radial-gradient(
+      650px circle at 0% 0%,
+      var(--secondary) 15%,
+      var(--primary) 35%,
+      rgba(22, 64, 77, 0.8) 75%,
+      rgba(22, 64, 77, 0.7) 80%,
+      transparent 100%
+    ),
+    radial-gradient(
+      1250px circle at 100% 100%,
+      var(--secondary) 15%,
+      var(--primary) 35%,
+      rgba(22, 64, 77, 0.8) 75%,
+      rgba(22, 64, 77, 0.7) 80%,
+      transparent 100%
+    );
+  min-height: 100vh;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+}
+
+.logo img {
+  height: 50px;
+  width: auto;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  color: var(--primary);
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 1rem;
+}
+
+.service-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(252, 163, 17, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-5px);
+}
+
+.service-card i {
+  font-size: 2rem;
+  color: var(--secondary);
+  margin-bottom: 1rem;
+}
+
+.service-card h3 {
+  color: var(--primary);
+  margin-bottom: 1rem;
+}
+
+.service-card p {
+  color: #666;
+  line-height: 1.6;
+}
