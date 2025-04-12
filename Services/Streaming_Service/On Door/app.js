@@ -17,9 +17,9 @@ const io = socketIo(server);
 const { startTCPServer } = require("./Utils/tcpService");
 const streamRoutes = require("./routes/streamRoutes");
 
-const PORT = process.env.STREAMINGWEB||10000;
-const STREAMPORT = process.env.STREAMINGPORT||30000;
-const IP = process.env.IP;
+const PORT = process.env.STREAMING_PORT || 10000;
+const STREAM_PORT = process.env.RASPBERRY_PORT||30000;
+const IP = process.env.IP || "localhost";
 app.locals.IP = IP
 
 app.use(express.static(path.join(__dirname, "UI/Public")));
@@ -34,6 +34,6 @@ io.on("connection", (socket) => {
     console.log("Client connected to WebSocket");
 });
 
-startTCPServer(io, STREAMPORT);
+startTCPServer(io, STREAM_PORT);
 
-server.listen(PORT, IP, () => console.log(`Web app running on ${IP}:${PORT}`));
+server.listen(PORT, IP, () => console.log(`Streaming Server is running on ${IP}:${PORT}`));

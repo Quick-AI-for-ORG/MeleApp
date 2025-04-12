@@ -2,12 +2,16 @@ import random
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+
+import os
+os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
+
+import tensorflow as tf
 from tensorflow.keras.layers import Dense, Input, Dropout
 from tensorflow.keras.models import Sequential, Model
 from sklearn.metrics import mean_squared_error
 from sklearn.preprocessing import StandardScaler
 from tensorflow.keras.callbacks import EarlyStopping
-import tensorflow as tf
 
 class vibrationAnomalyDetector():
     def __init__(self, n1=16, n2=8, dropout_rate=0.2, l2_reg=0.001):

@@ -1,7 +1,6 @@
 from flask import Flask, request, jsonify, Response, render_template
 import cv2
 import numpy as np
-import tensorflow as tf
 import os
 import sys
 import base64
@@ -104,8 +103,9 @@ def plot():
 
 if __name__ == '__main__':
     try:
-        print("Starting Flask server...")
-        app.run(host=os.getenv('IP') or '0.0.0.0', port=os.getenv("FLASK_PORT"), debug=True)
+        print(f"Flask Server is running on {os.getenv('IP')}:{os.getenv('FLASK_PORT')}")
+        from waitress import serve
+        serve(app, host=os.getenv('IP'), port=os.getenv('FLASK_PORT'))
         
     except KeyboardInterrupt:
         print("\n[INFO] Keyboard interrupt received. Shutting down server gracefully...")
