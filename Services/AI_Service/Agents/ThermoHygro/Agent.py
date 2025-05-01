@@ -72,7 +72,7 @@ class Agent:
         
         self.actions = previous
         
-        reason = ""
+        reason = "Temperature and Humidity are within optimal ranges."
         
         if tempState == -3: 
             self.actions["vent"] = apiary['temperature'] > hiveTemp[1]

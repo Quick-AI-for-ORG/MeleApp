@@ -38,6 +38,7 @@ def runAgent():
         
         print("Making decision based on current data...")
         decisions = agent.makeDecision()
+        print(decisions.get("reason"))
         
         print("Executing actions...")
         agent.act()
