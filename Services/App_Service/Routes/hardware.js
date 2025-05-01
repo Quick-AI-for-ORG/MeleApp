@@ -9,6 +9,11 @@ const controllers = {
     capture: require("../Controllers/ctrlCapture"),
     reading: require("../Controllers/ctrlReading")
   };
+  
+  router.use((req, res, next) => {
+      req.session.isHardware = true;
+      next();
+  });
 
 router.post("/addReading", controllers.reading.addReading)
 router.post("/addThreat", controllers.threat.addThreat)

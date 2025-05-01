@@ -37,15 +37,16 @@ class WeatherForecast:
         
         data = pd.DataFrame([
             {
-                "dateTime": reading["createdAt"],
-                inputType: float(reading["sensorValue"])
+                "dateTime": reading.get("createdAt"),
+                inputType: float(reading.get("sensorValue"))
             }
             for reading in readings
         ])
+        
     
         data['dateTime'] = pd.to_datetime(data['dateTime'])
         data = data.drop_duplicates(subset='dateTime').sort_values(by='dateTime').reset_index(drop=True)
-        data = data.set_index('dateTime').asfreq(self.freq)
+        data = data.set_index('dateTime')
         data = data.interpolate(method='time')
         
         if not update and len(data) < 3:
@@ -54,8 +55,6 @@ class WeatherForecast:
         return data
     
     def findBestOrder(self, data, sensorType):
-        print(f"\nFinding best ARIMA order for {sensorType} using auto_arima:")
-        
         auto = auto_arima(data, start_p=0, start_q=0, max_p=2, max_q=2, m=1, start_P=0, seasonal=False, d=None, max_d=2, 
                                 trace=False,
                                 error_action='ignore',
@@ -63,8 +62,6 @@ class WeatherForecast:
                                 stepwise=True)
         
         bestOrder = auto.order
-        print(f"Best order found: {bestOrder}")
-        
         self.orders[sensorType] = bestOrder
         return bestOrder
 
@@ -209,76 +206,3 @@ class WeatherForecast:
 
         return image
 
-if __name__ == "__main__":
-    tempReadings1 = [
-        {"createdAt": "2023-01-01T00:00:00", "sensorValue": 20.5},
-        {"createdAt": "2023-01-01T00:01:00", "sensorValue": 21.0},
-        {"createdAt": "2023-01-01T00:02:00", "sensorValue": 21.2},
-        {"createdAt": "2023-01-01T00:03:00", "sensorValue": 21.5},
-        {"createdAt": "2023-01-01T00:04:00", "sensorValue": 21.7},
-        {"createdAt": "2023-01-01T00:05:00", "sensorValue": 21.9},
-        {"createdAt": "2023-01-01T00:06:00", "sensorValue": 22.1},
-        {"createdAt": "2023-01-01T00:07:00", "sensorValue": 22.3},
-        {"createdAt": "2023-01-01T00:08:00", "sensorValue": 22.5},
-        {"createdAt": "2023-01-01T00:09:00", "sensorValue": 22.7}
-    ]
-
-    tempReadings2 = [
-        {"createdAt": "2023-01-01T00:10:00", "sensorValue": 22.9},
-        {"createdAt": "2023-01-01T00:11:00", "sensorValue": 23.1},
-        {"createdAt": "2023-01-01T00:12:00", "sensorValue": 23.3},
-        {"createdAt": "2023-01-01T00:13:00", "sensorValue": 23.5},
-        {"createdAt": "2023-01-01T00:14:00", "sensorValue": 23.7}
-    ]
-
-    humidReadings1 = [
-        {"createdAt": "2023-01-01T00:00:00", "sensorValue": 45.0},
-        {"createdAt": "2023-01-01T00:01:00", "sensorValue": 45.5},
-        {"createdAt": "2023-01-01T00:02:00", "sensorValue": 46.0},
-        {"createdAt": "2023-01-01T00:03:00", "sensorValue": 46.2},
-        {"createdAt": "2023-01-01T00:04:00", "sensorValue": 46.5},
-        {"createdAt": "2023-01-01T00:05:00", "sensorValue": 46.8},
-        {"createdAt": "2023-01-01T00:06:00", "sensorValue": 47.0},
-        {"createdAt": "2023-01-01T00:07:00", "sensorValue": 47.3},
-        {"createdAt": "2023-01-01T00:08:00", "sensorValue": 47.5},
-        {"createdAt": "2023-01-01T00:09:00", "sensorValue": 47.8}
-    ]
-
-    try:
-        forecaster = WeatherForecast()
-        
-        print("\n=== Temperature Forecasting ===")
-        
-        tempData1 = forecaster.loadAndPreprocessData("Temperature", tempReadings1, freq="T", update=False)
-        forecaster.trainArimaModel("Temperature", tempData1, update=False, evaluate=True)
-        
-        print("Initial Temperature Forecasts:")
-        tempForecast2 = forecaster.generateForecast("Temperature", steps=5)
-        for time, value in tempForecast2.items():
-            print(f"Time: {time}, Forecast: {value:.2f}°C")
-        
-        tempData2 = forecaster.loadAndPreprocessData("Temperature", tempReadings2, update=True)
-        forecaster.trainArimaModel("Temperature", tempData2, update=True)
-        tempForecast3 = forecaster.generateForecast("Temperature", steps=5)
-        
-        print("Updated Temperature Forecasts:")
-        for time, value in tempForecast3.items():
-            print(f"Time: {time}, Forecast: {value:.2f}°C")
-        
-        print("\n=== Humidity Forecasting ===")
-        
-        humidData1 = forecaster.loadAndPreprocessData("Humidity", humidReadings1, update=True)
-        forecaster.trainArimaModel("Humidity", humidData1, update=False, evaluate=True)
-        
-        
-        print("Humidity Forecasts:")
-        humidForecast2 = forecaster.generateForecast("Humidity", steps=5)
-        for time, value in humidForecast2.items():
-            print(f"Time: {time}, Forecast: {value:.2f}%")
-            
-        forecaster.plotForecastsVsActual(
-            humidData1.index, humidData1.values, humidForecast2, "Humidity"
-        )
-            
-    except Exception as e:
-        print(f"Error: {str(e)}")

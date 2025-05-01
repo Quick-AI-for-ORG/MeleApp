@@ -50,9 +50,9 @@ const updateApiary = async (req, res) => {
 const getApiary = async (req, res) => {
     try {
         const result = await Apiary.get(req.body._id);
-        return result
+        return res.json(result.toJSON());
     } catch (error) {
-        return new Result(-1, null, `Error fetching apiary: ${error.message}`)
+        return res.json(new Result(-1, null, `Error fetching apiary: ${error.message}`).toJSON());
     }
 }
 
@@ -98,8 +98,16 @@ const updateForecast = async (req, res) => {
         result = await weatherService.getWeatherData(apiary.location.latitude, apiary.location.longitude);
         if(!result.success.status) return res.json(result.toJSON())
         result = await apiary.updateForecast(result.data.temperature, result.data.humidity);
+        if(req.session.isHardware){
+            req.session.isHardware = false;
+            return res.json(result.toJSON())
+        }
         return result.toJSON();
     } catch (error) {
+        if(req.session.isHardware){
+            req.session.isHardware = false;
+            return res.json(new Result(-1, null, `Error updating forecast: ${error.message}`).toJSON())
+        }
        return new Result(-1, null, `Error updating forecast: ${error.message}`).toJSON()
     }
 }

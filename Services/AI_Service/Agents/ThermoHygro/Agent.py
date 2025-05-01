@@ -19,15 +19,15 @@ class Agent:
         self.enviroment = enviroment
         self.knowledgeBase = knowledgeBase
         self.aiClient = Client(f"{os.getenv('IP')}:{os.getenv('FLASK_PORT')}")
-        self.forecasts = {"Temperature": [], "Humidity": []}
+        self.forecasts = {"temperature": [], "humidity": []}
         
         self.actions = {'vent': False, 'fan': False, 'cooler': False}
 
-    async def forecast(self, sensorType, evaluate=False, append=False, plot=False):
+    def forecast(self, sensorType, evaluate=False, append=False, plot=False):
         try:
-            result = await self.aiClient.post("forecast", body={
+            result = self.aiClient.post("forecast", body={
                 "sensorType": sensorType,
-                "readings": self.enviroment.readings[sensorType],
+                "readings": self.enviroment.readings.get(sensorType.lower()),
                 "freq": 'T',
                 "append": append,
                 "steps": 4,
@@ -35,21 +35,19 @@ class Agent:
                 "getImage": plot
             })
             
-            if not result.success.status:
+            if not result.success.get('status'):
                 return result
             
             if plot:
-                plt.imshow(result.data["image"])
+                plt.imshow(result.data.get('data').get("image"))
             if evaluate:
-                print(result.data["metrics"])
+                print(result.data.get('data').get("metrics"))
             
-            for forecast in result.data["forecasts"]:
-                self.forecasts[sensorType.lower()].append(forecast["forecast"])
-                self.knowledgeBase.logForecast(sensorType.lower(), forecast["forecast"])
-                
-            self.knowledgeBase.getAverageState(sensorType.lower(), self.forecasts[sensorType.lower()], "forecast", "forecasted")
-            print(self.knowledgeBase.currentState["forecasted"])
-            
+            for forecast in result.data.get('data').get("forecasts").values():
+                self.forecasts[sensorType.lower()].append(forecast)
+                self.knowledgeBase.logForecast(sensorType.lower(), forecast)
+             
+            self.knowledgeBase.getAverageState(sensorType.lower(), self.forecasts[sensorType.lower()],  of="forecasted")            
             return Result(1, result.data, f"Forecasted {sensorType} Successfully")
         
         except Exception as e:
@@ -62,12 +60,12 @@ class Agent:
             "cooler": self.enviroment.cooler.mode[1]
         }
 
-        hiveTemp = self.knowledgeBase.getAverageState("temperature", self.enviroment.readings["Temperature"], "sensorValue")
-        hiveHumid = self.knowledgeBase.getAverageState("humidity", self.enviroment.readings["Humidity"], "sensorValue")
+        hiveTemp = self.knowledgeBase.getAverageState("temperature", self.enviroment.readings.get("temperature"), "sensorValue")
+        hiveHumid = self.knowledgeBase.getAverageState("humidity", self.enviroment.readings.get("humidity"), "sensorValue")
         apiary = self.enviroment.getLocalForecast()
         
-        tempTrend = self.knowledgeBase.getTrend(self.forecasts["temperature"])
-        humidTrend = self.knowledgeBase.getTrend(self.forecasts["humidity"])
+        tempTrend = self.knowledgeBase.getTrend(self.forecasts.get("temperature"))
+        humidTrend = self.knowledgeBase.getTrend(self.forecasts.get("humidity"))
         
         tempState = hiveTemp[1]
         humidState = hiveHumid[1]
@@ -76,10 +74,9 @@ class Agent:
         
         reason = ""
         
-        
         if tempState == -3: 
             self.actions["vent"] = apiary['temperature'] > hiveTemp[1]
-            reason = f"Critically low temperature detected, vent {"opened" if apiary['temperature'] > hiveTemp[1] else "closed"} based on apiary temperature."
+            reason = f"Critically low temperature detected, vent {'opened' if apiary['temperature'] > hiveTemp[1] else 'closed'} based on apiary temperature."
         
         elif tempState == 3: 
             self.actions["cooler"] = True
@@ -92,7 +89,6 @@ class Agent:
         elif humidState == 3: 
             self.actions["fan"] = True
             reason = "Critically high humidity detected, fan turned ON."
-            
             
         if tempTrend == "RISING" and tempState < 0 and tempState >-3:
             self.actions = previous
@@ -122,7 +118,7 @@ class Agent:
             if tempState == 2: 
                 self.actions["vent"] = apiary['temperature'] < hiveTemp[1]
                 self.actions["cooler"] = True
-                reason = f"High temperature detected, cooler turned on{", vent opened to cool." if apiary['temperature'] < hiveTemp[1] else '.'}"
+                reason = f"High temperature detected, cooler turned on{', vent opened to cool.' if apiary['temperature'] < hiveTemp[1] else '.'}"
             elif tempState == -2: 
                 self.actions["vent"] = apiary["temperature"] > hiveTemp[1]
                 reason = "Low temperature detected, vent opened to warm."
@@ -132,7 +128,7 @@ class Agent:
             if humidState == -2:
                 self.actions["cooler"] = True
                 self.actions["vent"] = apiary['temperature'] > hiveTemp[1]
-                reason = f"Low humidity detected, cooler turned on{", vent opened to adjust temperature." if apiary['temperature'] > hiveTemp[1] else '.'}"
+                reason = f"Low humidity detected, cooler turned on{', vent opened to adjust temperature.' if apiary['temperature'] > hiveTemp[1] else '.'}"
 
         return {
             "toggleVent": previous["vent"] != self.actions['vent'],

@@ -96,7 +96,7 @@ class Hive {
 
   async getReadings(limit=null, type=null){
     let result = null
-    if (limit) result = await Hive.dependency.populateSorted('readingModel' [this._id, type], ['hiveRef', 'sensorRef'], limit)
+    if (limit) result = await Hive.dependency.populateSorted('readingModel', [this._id, type], ['hiveRef', 'sensorRef'], limit)
     else result = await Hive.dependency.populate('readingModel', this, 'hiveRef')
     if(result.success.status) this.readings = result.data;
     return result;

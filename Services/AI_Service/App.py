@@ -38,7 +38,7 @@ def forecast():
             forecasted = forecaster.generateForecast(data["sensorType"], data["steps"])
             toReturn = {
                 "sensorType": data["sensorType"],
-                "forecast": forecasted
+                "forecasts": {str(key): value for key, value in forecasted.items()}
             }
             
             if data["checkPerformance"]: toReturn["metrics"] =  forecaster.metrics

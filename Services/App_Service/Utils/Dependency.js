@@ -43,13 +43,13 @@ const dependencyInterface = {
     },
     populateSorted: async function (reference, primaryKeys, compareKeys, limit=7) {
         try {
-            const result = await CRUDInterface.getAllNestedFilteredSorted(primaryKeys, reference, compareKeys, limit=limit);
+            const result = await CRUDInterface.getAllNestedFilteredSorted(primaryKeys, reference, compareKeys, sortBy={createdAt:-1}, limit=limit);
             if (!result.success.status) return result;
-            await Log.create({ log: `Population for ${object} is successfull.`, degree: 1 });
-            return new Result(1, result.data, `Population for ${object} from ${reference} is successfull.`);
+            await Log.create({ log: `Population from ${reference} is successfull.`, degree: 1 });
+            return new Result(1, result.data, `Population from ${reference} is successfull.`);
         } catch (error) {
-            await Log.create({ log: `Error during population for ${object} from ${reference}: ${error.message}.`, degree: -1 });
-            return new Result(-1, null, `Error during population for ${object} from ${reference}: ${error.message}.`);
+            await Log.create({ log: `Error during population from ${reference}: ${error.message}.`, degree: -1 });
+            return new Result(-1, null, `Error during population from ${reference}: ${error.message}.`);
         }
     },
     inverse: async function (reference, key, attribute) {

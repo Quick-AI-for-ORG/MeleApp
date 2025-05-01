@@ -104,7 +104,9 @@ class KnowledgeBase:
     
     
     def getAverageState(self, sensor, readings, attribute="sensorValue", of="inside"):
-        total = sum(reading[attribute] for reading in readings)
+        if of == 'inside': total = sum(reading[attribute] for reading in readings)
+        elif of == 'forecasted':  total = sum(reading for reading in readings)
+        
         avg = total / len(readings) if readings else 0
         
         if abs(avg - self.currentAverage[sensor]) > 1: 

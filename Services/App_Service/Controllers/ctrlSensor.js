@@ -52,8 +52,16 @@ const getSensor = async (req, res) => {
     try {
         const by = req.body.sensorType == undefined ? "_id" : "sensorType";
         const result = await Sensor.get(req.body.sensorType == undefined ? req.body._id : req.body.sensorType, by);
+        if (req.session.isHardware) {
+            req.session.isHardware = false;
+            return res.json(result.toJSON());
+        }
         return result.toJSON();
     } catch (error) {
+        if (req.session.isHardware) {
+            req.session.isHardware = false;
+            return res.json(new Result(-1, null, `Error fetching sensor: ${error.message}`).toJSON());
+        }
         return new Result(-1, null, `Error fetching sensor: ${error.message}`).toJSON();
     }
 }

@@ -57,8 +57,16 @@ const getHive = async (req, res) => {
     try {
         const id = req.query._id || req.body._id;
         const result = await Hive.get(id);
+        if(req.session.isHardware){
+            req.session.isHardware = false;
+            return res.json(result.toJSON());
+        }
         return result;
     } catch (error) {
+        if(req.session.isHardware){
+            req.session.isHardware = false;
+            return res.json(new Result(-1, null, `Error fetching hive: ${error.message}`).toJSON());
+        }
         return new Result(-1, null, `Error fetching hive: ${error.message}`);
     }
 }
@@ -135,6 +143,7 @@ const getReadings = async (req, res) => {
 
 const getSortedReadings = async (req,res) => {
     try {
+        req.session.isHardware = false;
         let result = await getHive(req, res);
         if (!result.success.status) return res.json(result.toJSON());
         const hive = jsonToObject(result.data);
