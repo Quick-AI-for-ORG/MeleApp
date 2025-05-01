@@ -21,8 +21,8 @@ const CRUDInterface = {
       const existingRecord = await models[model].findOne(compareClause);
       if (!existingRecord) {
         let record = await models[model].create(data);
-        await Log.create({log: `Created new record with ${compareKey}: ${data[compareKey]}.`, degree: 1,});
-        return new Result(1, record._doc, `Created new record with ${compareKey}: ${data[compareKey]}.`);
+        await Log.create({log: `Created new record with ${compareKey}: ${record._doc[compareKey]}.`, degree: 1,});
+        return new Result(1, record._doc, `Created new record with ${compareKey}: ${record._doc[compareKey]}.`);
       } else {
         await Log.create({log: `Record with ${compareKey}: ${data[compareKey]} already exists. Skipping creation.`,degree: 0,});
         return new Result(0, null,`Record with ${compareKey}: ${data[compareKey]} already exists. Skipping creation.`);

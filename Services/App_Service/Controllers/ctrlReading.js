@@ -12,6 +12,7 @@ const jsonToObject = (json) => {
 
 const addReading = async (req, res) => {
     try {
+        req.session.isHardware = false;
         const sensor = await controllers.sensor.getSensor(req,res);
         if (!sensor.success.status) return res.json(sensor.toJSON());
         const readingJSON = {
