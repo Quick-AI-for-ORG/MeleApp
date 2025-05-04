@@ -279,6 +279,18 @@ function updateHiveDashboard(hiveData) {
       }
     }
 
+    // Update vibration chart for anomaly detection
+    const vibrationChart = Chart.getChart("vibrationChart");
+    if (vibrationChart) {
+      const vibrationReadings = data.readings.filter(
+        (r) => r.sensorType === "Vibration"
+      );
+      if (vibrationReadings.length > 0) {
+        console.log("Found vibration readings:", vibrationReadings);
+        Charts.updateChart(vibrationChart, [vibrationReadings]);
+      }
+    }
+
     // Update frame comparison chart if exists
     const frameComparisonChart = Chart.getChart("frameComparisonChart");
     if (frameComparisonChart) {
@@ -359,6 +371,18 @@ function processSensorReadings(readings) {
       frameNum: r.frameNum || 1,
     }));
 
+  // Add vibration readings processing
+  const vibrationReadings = readings
+    .filter((r) => r.sensorType === "Vibration")
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    .slice(0, 7)
+    .map((r) => ({
+      timestamp: new Date(r.createdAt).toLocaleTimeString(),
+      value: Number(r.sensorValue),
+    }));
+
+  console.log("Processed vibration readings:", vibrationReadings);
+
   console.log("Processed weight readings:", weightReadings);
 
   return {
@@ -373,6 +397,7 @@ function processSensorReadings(readings) {
       sensors: row,
     })),
     weight: weightReadings,
+    vibration: vibrationReadings,
   };
 }
 
