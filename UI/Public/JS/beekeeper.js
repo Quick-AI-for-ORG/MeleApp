@@ -1071,5 +1071,5 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function openStream(hiveId, camera) {
-  window.location.href = `/keeper/stream?hiveId=${hiveId},camera=${camera}`;
+  window.location.href = `/keeper/stream?hiveId=${hiveId}&camera=${camera}`;
 }
