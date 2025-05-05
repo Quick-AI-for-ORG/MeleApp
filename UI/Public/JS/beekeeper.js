@@ -1052,22 +1052,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Initialize charts
   initializeCharts();
-
-  // Set up periodic chart updates
-  setInterval(async function () {
-    try {
-      const response = await fetch("/api/getHiveData");
-      const data = await response.json();
-
-      if (data.success) {
-        Charts.updateChart(weightChart, [data.weightData]);
-        Charts.updateChart(vibrationChart, [data.vibrationData]);
-        Charts.updateChart(hiveWeightChart, [data.hiveWeightData]);
-      }
-    } catch (error) {
-      console.error("Error fetching chart data:", error);
-    }
-  }, 300000); // Every 5 minutes
 });
 
 function openStream(hiveId, camera) {

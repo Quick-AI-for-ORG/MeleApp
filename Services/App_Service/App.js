@@ -21,15 +21,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(
   session({ secret: "Your_Secret_Key", saveUninitialized: true, resave: false })
 );
-// Make sure the static file middleware is properly configured
 app.use(express.static(path.join(__dirname, "../../UI/Public")));
 app.use(expressLayouts);
 
-// Add this before your route middleware
-app.use((req, res, next) => {
-  res.locals.user = req.session.user || null;
-  next();
-});
+
 
 app.use("/", rootRouter);
 app.use("/keeper", keeperRouter);
@@ -52,10 +47,7 @@ mongoose
     process.exit(1);
   });
 
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send("Something went wrong!");
-});
+
 
 const PORT = process.env.PORT || 3001;
 const IP = process.env.IP || 'localhost';
