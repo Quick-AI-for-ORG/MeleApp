@@ -15,7 +15,7 @@ const server = http.createServer(app);
 const io = socketIo(server);
 
 const { startTCPServer } = require("./Utils/tcpService");
-const streamRoutes = require("./routes/streamRoutes");
+const streamRoutes = require("./Routes/streamRoutes");
 
 const PORT = process.env.STREAMING_PORT || 10000;
 const STREAM_PORT = process.env.RASPBERRY_PORT||30000;

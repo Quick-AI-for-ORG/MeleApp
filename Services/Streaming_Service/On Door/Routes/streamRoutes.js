@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { renderStreamPage } = require("../controllers/streamController");
+const { renderStreamPage } = require("../Controllers/streamController");
 
 router.get("/", renderStreamPage);
 
