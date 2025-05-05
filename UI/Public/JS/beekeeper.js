@@ -1070,6 +1070,6 @@ document.addEventListener("DOMContentLoaded", function () {
   }, 300000); // Every 5 minutes
 });
 
-function openStream(hiveId) {
-  window.location.href = `/keeper/stream?hiveId=${hiveId}`;
+function openStream(hiveId, camera) {
+  window.location.href = `/keeper/stream?hiveId=${hiveId},camera=${camera}`;
 }
