@@ -89,6 +89,7 @@ const getThreatsCount = async (req, res) => {
 
 
 module.exports = {
+    _jsonToObject: jsonToObject,
     addThreat,
     removeThreat,
     updateThreat,
