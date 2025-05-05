@@ -186,7 +186,7 @@ const openDoorStream = async (req, res) => {
         let result = await getHive(req, res);
         if (!result.success.status) return res.json(result.toJSON());
         const hive = jsonToObject(result.data);
-        res.redirect(`http://${process.env.IP}:${hive.streamUrl}?user=${req.session.user._id},camera=${req.query.camera}`);
+        res.redirect(`http://${process.env.IP}:${hive.streamUrl}?user=${req.session.user._id}&camera=${req.query.camera}`);
     } catch (error) {
         return res.json(new Result(-1, null, `Error opening door stream: ${error.message}`).toJSON())
     }
