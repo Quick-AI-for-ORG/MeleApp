@@ -315,6 +315,12 @@ function updateHiveDashboard(hiveData) {
     const latestHumids = processedData.humidity[0]?.sensors || [];
     // ...rest of existing temperature/humidity processing...
   }
+
+  // Update threats count in the top dashboard card
+  const totalThreatsCard = $("#totalThreats");
+  if (totalThreatsCard) {
+    totalThreatsCard.textContent = (hiveData.threats && hiveData.threats.length) || "0";
+  }
 }
 
 function getSeverityClass(severity) {
