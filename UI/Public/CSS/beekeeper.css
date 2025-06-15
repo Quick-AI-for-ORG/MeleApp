@@ -589,13 +589,62 @@ body {
 
 /* Threats styles */
 .threats-card {
+  position: relative;
   overflow-y: auto;
+  padding-top: 0; /* Remove top padding to accommodate sticky header */
+}
+
+.threats-title {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: white;
+  padding: 1.5rem var(--padding-card);
+  margin: 0;
+  width: 100%;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.threats-title i {
+  color: var(--secondary);
 }
 
 .threats-list {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  padding: 1.5rem var(--padding-card);
+}
+
+/* Threats styles */
+.threats-card {
+  position: relative;
+  overflow-y: auto;
+}
+
+.threats-title {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: white;
+  padding: 1rem 0;
+  margin: 0;
+  width: 100%;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.threats-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-top: 0.5rem;
 }
 
 .threat-item {

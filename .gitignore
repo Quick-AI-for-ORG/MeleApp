@@ -140,3 +140,6 @@ Papers/*
 
 */__pycache__/*
 *.pyc
+
+Blender/*
+*.mp4

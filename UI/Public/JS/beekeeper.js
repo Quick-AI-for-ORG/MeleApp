@@ -233,11 +233,24 @@ function updateHiveDashboard(hiveData) {
   // Handle threats display
   const threatsList = $(".threats-list");
   if (threatsList) {
-    if (
-      data.threats &&
-      Array.isArray(data.threats) &&
-      data.threats.length > 0
-    ) {
+    if (data.threats && Array.isArray(data.threats) && data.threats.length > 0) {
+      threatsList.innerHTML = data.threats
+        .map(
+          (threat) => `
+          <div class="threat-item ${getSeverityClass(threat.severity)}">
+            <div class="threat-icon">
+              <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <div class="threat-info">
+              <h4>${threat.threatType}</h4>
+              <p>${threat.description !== "NA" ? threat.description : "No additional details available"}</p>
+              <span class="threat-severity">${getSeverityLabel(threat.severity)}</span>
+              <span class="timestamp">${new Date(threat.createdAt).toLocaleString()}</span>
+            </div>
+          </div>
+        `
+        )
+        .join("");
     } else {
       threatsList.innerHTML = `
         <div class="no-data-message">
@@ -301,6 +314,38 @@ function updateHiveDashboard(hiveData) {
     const latestTemps = processedData.temperature[0]?.sensors || [];
     const latestHumids = processedData.humidity[0]?.sensors || [];
     // ...rest of existing temperature/humidity processing...
+  }
+
+  // Update threats count in the top dashboard card
+  const totalThreatsCard = $("#totalThreats");
+  if (totalThreatsCard) {
+    totalThreatsCard.textContent = (hiveData.threats && hiveData.threats.length) || "0";
+  }
+}
+
+function getSeverityClass(severity) {
+  switch (severity) {
+    case 0:
+      return "low";
+    case 1:
+      return "medium";
+    case 2:
+      return "high";
+    default:
+      return "low";
+  }
+}
+
+function getSeverityLabel(severity) {
+  switch (severity) {
+    case 0:
+      return "Low";
+    case 1:
+      return "Medium";
+    case 2:
+      return "High";
+    default:
+      return "Low";
   }
 }
 
