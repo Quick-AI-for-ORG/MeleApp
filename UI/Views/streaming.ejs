@@ -191,10 +191,14 @@
         const socket = io();
         const img = document.getElementById("stream");
         let lastFrameTime = 0;
-
+        let lastImageTimestamp = Date.now();
+        const timeoutDuration = 5000; // 5 seconds without frame
+    
+        // Handle incoming image data
         socket.on("image", (data) => {
             const now = performance.now();
-
+            lastImageTimestamp = Date.now(); // update last received time
+    
             if (now - lastFrameTime > 33) {
                 requestAnimationFrame(() => {
                     img.src = "data:image/jpeg;base64," + data;
@@ -202,7 +206,24 @@
                 lastFrameTime = now;
             }
         });
+    
+        // Periodically check if image is being received
+        setInterval(() => {
+            if (Date.now() - lastImageTimestamp > timeoutDuration) {
+                // No image received recently, show black screen with "Connecting..."
+                const svg = `
+                    <svg xmlns='http://www.w3.org/2000/svg' width='640' height='480'>
+                        <rect width='100%' height='100%' fill='black'/>
+                        <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='32' fill='white' font-family='Segoe UI, Tahoma, sans-serif'>
+                            Connecting...
+                        </text>
+                    </svg>`;
+                img.src = "data:image/svg+xml;base64," + btoa(svg);
+            }
+        }, 1000);
     </script>
+    
+    
 </body>
 
 </html>
