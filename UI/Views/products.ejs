@@ -6,50 +6,94 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mele Honey Products</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="/CSS/products.css">
+    <link rel="stylesheet" href="/CSS/layout.css">
+    <%- include('./Partials/head.ejs') %>
 </head>
 
 <body>
-    <div class="products-hero">
+    <%- include('./Partials/navbar.ejs') %>
+        <div class="products-hero">
+            <div class="container">
+                <h1>Our Collection</h1>
+                <p>Discover the finest Egyptian honey varieties</p>
+            </div>
+        </div>
+
         <div class="container">
-            <h1>Our Collection</h1>
-            <p>Discover the finest Egyptian honey varieties</p>
+
+
+            <div class="products-grid">
+                <% products.forEach(product=> { %>
+                    <div class="product-card" data-category="<%= product.category %>">
+                        <div class="product-image">
+                            <img src="/Images/Products/<%= product.images[0] %>" alt="<%= product.name %>">
+                            <div class="product-overlay">
+                                <a id="<%=product._id%>" class="view-btn">
+                                    <i class="fas fa-eye me-2"></i> View Details
+                                    <form id="form-<%=product._id%>" action="/product" method="POST">
+                                        <input type="hidden" name="name" value="<%= product.name %>">
+                                    </form>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <h3>
+                                <%= product.name %>
+                            </h3>
+                            <p class="product-description">
+                                <%= product.description %>
+                            </p>
+                            <div class="product-meta">
+                                <span class="price">EGP <%= product.price %></span>
+                            </div>
+                        </div>
+                    </div>
+                    <% }) %>
+                        <script src="/JS/productDetails.js"></script>
+            </div>
         </div>
-    </div>
 
-    <div class="container">
-
-
-        <div class="products-grid">
-            <% products.forEach(product=> { %>
-                <div class="product-card" data-category="<%= product.category %>">
-                    <div class="product-image">
-                        <img src="/Images/Products/<%= product.images[0] %>" alt="<%= product.name %>">
-                        <div class="product-overlay">
-                            <a id="<%=product._id%>" class="view-btn">
-                                <i class="fas fa-eye me-2"></i> View Details
-                                <form id="form-<%=product._id%>" action="/product" method="POST">
-                                    <input type="hidden" name="name" value="<%= product.name %>">
-                                </form>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <h3>
-                            <%= product.name %>
-                        </h3>
-                        <p class="product-description">
-                            <%= product.description %>
-                        </p>
-                        <div class="product-meta">
-                            <span class="price">EGP <%= product.price %></span>
-                        </div>
-                    </div>
+        <!-- Include footer -->
+        <footer>
+            <div class="footer-content">
+                <div class="contact-form">
+                    <h3>Have a Question?</h3>
+                    <hr>
+                    <p>Our honey experts are here to help</p>
+                    <form id="QuestionForm" method="post" action="/keeper/askQuestion">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" required></textarea>
+                        <button type="submit">Contact Mele</button>
+                    </form>
                 </div>
-                <% }) %>
-                    <script src="/JS/productDetails.js"></script>
-        </div>
-    </div>
+                <div class="contact-details">
+                    <h3>Our Commitment</h3>
+                    <hr>
+                    <p style="font-weight: 600;">Beekeeping Made Smart</p>
+                    <p>Utilizing the latest state of the art AI and IoT technologies, the MELE-RIMBA team strives to
+                        provide
+                        its esteemed clients with a
+                        premium, hassle-free beekeeping experience which is the first of its kind in the middle east and
+                        the
+                        surrounding territories.</p>
+                    <p>Misr International University, Cairo, Egypt</p>
+                    <hr>
+                    <p>+20(2)-2461-9865</p>
+                    <a href="#">melerimba@gmail.com</a>
+                </div>
+                <div class="accept">
+                    <p>We Proudly Accept</p>
+                    <img src="/IMAGES/payment (1).png" alt="Master card & visa">
+                    <img src="/IMAGES/instapay.png" alt="Instapay">
+                </div>
+            </div>
+            <p style="color: white;">Mele Rimba © 2025 All Rights Reserved</p>
+        </footer>
+        <script src="/JS/question.js"></script>
 </body>
 
 </html>
