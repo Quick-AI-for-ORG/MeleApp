@@ -43,15 +43,14 @@ section {
   margin-top: 3rem;
 }
 
-
 .quality-card {
   background-color: rgba(255, 255, 255, 0.563);
   border-radius: 10px;
   box-shadow: 0 15px 30px rgba(187, 120, 12, 0.2);
   text-align: center;
-  color:white
+  color: white;
 }
-.quality-card .description{
+.quality-card .description {
   padding: 1%;
   border-radius: 5px;
   width: 100%;
@@ -59,7 +58,7 @@ section {
   margin-left: auto;
   margin-right: auto;
 }
-.quality-top{
+.quality-top {
   padding: 2%;
   background-color: #16404d;
   border-radius: 10px;
@@ -67,17 +66,16 @@ section {
   border-bottom-left-radius: 0%;
 }
 
-.quality-card i{
+.quality-card i {
   font-size: 2rem;
   color: white;
-  margin:3%;
+  margin: 3%;
   margin-bottom: 2%;
-
 }
-.quality-card h3{
+.quality-card h3 {
   border: #fca311 solid 3px;
   background: #fbf8ed;
-  padding: 2%;;
+  padding: 2%;
   border-radius: 5px;
   color: #16404d;
   width: 90%;
@@ -85,12 +83,12 @@ section {
   margin-right: auto;
   margin-top: 1%;
 }
-.quality-card .title{
+.quality-card .title {
   color: #16404d;
   width: 100%;
   padding: 4%;
   vertical-align: middle;
-  height:30%
+  height: 30%;
 }
 
 /* Fun Facts Section */
@@ -129,7 +127,8 @@ section {
   border-radius: 50%;
 }
 
-.fact-card h3, .fact-card p {
+.fact-card h3,
+.fact-card p {
   color: #fbf5dd;
 }
 
@@ -145,7 +144,6 @@ section {
   }
 }
 
-
 /* Buttons & Links */
 .btn-link {
   color: #16404d;
@@ -155,29 +153,26 @@ section {
   color: #fca311;
 }
 
-.about-section .col-md-6:first-child{
+.about-section .col-md-6:first-child {
   background-color: #16404d;
   color: #fbf5dd;
   padding: 5%;
-  width:50%;
+  width: 50%;
   height: 425px;
-  color:#fff;
+  color: #fff;
   font-weight: 400;
-
 }
-.about-section h2{
-  color:#fbf5dd;
+.about-section h2 {
+  color: #fbf5dd;
   margin-bottom: 5%;
 }
-
-
 
 .sensors-section ul {
   display: flex;
   flex-wrap: wrap;
   list-style: none;
   justify-content: center;
-  gap:10px
+  gap: 10px;
 }
 
 .sensor-card {
@@ -190,23 +185,22 @@ section {
   text-align: center;
   overflow: hidden;
   color: #16404d;
-  transition: .3s;
+  transition: 0.3s;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   box-shadow: -10px 10px 20px rgba(22, 64, 77, 0.307);
 }
-.sensor-card i{
-  color:#fca311
+.sensor-card i {
+  color: #fca311;
 }
 
 .informations-container {
   flex: 1 0 auto;
-  padding:2%;
+  padding: 2%;
   background: #16404d;
-  transition: .3s;
+  transition: 0.3s;
   transform: translateY(100px);
-
 }
 
 .informations-container .title {
@@ -219,7 +213,7 @@ section {
 }
 
 .informations-container .title::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -10;
   left: 0;
@@ -232,17 +226,17 @@ section {
 
 .informations-container .sub-title {
   font-size: 1em;
-  margin-top:2%;
-  color: #e9e9e9f0
+  margin-top: 2%;
+  color: #e9e9e9f0;
 }
 
 .informations-container .more-information {
   opacity: 0;
-  transition: .3s;
+  transition: 0.3s;
 }
 
 .informations-container .more-information .disclaimer {
-  margin:2%;
+  margin: 2%;
   width: 80%;
   margin-left: auto;
   margin-right: auto;
@@ -263,25 +257,127 @@ section {
   opacity: 1;
 }
 
+/* Responsive styles for smaller screens */
+@media (max-width: 992px) {
+  section {
+    padding: 4rem 0;
+  }
+
+  .about-section .col-md-6:first-child {
+    height: auto;
+    min-height: 350px;
+  }
+
+  .about-section .about-img {
+    height: 350px;
+    object-fit: cover;
+  }
+
+  .quality-grid {
+    gap: 1.5rem;
+  }
+
+  .sensor-card {
+    width: 45%;
+  }
+}
+
 @media (max-width: 768px) {
   .hero-content h1 {
     font-size: 2.5rem;
   }
+
   section {
     padding: 3rem 0;
   }
-  #about-card{
-    max-width: 95%;
-    min-width: 90%;
+
+  #about-card {
+    max-width: 100%;
+    min-width: 100%;
     height: auto;
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: 1%;
+    margin-bottom: 2rem;
   }
-  .sensor-card{
-    height: fit-content;
+
+  .about-section .col-md-6:first-child {
     width: 100%;
-    transform: translateX(-15px);
+    border-radius: 10px;
   }
- 
+
+  .sensor-card {
+    width: 100%;
+    margin: 1rem 0;
+    transform: none;
+  }
+
+  .informations-container {
+    transform: translateY(70px);
+  }
+
+  .quality-card h3 {
+    font-size: 1.2rem;
+    width: 95%;
+  }
+
+  .quality-card .title {
+    height: auto;
+    padding: 1rem;
+  }
+
+  .fact-card {
+    padding: 1.5rem;
+  }
+
+  .fact-card i {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .hero-section {
+    height: 60vh;
+    margin-bottom: 2rem;
+  }
+
+  .hero-content h1 {
+    font-size: 2rem;
+  }
+
+  section {
+    padding: 2rem 0;
+  }
+
+  .quality-grid,
+  .facts-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .quality-card,
+  .fact-card {
+    margin-bottom: 1rem;
+  }
+
+  .informations-container .title {
+    font-size: 1rem;
+  }
+
+  .informations-container .sub-title {
+    font-size: 0.9rem;
+  }
+
+  .informations-container .more-information .disclaimer {
+    font-size: 0.75rem;
+    width: 90%;
+  }
+
+  /* Show sensor information by default on mobile */
+  .informations-container {
+    transform: translateY(0);
+  }
+
+  .informations-container .more-information {
+    opacity: 1;
+  }
 }
