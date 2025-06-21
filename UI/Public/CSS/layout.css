@@ -161,7 +161,6 @@ footer *,
 .navbar {
   border-bottom: 2px solid #fca311;
   margin-bottom: 0.5rem;
-  padding: 0.5rem; /* Reduced padding */
 }
 
 .nav-link {
@@ -169,8 +168,6 @@ footer *,
   transition: color 0.3s ease;
   display: flex;
   align-items: center;
-  padding: 0.4rem 0.6rem !important; /* Reduced horizontal padding */
-  font-size: 0.9rem; /* Slightly smaller font */
 }
 
 .nav-link:hover {
@@ -246,62 +243,6 @@ main {
   transform: scale(1.1);
 }
 
-/* Enhanced navbar responsiveness */
-@media (max-width: 992px) {
-  .navbar {
-    padding: 0.4rem 0.5rem;
-  }
-
-  .nav-link {
-    padding: 0.3rem 0.4rem !important;
-  }
-
-  .nav-icon {
-    width: 20px;
-    height: 20px;
-    margin-right: 6px;
-  }
-}
-
-@media (max-width: 768px) {
-  .navbar {
-    padding: 0.3rem 0.4rem;
-  }
-
-  .nav-link {
-    padding: 0.25rem 0.3rem !important;
-    font-size: 0.85rem;
-  }
-
-  .nav-icon {
-    width: 18px;
-    height: 18px;
-    margin-right: 4px;
-  }
-
-  #searchResults {
-    width: 90%;
-    left: 5%;
-  }
-}
-
-@media (max-width: 480px) {
-  .navbar {
-    padding: 0.25rem;
-  }
-
-  .nav-link {
-    padding: 0.2rem !important;
-    font-size: 0.8rem;
-  }
-
-  .nav-icon {
-    width: 16px;
-    height: 16px;
-    margin-right: 3px;
-  }
-}
-
 /* Responsive Footer */
 @media (max-width: 1024px) {
   .footer-content {
@@ -350,23 +291,5 @@ main {
   .contact-form button {
     font-size: 12px;
     padding: 4px 10px;
-  }
-
-  /* Payment images responsive styling */
-  .accept {
-    max-width: 120px;
-    margin: 0 auto;
-  }
-
-  .accept img {
-    max-width: 70%;
-    height: auto;
-    margin: 5px auto;
-    display: block;
-  }
-
-  .accept p {
-    font-size: 12px;
-    margin-bottom: 5px;
   }
 }
