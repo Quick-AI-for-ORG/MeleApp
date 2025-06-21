@@ -45,7 +45,8 @@
 }
 
 .carousel-item .row {
-  margin: 0 -5px;
+  margin-top: 80px;
+  /* margin: 0 -5px; */
 }
 
 .carousel-item .col-md-4 {
