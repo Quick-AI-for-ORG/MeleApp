@@ -351,4 +351,22 @@ main {
     font-size: 12px;
     padding: 4px 10px;
   }
+
+  /* Payment images responsive styling */
+  .accept {
+    max-width: 120px;
+    margin: 0 auto;
+  }
+
+  .accept img {
+    max-width: 70%;
+    height: auto;
+    margin: 5px auto;
+    display: block;
+  }
+
+  .accept p {
+    font-size: 12px;
+    margin-bottom: 5px;
+  }
 }
