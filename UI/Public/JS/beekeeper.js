@@ -233,7 +233,11 @@ function updateHiveDashboard(hiveData) {
   // Handle threats display
   const threatsList = $(".threats-list");
   if (threatsList) {
-    if (data.threats && Array.isArray(data.threats) && data.threats.length > 0) {
+    if (
+      data.threats &&
+      Array.isArray(data.threats) &&
+      data.threats.length > 0
+    ) {
       threatsList.innerHTML = data.threats
         .map(
           (threat) => `
@@ -243,9 +247,17 @@ function updateHiveDashboard(hiveData) {
             </div>
             <div class="threat-info">
               <h4>${threat.threatType}</h4>
-              <p>${threat.description !== "NA" ? threat.description : "No additional details available"}</p>
-              <span class="threat-severity">${getSeverityLabel(threat.severity)}</span>
-              <span class="timestamp">${new Date(threat.createdAt).toLocaleString()}</span>
+              <p>${
+                threat.description !== "NA"
+                  ? threat.description
+                  : "No additional details available"
+              }</p>
+              <span class="threat-severity">${getSeverityLabel(
+                threat.severity
+              )}</span>
+              <span class="timestamp">${new Date(
+                threat.createdAt
+              ).toLocaleString()}</span>
             </div>
           </div>
         `
@@ -319,7 +331,8 @@ function updateHiveDashboard(hiveData) {
   // Update threats count in the top dashboard card
   const totalThreatsCard = $("#totalThreats");
   if (totalThreatsCard) {
-    totalThreatsCard.textContent = (hiveData.threats && hiveData.threats.length) || "0";
+    totalThreatsCard.textContent =
+      (hiveData.threats && hiveData.threats.length) || "0";
   }
 }
 
@@ -970,6 +983,90 @@ function askToConfirm(
 }
 
 /******************************
+ *  MOBILE MENU FUNCTIONS     *
+ ******************************/
+function initializeMobileMenu() {
+  const kebabToggle = $("#kebabMenuToggle");
+  const kebabDropdown = $("#kebabDropdown");
+  const toggleSidebarBtn = $("#toggleSidebarBtn");
+  const sidebar = $(".sidebar");
+
+  if (kebabToggle && kebabDropdown) {
+    kebabToggle.addEventListener("click", function () {
+      kebabDropdown.classList.toggle("active");
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener("click", function (e) {
+      if (
+        !e.target.closest(".kebab-menu") &&
+        kebabDropdown.classList.contains("active")
+      ) {
+        kebabDropdown.classList.remove("active");
+      }
+    });
+  }
+
+  if (toggleSidebarBtn && sidebar) {
+    toggleSidebarBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      sidebar.style.display =
+        sidebar.style.display === "block" ? "none" : "block";
+
+      // Add fixed positioning for mobile view
+      if (sidebar.style.display === "block") {
+        sidebar.style.position = "fixed";
+        sidebar.style.top = "70px";
+        sidebar.style.left = "0";
+        sidebar.style.width = "80%";
+        sidebar.style.height = "calc(100vh - 70px)";
+        sidebar.style.zIndex = "98";
+        sidebar.style.overflowY = "auto";
+      } else {
+        sidebar.style.position = "";
+      }
+    });
+  }
+}
+
+/******************************
+ *  INITIALIZATION HELPERS    *
+ ******************************/
+function selectDefaultApiary() {
+  try {
+    // Get apiaries from hidden data
+    const apiariesElement = $("#apiariesInjection");
+    if (!apiariesElement) return;
+
+    const apiaries = JSON.parse(apiariesElement.dataset.apiaries || "[]");
+    if (apiaries.length === 0) return;
+
+    // Select the first apiary by default
+    const firstApiary = apiaries[0];
+    if (firstApiary && firstApiary._id) {
+      setSelectedApiary(firstApiary._id);
+      updateTitles(firstApiary.name || "Default Apiary");
+
+      // Find and trigger click on the first apiary in sidebar
+      const apiaryTriggers = document.querySelectorAll(
+        ".nested-trigger[data-apiary-id]"
+      );
+      if (apiaryTriggers.length > 0) {
+        const firstApiaryTrigger = Array.from(apiaryTriggers).find(
+          (trigger) => trigger.dataset.apiaryId === firstApiary._id
+        );
+        if (firstApiaryTrigger) {
+          // Simulate click to expand the apiary content
+          setTimeout(() => firstApiaryTrigger.click(), 100);
+        }
+      }
+    }
+  } catch (error) {
+    console.error("Error selecting default apiary:", error);
+  }
+}
+
+/******************************
  *  EVENT LISTENERS & INIT    *
  ******************************/
 function setupEventListeners() {
@@ -1036,30 +1133,9 @@ function setupEventListeners() {
   window.addEventListener("click", function (e) {
     if (e.target.classList.contains("modal")) closeModal(e.target.id);
   });
-}
 
-function selectDefaultApiary() {
-  const apiaries = JSON.parse($("#apiariesInjection").dataset.apiaries);
-  if (apiaries && apiaries.length > 0) {
-    const firstApiary = apiaries[0];
-    setSelectedApiary(firstApiary._id);
-    updateTitles(firstApiary.name);
-
-    // Show the apiary content visually
-    const firstApiaryTrigger = $(
-      ".nested-trigger[data-apiary-id='" + firstApiary._id + "']"
-    );
-    const dropdownContent = firstApiaryTrigger?.nextElementSibling;
-    if (dropdownContent) {
-      dropdownContent.classList.add("show");
-      dropdownContent.style.display = "block";
-
-      const chevron = firstApiaryTrigger.querySelector(".fa-chevron-right");
-      if (chevron) {
-        chevron.style.transform = "rotate(90deg)";
-      }
-    }
-  }
+  // Setup mobile menu
+  initializeMobileMenu();
 }
 
 document.addEventListener("DOMContentLoaded", function () {

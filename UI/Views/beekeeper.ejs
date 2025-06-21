@@ -14,8 +14,7 @@
 </head>
 
 <body>
-    <div class="container">
-        <!-- Header -->
+    <div class="container"> <!-- Header -->
         <header class="header">
             <div class="header-left">
                 <div class="logo">
@@ -44,6 +43,31 @@
                 <!-- Hidden user data for JS -->
                 <input type="hidden" id="sessionId" value="<%= user._id %>">
                 <input type="hidden" id="sessionRole" value="<%= user.role %>">
+            </div>
+
+            <!-- Kebab Menu for Mobile -->
+            <div class="kebab-menu">
+                <div class="kebab-icon" id="kebabMenuToggle">
+                    <i class="fas fa-ellipsis-v"></i>
+                </div>
+                <div class="kebab-dropdown" id="kebabDropdown">
+                    <a href="/keeper/profile" class="kebab-item">
+                        <i class="fas fa-user"></i> Profile
+                    </a>
+                    <% if(user.role==='Owner' ) { %>
+                        <a href="/keeper/upgrade" class="kebab-item warning">
+                            <i class="fas fa-arrow-up-right-from-square"></i> Upgrade
+                        </a>
+                        <% } %>
+                            <div class="kebab-divider"></div>
+                            <a href="#" class="kebab-item" id="toggleSidebarBtn">
+                                <i class="fas fa-bars"></i> Toggle Sidebar
+                            </a>
+                            <div class="kebab-divider"></div>
+                            <a href="/keeper/logout" class="kebab-item danger">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </a>
+                </div>
             </div>
 
             <div class="header-right">

@@ -1312,6 +1312,96 @@ body.loading-hive .hive-dashboard::after {
   color: var(--secondary);
 }
 
+/* Kebab Menu Styles for Mobile */
+.kebab-menu {
+  display: none;
+  position: relative;
+}
+
+.kebab-icon {
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  background: white;
+  border: 1px solid #eee;
+}
+
+.kebab-icon:hover {
+  background: var(--bg-light);
+}
+
+.kebab-icon i {
+  font-size: 1.5rem;
+  color: var(--primary);
+}
+
+.kebab-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  box-shadow: var(--shadow);
+  border-radius: var(--border-radius);
+  padding: 0.5rem 0;
+  min-width: 180px;
+  z-index: 100;
+  display: none;
+}
+
+.kebab-dropdown.active {
+  display: block;
+  animation: slideDown 0.3s ease;
+}
+
+.kebab-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  color: var(--text-dark);
+  text-decoration: none;
+  transition: var(--transition);
+  cursor: pointer;
+}
+
+.kebab-item:hover {
+  background: var(--bg-light);
+}
+
+.kebab-item i {
+  width: 20px;
+  text-align: center;
+  color: var(--primary);
+}
+
+.kebab-item.danger {
+  color: var(--danger);
+}
+
+.kebab-item.danger i {
+  color: var(--danger);
+}
+
+.kebab-item.primary i {
+  color: var(--primary);
+}
+
+.kebab-item.warning i {
+  color: var(--secondary);
+}
+
+.kebab-divider {
+  height: 1px;
+  background: var(--border-light);
+  margin: 0.5rem 0;
+}
+
 /* Enhanced Responsive Design */
 @media (max-width: 1400px) {
   .container {
@@ -1349,6 +1439,14 @@ body.loading-hive .hive-dashboard::after {
 
   .sidebar {
     display: none;
+  }
+
+  .header-right {
+    display: none;
+  }
+
+  .kebab-menu {
+    display: block;
   }
 
   .weather-stats {
@@ -1444,86 +1542,75 @@ body.loading-hive .hive-dashboard::after {
 
 @media (max-width: 480px) {
   .header {
-    flex-direction: column;
-    gap: 0.5rem;
+    position: relative;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
     padding: 0.5rem;
   }
 
-  .header-left,
-  .header-right {
-    width: 100%;
-    justify-content: center;
-    flex-wrap: wrap;
+  .header-left {
+    max-width: 70%;
   }
 
-  .logo img {
-    height: 25px;
+  .dynamic-title {
+    display: none;
   }
 
-  .weather-card {
-    flex-direction: column;
-    text-align: center;
-    padding: 1rem 0.5rem;
+  .kebab-menu {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
   }
 
-  .weather-icon {
-    margin: 0 auto 0.5rem;
+  .kebab-dropdown {
+    position: absolute;
+    top: calc(100% + 5px);
+    right: 0;
+    width: 200px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
   }
 
-  .beekeeper-card {
-    flex-direction: column;
-    text-align: center;
-    padding: 1rem;
+  .kebab-item {
+    padding: 12px 15px;
+    font-size: 14px;
   }
 
-  .beekeeper-avatar {
-    margin: 0 0 0.5rem 0;
+  .sidebar {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    width: 80%;
+    height: calc(100vh - 70px);
+    z-index: 98;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
   }
 
-  .beekeeper-actions {
-    position: static;
-    opacity: 1;
-    justify-content: center;
-    margin-top: 0.5rem;
+  .sidebar.active {
+    transform: translateX(0);
   }
 
   .modal-content {
-    width: 100%;
-    margin: 0;
-    border-radius: 0;
-  }
-
-  .form-group {
-    margin: 0.5rem;
-  }
-
-  .form-actions {
-    padding: 0.5rem;
-    flex-direction: column;
-  }
-
-  .threats-card,
-  .chart-card {
-    height: auto;
-    min-height: 300px;
-    border-radius: 0;
-  }
-
-  .threats-title,
-  .chart-title {
-    font-size: 1rem;
-    padding: 0.75rem;
-  }
-
-  .kit-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
+    width: 95%;
+    margin: 10px auto;
   }
 
   .confirmation {
     width: 95%;
     margin: 0 2.5%;
+  }
+
+  /* Better touch targets for mobile */
+  .kebab-item,
+  .monitor-link,
+  .nested-trigger {
+    padding: 12px 15px;
+    min-height: 44px;
   }
 }
 
