@@ -411,6 +411,11 @@
         </main>
     </div>
 
+    <!-- Add Sidebar Toggle Button -->
+    <button class="sidebar-toggle" id="sidebarToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
     <!-- Modals -->
     <!-- Beekeeper Modal -->
     <div id="beekeeperModal" class="modal">
@@ -482,6 +487,18 @@
             const vibrationChart = Charts.createVibrationChart('vibrationChart');
             const hiveWeightChart = Charts.createWeightChart('hiveWeightChart');
 
+            // Make charts responsive
+            const resizeCharts = function () {
+                if (weightChart && weightChart.resize) weightChart.resize();
+                if (vibrationChart && vibrationChart.resize) vibrationChart.resize();
+                if (hiveWeightChart && hiveWeightChart.resize) hiveWeightChart.resize();
+            };
+
+            // Call resize on window resize
+            window.addEventListener('resize', function () {
+                resizeCharts();
+            });
+
             // Set up periodic chart updates
             setInterval(async function () {
                 try {
@@ -492,6 +509,8 @@
                         Charts.updateChart(weightChart, [data.weightData]);
                         Charts.updateChart(vibrationChart, [data.vibrationData]);
                         Charts.updateChart(hiveWeightChart, [data.hiveWeightData]);
+                        // Ensure charts are properly sized after data update
+                        resizeCharts();
                     }
                 } catch (error) {
                     console.error('Error fetching chart data:', error);
@@ -500,6 +519,61 @@
         });
     </script>
     <script src="/JS/beekeeper.js"></script>
+
+    <!-- Add JavaScript for sidebar toggle -->
+    <script>
+        // Sidebar toggle functionality
+        document.getElementById('sidebarToggle').addEventListener('click', function () {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.classList.toggle('active');
+
+            // Change icon based on sidebar state
+            const icon = this.querySelector('i');
+            if (sidebar.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function (event) {
+            const sidebar = document.querySelector('.sidebar');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+
+            // Don't close if clicking on the toggle button or inside the sidebar
+            if (!sidebar.contains(event.target) && event.target !== sidebarToggle && !sidebarToggle.contains(event.target)) {
+                sidebar.classList.remove('active');
+
+                // Reset icon
+                const icon = sidebarToggle.querySelector('i');
+                if (icon) {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            }
+        });
+
+        // Ensure sidebar closes when switching between apiary and hive views on mobile
+        document.querySelectorAll('.nested-trigger').forEach(trigger => {
+            trigger.addEventListener('click', function () {
+                if (window.innerWidth <= 992) {
+                    setTimeout(() => {
+                        document.querySelector('.sidebar').classList.remove('active');
+
+                        // Reset icon
+                        const icon = document.querySelector('#sidebarToggle i');
+                        if (icon) {
+                            icon.classList.remove('fa-times');
+                            icon.classList.add('fa-bars');
+                        }
+                    }, 300); // Small delay to allow click to register
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
